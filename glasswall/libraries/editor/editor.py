@@ -39,7 +39,7 @@ class Editor(Library):
         # Call protect file on a known good bitmap to see if license has expired
         try:
             self.protect_file(
-                input_file=os.path.join(glasswall._ROOT, "common", "validate_license.bmp"),
+                input_file=b"BM:\x00\x00\x00\x00\x00\x00\x006\x00\x00\x00(\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x18\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\x00",
                 raise_unsupported=True
             )
             log.debug(f"{self.__class__.__name__} license validated successfully.")
