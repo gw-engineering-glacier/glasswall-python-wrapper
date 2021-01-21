@@ -1,6 +1,0 @@
-2021-01-18 15:48:44.543 glasswall DEBUG    set_content_management_policy 
-	status: 1
-2021-01-18 15:48:44.544 glasswall WARNING  determine_file_type       
-	file_type: 4
-	file_type_as_string: licenseExpired
-	input_file: C:\Users\AngusRoberts\Documents\Azure\gated-check-in\glasswall\common\validate_license.bmp
