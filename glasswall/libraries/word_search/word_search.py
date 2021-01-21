@@ -7,7 +7,7 @@ import os
 from typing import Union
 
 import glasswall
-from glasswall.common import gw_utils
+from glasswall import utils
 from glasswall.libraries.library import Library
 from glasswall.libraries.word_search import errors, successes
 
@@ -81,7 +81,7 @@ class WordSearch(Library):
             with open(input_file, "rb") as f:
                 input_file_bytes = f.read()
         elif isinstance(input_file, (bytearray, io.BytesIO)):
-            input_file_bytes = gw_utils.as_bytes(input_file)
+            input_file_bytes = utils.as_bytes(input_file)
 
         if isinstance(homoglyphs, str):
             if os.path.isfile(homoglyphs):
@@ -90,7 +90,7 @@ class WordSearch(Library):
             else:
                 raise FileNotFoundError(homoglyphs)
         elif isinstance(homoglyphs, (bytearray, io.BytesIO)):
-            homoglyphs_bytes = gw_utils.as_bytes(homoglyphs)
+            homoglyphs_bytes = utils.as_bytes(homoglyphs)
         elif isinstance(homoglyphs, type(None)):
             # Load default
             with open(os.path.join(glasswall._ROOT, "config", "word_search", "homoglyphs.json"), "rb") as f:
@@ -110,7 +110,7 @@ class WordSearch(Library):
                     }
                 }
             ).text,
-        xml_config = gw_utils.validate_xml(xml_config)
+        xml_config = utils.validate_xml(xml_config)
 
         # Variable initialisation
         ct_input_buffer = ct.c_char_p(input_file_bytes)
@@ -123,7 +123,7 @@ class WordSearch(Library):
         ct_xml_config = ct.c_char_p(xml_config.encode())
         gw_return_object = glasswall.GwReturnObj()
 
-        with gw_utils.CwdHandler(new_cwd=self.library_path):
+        with utils.CwdHandler(new_cwd=self.library_path):
             gw_return_object.status = self.library.GwWordSearch(
                 ct_input_buffer,
                 ct_input_buffer_length,
@@ -135,11 +135,11 @@ class WordSearch(Library):
                 ct_xml_config
             )
 
-        gw_return_object.output_file = gw_utils.buffer_to_bytes(
+        gw_return_object.output_file = utils.buffer_to_bytes(
             output_buffer,
             output_buffer_length
         )
-        gw_return_object.output_report = gw_utils.buffer_to_bytes(
+        gw_return_object.output_report = utils.buffer_to_bytes(
             output_report_buffer,
             output_report_buffer_length
         )
@@ -189,7 +189,7 @@ class WordSearch(Library):
         Returns:
             None
         """
-        for relative_path in gw_utils.list_file_paths(input_directory, absolute=False):
+        for relative_path in utils.list_file_paths(input_directory, absolute=False):
             # construct absolute paths
             input_file = os.path.abspath(os.path.join(input_directory, relative_path))
             output_file = os.path.abspath(os.path.join(output_directory, relative_path))

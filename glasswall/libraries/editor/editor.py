@@ -8,8 +8,8 @@ from contextlib import contextmanager
 from typing import Union
 
 import glasswall
-from glasswall.common import determine_file_type as dft
-from glasswall.common import gw_utils
+from glasswall import determine_file_type as dft
+from glasswall import utils
 from glasswall.libraries.editor import errors, successes
 from glasswall.libraries.library import Library
 
@@ -161,7 +161,7 @@ class Editor(Library):
 
         elif isinstance(input_file, (bytes, bytearray, io.BytesIO)):
             # convert to bytes
-            bytes_input_file = gw_utils.as_bytes(input_file)
+            bytes_input_file = utils.as_bytes(input_file)
 
             # ctypes conversion
             ct_buffer = ct.c_char_p(bytes_input_file)
@@ -229,7 +229,7 @@ class Editor(Library):
 
         # print("GW2GetPolicySettings status:", status)
 
-        # file_bytes = gw_utils.buffer_to_bytes(
+        # file_bytes = utils.buffer_to_bytes(
         #     ct_buffer,
         #     ct_butter_length,
         # )
@@ -262,10 +262,10 @@ class Editor(Library):
             input_file = glasswall.content_management.policies.Editor(default="sanitise")
 
         # Validate xml content is parsable
-        xml_string = gw_utils.validate_xml(input_file)
+        xml_string = utils.validate_xml(input_file)
 
         # write xml to temporary file
-        with gw_utils.TempFilePath(directory=os.environ.get("temp_directory", None), delete=False) as temp_file:
+        with utils.TempFilePath(directory=os.environ.get("temp_directory", None), delete=False) as temp_file:
             with open(temp_file, "w") as f:
                 f.write(xml_string)
             input_file = temp_file
@@ -294,7 +294,7 @@ class Editor(Library):
         # elif isinstance(input_file, (str, bytes, bytearray, io.BytesIO)):
         #     # Convert bytearray, io.BytesIO to bytes
         #     if isinstance(input_file, (bytearray, io.BytesIO)):
-        #         input_file = gw_utils.as_bytes(input_file)
+        #         input_file = utils.as_bytes(input_file)
         #     # Convert string xml to bytes
         #     if isinstance(input_file, str):
         #         input_file = input_file.encode("utf-8")
@@ -363,7 +363,7 @@ class Editor(Library):
 
         elif isinstance(input_file, (bytes, bytearray, io.BytesIO,)):
             # Convert bytearray and io.BytesIO to bytes
-            input_file = gw_utils.as_bytes(input_file)
+            input_file = utils.as_bytes(input_file)
 
             # API function declaration
             self.library.GW2RegisterInputMemory.argtypes = [
@@ -557,12 +557,12 @@ class Editor(Library):
 
         # Convert memory inputs to bytes
         if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
-            input_file = gw_utils.as_bytes(input_file)
+            input_file = utils.as_bytes(input_file)
 
         # Check that file type is supported
         self.determine_file_type(input_file=input_file)
 
-        with gw_utils.CwdHandler(self.library_path):
+        with utils.CwdHandler(self.library_path):
             with self.new_session() as session:
                 # Set content management policy
                 self.set_content_management_policy(session, content_management_policy)
@@ -588,7 +588,7 @@ class Editor(Library):
                                 file_bytes = f.read()
                     else:
                         # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
-                        file_bytes = gw_utils.buffer_to_bytes(
+                        file_bytes = utils.buffer_to_bytes(
                             register_output.buffer,
                             register_output.buffer_length
                         )
@@ -610,7 +610,7 @@ class Editor(Library):
         """
         protected_files_dict = {}
         # Call protect_file on each file in input_directory to output_directory
-        for input_file in gw_utils.list_file_paths(input_directory):
+        for input_file in utils.list_file_paths(input_directory):
             relative_path = os.path.relpath(input_file, input_directory)
             output_file = None if output_directory is None else os.path.join(os.path.abspath(output_directory), relative_path)
 
@@ -664,9 +664,9 @@ class Editor(Library):
 
         # Convert memory inputs to bytes
         if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
-            input_file = gw_utils.as_bytes(input_file)
+            input_file = utils.as_bytes(input_file)
 
-        with gw_utils.CwdHandler(self.library_path):
+        with utils.CwdHandler(self.library_path):
             with self.new_session() as session:
                 # Set content management policy
                 self.set_content_management_policy(session, content_management_policy)
@@ -692,7 +692,7 @@ class Editor(Library):
                                 file_bytes = f.read()
                     else:
                         # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
-                        file_bytes = gw_utils.buffer_to_bytes(
+                        file_bytes = utils.buffer_to_bytes(
                             register_analysis.buffer,
                             register_analysis.buffer_length
                         )
@@ -713,7 +713,7 @@ class Editor(Library):
         """
         analysis_files_dict = {}
         # Call analyse_file on each file in input_directory to output_directory
-        for input_file in gw_utils.list_file_paths(input_directory):
+        for input_file in utils.list_file_paths(input_directory):
             relative_path = os.path.relpath(input_file, input_directory) + ".xml"
             output_file = None if output_directory is None else os.path.join(os.path.abspath(output_directory), relative_path)
 
@@ -832,9 +832,9 @@ class Editor(Library):
 
         # Convert memory inputs to bytes
         if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
-            input_file = gw_utils.as_bytes(input_file)
+            input_file = utils.as_bytes(input_file)
 
-        with gw_utils.CwdHandler(self.library_path):
+        with utils.CwdHandler(self.library_path):
             with self.new_session() as session:
                 # Set content management policy
                 self.set_content_management_policy(session, content_management_policy)
@@ -861,7 +861,7 @@ class Editor(Library):
                                 file_bytes = f.read()
                     else:
                         # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
-                        file_bytes = gw_utils.buffer_to_bytes(
+                        file_bytes = utils.buffer_to_bytes(
                             register_export.buffer,
                             register_export.buffer_length
                         )
@@ -882,7 +882,7 @@ class Editor(Library):
         """
         export_files_dict = {}
         # Call export_file on each file in input_directory to output_directory
-        for input_file in gw_utils.list_file_paths(input_directory):
+        for input_file in utils.list_file_paths(input_directory):
             relative_path = os.path.relpath(input_file, input_directory) + ".zip"
             output_file = None if output_directory is None else os.path.join(os.path.abspath(output_directory), relative_path)
 
@@ -937,7 +937,7 @@ class Editor(Library):
 
         elif isinstance(input_file, (bytes, bytearray, io.BytesIO,)):
             # Convert bytearray and io.BytesIO to bytes
-            input_file = gw_utils.as_bytes(input_file)
+            input_file = utils.as_bytes(input_file)
 
             # API function declaration
             self.library.GW2RegisterExportMemory.argtypes = [
@@ -1005,9 +1005,9 @@ class Editor(Library):
 
         # Convert memory inputs to bytes
         if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
-            input_file = gw_utils.as_bytes(input_file)
+            input_file = utils.as_bytes(input_file)
 
-        with gw_utils.CwdHandler(self.library_path):
+        with utils.CwdHandler(self.library_path):
             with self.new_session() as session:
                 # Set content management policy
                 self.set_content_management_policy(session, content_management_policy)
@@ -1034,7 +1034,7 @@ class Editor(Library):
                                 file_bytes = f.read()
                     else:
                         # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
-                        file_bytes = gw_utils.buffer_to_bytes(
+                        file_bytes = utils.buffer_to_bytes(
                             register_output.buffer,
                             register_output.buffer_length
                         )
@@ -1056,7 +1056,7 @@ class Editor(Library):
         """
         import_files_dict = {}
         # Call import_file on each file in input_directory to output_directory
-        for input_file in gw_utils.list_file_paths(input_directory):
+        for input_file in utils.list_file_paths(input_directory):
             relative_path = os.path.relpath(input_file, input_directory)
             # Remove .zip extension from relative_path
             relative_path = os.path.splitext(relative_path)[0]

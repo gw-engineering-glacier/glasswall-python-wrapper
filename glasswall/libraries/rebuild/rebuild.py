@@ -7,8 +7,8 @@ import os
 from typing import Union
 
 import glasswall
-from glasswall.common import determine_file_type as dft
-from glasswall.common import gw_utils
+from glasswall import determine_file_type as dft
+from glasswall import utils
 from glasswall.libraries.library import Library
 from glasswall.libraries.rebuild import errors, successes
 
@@ -93,7 +93,7 @@ class Rebuild(Library):
             self.library.GWDetermineFileTypeFromFileInMem.restype = ct.c_int
 
             # convert to bytes
-            bytes_input_file = gw_utils.as_bytes(input_file)
+            bytes_input_file = utils.as_bytes(input_file)
 
             # ctypes conversion
             ct_input_buffer = ct.c_char_p(bytes_input_file)
@@ -149,7 +149,7 @@ class Rebuild(Library):
             log.debug(f"\n\tstatus: {status}")
 
         # As string
-        xml_string = gw_utils.validate_xml(ct.wstring_at(ct_input_buffer))
+        xml_string = utils.validate_xml(ct.wstring_at(ct_input_buffer))
 
         return xml_string
 
@@ -172,7 +172,7 @@ class Rebuild(Library):
             input_file = glasswall.content_management.policies.Rebuild(default="sanitise")
 
         # Validate xml content is parsable
-        xml_string = gw_utils.validate_xml(input_file)
+        xml_string = utils.validate_xml(input_file)
 
         # Declare argument types
         self.library.GWFileConfigXML.argtypes = [ct.c_wchar_p]
@@ -229,9 +229,9 @@ class Rebuild(Library):
 
         # Convert memory inputs to bytes
         if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
-            input_file = gw_utils.as_bytes(input_file)
+            input_file = utils.as_bytes(input_file)
 
-        with gw_utils.CwdHandler(self.library_path):
+        with utils.CwdHandler(self.library_path):
             # Set content management policy
             if content_management_policy:
                 self.set_content_management_policy(content_management_policy)
@@ -327,7 +327,7 @@ class Rebuild(Library):
                             file_bytes = f.read()
                 else:
                     # file to memory, memory to memory
-                    file_bytes = gw_utils.buffer_to_bytes(
+                    file_bytes = utils.buffer_to_bytes(
                         ct_output_buffer,
                         ct_output_size
                     )
@@ -354,7 +354,7 @@ class Rebuild(Library):
         """
         protected_files_dict = {}
         # Call protect_file on each file in input_directory to output_directory
-        for input_file in gw_utils.list_file_paths(input_directory):
+        for input_file in utils.list_file_paths(input_directory):
             relative_path = os.path.relpath(input_file, input_directory)
             output_file = None if output_directory is None else os.path.join(os.path.abspath(output_directory), relative_path)
 
@@ -408,9 +408,9 @@ class Rebuild(Library):
 
         # Convert memory inputs to bytes
         if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
-            input_file = gw_utils.as_bytes(input_file)
+            input_file = utils.as_bytes(input_file)
 
-        with gw_utils.CwdHandler(self.library_path):
+        with utils.CwdHandler(self.library_path):
             # Set content management policy
             self.set_content_management_policy(content_management_policy)
 
@@ -505,7 +505,7 @@ class Rebuild(Library):
                             file_bytes = f.read()
                 else:
                     # file to memory, memory to memory
-                    file_bytes = gw_utils.buffer_to_bytes(
+                    file_bytes = utils.buffer_to_bytes(
                         ct_output_buffer,
                         ct_output_size
                     )
@@ -531,7 +531,7 @@ class Rebuild(Library):
         """
         analysis_files_dict = {}
         # Call analyse_file on each file in input_directory to output_directory
-        for input_file in gw_utils.list_file_paths(input_directory):
+        for input_file in utils.list_file_paths(input_directory):
             relative_path = os.path.relpath(input_file, input_directory) + ".xml"
             output_file = None if output_directory is None else os.path.join(os.path.abspath(output_directory), relative_path)
 
@@ -585,9 +585,9 @@ class Rebuild(Library):
 
         # Convert memory inputs to bytes
         if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
-            input_file = gw_utils.as_bytes(input_file)
+            input_file = utils.as_bytes(input_file)
 
-        with gw_utils.CwdHandler(self.library_path):
+        with utils.CwdHandler(self.library_path):
             # Set content management policy
             self.set_content_management_policy(content_management_policy)
 
@@ -673,7 +673,7 @@ class Rebuild(Library):
                             file_bytes = f.read()
                 else:
                     # file to memory, memory to memory
-                    file_bytes = gw_utils.buffer_to_bytes(
+                    file_bytes = utils.buffer_to_bytes(
                         ct_output_buffer,
                         ct_output_size
                     )
@@ -699,7 +699,7 @@ class Rebuild(Library):
         """
         export_files_dict = {}
         # Call export_file on each file in input_directory to output_directory
-        for input_file in gw_utils.list_file_paths(input_directory):
+        for input_file in utils.list_file_paths(input_directory):
             relative_path = os.path.relpath(input_file, input_directory) + ".zip"
             output_file = None if output_directory is None else os.path.join(os.path.abspath(output_directory), relative_path)
 
@@ -753,9 +753,9 @@ class Rebuild(Library):
 
         # Convert memory inputs to bytes
         if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
-            input_file = gw_utils.as_bytes(input_file)
+            input_file = utils.as_bytes(input_file)
 
-        with gw_utils.CwdHandler(self.library_path):
+        with utils.CwdHandler(self.library_path):
             # Set content management policy
             self.set_content_management_policy(content_management_policy)
 
@@ -841,7 +841,7 @@ class Rebuild(Library):
                             file_bytes = f.read()
                 else:
                     # file to memory, memory to memory
-                    file_bytes = gw_utils.buffer_to_bytes(
+                    file_bytes = utils.buffer_to_bytes(
                         ct_output_buffer,
                         ct_output_size
                     )
@@ -868,7 +868,7 @@ class Rebuild(Library):
         """
         import_files_dict = {}
         # Call import_file on each file in input_directory to output_directory
-        for input_file in gw_utils.list_file_paths(input_directory):
+        for input_file in utils.list_file_paths(input_directory):
             relative_path = os.path.relpath(input_file, input_directory)
             # Remove .zip extension from relative_path
             relative_path = os.path.splitext(relative_path)[0]

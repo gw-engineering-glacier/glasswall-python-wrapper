@@ -8,7 +8,7 @@ import os
 from typing import Union
 
 import glasswall
-from glasswall.common import gw_utils
+from glasswall import utils
 from glasswall.libraries.archive_manager import errors, successes
 from glasswall.libraries.library import Library
 
@@ -95,7 +95,7 @@ class ArchiveManager(Library):
             with open(input_file, "rb") as f:
                 input_file_bytes = f.read()
         elif isinstance(input_file, (bytearray, io.BytesIO)):
-            input_file_bytes = gw_utils.as_bytes(input_file)
+            input_file_bytes = utils.as_bytes(input_file)
 
         if isinstance(content_management_policy, str) and os.path.isfile(content_management_policy):
             with open(content_management_policy, "rb") as f:
@@ -103,7 +103,7 @@ class ArchiveManager(Library):
         elif isinstance(content_management_policy, type(None)):
             # Load default
             content_management_policy = glasswall.content_management.policies.ArchiveManager(default="sanitise", default_archive_manager="process")
-        content_management_policy = gw_utils.validate_xml(content_management_policy)
+        content_management_policy = utils.validate_xml(content_management_policy)
 
         # API function declaration
         self.library.GwFileAnalysisArchive.argtypes = [
@@ -128,7 +128,7 @@ class ArchiveManager(Library):
         ct_content_management_policy = ct.c_char_p(content_management_policy.encode())  # const char *xmlConfigString
         gw_return_object = glasswall.GwReturnObj()
 
-        with gw_utils.CwdHandler(new_cwd=self.library_path):
+        with utils.CwdHandler(new_cwd=self.library_path):
             # API call
             gw_return_object.status = self.library.GwFileAnalysisArchive(
                 ct.byref(ct_input_buffer),
@@ -144,11 +144,11 @@ class ArchiveManager(Library):
             if raise_unsupported:
                 raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
 
-        gw_return_object.output_file = gw_utils.buffer_to_bytes(
+        gw_return_object.output_file = utils.buffer_to_bytes(
             ct_output_buffer,
             ct_output_buffer_length
         )
-        gw_return_object.output_report = gw_utils.buffer_to_bytes(
+        gw_return_object.output_report = utils.buffer_to_bytes(
             ct_output_report_buffer,
             ct_output_report_buffer_length
         )
@@ -181,7 +181,7 @@ class ArchiveManager(Library):
         Returns:
             None
         """
-        for relative_path in gw_utils.list_file_paths(input_directory, absolute=False):
+        for relative_path in utils.list_file_paths(input_directory, absolute=False):
             # construct absolute paths
             input_file = os.path.abspath(os.path.join(input_directory, relative_path))
             output_file = os.path.abspath(os.path.join(output_directory, relative_path))
@@ -233,7 +233,7 @@ class ArchiveManager(Library):
             with open(input_file, "rb") as f:
                 input_file_bytes = f.read()
         elif isinstance(input_file, (bytearray, io.BytesIO)):
-            input_file_bytes = gw_utils.as_bytes(input_file)
+            input_file_bytes = utils.as_bytes(input_file)
 
         if isinstance(content_management_policy, str) and os.path.isfile(content_management_policy):
             with open(content_management_policy, "rb") as f:
@@ -241,7 +241,7 @@ class ArchiveManager(Library):
         elif isinstance(content_management_policy, type(None)):
             # Load default
             content_management_policy = glasswall.content_management.policies.ArchiveManager(default="sanitise", default_archive_manager="process")
-        content_management_policy = gw_utils.validate_xml(content_management_policy)
+        content_management_policy = utils.validate_xml(content_management_policy)
 
         # API function declaration
         self.library.GwFileAnalysisArchive.argtypes = [
@@ -266,7 +266,7 @@ class ArchiveManager(Library):
         ct_content_management_policy = ct.c_char_p(content_management_policy.encode())  # const char *xmlConfigString
         gw_return_object = glasswall.GwReturnObj()
 
-        with gw_utils.CwdHandler(new_cwd=self.library_path):
+        with utils.CwdHandler(new_cwd=self.library_path):
             # API call
             gw_return_object.status = self.library.GwFileProtectAndReportArchive(
                 ct.byref(ct_input_buffer),
@@ -282,11 +282,11 @@ class ArchiveManager(Library):
             if raise_unsupported:
                 raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
 
-        gw_return_object.output_file = gw_utils.buffer_to_bytes(
+        gw_return_object.output_file = utils.buffer_to_bytes(
             ct_output_buffer,
             ct_output_buffer_length
         )
-        gw_return_object.output_report = gw_utils.buffer_to_bytes(
+        gw_return_object.output_report = utils.buffer_to_bytes(
             ct_output_report_buffer,
             ct_output_report_buffer_length
         )
@@ -322,7 +322,7 @@ class ArchiveManager(Library):
         """
         protected_archives_dict = {}
         # Call protect_archive on each file in input_directory to output_directory
-        for input_file in gw_utils.list_file_paths(input_directory):
+        for input_file in utils.list_file_paths(input_directory):
             relative_path = os.path.relpath(input_file, input_directory)
             output_file = None if output_directory is None else os.path.join(os.path.abspath(output_directory), relative_path)
             output_report = None if output_report_directory is None else os.path.join(os.path.abspath(output_report_directory), relative_path + ".xml")

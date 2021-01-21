@@ -6,7 +6,7 @@ import os
 import sys
 
 import glasswall
-from glasswall.common import gw_utils
+from glasswall import utils
 from glasswall.libraries.library import Library
 from glasswall.libraries.security_tagging import errors, successes
 
@@ -73,7 +73,7 @@ class SecurityTagging(Library):
         # Make output directory if it does not exist
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
 
-        with gw_utils.CwdHandler(self.library_path):
+        with utils.CwdHandler(self.library_path):
             # API function declaration
             self.library.GWSecuTag_TagFile.argtypes = [ct.c_char_p]
 
@@ -102,14 +102,14 @@ class SecurityTagging(Library):
                 log.warning(f"\n\tstatus: {status}\n\toutput file does not exist: {output_file}")
                 status = "OUTPUT_NOT_CREATED"
             elif os.path.isfile(output_file):
-                with gw_utils.TempFilePath() as temp_file:
+                with utils.TempFilePath() as temp_file:
                     self.retrieve_tags(
                         input_file=output_file,
                         output_file=temp_file,
                         raise_unsupported=False
                     )
                     try:
-                        dict_ = gw_utils.xml_as_dict(temp_file)
+                        dict_ = utils.xml_as_dict(temp_file)
                     except ValueError:
                         dict_ = {}
                     if not dict_:
@@ -152,7 +152,7 @@ class SecurityTagging(Library):
         if not isinstance(raise_unsupported, bool):
             raise TypeError(raise_unsupported)
 
-        for relative_path in gw_utils.list_file_paths(input_directory, absolute=False):
+        for relative_path in utils.list_file_paths(input_directory, absolute=False):
             # construct absolute paths
             input_file  = os.path.abspath(os.path.join(input_directory, relative_path))
             output_file = os.path.abspath(os.path.join(output_directory, relative_path))
@@ -165,7 +165,7 @@ class SecurityTagging(Library):
                 raise_unsupported=raise_unsupported,
             )
 
-        gw_utils.delete_empty_subdirectories(output_directory)
+        utils.delete_empty_subdirectories(output_directory)
 
     def retrieve_tags(self, input_file: str, output_file: str, raise_unsupported=True):
         """ Retrieves the xml tags of the input_file and writes it to output_file.
@@ -199,7 +199,7 @@ class SecurityTagging(Library):
 
         log.debug(f"Attempting {sys._getframe().f_code.co_name}:\n\tinput_file: {input_file}\n\toutput_file: {output_file}")
 
-        with gw_utils.CwdHandler(self.library_path):
+        with utils.CwdHandler(self.library_path):
             # API function declaration
             self.library.GWSecuTag_RetrieveTagFile.argtypes = [ct.c_char_p]
 
@@ -249,7 +249,7 @@ class SecurityTagging(Library):
         if not isinstance(raise_unsupported, bool):
             raise TypeError(raise_unsupported)
 
-        for relative_path in gw_utils.list_file_paths(input_directory, absolute=False):
+        for relative_path in utils.list_file_paths(input_directory, absolute=False):
             # construct absolute paths
             input_file  = os.path.abspath(os.path.join(input_directory, relative_path))
             output_file = os.path.abspath(os.path.join(output_directory, relative_path + ".xml"))
@@ -261,4 +261,4 @@ class SecurityTagging(Library):
                 raise_unsupported=raise_unsupported,
             )
 
-        gw_utils.delete_empty_subdirectories(output_directory)
+        utils.delete_empty_subdirectories(output_directory)

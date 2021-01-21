@@ -4,7 +4,7 @@ import ctypes as ct
 import os
 
 import glasswall
-from glasswall.common import gw_utils
+from glasswall import utils
 
 
 class Library:
@@ -16,7 +16,7 @@ class Library:
     def load_library(self, library_path: str):
         if not os.path.isfile(library_path):
             if os.path.isdir(library_path):
-                library_path = gw_utils.get_library(self.__class__.__name__, library_path)
+                library_path = utils.get_library(self.__class__.__name__, library_path)
             else:
                 raise FileNotFoundError(library_path)
 
@@ -25,11 +25,11 @@ class Library:
         # Preload dependencies to avoid "OSError: ...: cannot open shared object file: No such file or directory"
         dependencies = [
             os.path.join(os.path.dirname(self.library_path), dependency)
-            for dependency in glasswall.libraries.os_info[glasswall._OPERATING_SYSTEM][gw_utils.as_snake_case(self.__class__.__name__)]["dependencies"]
+            for dependency in glasswall.libraries.os_info[glasswall._OPERATING_SYSTEM][utils.as_snake_case(self.__class__.__name__)]["dependencies"]
         ]
-        missing_dependencies = gw_utils.load_dependencies(dependencies, ignore_errors=True)
+        missing_dependencies = utils.load_dependencies(dependencies, ignore_errors=True)
 
-        with gw_utils.CwdHandler(new_cwd=self.library_path):
+        with utils.CwdHandler(new_cwd=self.library_path):
             try:
                 # Try to load library
                 return ct.cdll.LoadLibrary(self.library_path)

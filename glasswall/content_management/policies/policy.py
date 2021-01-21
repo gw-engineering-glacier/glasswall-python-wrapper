@@ -2,7 +2,7 @@
 
 from typing import Union
 
-from glasswall.common import gw_utils
+from glasswall import utils
 from glasswall.content_management.config_elements.config_element import ConfigElement
 from glasswall.content_management.errors.config_elements import ConfigElementNotFound
 from glasswall.content_management.errors.switches import SwitchNotFound
@@ -78,7 +78,7 @@ class Policy:
 
             # If no matching ConfigElement contains arg "switch" in .switches, raise error.
             if not matched_config_elements_with_switch:
-                available_switches = sorted(set(gw_utils.flatten_list([c.switches for c in matched_config_elements])))
+                available_switches = sorted(set(utils.flatten_list([c.switches for c in matched_config_elements])))
                 switch_name = switch.name if isinstance(switch, Switch) else switch
                 raise SwitchNotFound(f"'{switch_name}' not in {available_switches}")
 
