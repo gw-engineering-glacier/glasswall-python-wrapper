@@ -1,0 +1,7 @@
+2021-01-11 16:31:00.960 glasswall INFO     setUpClass                Running: TestRebuildComparison
+2021-01-11 16:31:01.206 glasswall DEBUG    setUp                     test_comparison___analyse
+2021-01-11 16:31:01.345 glasswall DEBUG    setUp                     test_comparison___determine_file_type
+2021-01-11 16:31:01.359 glasswall DEBUG    setUp                     test_comparison___export
+2021-01-11 16:31:01.500 glasswall DEBUG    setUp                     test_comparison___import
+2021-01-11 16:31:02.553 glasswall DEBUG    setUp                     test_comparison___protect
+2021-01-11 16:31:03.604 glasswall DEBUG    setUp                     test_comparison___visual_comparison

@@ -1,0 +1,25 @@
+2021-01-11 16:25:10.580 glasswall INFO     __init__                  gated-check-in version 0.10.1
+2021-01-11 16:25:10.582 glasswall INFO     __init__                  gw-ar-python-wrapper version 0.10.0
+2021-01-11 16:25:10.583 glasswall INFO     __init__                  python version 3.6.8
+2021-01-11 16:25:10.597 glasswall INFO     __init__                  operating_system: Windows
+2021-01-11 16:25:10.602 glasswall DEBUG    __init__                  Namespace(build_path='C:\\Users\\AngusRoberts\\Documents\\Azure\\gated-check-in\\data\\libraries\\sdk.rebuild\\1.132', full=False, libraries_path='C:\\Users\\AngusRoberts\\Documents\\Azure\\gated-check-in\\data\\libraries', no_integrity=False, no_valgrind=False, no_visual_comparison=False, only=['rebuild'], test_path='C:\\Users\\AngusRoberts\\Documents\\Azure\\gated-check-in\\data\\files')
+2021-01-11 16:25:10.701 glasswall WARNING  get_library               Found 2 rebuild libraries, but expected only one:
+C:\Users\AngusRoberts\Documents\Azure\gated-check-in\data\libraries\sdk.editor\2.139\windows-drop-no-kill-switch\glasswall.classic.dll
+C:\Users\AngusRoberts\Documents\Azure\gated-check-in\data\libraries\sdk.rebuild\1.132\windows-drop-no-kill-switch\glasswall.classic.dll
+Latest library: C:\Users\AngusRoberts\Documents\Azure\gated-check-in\data\libraries\sdk.rebuild\1.132\windows-drop-no-kill-switch\glasswall.classic.dll
+2021-01-11 16:25:12.476 glasswall WARNING  get_library               Found 2 rebuild libraries, but expected only one:
+C:\Users\AngusRoberts\Documents\Azure\gated-check-in\data\libraries\sdk.editor\2.139\windows-drop-no-kill-switch\glasswall.classic.dll
+C:\Users\AngusRoberts\Documents\Azure\gated-check-in\data\libraries\sdk.rebuild\1.132\windows-drop-no-kill-switch\glasswall.classic.dll
+Latest library: C:\Users\AngusRoberts\Documents\Azure\gated-check-in\data\libraries\sdk.rebuild\1.132\windows-drop-no-kill-switch\glasswall.classic.dll
+2021-01-11 16:25:13.935 glasswall WARNING  set_environment_variables Valgrind tests disabled due to unsupported OS: Windows
+2021-01-11 16:25:13.946 glasswall DEBUG    run_tests                 Skipped archive_manager as the '--only' arg has been specified.
+2021-01-11 16:25:13.946 glasswall DEBUG    run_tests                 Skipped editor as the '--only' arg has been specified.
+2021-01-11 16:25:13.946 glasswall DEBUG    run_tests                 Skipped gwqtcli as the '--only' arg has been specified.
+2021-01-11 16:25:13.984 glasswall DEBUG    run_tests                 Running expected rebuild: C:\Users\AngusRoberts\Documents\Azure\gated-check-in\data\combined_libraries\gcin\glasswall.classic.dll
+2021-01-11 16:28:07.896 glasswall DEBUG    run_tests                 Running output rebuild: C:\Users\AngusRoberts\Documents\Azure\gated-check-in\data\combined_libraries\user\glasswall.classic.dll
+2021-01-11 16:31:03.646 glasswall DEBUG    run_tests                 Skipped security_tagging as the '--only' arg has been specified.
+2021-01-11 16:31:03.646 glasswall DEBUG    run_tests                 Skipped word_search as the '--only' arg has been specified.
+2021-01-11 16:31:03.646 glasswall INFO     run_tests                          rebuild   expected PASS
+2021-01-11 16:31:03.659 glasswall INFO     run_tests                          rebuild     output PASS
+2021-01-11 16:31:03.660 glasswall INFO     run_tests                          rebuild comparison PASS
+2021-01-11 16:31:03.661 glasswall INFO     run_tests                 GCI PASS

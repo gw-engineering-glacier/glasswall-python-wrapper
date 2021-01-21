@@ -1,0 +1,2 @@
+2021-01-13 10:28:13.585 glasswall INFO     setUpClass                Running: TestArchiveManagerComparison
+2021-01-13 10:28:13.692 glasswall DEBUG    setUp                     test_comparison___analyse

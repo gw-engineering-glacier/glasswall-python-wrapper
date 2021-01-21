@@ -1,0 +1,7 @@
+2021-01-12 12:07:06.226 glasswall INFO     setUpClass                Running: TestArchiveManagerRunner
+2021-01-12 12:07:06.241 glasswall INFO     __init__                  Loaded Glasswall ArchiveManager version 0.10
+2021-01-12 12:07:06.241 glasswall DEBUG    setUpClass                Calculating input state pre-tests.
+2021-01-12 12:07:16.431 glasswall DEBUG    setUp                     test_analyse_directory___sanitise_discard
+2021-01-12 12:09:08.326 glasswall DEBUG    setUp                     test_analyse_directory___sanitise_no_action
+2021-01-12 12:11:02.092 glasswall DEBUG    setUp                     test_analyse_directory___sanitise_process
+2021-01-12 12:13:02.504 glasswall DEBUG    tearDownClass             Calculating input state post-tests.

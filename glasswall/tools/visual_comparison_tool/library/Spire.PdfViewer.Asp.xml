@@ -1,0 +1,1268 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Spire.PdfViewer.Asp</name>
+    </assembly>
+    <members>
+        <member name="T:Spire.PdfViewer.Asp.ZoomMode">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.ZoomMode.Default">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.ZoomMode.FitPage">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.ZoomMode.FitWidth">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfViewer.m_documentToolbar">
+            <summary>
+            Toolbar
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfViewer.m_documentView">
+            <summary>
+            show Content
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfViewer.keyValue">
+            <summary>
+            Argument key value
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfViewer.m_CallbackArgument">
+             <summary>
+            requset a Argument
+             </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfViewer.m_CacheNumberImage">
+            <summary>
+            Cache the number of Image, default is 1000.
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfViewer.m_CacheInterval">
+            <summary>
+            The interval time of emptying caching, specified in seconds.
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfViewer.m_CacheTime">
+            <summary>
+            The caching time of an image, specified in seconds.
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfViewer.m_CacheStreamInterval">
+            <summary>
+            The interval time of emptying caching, specified in seconds.
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfViewer.m_CacheStreamTime">
+            <summary>
+            The caching time of an image, specified in seconds.
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfViewer.m_ScrollInterval">
+            <summary>
+            The time of responding to event after stop scrolling, specified in milliseconds.default is 500
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfViewer.m_ZoomFactor">
+            <summary>
+            Zoom value of page, default is 1.
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfViewer.m_CacheNumberStream">
+            <summary>
+             Cache the number of Sream, default is 100.
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfViewer.m_CustomErrorMessages">
+            <summary>
+            Custom Error Messages
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfViewer.m_LoadStreamComplete">
+            <summary>
+            Whether to read file stream complete
+            </summary>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfViewer.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfViewer.BeforeLoadingInitialized">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfViewer.AfterLoadingInitialized">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfViewer.CreateChildControls">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfViewer.Render(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfViewer.RenderContents(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfViewer.RaiseCallbackEvent(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="argument"></param>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfViewer.GetCallbackResult">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfViewer.GetResourceUrl(System.String)">
+            <summary>
+            Get Resource Url
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfViewer.RaisePostBackEvent(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfViewer.LoadFromStream(System.IO.Stream,System.String)">
+            <summary>
+            load from Stream
+            </summary>
+            <param name="stream"></param>
+            <param name="password"></param>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfViewer.LoadFromStream(System.IO.Stream)">
+            <summary>
+            Load a PDF document from a Stream. 
+            </summary>
+            <param name="stream">A Stream containing a PDF document.</param>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfViewer.LoadFromFile(System.String)">
+            <summary>
+            Load a PDF document from a file. 
+            </summary>
+            <param name="filePath">The name of the file that contains the PDF document.</param>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfViewer.LoadFromFile(System.String,System.String)">
+            <summary>
+            Load a PDF document from a file. 
+            </summary>
+            <param name="fileName">file name</param>
+            <param name="password">password</param>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfViewer.FileName">
+            <summary>
+            Gets current opened pdf file name.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfViewer.CountPage">
+            <summary>
+            Gets the current number of display pages for the content.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfViewer.ScrollInterval">
+            <summary>
+            The time of responding to event after stop scrolling, specified in milliseconds.default is 500
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfViewer.CacheInterval">
+            <summary>
+            The interval time of emptying caching, specified in seconds.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfViewer.CacheTime">
+            <summary>
+            The caching time of an image, specified in seconds.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfViewer.CacheStreamInterval">
+            <summary>
+            The interval time of emptying caching, specified in seconds.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfViewer.CacheStreamTime">
+            <summary>
+            The caching time of an image, specified in seconds.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfViewer.CacheNumberImage">
+            <summary>
+            Cache the number of Image, default is 1000.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfViewer.ZoomFactor">
+            <summary>
+            Zoom value of page, default is 1.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfViewer.CacheNumberStream">
+            <summary>
+            Cache the number of Sream, default is 100.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfViewer.CustomErrorMessages">
+            <summary>
+            Custom Error Messages
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfViewer.LoadStreamComplete">
+            <summary>
+            Whether to read file stream complete
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfViewerToolbar.m_CountPage">
+            <summary>
+            The number of page of PDF document.
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfViewerToolbar.m_ZoomFactor">
+            <summary>
+            Zoom value of page, default is 1.
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfViewerToolbar.m_PdfViewerID">
+            <summary>
+            father Control
+            </summary>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfViewerToolbar.InitData">
+            <summary>
+            init 
+            </summary>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfViewerToolbar.WriterCustomZoomFactor(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfViewerToolbar.Render(System.Web.UI.HtmlTextWriter)">
+             <summary>
+            
+             </summary>
+             <param name="writer"></param>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfViewerToolbar.RenderContents(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfViewerToolbar.CountPage">
+            <summary>
+            The number of page of PDF document.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfViewerToolbar.PdfViewerID">
+            <summary>
+            father Control
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfViewerToolbar.PdfDocumentViewerID">
+            <summary>
+            The associated control
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfViewerToolbar.ZoomFactor">
+            <summary>
+            Zoom value of page, default is 1.
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Forms.PdfDocumentTextStyle.Regular">
+            <summary>
+            Regular text style.
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Forms.PdfDocumentTextStyle.Bold">
+            <summary>
+            Bold text style.
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Forms.PdfDocumentTextStyle.Italic">
+            <summary>
+            Italic text style.
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Drawing.PdfDocumentLoader.s_instance">
+            <summary>
+            static Object
+            </summary>
+        </member>
+        <member name="M:Spire.PdfViewer.Drawing.PdfDocumentLoader.Load(System.IO.Stream)">
+            <summary>
+            Load from Stream
+            </summary>
+            <param name="stream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Spire.PdfViewer.Drawing.PdfDocumentLoader.Load(System.String)">
+            <summary>
+            Load from file
+            </summary>
+            <param name="filePath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Spire.PdfViewer.Drawing.PdfDocumentLoader.Load(System.IO.Stream,System.String)">
+            <summary>
+            Load from Stream,with password
+            </summary>
+            <param name="stream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Spire.PdfViewer.Drawing.PdfDocumentLoader.Load(System.String,System.Boolean)">
+            <summary>
+            Load from file,dispose Stream
+            </summary>
+            <param name="filePath"></param>
+            <param name="isDisposedStream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Spire.PdfViewer.Drawing.PdfDocumentLoader.Load(System.String,System.String,System.Boolean)">
+            <summary>
+            Load from password file,dispose Stream
+            </summary>
+            <param name="filePath"></param>
+            <param name="isDisposedStream"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Spire.PdfViewer.Drawing.PdfDocumentLoader.Instance">
+            <summary>
+            Get Instance
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Drawing.PdfImageBase64String.m_File_Page">
+            <summary>
+            file -page
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Drawing.PdfImageBase64String.m_Base64String">
+            <summary>
+            image of Base64string
+            </summary>
+        </member>
+        <member name="M:Spire.PdfViewer.Drawing.PdfImageBase64String.#ctor(System.String,System.String)">
+            <summary>
+            initialize obj
+            </summary>
+            <param name="m_File_Page"></param>
+            <param name="m_Base64String"></param>
+        </member>
+        <member name="P:Spire.PdfViewer.Drawing.PdfImageBase64String.File_Page">
+            <summary>
+            file -page
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Drawing.PdfImageBase64String.Base64String">
+            <summary>
+            image of Base64string
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Drawing.PdfKeyTime.m_File_Page">
+            <summary>
+            file-page
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Drawing.PdfKeyTime.m_Time">
+            <summary>
+            cache time
+            </summary>
+        </member>
+        <member name="M:Spire.PdfViewer.Drawing.PdfKeyTime.#ctor(System.String,System.DateTime)">
+            <summary>
+            initialize obj
+            </summary>
+            <param name="m_File_Page"></param>
+            <param name="m_Time"></param>
+        </member>
+        <member name="P:Spire.PdfViewer.Drawing.PdfKeyTime.File_Page">
+            <summary>
+            file-page
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Drawing.PdfKeyTime.Time">
+            <summary>
+            cache time
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Drawing.PdfViewerAsp.m_CacheSize">
+            <summary>
+            Cache Image size
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Drawing.PdfViewerAsp.m_CacheInterval">
+            <summary>
+            Interval time
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Drawing.PdfViewerAsp.m_CacheSecond">
+            <summary>
+            Cache time
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Drawing.PdfViewerAsp.m_CacheNumberStream">
+            <summary>
+            Cache the number of Sream.
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Drawing.PdfViewerAsp.m_CacheStreamInterval">
+            <summary>
+            The interval time of emptying caching, specified in seconds.
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Drawing.PdfViewerAsp.m_CacheStreamTime">
+            <summary>
+            The caching time of an image, specified in seconds.
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Drawing.PdfViewerAsp.m_keys">
+            <summary>
+            image key
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Drawing.PdfViewerAsp.m_LinkenKeys">
+            <summary>
+            key -cache time
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Drawing.PdfViewerAsp.m_LinkenKeysStream">
+            <summary>
+            key -cache time
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Drawing.PdfViewerAsp.m_dictionary">
+            <summary>
+            key ,base64string value
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Drawing.PdfViewerAsp.m_dictionaryStream">
+            <summary>
+            key ,Stream
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Drawing.PdfViewerAsp.m_DictionaryPageBound">
+            <summary>
+            key,Page Bounds
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Drawing.PdfViewerAsp.m_HandleTimer">
+            <summary>
+            Timers dispose
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Drawing.PdfViewerAsp.m_HandleTimerStream">
+            <summary>
+            Timers dispose
+            </summary>
+        </member>
+        <member name="M:Spire.PdfViewer.Drawing.PdfViewerAsp.InitPdfViewerAsp(System.UInt16,System.UInt16,System.UInt16)">
+            <summary>
+            initialize
+            </summary>
+            <param name="CacheSize"></param>
+            <param name="CacheSecond"></param>
+            <param name="CacheInterval"></param>
+        </member>
+        <member name="M:Spire.PdfViewer.Drawing.PdfViewerAsp.InitPdfViewerAspStream(System.UInt16,System.UInt16,System.UInt16)">
+            <summary>
+            initialize
+            </summary>
+            <param name="CacheNumberStream"></param>
+            <param name="CacheStreamTime"></param>
+            <param name="CacheStreamInterval"></param>
+        </member>
+        <member name="M:Spire.PdfViewer.Drawing.PdfViewerAsp.InitTimer">
+            <summary>
+            initialize Timer
+            </summary>
+        </member>
+        <member name="M:Spire.PdfViewer.Drawing.PdfViewerAsp.InitTimerStream">
+            <summary>
+            initialize Timer
+            </summary>
+        </member>
+        <member name="M:Spire.PdfViewer.Drawing.PdfViewerAsp.OnTimedEvent(System.Object,System.Timers.ElapsedEventArgs)">
+            <summary>
+            dispose Image Base64string
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Spire.PdfViewer.Drawing.PdfViewerAsp.OnTimedEventStream(System.Object,System.Timers.ElapsedEventArgs)">
+            <summary>
+            dispose Image Base64string
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Spire.PdfViewer.Drawing.PdfViewerAsp.Read64StringAndReturnNotContainsKeys(System.Collections.Generic.Dictionary{System.String,System.String},System.String,System.Int32,System.Int32)">
+            <summary>
+            Get exits Base64string from key,Return Not Exits Key
+            </summary>
+            <param name="dictionary"></param>
+            <param name="fileName"></param>
+            <param name="startIndex"></param>
+            <param name="endIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Spire.PdfViewer.Drawing.PdfViewerAsp.OperatorItemAdd(Spire.PdfViewer.Drawing.PdfImageBase64String)">
+            <summary>
+            add object
+            </summary>
+            <param name="item"></param>
+        </member>
+        <member name="M:Spire.PdfViewer.Drawing.PdfViewerAsp.OperatorItemAdd(System.String,System.IO.Stream)">
+            <summary>
+            add object
+            </summary>
+            <param name="item"></param>
+        </member>
+        <member name="M:Spire.PdfViewer.Drawing.PdfViewerAsp.OperatorItemDelete">
+            <summary>
+            remove Object
+            </summary>
+        </member>
+        <member name="M:Spire.PdfViewer.Drawing.PdfViewerAsp.OperatorStreamItemDelete">
+            <summary>
+            remove Object
+            </summary>
+        </member>
+        <member name="M:Spire.PdfViewer.Drawing.PdfViewerAsp.GetHashStringValueFromStream(System.IO.Stream)">
+            <summary>
+            
+            </summary>
+            <param name="stream"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Spire.PdfViewer.Drawing.PdfViewerAsp.DictionaryPageBound">
+            <summary>
+            key,page Rectangle
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Drawing.PdfViewerAsp.DictionaryStream">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Drawing.PdfViewerAsp.Keys">
+             <summary>
+            image key 
+             </summary>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.CommonMethod.GetHttpAndHostAddress">
+            <summary>
+            Get http host address
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.CommonMethod.GetFileName(System.String)">
+            <summary>
+            Get file name
+            </summary>
+            <param name="filePath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.CommonMethod.GetFileName(System.String,System.Single)">
+            <summary>
+            Get file name 
+            </summary>
+            <param name="filePath"></param>
+            <param name="ZoomFator"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Spire.PdfViewer.DocumentOpenedEventHandler">
+            <summary>
+            Provides document opened events
+            </summary>
+            <param name="sender"></param>
+            <param name="args"></param>
+        </member>
+        <member name="T:Spire.PdfViewer.DocumentClosedEventHandler">
+            <summary>
+            Provides document closed events
+            </summary>
+            <param name="sender"></param>
+            <param name="args"></param>
+        </member>
+        <member name="T:Spire.PdfViewer.PageNumberChangedEventHandler">
+            <summary>
+            Provides page number changed events.
+            </summary>
+            <param name="sender"></param>
+            <param name="args"></param>
+        </member>
+        <member name="T:Spire.PdfViewer.ZoomChangedEventHandler">
+            <summary>
+            Provides zoom changed events
+            </summary>
+            <param name="sender"></param>
+            <param name="zoomFactor"></param>
+        </member>
+        <member name="T:Spire.PdfViewer.Asp.PdfDocumentAttachmentAnnotation">
+            <summary>
+            PDF document attachment annotation
+            </summary>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfDocumentAttachmentAnnotation.SaveAs(System.String)">
+            <summary>
+            Exported attachment annotaion data to file
+            </summary>
+            <param name="filePath"></param>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentAttachmentAnnotation.FileName">
+            <summary>
+            Attachment file name
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentAttachmentAnnotation.Text">
+            <summary>
+            Attachment annotation Text
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentAttachmentAnnotation.PageIndex">
+            <summary>
+            Attachment annotation page index
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentAttachmentAnnotation.Location">
+            <summary>
+            Attachment annotaion location in page 
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentAttachmentAnnotation.Color">
+            <summary>
+            Attachment annotation text color
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentAttachmentAnnotation.Icon">
+            <summary>
+            Attachment annotation icon
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentAttachmentAnnotation.Data">
+            <summary>
+            Attachment annotaion file data
+            </summary>
+        </member>
+        <member name="T:Spire.PdfViewer.Asp.PdfDocumentBookmarkContainer">
+            <summary>
+            Root bookmark of PDF document
+            </summary>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfDocumentBookmark.Convert(Spire.Pdf.Bookmarks.PdfBookmark,Spire.PdfViewer.Asp.PdfDocumentViewer)">
+             <summary>
+            转换Spire.pdf Pdfbookmark 为spire.pdfViewer 中的PdfDocumentBookmark
+             </summary>
+             <param name="bookMark"></param>
+             <param name="viewer"></param>
+             <returns></returns>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentBookmark.Title">
+            <summary>
+            The title of current bookmark.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentBookmark.Color">
+            <summary>
+            The color of bookmark.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentBookmark.Id">
+            <summary>
+            书签在同级别兄弟书签中的位置索引
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentBookmark.Previous">
+            <summary>
+            Previous sibling bookmark of current bookmark.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentBookmark.Next">
+            <summary>
+            Next sibling bookmark of current bookmark.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentBookmark.Children">
+            <summary>
+            All children object of current bookmark.
+            </summary>
+        </member>
+        <member name="T:Spire.PdfViewer.Asp.PdfViewerMode.PdfViewerMode">
+            <summary>
+            PdfDocumentViewer display mode
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfDocumentViewer.convertor">
+            <summary>
+            Point to Pix
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfDocumentViewer.m_IsUsedPdfViewer">
+            <summary>
+            whether PdfViewer
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfDocumentViewer.m_VirtualPdfFile">
+            <summary>
+            the virtual path
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfDocumentViewer.m_Password">
+            <summary>
+            file password
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfDocumentViewer.m_pageBounds">
+            <summary>
+            the size of each page
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfDocumentViewer.m_MaxPageBoundsWidth">
+            <summary>
+            All Page Max Bounds Width
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfDocumentViewer.m_ZoomFactor">
+            <summary>
+            Zoom value of page, default is 1.
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfDocumentViewer.m_CacheNumberStream">
+            <summary>
+             Cache the number of Sream, default is 100.
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfDocumentViewer.m_CurrentPage">
+            <summary>
+            Current Page
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfDocumentViewer.m_isEvalExpired">
+            <summary>
+            valid
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfDocumentViewer.m_dictionary">
+            <summary>
+             Key,base64string value
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfDocumentViewer.m_CacheTime">
+            <summary>
+            The caching time of an image, specified in seconds.
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfDocumentViewer.m_ScrollInterval">
+            <summary>
+            The time of responding to event after stop scrolling, specified in milliseconds.default is 500
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfDocumentViewer.m_CacheInterval">
+            <summary>
+            The interval time of emptying caching, specified in seconds.
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfDocumentViewer.m_CacheStreamInterval">
+            <summary>
+            The interval time of emptying caching, specified in seconds.
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfDocumentViewer.m_CacheStreamTime">
+            <summary>
+            The caching time of an image, specified in seconds.
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfDocumentViewer.m_CacheNumberImage">
+            <summary>
+            Cache the number of Image, default is 1000.
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfDocumentViewer.m_CustomErrorMessages">
+            <summary>
+            Custom Error Messages
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfDocumentViewer.m_PdfViewerID">
+            <summary>
+            father Control
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfDocumentViewer.keyValue">
+            <summary>
+            Argument key value
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfDocumentViewer.m_CallbackArgument">
+             <summary>
+            requset a Argument
+             </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Asp.PdfDocumentViewer.m_LoadStreamComplete">
+            <summary>
+            Whether to read file stream complete
+            </summary>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfDocumentViewer.Render(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfDocumentViewer.RenderContentsJs(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfDocumentViewer.RenderContents(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfDocumentViewer.LoadFromFile(System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            Load file
+            </summary>
+            <param name="filePath"></param>
+            <param name="startIndex"></param>
+            <param name="endIndex"></param>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfDocumentViewer.AddClientIDToSession(System.String)">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfDocumentViewer.GetClientIDFromSession">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfDocumentViewer.LoadFromFile(System.String,System.String,System.Collections.Generic.List{System.String},System.Int32,System.Int32)">
+            <summary>
+            Load file
+            </summary>
+            <param name="filePath"></param>
+            <param name="notKeys"></param>
+            <param name="startIndex"></param>
+            <param name="endIndex"></param>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfDocumentViewer.LoadFromStream(System.IO.Stream,System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            Load Stream
+            </summary>
+            <param name="filePath"></param>
+            <param name="startIndex"></param>
+            <param name="endIndex"></param>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfDocumentViewer.LoadFromStream(System.IO.Stream,System.String,System.String,System.Collections.Generic.List{System.String},System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="streamMark"></param>
+            <param name="stream"></param>
+            <param name="password"></param>
+            <param name="notKeys"></param>
+            <param name="startIndex"></param>
+            <param name="endIndex"></param>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfDocumentViewer.CopyStream(System.IO.Stream)">
+            <summary>
+            Copy stream
+            </summary>
+            <param name="file"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfDocumentViewer.ComputePageBounds">
+            <summary>
+            Page Bound
+            </summary>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfDocumentViewer.GetResourceUrl(System.String)">
+            <summary>
+            Get Resource Url
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfDocumentViewer.LoadFromStream(System.IO.Stream)">
+            <summary>
+            Load PDF document from stream.
+            </summary>
+            <param name="stream">Data stream</param>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfDocumentViewer.LoadFromStream(System.IO.Stream,System.String)">
+            <summary>
+            load from Stream
+            </summary>
+            <param name="filePath"></param>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfDocumentViewer.LoadFromFile(System.String)">
+            <summary>
+            Load PDF document from file.
+            </summary>
+            <param name="filePath">File path</param>
+        </member>
+        <member name="M:Spire.PdfViewer.Asp.PdfDocumentViewer.LoadFromFile(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="filePath">File path</param>
+            <param name="password">File password</param>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentViewer.CountPage">
+            <summary>
+            Get PDF document total page count
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentViewer.FileName">
+            <summary>
+            Get PDF document file name.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentViewer.ScrollInterval">
+            <summary>
+            The time of responding to event after stop scrolling, specified in milliseconds.default is 500
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentViewer.CacheTime">
+            <summary>
+            The caching time of an image, specified in seconds.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentViewer.CacheInterval">
+            <summary>
+            The interval time of emptying caching, specified in seconds.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentViewer.CacheStreamInterval">
+            <summary>
+            The interval time of emptying caching, specified in seconds.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentViewer.CacheStreamTime">
+            <summary>
+            The caching time of an image, specified in seconds.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentViewer.CacheNumberImage">
+            <summary>
+             Cache the number of Image, default is 1000.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentViewer.IsUsedPdfViewer">
+            <summary>
+            whether PdfViewer
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentViewer.Dictionary">
+            <summary>
+            Key,base64string value
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentViewer.CurrentPage">
+            <summary>
+            Current page
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentViewer.VirtualPdfFile">
+            <summary>
+             the virtual path
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentViewer.Password">
+            <summary>
+            file password
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentViewer.ZoomFactor">
+            <summary>
+            Zoom value of page, default is 1.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentViewer.CacheNumberStream">
+            <summary>
+            Cache the number of Sream, default is 100.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentViewer.CustomErrorMessages">
+            <summary>
+            Custom Error Messages
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentViewer.LoadStreamComplete">
+            <summary>
+            Whether to read file stream complete
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentViewer.PdfViewerID">
+            <summary>
+            father Control
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentViewer.PageBounds">
+            <summary>
+            Page Bounds
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentViewer.MaxPageBoundsWidth">
+            <summary>
+            All Page Max Bounds Width
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.PdfDocumentViewer.PageBoundsList">
+            <summary>
+            Page Bound
+            </summary>
+        </member>
+        <member name="T:Spire.PdfViewer.Asp.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.Properties.Resources.FitPage">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.Properties.Resources.FitWindow">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.Properties.Resources.GoToFirstPage_Disabled">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.Properties.Resources.GoToFirstPage_Enabled">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.Properties.Resources.GoToLastPage_Disabled">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.Properties.Resources.GoToLastPage_Enabled">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.Properties.Resources.GoToNextPage_Disabled">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.Properties.Resources.GoToNextPage_Enabled">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.Properties.Resources.GoToPreviousPage_Disabled">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.Properties.Resources.GoToPreviousPage_Enabled">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.Properties.Resources.InfoIcon">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.Properties.Resources.OpenDocument">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.Properties.Resources.PrintDocument">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.Properties.Resources.Save">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.Properties.Resources.ShowOnePage">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.Properties.Resources.side">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.Properties.Resources.ZoomIn">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Asp.Properties.Resources.ZoomOut">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="T:Spire.PdfViewer.Forms.PdfDocumentAttachment">
+            <summary>
+            PDF document attachment
+            </summary>
+        </member>
+        <member name="M:Spire.PdfViewer.Forms.PdfDocumentAttachment.SaveAS(System.String)">
+            <summary>
+            Exported attachment data to file
+            </summary>
+            <param name="filePath"></param>
+        </member>
+        <member name="P:Spire.PdfViewer.Forms.PdfDocumentAttachment.FileName">
+            <summary>
+            Attachment file name
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Forms.PdfDocumentAttachment.Description">
+            <summary>
+            Attachment description
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Forms.PdfDocumentAttachment.MimeType">
+            <summary>
+            Attachment mime type
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Forms.PdfDocumentAttachment.CreationTime">
+            <summary>
+            Attachment creat time
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Forms.PdfDocumentAttachment.ModifyTime">
+            <summary>
+            Attachment modify time
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Forms.PdfDocumentAttachment.Data">
+            <summary>
+            Attachment file data
+            </summary>
+        </member>
+        <member name="T:Spire.PdfViewer.Forms.PdfDocumentInfo">
+            <summary>
+            PDF document basic information
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Forms.PdfDocumentInfo.Title">
+            <summary>
+            PDF document title
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Forms.PdfDocumentInfo.Author">
+            <summary>
+            PDF document author
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Forms.PdfDocumentInfo.Creator">
+            <summary>
+            PDF document creator
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Forms.PdfDocumentInfo.Producer">
+            <summary>
+            PDF document producer
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Forms.PdfDocumentInfo.Keywords">
+            <summary>
+            PDF document keywords
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Forms.PdfDocumentInfo.Subject">
+            <summary>
+            PDF document subject
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Forms.PdfDocumentInfo.CreationDate">
+            <summary>
+            PDF document create date
+            </summary>
+        </member>
+        <member name="P:Spire.PdfViewer.Forms.PdfDocumentInfo.ModificationDate">
+            <summary>
+            PDF document modification date
+            </summary>
+        </member>
+        <member name="T:Spire.PdfViewer.Asp.PageLayoutMode">
+            <summary>
+            PdfDocumentViewer Page display mode 
+            </summary>
+        </member>
+        <member name="T:Spire.PdfViewer.Forms.PasswordDlg">
+            <summary>
+            Summary description for password.
+            </summary>
+        </member>
+        <member name="F:Spire.PdfViewer.Forms.PasswordDlg.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Spire.PdfViewer.Forms.PasswordDlg.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:Spire.PdfViewer.Forms.PasswordDlg.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="T:Spire.PdfViewer.Forms.PdfPagePonit">
+             <summary>
+            location of PDF document bookmark 
+             </summary>
+        </member>
+    </members>
+</doc>

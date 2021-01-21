@@ -1,0 +1,742 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Spire.OfficeViewer.Forms</name>
+    </assembly>
+    <members>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.OpenFile(System.Object,System.EventArgs)">
+            <summary>
+            This event is open a file 
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.GoToFirstPage">
+            <summary>
+            Go to first page.
+            </summary>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.GoToLastPage">
+            <summary>
+            Go to last page.
+            </summary>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.GoToNextPage">
+            <summary>
+            Go to next page.
+            </summary>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.GoToPage(System.Int32)">
+            <summary>
+            Go to specific page.
+            </summary>
+            <param name="pageNumber">page number</param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.GoToPreviousPage">
+            <summary>
+            Go to previous page
+            </summary>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.CloseDocument">
+            <summary>
+            Closes the Doc document.
+            </summary>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.Close(System.Boolean,System.Boolean)">
+            <summary>
+            Closes the DOC document.
+            </summary>
+            <param name="cleartoPdfParameter"></param>
+            <param name="disposing"></param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.Close(System.Boolean)">
+            <summary>
+            Closes the Office document.
+            </summary>
+            <param name="cleartoPdfParameter"></param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.LoadFromFile(System.String)">
+            <summary>
+             Opens the document from a file.
+            </summary>
+            <param name="filePath"></param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.LoadFromFile(System.String,System.String)">
+            <summary>
+             Opens the document from a file and password.
+            </summary>
+            <param name="filePath"></param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.LoadFromFile(System.String,Spire.OfficeViewer.Forms.FileType)">
+            <summary>
+            Open the document according to the files and file type.
+            </summary>
+            <param name="filePath">Name of the file.</param>       
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.LoadFromFile(System.String,Spire.OfficeViewer.Forms.FileType,System.String)">
+            <summary>
+             Open the document according to the files, file type and password.
+            </summary>
+            <param name="fileName">Name of the file.</param>
+            <param name="password">The password.</param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.DetermineFileType(System.String)">
+            <summary>
+            Loading Document examples
+            </summary>
+            <param name="document">Document examples for Spire.Doc</param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.SaveAs(System.String)">
+            <summary>
+            File format to save another
+            </summary>
+            <param name="fileName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.SaveImage(System.UInt16)">
+            <summary>
+            Saves DOC document page as image
+            </summary>
+            <param name="startindex">Page with page index to save as image</param>
+            <returns>Returns  page as Image</returns>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.SaveImage(System.UInt16,System.UInt16)">
+            <summary>
+            Exports the specified pages as Images
+            </summary>
+            <param name="startIndex">The starting page index</param>
+            <param name="endIndex">The ending page index</param>
+            <returns>Returns the specified pages as Images</returns>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.Dispose">
+            <summary>
+            Dispose
+            </summary>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.OnPaint(System.Windows.Forms.PaintEventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.WndProc(System.Windows.Forms.Message@)">
+            <summary>
+            
+            </summary>
+            <param name="m"></param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.OnSizeChanged(System.EventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.MoveScrollBar(Spire.OfficeViewer.Forms.ScrollBarType,System.Single)">
+            <summary>
+            Moving scroll bar.
+            </summary>
+            <param name="bar"></param>
+            <param name="targetPosition"></param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.SetHorizontalScrollBar">
+            <summary>
+            Show horizontal scroll bar.
+            </summary>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.HiddenScrollBar">
+            <summary>
+            hidden scroll bar.
+            </summary>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.SetScrollBarRange(Spire.OfficeViewer.Forms.ScrollBarType,System.Int32,System.Int32)">
+            <summary>
+            Set ScrollBar Info.
+            </summary>
+            <param name="bar"></param>
+            <param name="min"></param>
+            <param name="max"></param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.SetScrollBarLength(Spire.OfficeViewer.Forms.ScrollBarType,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="bar"></param>
+            <param name="length"></param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.OnParentSizeChanged(System.Object,System.EventArgs)">
+            <summary>
+            当父窗口改变时改变滚动条比列.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.ZoomTo(Spire.OfficeViewer.Forms.ZoomMode)">
+            <summary>
+            Set Zoom by ZoomMode
+            </summary>
+            <param name="mode"></param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.ZoomTo(System.Int32)">
+            <summary>
+            Set Zoom by percentage
+            </summary>
+            <param name="percentage"></param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.ShowProgreesForm">
+            <summary>
+            显示进度条窗口
+            </summary>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.CloseProgressForm">
+            <summary>
+             关闭进度条窗口
+            </summary>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.OnLoaded(System.EventArgs)">
+            <summary>
+            加载页面数据完成事件
+            </summary>
+            <param name="eventArgs"></param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentViewer.LoadPages(Spire.OfficeViewer.Forms.FileType)">
+            <summary>
+            加载页面数据
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.DocumentViewer.EnableHandTools">
+            <summary>
+            Gets or Sets hand tool
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.DocumentViewer.HiddenText">
+            <summary>
+            Set parameters are show hidden text
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.DocumentViewer.PrintDialog">
+            <summary>
+            Set print parnameters
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.DocumentViewer.PrintDocument">
+            <summary>
+            Gets the PrintDocument
+            </summary>
+        </member>
+        <member name="E:Spire.OfficeViewer.Forms.DocumentViewer.PageNumberChanged">
+            <summary>
+            Occurs current page number changed.
+            </summary>
+        </member>
+        <member name="E:Spire.OfficeViewer.Forms.DocumentViewer.DocLoaded">
+            <summary>
+            Provides document loaded events.
+            </summary>
+        </member>
+        <member name="E:Spire.OfficeViewer.Forms.DocumentViewer.DocClosed">
+            <summary>
+            Provides document closed events.
+            </summary>
+        </member>
+        <member name="E:Spire.OfficeViewer.Forms.DocumentViewer.ZoomChanged">
+            <summary>
+            Occurs zoom changed.
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.DocumentViewer.FileName">
+            <summary>
+            Get opened Doc file name.
+            </summary>
+        </member>
+        <member name="E:Spire.OfficeViewer.Forms.DocumentViewer.NavigationButtonStatesChanged">
+            <summary>
+            Navigation Button States Changed
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.DocumentViewer.LoadedDocument">
+            <summary>
+            Gets/Sets loaded document.
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.DocumentViewer.ProgressControl">
+            <summary>
+            Get according to the progress control.
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.DocumentViewer.AltPageCount">
+            <summary>
+            Gets/Set page count.
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.DocumentViewer.Pages">
+            <summary>
+            Gets pages array.
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.DocumentViewer.CurrentPageNumber">
+            <summary>
+            Gets the page number for the currently displayed page.
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.DocumentViewer.PageIndex">
+            <summary>
+            Gets the page index for the currently displayed page.
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.DocumentViewer.PageCount">
+            <summary>
+            Gets the current number of display pages for the content.
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.DocumentViewer.ZoomMode">
+            <summary>
+            Gets or Sets the Zoom mode.
+            </summary>
+        </member>
+        <member name="T:Spire.OfficeViewer.Forms.SearchStringStruct">
+             <summary>
+            Find the search string character information.
+             </summary>
+        </member>
+        <member name="F:Spire.OfficeViewer.Forms.SearchStringStruct.FindChar">
+            <summary>
+            Need to search strings.
+            </summary>
+        </member>
+        <member name="F:Spire.OfficeViewer.Forms.SearchStringStruct.IgnoreCase">
+            <summary>
+            Is Case-sensitive.
+            </summary>
+        </member>
+        <member name="F:Spire.OfficeViewer.Forms.SearchStringStruct.StringPosition">
+            <summary>
+            Find a string position.
+            </summary>
+        </member>
+        <member name="T:Spire.OfficeViewer.Forms.StringPosition">
+            <summary>
+            The string in the page number,location within the page,border.
+            </summary>
+        </member>
+        <member name="F:Spire.OfficeViewer.Forms.StringPosition.PageNum">
+             <summary>
+            String in the page number.
+             </summary>
+        </member>
+        <member name="F:Spire.OfficeViewer.Forms.StringPosition.Bounds">
+            <summary>
+            String in position within the page,and borders.
+            </summary>
+        </member>
+        <member name="T:Spire.OfficeViewer.Forms.FoundCharEventHandler">
+            <summary>
+            Find character events entrust treatment.
+            </summary>
+            <param name="serder"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.Win32Utilitie.GetScrollInfo(System.IntPtr,System.Int32,Spire.OfficeViewer.Forms.ScrollInfo@)">
+            <summary>
+            Get the scrollbar parameters.
+            </summary>
+            <param name="hWnd"></param>
+            <param name="fnBar"></param>
+            <param name="lpsi"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.Win32Utilitie.SetScrollInfo(System.IntPtr,System.Int32,Spire.OfficeViewer.Forms.ScrollInfo@,System.Boolean)">
+            <summary>
+            Set the scrollbar parameters.
+            </summary>
+            <param name="hWnd"></param>
+            <param name="fnBar"></param>
+            <param name="lpsi"></param>
+            <param name="fRedraw"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.Win32Utilitie.GetScrollPos(System.IntPtr,System.Int32)">
+            <summary>
+            Get Scrollbor in the current position of the scroll button.
+            </summary>
+            <param name="hwnd"></param>
+            <param name="nbar"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.Win32Utilitie.SetScrollPos(System.IntPtr,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Set scrollbar rolling the location of the button.
+            </summary>
+            <param name="hWnd"></param>
+            <param name="nBar"></param>
+            <param name="nPos"></param>
+            <param name="Rush"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.Win32Utilitie.UpdateWindow(System.IntPtr)">
+            <summary>
+            Update Window.
+            </summary>
+            <param name="hWnd"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.Win32Utilitie.SendMessage(System.IntPtr,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Send Message to one or more of the form.
+            </summary>
+            <param name="hWnd"></param>
+            <param name="msg"></param>
+            <param name="wParam"></param>
+            <param name="lParam"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.Win32Utilitie.PostMessage(System.IntPtr,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="hWnd"></param>
+            <param name="msg"></param>
+            <param name="wParam"></param>
+            <param name="lParam"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.Win32Utilitie.ShowScrollBar(System.IntPtr,System.Int32,System.Int32)">
+            <summary>
+            Displays or hide designated the scroll bar.
+            </summary>
+            <param name="hWnd"></param>
+            <param name="fnBar"></param>
+            <param name="bShow"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Spire.OfficeViewer.Forms.FileType">
+            <summary>
+            Collections of file types.
+            </summary>
+        </member>
+        <member name="F:Spire.OfficeViewer.Forms.FileType.Excel">
+            <summary>
+            Excel File
+            </summary>
+        </member>
+        <member name="F:Spire.OfficeViewer.Forms.FileType.Word">
+            <summary>
+            Word File
+            </summary>
+        </member>
+        <member name="F:Spire.OfficeViewer.Forms.FileType.Ppt">
+            <summary>
+            Presentation File
+            </summary>
+        </member>
+        <member name="F:Spire.OfficeViewer.Forms.FileType.PDF">
+            <summary>
+            Pdf file
+            </summary>
+        </member>
+        <member name="F:Spire.OfficeViewer.Forms.FileType.UnKnow">
+            <summary>
+            Unknown file
+            </summary>
+        </member>
+        <member name="T:Spire.OfficeViewer.Forms.PageLayoutMode">
+            <summary>
+            PdfDocumentViewer Page display mode 
+            </summary>
+        </member>
+        <member name="T:Spire.OfficeViewer.Forms.ZoomMode">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Spire.OfficeViewer.Forms.ZoomMode.Default">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Spire.OfficeViewer.Forms.ZoomMode.FitPage">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Spire.OfficeViewer.Forms.ZoomMode.FitWidth">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Spire.OfficeViewer.Forms.ProgressForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.ProgressForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.ProgressForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.VirtualizingPagePanel.GetPart(System.Drawing.Image,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
+            <summary>      
+            获取图片指定部分
+            </summary>
+            <param name="pPath">图片路径</param>
+            <param name="pPartStartPointX">目标图片开始绘制处的坐标X值(通常为0)</param>
+            <param name="pPartStartPointY">目标图片开始绘制处的坐标Y值(通常为0)</param>
+            <param name="pPartWidth">目标图片的宽度</param>
+            <param name="pPartHeight">目标图片的高度</param>
+            <param name="pOrigStartPointX">原始图片开始截取处的坐标X值</param>
+            <param name="pOrigStartPointY">原始图片开始截取处的坐标Y值</param>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.VirtualizingPagePanel.FindText">
+            <summary>
+            Set find text
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.VirtualizingPagePanel.FindTextHighLightColor">
+            <summary>
+            find text color
+            </summary>
+        </member>
+        <member name="T:Spire.OfficeViewer.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.HyperlinksLabel.OnLocationChanged(System.EventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.HyperlinksLabel.OnPaint(System.Windows.Forms.PaintEventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="pe"></param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.HyperlinksLabel.OnMouseLeave(System.EventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.HyperlinksLabel.SetToolTipInfo">
+            <summary>
+            Set tooltip pop info.
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.HyperlinksLabel.LinkData">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.HyperlinksLabel.Image">
+            <summary>
+            get/set transparent image
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.HyperlinksLabel.Visible">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.HyperlinksLabel.CreateParams">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.OfficeViewer.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.OfficeViewer.CloseDocument">
+            <summary>
+            Closes the Doc document
+            </summary>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.OfficeViewer.SaveAsImage(System.UInt16)">
+            <summary>
+            Saves page to image.
+            </summary>
+            <param name="pageNumber">Page number</param>
+            <returns></returns>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.OfficeViewer.SaveAsImage(System.UInt16,System.UInt16)">
+            <summary>
+            Saves page to image.
+            </summary>
+            <param name="startPageNumber">start page number</param>
+            <param name="endPageNumber">end page number</param>
+            <returns></returns>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.OfficeViewer.GoToPage(System.Int32)">
+            <summary>
+            Jump to a specified page number. 
+            </summary>
+            <param name="index">The number of the page to jump to.</param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.OfficeViewer.LoadFromFile(System.String)">
+            <summary>
+            Load the Doc document from a file. 
+            </summary>
+            <param name="filePath">The name of the file that contains the Doc document.</param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.OfficeViewer.Load(System.String,System.String)">
+            <summary>
+            Load the document from a file. 
+            </summary>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.OfficeViewer.Load(System.String,Spire.OfficeViewer.Forms.FileType,System.String)">
+            <summary>
+            Load the document from a file. 
+            </summary>
+            <param name="fileName">file name</param>
+            <param name="password">password</param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.OfficeViewer.SaveToFile(System.String)">
+            <summary>
+            Save Doc documetns
+            </summary>
+            <param name="filePath"></param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.OfficeViewer.Print">
+            <summary>
+            Print Doc document
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.OfficeViewer.FileName">
+            <summary>
+            Gets the current opened Doc file name.
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.OfficeViewer.PageCount">
+            <summary>
+            Gets the current number of display pages for the content.
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.OfficeViewer.IsToolBarVisible">
+            <summary>
+            Gets or sets whether is visible of toolbar.
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.OfficeViewer.PrintDocument">
+            <summary>
+            Defines a reusable object that sends output to a printer, when printing from current document.
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.OfficeViewer.CurrentPageNumber">
+            <summary>
+            Gets the page number for the currently displayed page.
+            </summary>
+        </member>
+        <member name="E:Spire.OfficeViewer.Forms.OfficeViewer.PageNumberChanged">
+            <summary>
+            Occurs current page number changed.
+            </summary>
+        </member>
+        <member name="E:Spire.OfficeViewer.Forms.OfficeViewer.DocumentOpened">
+            <summary>
+            Occurs after a document is opened.
+            </summary>
+        </member>
+        <member name="E:Spire.OfficeViewer.Forms.OfficeViewer.DocumentClosed">
+            <summary>
+            Occurs after a document is closed.
+            </summary>
+        </member>
+        <member name="E:Spire.OfficeViewer.Forms.OfficeViewer.ZoomChanged">
+            <summary>
+            Occurs zoom changed.
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.OfficeViewer.CanPrint">
+            <summary>
+            Can print.
+            </summary>
+        </member>
+        <member name="T:Spire.OfficeViewer.Forms.DocumentToolbar">
+            <summary>
+            Menu bar provided by officeviewer.
+            </summary>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentToolbar.Initialize(Spire.OfficeViewer.Forms.DocumentViewer)">
+            <summary>
+            Initialize DocumentToolbar
+            </summary>
+            <param name="view"></param>
+        </member>
+        <member name="M:Spire.OfficeViewer.Forms.DocumentToolbar.EnableControl(System.Boolean)">
+            <summary>
+            是否起用控件
+            </summary>
+            <param name="enable"></param>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.DocumentToolbar.ActiveView">
+            <summary>
+            DocumentViewer object as attributes
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.DocumentToolbar.AllowPrint">
+            <summary>
+            AllowPrint
+            </summary>
+        </member>
+        <member name="P:Spire.OfficeViewer.Forms.DocumentToolbar.AllowSave">
+            <summary>
+            AllowSave
+            </summary>
+        </member>
+        <member name="T:Spire.OfficeViewer.Forms.DocumentOpenedEventHandler">
+            <summary>
+            Provides document opened events
+            </summary>
+            <param name="sender"></param>
+            <param name="args"></param>
+        </member>
+        <member name="T:Spire.OfficeViewer.Forms.DocumentClosedEventHandler">
+            <summary>
+            Provides document closed events
+            </summary>
+            <param name="sender"></param>
+            <param name="args"></param>
+        </member>
+        <member name="T:Spire.OfficeViewer.Forms.PageNumberChangedEventHandler">
+            <summary>
+            Provides page number changed events.
+            </summary>
+            <param name="sender"></param>
+            <param name="args"></param>
+        </member>
+        <member name="T:Spire.OfficeViewer.Forms.NavigationButtonStatesChangedEventHandler">
+            <summary>
+            Provides navigation button states changed events.
+            </summary>
+            <param name="sender"></param>
+            <param name="args"></param>
+        </member>
+        <member name="T:Spire.OfficeViewer.Forms.ZoomChangedEventHandler">
+            <summary>
+            Provides zoom changed events
+            </summary>
+            <param name="sender"></param>
+            <param name="zoomFactor"></param>
+        </member>
+    </members>
+</doc>
