@@ -1,6 +1,6 @@
 
 
-from glasswall.common.determine_file_type.classes import FileTypeEnumSuccess
+from glasswall.determine_file_type.classes import FileTypeEnumSuccess
 
 
 # The file types that we support.

@@ -1,6 +1,6 @@
 
 
-from glasswall.common.determine_file_type.classes import FileTypeEnumError
+from glasswall.determine_file_type.classes import FileTypeEnumError
 
 
 class UnknownErrorCode(FileTypeEnumError):

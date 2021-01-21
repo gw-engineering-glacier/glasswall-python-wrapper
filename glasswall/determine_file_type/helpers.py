@@ -2,7 +2,7 @@
 
 from typing import Union
 
-from glasswall.common.determine_file_type.classes import FileTypeEnum, FileTypeEnumError, FileTypeEnumSuccess
+from glasswall.determine_file_type.classes import FileTypeEnum, FileTypeEnumError, FileTypeEnumSuccess
 
 error_list = FileTypeEnumError.__subclasses__()
 success_list = FileTypeEnumSuccess.__subclasses__()
