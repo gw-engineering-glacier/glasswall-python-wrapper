@@ -17,7 +17,7 @@ os.makedirs(os.path.dirname(log_filename), exist_ok=True)
 
 # Logging to file
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO,
     format=fmt,
     datefmt=datefmt,
     filename=log_filename,

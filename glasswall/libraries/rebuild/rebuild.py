@@ -29,7 +29,6 @@ class Rebuild(Library):
         self.validate_license()
 
         log.info(f"Loaded Glasswall {self.__class__.__name__} version {self.version()}")
-        print(f"Loaded Glasswall {self.__class__.__name__} version {self.version()}")
 
 
     def validate_license(self):

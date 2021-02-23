@@ -34,7 +34,6 @@ class ArchiveManager(Library):
         self.library = self.load_library(os.path.abspath(library_path))
 
         log.info(f"Loaded Glasswall {self.__class__.__name__} version {self.version()}")
-        print(f"Loaded Glasswall {self.__class__.__name__} version {self.version()}")
 
     def version(self):
         """ Returns the Glasswall library version.
