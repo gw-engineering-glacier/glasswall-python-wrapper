@@ -28,7 +28,7 @@ class Rebuild(Library):
         # Validate killswitch has not activated
         self.validate_license()
 
-        log.info(f"Loaded Glasswall {self.__class__.__name__} version {self.version()}")
+        log.info(f"Loaded Glasswall {self.__class__.__name__} version {self.version()} from {library_path}")
 
 
     def validate_license(self):
