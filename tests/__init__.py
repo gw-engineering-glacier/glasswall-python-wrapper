@@ -1,1 +1,1 @@
-# python -m unittest discover glasswall.tests -v
+# python -m unittest discover -v
