@@ -919,7 +919,7 @@ class Editor(Library):
             input_file = os.path.abspath(input_file)
 
             # API function declaration
-            self.library.GW2RegisterExportFile.argtypes = [
+            self.library.GW2RegisterImportFile.argtypes = [
                 ct.c_size_t,
                 ct.c_char_p
             ]
@@ -939,7 +939,7 @@ class Editor(Library):
             input_file = utils.as_bytes(input_file)
 
             # API function declaration
-            self.library.GW2RegisterExportMemory.argtypes = [
+            self.library.GW2RegisterImportMemory.argtypes = [
                 ct.c_size_t,
                 ct.c_void_p,
                 ct.c_size_t

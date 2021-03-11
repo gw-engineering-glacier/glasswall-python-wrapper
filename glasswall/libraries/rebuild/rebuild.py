@@ -611,7 +611,7 @@ class Rebuild(Library):
             # file to memory
             elif isinstance(input_file, str) and output_file is None:
                 # API function declaration
-                self.library.GWFileAnalysisAudit.argtypes = [
+                self.library.GWFileToMemoryAnalysisProtectAndExport.argtypes = [
                     ct.c_wchar_p,
                     ct.POINTER(ct.c_void_p),
                     ct.POINTER(ct.c_size_t)
