@@ -19,6 +19,7 @@ class pdfConfig(ConfigElement):
         self.switches = [
             switches.pdf.acroform(value=kwargs.get("acroform", default)),
             switches.pdf.actions_all(value=kwargs.get("actions_all", default)),
+            switches.pdf.digital_signatures(value=kwargs.get("digital_signatures", default)),
             switches.pdf.embedded_files(value=kwargs.get("embedded_files", default)),
             switches.pdf.embedded_images(value=kwargs.get("embedded_images", default)),
             switches.pdf.external_hyperlinks(value=kwargs.get("external_hyperlinks", default)),

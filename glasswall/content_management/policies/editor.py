@@ -9,7 +9,7 @@ class Editor(Policy):
 
     def __init__(self, default: str = "sanitise", config: dict = {}):
         self.config_elements = [
-            config_elements.pdfConfig(default=default, **config.get("pdfConfig", {})),
+            config_elements.pdfConfig(default=default, **{**config.get("pdfConfig", {}), **{"digital_signatures": "disallow"}}), # force Editor digital_signatures disallow
             config_elements.pptConfig(default=default, **config.get("pptConfig", {})),
             config_elements.sysConfig(**config.get("sysConfig", {})),
             config_elements.tiffConfig(default=default, **config.get("tiffConfig", {})),
