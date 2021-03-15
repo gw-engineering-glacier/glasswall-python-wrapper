@@ -246,8 +246,6 @@ class Editor(Library):
         Returns:
             status (int): The result of the Glasswall API call.
         """
-        # NOTE GW2RegisterPoliciesMemory currently has some issues, avoiding using it for now.
-
         # Validate type
         if not isinstance(session, int):
             raise TypeError(session)
@@ -261,70 +259,67 @@ class Editor(Library):
             input_file = glasswall.content_management.policies.Editor(default="sanitise")
 
         # Validate xml content is parsable
-        xml_string = utils.validate_xml(input_file)
+        utils.validate_xml(input_file)
 
-        # write xml to temporary file
-        with utils.TempFilePath(directory=os.environ.get("temp_directory", None), delete=False) as temp_file:
-            with open(temp_file, "w") as f:
-                f.write(xml_string)
-            input_file = temp_file
+        gw_return_object = glasswall.GwReturnObj()
 
-            # From file
-            if isinstance(input_file, str) and os.path.isfile(input_file):
-                # API function declaration
-                self.library.GW2RegisterPoliciesFile.argtypes = [
-                    ct.c_size_t,
-                    ct.c_char_p,
-                    ct.c_int,
-                ]
+        # From file
+        if isinstance(input_file, str) and os.path.isfile(input_file):
+            # API function declaration
+            self.library.GW2RegisterPoliciesFile.argtypes = [
+                ct.c_size_t,
+                ct.c_char_p,
+                ct.c_int,
+            ]
 
-                # Variable initialisation
-                ct_session = ct.c_size_t(session)
-                ct_input_file = ct.c_char_p(input_file.encode("utf-8"))
-                ct_file_format = ct.c_int(file_format)
+            # Variable initialisation
+            gw_return_object.ct_session = ct.c_size_t(session)
+            gw_return_object.ct_input_file = ct.c_char_p(input_file.encode("utf-8"))
+            gw_return_object.ct_file_format = ct.c_int(file_format)
 
-                status = self.library.GW2RegisterPoliciesFile(
-                    ct_session,
-                    ct_input_file,
-                    ct_file_format
-                )
+            gw_return_object.status = self.library.GW2RegisterPoliciesFile(
+                gw_return_object.ct_session,
+                gw_return_object.ct_input_file,
+                gw_return_object.ct_file_format
+            )
 
-        # # From memory
-        # elif isinstance(input_file, (str, bytes, bytearray, io.BytesIO)):
-        #     # Convert bytearray, io.BytesIO to bytes
-        #     if isinstance(input_file, (bytearray, io.BytesIO)):
-        #         input_file = utils.as_bytes(input_file)
-        #     # Convert string xml to bytes
-        #     if isinstance(input_file, str):
-        #         input_file = input_file.encode("utf-8")
-        #     # API function declaration
-        #     self.library.GW2RegisterPoliciesMemory.argtype = [
-        #         ct.c_size_t,
-        #         ct.c_char_p,
-        #         ct.c_int
-        #     ]
+        # From memory
+        elif isinstance(input_file, (str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy)):
+            # Convert bytearray, io.BytesIO to bytes
+            if isinstance(input_file, (bytearray, io.BytesIO)):
+                input_file = utils.as_bytes(input_file)
+            # Convert string xml or Policy to bytes
+            if isinstance(input_file, (str, glasswall.content_management.policies.Policy)):
+                input_file = input_file.encode("utf-8")
 
-        #     # Variable initialisation
-        #     ct_session = ct.c_size_t(session)
-        #     ct_buffer = ct.c_char_p(input_file)
-        #     ct_buffer_length = ct.c_size_t(len(input_file))
-        #     ct_file_format = ct.c_int(file_format)
+            # API function declaration
+            self.library.GW2RegisterPoliciesMemory.argtype = [
+                ct.c_size_t,
+                ct.c_char_p,
+                ct.c_int
+            ]
 
-        #     # API Call
-        #     status = self.library.GW2RegisterPoliciesMemory(
-        #         ct_session,
-        #         ct_buffer,
-        #         ct_buffer_length,
-        #         ct_file_format
-        #     )
+            # Variable initialisation
+            gw_return_object.ct_session = ct.c_size_t(session)
+            gw_return_object.ct_buffer = ct.c_char_p(input_file)
+            gw_return_object.ct_buffer_length = ct.c_size_t(len(input_file))
+            gw_return_object.ct_file_format = ct.c_int(file_format)
 
-        if status not in successes.success_codes:
-            log.warning(f"\n\tsession: {session}\n\tstatus: {status}")
-            raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+            # API Call
+            gw_return_object.status = self.library.GW2RegisterPoliciesMemory(
+                gw_return_object.ct_session,
+                gw_return_object.ct_buffer,
+                gw_return_object.ct_buffer_length,
+                gw_return_object.ct_file_format
+            )
+
+        if gw_return_object.status not in successes.success_codes:
+            log.warning(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
+            raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
         else:
-            log.debug(f"\n\tsession: {session}\n\tstatus: {status}")
+            log.debug(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
 
-        return status
+        return gw_return_object
 
     def register_input(self, session: int, input_file: Union[str, bytes, bytearray, io.BytesIO]):
         """ Register an input file or bytes for the given session.
@@ -563,36 +558,36 @@ class Editor(Library):
 
         with utils.CwdHandler(self.library_path):
             with self.new_session() as session:
-                # Set content management policy
-                self.set_content_management_policy(session, content_management_policy)
-
+                content_management_policy = self.set_content_management_policy(session, content_management_policy)
                 register_input = self.register_input(session, input_file)
                 register_output = self.register_output(session, output_file=output_file)
                 status = self.run_session(session)
+                # Ensure memory allocated by GW2RegisterPoliciesMemory is not garbage collected until after run_session
+                content_management_policy
 
-                if status not in successes.success_codes:
-                    if raise_unsupported:
-                        raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
-                    else:
-                        file_bytes = None
+        if status not in successes.success_codes:
+            if raise_unsupported:
+                raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+            else:
+                file_bytes = None
+        else:
+            # Get file bytes
+            if isinstance(output_file, str):
+                # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
+                if not os.path.isfile(output_file):
+                    log.warning(f"Glasswall returned success code: {status} but no output file was found: {output_file}")
+                    file_bytes = None
                 else:
-                    # Get file bytes
-                    if isinstance(output_file, str):
-                        # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
-                        if not os.path.isfile(output_file):
-                            log.warning(f"Glasswall returned success code: {status} but no output file was found: {output_file}")
-                            file_bytes = None
-                        else:
-                            with open(output_file, "rb") as f:
-                                file_bytes = f.read()
-                    else:
-                        # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
-                        file_bytes = utils.buffer_to_bytes(
-                            register_output.buffer,
-                            register_output.buffer_length
-                        )
+                    with open(output_file, "rb") as f:
+                        file_bytes = f.read()
+            else:
+                # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
+                file_bytes = utils.buffer_to_bytes(
+                    register_output.buffer,
+                    register_output.buffer_length
+                )
 
-                return file_bytes
+        return file_bytes
 
     def protect_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.Policy"] = None, raise_unsupported: bool = True):
         """ Recursively processes all files in a directory in protect mode using the given content management policy.
@@ -667,36 +662,36 @@ class Editor(Library):
 
         with utils.CwdHandler(self.library_path):
             with self.new_session() as session:
-                # Set content management policy
-                self.set_content_management_policy(session, content_management_policy)
-
+                content_management_policy = self.set_content_management_policy(session, content_management_policy)
                 register_input = self.register_input(session, input_file)
                 register_analysis = self.register_analysis(session, output_file)
                 status = self.run_session(session)
+                # Ensure memory allocated by GW2RegisterPoliciesMemory is not garbage collected until after run_session
+                content_management_policy
 
-                if status not in successes.success_codes:
-                    if raise_unsupported:
-                        raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
-                    else:
-                        file_bytes = None
+        if status not in successes.success_codes:
+            if raise_unsupported:
+                raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+            else:
+                file_bytes = None
+        else:
+            # Get file bytes
+            if isinstance(output_file, str):
+                # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
+                if not os.path.isfile(output_file):
+                    log.warning(f"Glasswall returned success code: {status} but no output file was found: {output_file}")
+                    file_bytes = None
                 else:
-                    # Get file bytes
-                    if isinstance(output_file, str):
-                        # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
-                        if not os.path.isfile(output_file):
-                            log.warning(f"Glasswall returned success code: {status} but no output file was found: {output_file}")
-                            file_bytes = None
-                        else:
-                            with open(output_file, "rb") as f:
-                                file_bytes = f.read()
-                    else:
-                        # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
-                        file_bytes = utils.buffer_to_bytes(
-                            register_analysis.buffer,
-                            register_analysis.buffer_length
-                        )
+                    with open(output_file, "rb") as f:
+                        file_bytes = f.read()
+            else:
+                # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
+                file_bytes = utils.buffer_to_bytes(
+                    register_analysis.buffer,
+                    register_analysis.buffer_length
+                )
 
-                return file_bytes
+        return file_bytes
 
     def analyse_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.Policy"] = None, raise_unsupported: bool = True):
         """ Analyses all files in a directory and its subdirectories. The analysis files are written to output_directory maintaining the same directory structure as input_directory.
@@ -835,37 +830,37 @@ class Editor(Library):
 
         with utils.CwdHandler(self.library_path):
             with self.new_session() as session:
-                # Set content management policy
-                self.set_content_management_policy(session, content_management_policy)
-
+                content_management_policy = self.set_content_management_policy(session, content_management_policy)
                 register_input = self.register_input(session, input_file)
                 register_export = self.register_export(session, output_file)
                 status = self.run_session(session)
+                # Ensure memory allocated by GW2RegisterPoliciesMemory is not garbage collected until after run_session
+                content_management_policy
 
-                if status not in successes.success_codes:
-                    log.warning(f"\n\tsession: {session}\n\tstatus: {status}")
-                    if raise_unsupported:
-                        raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
-                    else:
-                        file_bytes = None
+        if status not in successes.success_codes:
+            log.warning(f"\n\tsession: {session}\n\tstatus: {status}")
+            if raise_unsupported:
+                raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+            else:
+                file_bytes = None
+        else:
+            # Get file bytes
+            if isinstance(output_file, str):
+                # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
+                if not os.path.isfile(output_file):
+                    log.warning(f"Glasswall returned success code: {status} but no output file was found: {output_file}")
+                    file_bytes = None
                 else:
-                    # Get file bytes
-                    if isinstance(output_file, str):
-                        # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
-                        if not os.path.isfile(output_file):
-                            log.warning(f"Glasswall returned success code: {status} but no output file was found: {output_file}")
-                            file_bytes = None
-                        else:
-                            with open(output_file, "rb") as f:
-                                file_bytes = f.read()
-                    else:
-                        # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
-                        file_bytes = utils.buffer_to_bytes(
-                            register_export.buffer,
-                            register_export.buffer_length
-                        )
+                    with open(output_file, "rb") as f:
+                        file_bytes = f.read()
+            else:
+                # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
+                file_bytes = utils.buffer_to_bytes(
+                    register_export.buffer,
+                    register_export.buffer_length
+                )
 
-                return file_bytes
+        return file_bytes
 
     def export_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.Policy"] = None, raise_unsupported: bool = True):
         """ Exports all files in a directory and its subdirectories. The export files are written to output_directory maintaining the same directory structure as input_directory.
@@ -1008,37 +1003,37 @@ class Editor(Library):
 
         with utils.CwdHandler(self.library_path):
             with self.new_session() as session:
-                # Set content management policy
-                self.set_content_management_policy(session, content_management_policy)
-
+                content_management_policy = self.set_content_management_policy(session, content_management_policy)
                 register_import = self.register_import(session, input_file)
                 register_output = self.register_output(session, output_file)
                 status = self.run_session(session)
+                # Ensure memory allocated by GW2RegisterPoliciesMemory is not garbage collected until after run_session
+                content_management_policy
 
-                if status not in successes.success_codes:
-                    log.warning(f"\n\tsession: {session}\n\tstatus: {status}")
-                    if raise_unsupported:
-                        raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
-                    else:
-                        file_bytes = None
+        if status not in successes.success_codes:
+            log.warning(f"\n\tsession: {session}\n\tstatus: {status}")
+            if raise_unsupported:
+                raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+            else:
+                file_bytes = None
+        else:
+            # Get file bytes
+            if isinstance(output_file, str):
+                # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
+                if not os.path.isfile(output_file):
+                    log.warning(f"Glasswall returned success code: {status} but no output file was found: {output_file}")
+                    file_bytes = None
                 else:
-                    # Get file bytes
-                    if isinstance(output_file, str):
-                        # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
-                        if not os.path.isfile(output_file):
-                            log.warning(f"Glasswall returned success code: {status} but no output file was found: {output_file}")
-                            file_bytes = None
-                        else:
-                            with open(output_file, "rb") as f:
-                                file_bytes = f.read()
-                    else:
-                        # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
-                        file_bytes = utils.buffer_to_bytes(
-                            register_output.buffer,
-                            register_output.buffer_length
-                        )
+                    with open(output_file, "rb") as f:
+                        file_bytes = f.read()
+            else:
+                # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
+                file_bytes = utils.buffer_to_bytes(
+                    register_output.buffer,
+                    register_output.buffer_length
+                )
 
-                return file_bytes
+        return file_bytes
 
     def import_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.Policy"] = None, raise_unsupported: bool = True):
         """ Imports all files in a directory and its subdirectories. Files are expected as .zip but this is not forced.

@@ -142,7 +142,7 @@ class TestPolicy(unittest.TestCase):
 
     def test_encoded___return_matches_expected(self):
         self.assertEqual(
-            self.custom_policy.encoded,
+            self.custom_policy.encode(),
             inspect.cleandoc("""
             <?xml version="1.0" encoding="utf-8"?>
             <config>

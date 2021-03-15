@@ -19,6 +19,9 @@ class ConfigElement:
         # Sort self.switches by .name and .value
         self.switches.sort()
 
+    def __str__(self):
+        return self.text
+
     def __repr__(self):
         """ Change string representation of object. """
         return f'ConfigElement("{self.name}")'

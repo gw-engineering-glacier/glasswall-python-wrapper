@@ -100,7 +100,7 @@ class TestConfigElement(unittest.TestCase):
 
     def test_repr___config_element_pdfConfig___matches_expected(self):
         self.assertEqual(
-            str(self.config_element_pdfConfig),
+            repr(self.config_element_pdfConfig),
             'ConfigElement("pdfConfig")'
         )
 

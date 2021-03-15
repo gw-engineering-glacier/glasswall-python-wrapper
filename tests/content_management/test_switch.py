@@ -64,7 +64,7 @@ class TestSwitch(unittest.TestCase):
 
     def test_repr___matches_expected(self):
         self.assertEqual(
-            str(self.switch_embedded_images_allow),
+            repr(self.switch_embedded_images_allow),
             'Switch("embedded_images", "allow")'
         )
 

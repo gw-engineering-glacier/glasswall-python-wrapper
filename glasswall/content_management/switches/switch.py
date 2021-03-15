@@ -15,6 +15,9 @@ class Switch:
         self.value = value
         self.attributes = attributes or {}
 
+    def __str__(self):
+        return self.text
+
     def __repr__(self):
         """ Change string representation of object. """
         return f'Switch("{self.name}", "{self.value}")'

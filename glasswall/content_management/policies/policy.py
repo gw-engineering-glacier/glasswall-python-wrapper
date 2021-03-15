@@ -18,6 +18,9 @@ class Policy:
         # Sort self.config_elements by .name and .switches
         self.config_elements.sort()
 
+    def __str__(self):
+        return self.text
+
     @property
     def text(self):
         """ String representation of XML. """
@@ -30,10 +33,9 @@ class Policy:
 
         return string
 
-    @property
-    def encoded(self, **kwargs):
+    def encode(self, *args):
         """ UTF-8 encoded string representation of XML. """
-        return self.text.encode(**kwargs)
+        return str(self).encode(*args)
 
     def get_config_element_names(self):
         """ Returns a sorted list of unique ConfigElement.name values from self.config_elements. """
