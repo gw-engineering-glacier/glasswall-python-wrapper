@@ -21,7 +21,7 @@ class WordSearch(Library):
         super().__init__(library_path=library_path)
         self.library = self.load_library(os.path.abspath(library_path))
 
-        log.info(f"Loaded Glasswall {self.__class__.__name__} version {self.version()} from {library_path}")
+        log.info(f"Loaded Glasswall {self.__class__.__name__} version {self.version()} from {self.library_path}")
 
     def version(self):
         """ Returns the Glasswall library version.
