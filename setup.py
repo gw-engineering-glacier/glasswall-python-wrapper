@@ -15,7 +15,7 @@ setuptools.setup(
     long_description=long_description,
     author="AngusWR",
     author_email="aroberts@glasswallsolutions.com",
-    # url="",  # TODO
+    url="https://github.com/filetrust/glasswall-python",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3.6",
