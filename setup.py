@@ -13,6 +13,7 @@ setuptools.setup(
     version="0.1.0",
     description="Glasswall Python Wrapper",
     long_description=long_description,
+    long_description_content_type="text/markdown",
     author="AngusWR",
     author_email="aroberts@glasswallsolutions.com",
     url="https://github.com/filetrust/glasswall-python",
