@@ -3,9 +3,8 @@
 import os
 import platform
 import tempfile
-from pkg_resources import get_distribution
 
-__version__ = get_distribution(__name__).version
+__version__ = "0.1.1"
 
 _OPERATING_SYSTEM = platform.system()
 _PYTHON_VERSION = platform.python_version()
