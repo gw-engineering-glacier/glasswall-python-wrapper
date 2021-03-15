@@ -1,13 +1,14 @@
 
 
-__version__ = "0.10.0"
-
 import ctypes
 import logging
 import os
 import platform
 import tempfile
 from datetime import datetime
+from pkg_resources import get_distribution
+
+__version__ = get_distribution(__name__).version
 
 _PYTHON_VERSION = platform.python_version()
 _OPERATING_SYSTEM = platform.system()
