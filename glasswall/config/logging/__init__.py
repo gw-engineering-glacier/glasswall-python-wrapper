@@ -2,7 +2,6 @@
 
 import logging
 import os
-import tempfile
 from datetime import datetime
 
 import glasswall

@@ -68,7 +68,7 @@ class ConfigElement:
         """
         if isinstance(switch, Switch):
             # If switch is not in self.switches, raise error.
-            if not switch in self.switches:
+            if switch not in self.switches:
                 raise SwitchNotFound(switch)
 
             while switch in self.switches:

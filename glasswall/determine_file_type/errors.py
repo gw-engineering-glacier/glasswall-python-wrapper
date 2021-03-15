@@ -43,4 +43,3 @@ class ft_passwordProtectedOpcFile(FileTypeEnumError):
 class ft_nullPointerArgument(FileTypeEnumError):
     integer = 6
     string = "nullPointerArgument"
-

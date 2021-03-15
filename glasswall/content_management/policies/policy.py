@@ -57,7 +57,7 @@ class Policy:
         """
         if isinstance(config_element, ConfigElement):
             # If config_element is not in self.config_elements, raise error.
-            if not config_element in self.config_elements:
+            if config_element not in self.config_elements:
                 raise ConfigElementNotFound(config_element)
 
             # The ConfigElement instance exists in self.config_elements, remove the switch.
@@ -106,7 +106,7 @@ class Policy:
         """
         if isinstance(config_element, ConfigElement):
             # If config_element is not in self.config_elements, raise error.
-            if not config_element in self.config_elements:
+            if config_element not in self.config_elements:
                 raise ConfigElementNotFound(config_element)
 
             # The ConfigElement instance exists in self.config_elements, add the switch.
@@ -142,7 +142,7 @@ class Policy:
         """
         if isinstance(config_element, ConfigElement):
             # If config_element is not in self.config_elements, raise error.
-            if not config_element in self.config_elements:
+            if config_element not in self.config_elements:
                 raise ConfigElementNotFound(config_element)
 
             while config_element in self.config_elements:

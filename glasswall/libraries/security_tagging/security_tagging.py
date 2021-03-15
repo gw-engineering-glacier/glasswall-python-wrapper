@@ -5,7 +5,6 @@ import logging
 import os
 import sys
 
-import glasswall
 from glasswall import utils
 from glasswall.libraries.library import Library
 from glasswall.libraries.security_tagging import errors, successes
@@ -65,8 +64,8 @@ class SecurityTagging(Library):
             raise TypeError(raise_unsupported)
 
         # Convert paths to absolute paths
-        tags_path   = os.path.abspath(tags_path)
-        input_file  = os.path.abspath(input_file)
+        tags_path = os.path.abspath(tags_path)
+        input_file = os.path.abspath(input_file)
         output_file = os.path.abspath(output_file)
 
         # Make output directory if it does not exist
@@ -77,9 +76,9 @@ class SecurityTagging(Library):
             self.library.GWSecuTag_TagFile.argtypes = [ct.c_char_p]
 
             # Variable initialisation
-            ct_tags_path    = ct.c_char_p(tags_path.encode("utf-8"))
-            ct_input_file   = ct.c_char_p(input_file.encode("utf-8"))
-            ct_output_file  = ct.c_char_p(output_file.encode("utf-8"))
+            ct_tags_path = ct.c_char_p(tags_path.encode("utf-8"))
+            ct_input_file = ct.c_char_p(input_file.encode("utf-8"))
+            ct_output_file = ct.c_char_p(output_file.encode("utf-8"))
 
             # API call
             status = self.library.GWSecuTag_TagFile(
@@ -153,7 +152,7 @@ class SecurityTagging(Library):
 
         for relative_path in utils.list_file_paths(input_directory, absolute=False):
             # construct absolute paths
-            input_file  = os.path.abspath(os.path.join(input_directory, relative_path))
+            input_file = os.path.abspath(os.path.join(input_directory, relative_path))
             output_file = os.path.abspath(os.path.join(output_directory, relative_path))
 
             # call tag_file on each file in input to output
@@ -203,8 +202,8 @@ class SecurityTagging(Library):
             self.library.GWSecuTag_RetrieveTagFile.argtypes = [ct.c_char_p]
 
             # Variable initialisation
-            ct_input_file   = ct.c_char_p(input_file.encode("utf-8"))
-            ct_output_file  = ct.c_char_p(output_file.encode("utf-8"))
+            ct_input_file = ct.c_char_p(input_file.encode("utf-8"))
+            ct_output_file = ct.c_char_p(output_file.encode("utf-8"))
 
             # API call
             status = self.library.GWSecuTag_RetrieveTagFile(
@@ -250,7 +249,7 @@ class SecurityTagging(Library):
 
         for relative_path in utils.list_file_paths(input_directory, absolute=False):
             # construct absolute paths
-            input_file  = os.path.abspath(os.path.join(input_directory, relative_path))
+            input_file = os.path.abspath(os.path.join(input_directory, relative_path))
             output_file = os.path.abspath(os.path.join(output_directory, relative_path + ".xml"))
 
             # call retrieve_tags on each file in input to output
