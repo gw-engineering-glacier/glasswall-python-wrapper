@@ -27,6 +27,6 @@ log = logging.getLogger("glasswall")
 
 # Logging to console
 console = logging.StreamHandler()
-console.setLevel(logging.ERROR)
+console.setLevel(logging.INFO)
 console.setFormatter(logging.Formatter(fmt, datefmt=datefmt))
 logging.getLogger("").addHandler(console)
