@@ -5,7 +5,7 @@ A high level Python wrapper for interfacing with Glasswall libraries.
 
 ## Getting Started
 Install via pip:
-```cmd
+```
 pip install glasswall
 ```
 
@@ -20,6 +20,7 @@ pip install glasswall
 
 <details open>
 <summary>Loading a Glasswall Library</summary>
+
 Currently the following libraries are supported:
 
 * ArchiveManager
