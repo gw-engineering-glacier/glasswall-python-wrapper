@@ -1,16 +1,13 @@
 
 
-__version__ = "0.10.0"
-
-import ctypes
-import logging
 import os
 import platform
 import tempfile
-from datetime import datetime
 
-_PYTHON_VERSION = platform.python_version()
+__version__ = "0.1.1"
+
 _OPERATING_SYSTEM = platform.system()
+_PYTHON_VERSION = platform.python_version()
 _ROOT = os.path.dirname(__file__)
 _TEMPDIR = os.path.join(tempfile.gettempdir(), "glasswall")
 

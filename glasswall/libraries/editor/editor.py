@@ -562,8 +562,8 @@ class Editor(Library):
                 register_input = self.register_input(session, input_file)
                 register_output = self.register_output(session, output_file=output_file)
                 status = self.run_session(session)
-                # Ensure memory allocated by GW2RegisterPoliciesMemory is not garbage collected until after run_session
-                content_management_policy
+                # Ensure memory allocated is not garbage collected until after run_session
+                content_management_policy, register_input, register_output
 
         if status not in successes.success_codes:
             if raise_unsupported:
@@ -666,8 +666,8 @@ class Editor(Library):
                 register_input = self.register_input(session, input_file)
                 register_analysis = self.register_analysis(session, output_file)
                 status = self.run_session(session)
-                # Ensure memory allocated by GW2RegisterPoliciesMemory is not garbage collected until after run_session
-                content_management_policy
+                # Ensure memory allocated is not garbage collected until after run_session
+                content_management_policy, register_input, register_analysis
 
         if status not in successes.success_codes:
             if raise_unsupported:
@@ -834,8 +834,8 @@ class Editor(Library):
                 register_input = self.register_input(session, input_file)
                 register_export = self.register_export(session, output_file)
                 status = self.run_session(session)
-                # Ensure memory allocated by GW2RegisterPoliciesMemory is not garbage collected until after run_session
-                content_management_policy
+                # Ensure memory allocated is not garbage collected until after run_session
+                content_management_policy, register_input, register_export
 
         if status not in successes.success_codes:
             log.warning(f"\n\tsession: {session}\n\tstatus: {status}")
@@ -1007,8 +1007,8 @@ class Editor(Library):
                 register_import = self.register_import(session, input_file)
                 register_output = self.register_output(session, output_file)
                 status = self.run_session(session)
-                # Ensure memory allocated by GW2RegisterPoliciesMemory is not garbage collected until after run_session
-                content_management_policy
+                # Ensure memory allocated is not garbage collected until after run_session
+                content_management_policy, register_import, register_output
 
         if status not in successes.success_codes:
             log.warning(f"\n\tsession: {session}\n\tstatus: {status}")

@@ -38,7 +38,7 @@ os_info = {
         },
         "word_search": {
             "file_name": "libglasswall.word.search.so",
-            "dependencies": [], # loading dependencies through ctypes doesn't help for word search, use LD_LIBRARY_PATH
+            "dependencies": [],  # loading dependencies through ctypes doesn't help for word search, use LD_LIBRARY_PATH
         },
     },
 

@@ -30,7 +30,6 @@ class Rebuild(Library):
 
         log.info(f"Loaded Glasswall {self.__class__.__name__} version {self.version()} from {self.library_path}")
 
-
     def validate_license(self):
         """ Validates the license of the library by attempting to call protect_file on a known supported file.
 
