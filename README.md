@@ -1,4 +1,5 @@
 ![](https://github.com/filetrust/glasswall-python/actions/workflows/python-package.yml/badge.svg)
+
 ![](https://github.com/filetrust/glasswall-python/actions/workflows/python-publish.yml/badge.svg)
 
 # Glasswall Python Wrapper
