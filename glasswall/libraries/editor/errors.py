@@ -74,6 +74,21 @@ class EngineeringOnlyGoesToFile(EditorError):
     pass
 
 
+class UnableToWriteOutput(EditorError):
+    """ Editor error code -14 """
+    pass
+
+
+class UnableToWriteExport(EditorError):
+    """ Editor error code -15 """
+    pass
+
+
+class FileRejected(EditorError):
+    """ Editor error code -16 """
+    pass
+
+
 error_codes = {
     -1: GeneralFail,
     -2: UnexpectedEndOfFile,
@@ -88,4 +103,7 @@ error_codes = {
     -11: CameraDidNotInitialise,
     -12: NoCamerasConnected,
     -13: EngineeringOnlyGoesToFile,
+    -14: UnableToWriteOutput,
+    -15: UnableToWriteExport,
+    -16: FileRejected,
 }
