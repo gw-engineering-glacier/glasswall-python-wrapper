@@ -554,7 +554,13 @@ class Editor(Library):
             input_file = utils.as_bytes(input_file)
 
         # Check that file type is supported
-        self.determine_file_type(input_file=input_file)
+        try:
+            self.determine_file_type(input_file=input_file)
+        except dft.errors.FileTypeEnumError:
+            if raise_unsupported:
+                raise
+            else:
+                return None
 
         with utils.CwdHandler(self.library_path):
             with self.new_session() as session:
@@ -642,7 +648,13 @@ class Editor(Library):
             raise TypeError(raise_unsupported)
 
         # Check that file type is supported
-        self.determine_file_type(input_file=input_file)
+        try:
+            self.determine_file_type(input_file=input_file)
+        except dft.errors.FileTypeEnumError:
+            if raise_unsupported:
+                raise
+            else:
+                return None
 
         # Convert string path arguments to absolute paths
         if isinstance(input_file, str):
@@ -810,7 +822,13 @@ class Editor(Library):
             raise TypeError(raise_unsupported)
 
         # Check that file type is supported
-        self.determine_file_type(input_file=input_file)
+        try:
+            self.determine_file_type(input_file=input_file)
+        except dft.errors.FileTypeEnumError:
+            if raise_unsupported:
+                raise
+            else:
+                return None
 
         # Convert string path arguments to absolute paths
         if isinstance(input_file, str):
@@ -983,7 +1001,13 @@ class Editor(Library):
             raise TypeError(raise_unsupported)
 
         # Check that file type is supported
-        self.determine_file_type(input_file=input_file)
+        try:
+            self.determine_file_type(input_file=input_file)
+        except dft.errors.FileTypeEnumError:
+            if raise_unsupported:
+                raise
+            else:
+                return None
 
         # Convert string path arguments to absolute paths
         if isinstance(input_file, str):

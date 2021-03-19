@@ -223,7 +223,13 @@ class Rebuild(Library):
             content_management_policy = os.path.abspath(content_management_policy)
 
         # Check that file type is supported
-        file_type = self.determine_file_type(input_file=input_file)
+        try:
+            file_type = self.determine_file_type(input_file=input_file)
+        except dft.errors.FileTypeEnumError:
+            if raise_unsupported:
+                raise
+            else:
+                return None
 
         # Convert memory inputs to bytes
         if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
@@ -402,7 +408,13 @@ class Rebuild(Library):
             content_management_policy = os.path.abspath(content_management_policy)
 
         # Check that file type is supported
-        file_type = self.determine_file_type(input_file=input_file)
+        try:
+            file_type = self.determine_file_type(input_file=input_file)
+        except dft.errors.FileTypeEnumError:
+            if raise_unsupported:
+                raise
+            else:
+                return None
 
         # Convert memory inputs to bytes
         if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
@@ -579,7 +591,13 @@ class Rebuild(Library):
             content_management_policy = os.path.abspath(content_management_policy)
 
         # Check that file type is supported
-        self.determine_file_type(input_file=input_file)
+        try:
+            self.determine_file_type(input_file=input_file)
+        except dft.errors.FileTypeEnumError:
+            if raise_unsupported:
+                raise
+            else:
+                return None
 
         # Convert memory inputs to bytes
         if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
@@ -747,7 +765,13 @@ class Rebuild(Library):
             content_management_policy = os.path.abspath(content_management_policy)
 
         # Check that file type is supported
-        self.determine_file_type(input_file=input_file)
+        try:
+            self.determine_file_type(input_file=input_file)
+        except dft.errors.FileTypeEnumError:
+            if raise_unsupported:
+                raise
+            else:
+                return None
 
         # Convert memory inputs to bytes
         if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
