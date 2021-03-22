@@ -9,10 +9,9 @@ from typing import Union
 import glasswall
 from glasswall import determine_file_type as dft
 from glasswall import utils
+from glasswall.config.logging import log
 from glasswall.libraries.library import Library
 from glasswall.libraries.rebuild import errors, successes
-
-log = logging.getLogger("glasswall")
 
 
 class Rebuild(Library):

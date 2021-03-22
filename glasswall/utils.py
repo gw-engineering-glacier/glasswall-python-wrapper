@@ -11,9 +11,7 @@ from typing import Iterable, Union
 from lxml import etree
 
 import glasswall
-
-
-log = logging.getLogger("glasswall")
+from glasswall.config.logging import log
 
 
 def as_bytes(file_: Union[bytes, bytearray, io.BytesIO]):

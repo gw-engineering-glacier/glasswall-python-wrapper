@@ -2,16 +2,14 @@
 
 import ctypes as ct
 import io
-import logging
 import os
 from typing import Union
 
 import glasswall
 from glasswall import utils
+from glasswall.config.logging import log
 from glasswall.libraries.library import Library
 from glasswall.libraries.word_search import errors, successes
-
-log = logging.getLogger("glasswall")
 
 
 class WordSearch(Library):
