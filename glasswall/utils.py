@@ -1,15 +1,11 @@
 
 
 import ctypes as ct
-import hashlib
 import io
-import json
 import logging
 import os
 import pathlib
-import re
 import tempfile
-from distutils.version import LooseVersion
 from typing import Iterable, Union
 
 from lxml import etree
@@ -144,20 +140,6 @@ def load_dependencies(dependencies: list, ignore_errors: bool = False):
                     raise
 
     return missing_dependencies
-
-
-def _max_version_in_path(path: pathlib.Path):
-    """ Helper function for get_library, returns the highest LooseVersion.version in a path.parts, avoiding int to str comparisons. """
-    # prioritise path parts starting with a digit 0-9
-    starts_digit = [p for p in path.parts if p.startswith(tuple(map(str, range(10))))]
-    if starts_digit:
-        part = max(starts_digit, key=lambda x: LooseVersion(x).version)
-
-    # if no path parts start with a digit, don't try to sort it
-    else:
-        part = "0"
-
-    return LooseVersion(part).version
 
 
 def get_library(library: str, directory: str):
@@ -337,11 +319,6 @@ def xml_as_dict(xml):
     return dict_
 
 
-##################################################
-""" TODO gated-check-in functions, to be moved """
-##################################################
-
-
 def delete_empty_subdirectories(directory: str):
     """ Deletes all empty subdirectories of a given directory.
 
@@ -378,168 +355,6 @@ def delete_directory(directory: str, keep_folder: bool = False):
         # Delete the directory
         if keep_folder is False:
             os.rmdir(directory)
-
-
-def crossplatform_path(path: str):
-    """ Makes a path cross-platform and suitable for comparison. Calls os.normpath and then replaces all "\\" with "/"
-
-    Args:
-        path (str): The path to simplify.
-
-    Returns:
-        path (str): The simplified path.
-    """
-    return os.path.normpath(path).replace("\\", "/")
-
-
-def _md5_chunked(file_: bytes, chunk_size: int):
-    """ Returns an md5 read in chunk_size bytes. There are 1_048_576 bytes in 1 MB.
-
-    Args:
-        file_ (bytes): The file bytes.
-        chunk_size (int): The size of chunks to read from file_.
-
-    Returns:
-        md5 (hashlib.md5()): A hashlib.md5() object
-    """
-    md5 = hashlib.md5()
-    while True:
-        data = file_.read(chunk_size)
-        if not data:
-            break
-        md5.update(data)
-
-    return md5
-
-
-def get_md5(file_: Union[bytes, str], chunk_size: int = 67_108_864, from_string: bool = False):
-    """ Returns the md5 hash of the given file.
-
-    Args:
-        file_ (Union[bytes, str]): The file bytes or file path.
-        chunk_size (int): The size of chunks to read from file_.
-        from_string (bool): Generate md5 from string instead of assuming string is a file path.
-
-    Returns:
-        md5 (str): A string representing an md5 hash.
-    """
-    if not isinstance(file_, (bytes, str,)):
-        raise TypeError(f"file_ must be one of type: {(bytes, str,)} and not {type(file_)}")
-    elif isinstance(file_, bytes):
-        md5 = hashlib.md5()
-        md5.update(file_)
-    elif isinstance(file_, str):
-        if from_string:
-            md5 = hashlib.md5()
-            md5.update(file_.encode())
-        else:
-            with open(file_, "rb") as f:
-                md5 = _md5_chunked(f, chunk_size)
-
-    return md5.hexdigest()
-
-
-def get_md5_directory(directory: str, **kwargs):
-    """ Calls get_md5 on the contents of a directory and all subdirectories recursively. """
-    return {
-        file_path: get_md5(file_path, **kwargs)
-        for file_path in list_file_paths(directory)
-    }
-
-
-def lxml_elements_equal(e1: etree.Element, e2: etree.Element):
-    """ Returns True if lxml Elements e1 and e2 are equal, else False.
-    Args:
-        e1 (etree.Element): First lxml Element
-        e2 (etree.Element): Second lxml Element
-
-    Returns:
-        bool
-    """
-    if any([
-        e1.tag != e2.tag,
-        e1.text != e2.text,
-        e1.tail != e2.tail,
-        e1.attrib != e2.attrib,
-        len(e1) != len(e2)
-    ]):
-        return False
-    return all(lxml_elements_equal(c1, c2) for c1, c2 in zip(e1, e2))
-
-
-# TODO unused, but may be repurposed later
-def get_sanitisation_item_technical_description(xml: Union[str, bytes, bytearray, io.BytesIO]):
-    """ Returns a list of technical description strings found in an analysis .xml
-
-    Args:
-        xml (Union[str, bytes, bytearray, io.BytesIO]): The xml string, or file path, or bytes.
-
-    Returns:
-        technical_descriptions (list): A list of technical description strings from within the XML file.
-    """
-    # Convert xml to string
-    xml_string = validate_xml(xml)
-
-    # Get root
-    root = etree.fromstring(xml_string.encode())
-
-    technical_descriptions = [
-        sanitisation_item.find("gw:TechnicalDescription", glasswall.config.xml.namespaces).text
-        for sanitisation_item in root.findall(".//gw:SanitisationItem", glasswall.config.xml.namespaces)
-    ]
-
-    return technical_descriptions
-
-
-def create_determine_file_type_dict(library, input_directory: str):
-    """ Creates a dictionary of file paths and their corresponding int and str file types.
-
-    Args:
-        library (Union[glasswall.Editor, glasswall.Rebuild]): An instance of a Glasswall library.
-        input_directory (str): The input directory containing files to run determine_file_type on.
-
-    Returns:
-        dft_dict (dict): A dictionary of file paths and their corresponding int and str file types.
-    """
-    # Construct dictionary of file paths, their file type as int, and their file type as str
-    dft_dict = {
-        crossplatform_path(os.path.relpath(file_path, input_directory)): {
-            "int": library.determine_file_type(file_path),
-            "str": library.determine_file_type(file_path, as_string=True)
-        }
-        for file_path in list_file_paths(input_directory)
-    }
-
-    return dft_dict
-
-
-def save_dictionary_as_json(dictionary: dict, output_file: str):
-    """ Writes the determine file type dictionary to the output path as JSON.
-
-    Args:
-        dictionary (dict): A dictionary.
-        output_file (str): The output file path where the dictionary will be written as JSON.
-
-    Returns:
-        None
-    """
-    if not os.path.isfile(output_file):
-        os.makedirs(os.path.dirname(output_file), exist_ok=True)
-    with open(output_file, "w") as f:
-        f.write(json.dumps(dictionary, indent=4))
-
-
-def load_json_as_dictionary(json_path: str):
-    """ Loads JSON from json_path, returning a dictionary.
-
-    Args:
-        json_path (str): The JSON file to return as a dictionary.
-
-    Returns:
-        dictionary (dict): A dictionary containing the JSON file data.
-    """
-    with open(json_path) as f:
-        return json.load(f)
 
 
 def as_snake_case(string):
@@ -633,54 +448,3 @@ def flatten_list(list_: Iterable):
         for sublist in list_
         for item in sublist
     ]
-
-
-def get_valgrind_leak_summary(file_path: str):
-    """ Returns the LEAK SUMMARY lines from a Valgrind log file as a dictionary.
-
-    Args:
-        file_path (str): Path to the Valgrind .log file
-
-    Returns:
-        leak_summary (dict): A dictionary of the Valgrind leak summary.
-
-    Example return:
-
-    {
-        "definitely lost": {"bytes": 0, "blocks": 0},
-        "indirectly lost": {"bytes": 0, "blocks": 0},
-        "possibly lost": {"bytes": 6776, "blocks": 12},
-        "still reachable": {"bytes": 486982, "blocks": 198},
-        "suppressed": {"bytes": 0, "blocks": 0},
-    }
-    """
-    leak_summary = {}
-    pattern = re.compile(r"(.+): (\d+) bytes in (\d+) blocks")
-    capture_lines = False
-    with open(file_path) as f:
-        for line in f:
-            # Start capturing lines when "LEAK SUMMARY:" is found
-            if "LEAK SUMMARY:" in line:
-                capture_lines = True
-            if capture_lines:
-                # Format line
-                line = line.partition("== ")[-1].lstrip().rstrip().replace(",", "")
-
-                # Break for loop at the first empty line
-                if not line:
-                    break
-
-                match = re.match(pattern, line)
-                if not match:
-                    log.warning(f"Unable to find match in Valgrind log line:\n{line}")
-                    continue
-
-                key, bytes_, blocks = re.match(pattern, line).groups()
-
-                # Add this line to leak_summary
-                leak_summary[key] = {
-                    "bytes": int(bytes_),
-                    "blocks": int(blocks),
-                }
-
-    return leak_summary
