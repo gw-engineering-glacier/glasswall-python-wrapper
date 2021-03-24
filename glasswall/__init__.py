@@ -4,7 +4,7 @@ import os
 import platform
 import tempfile
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 
 _OPERATING_SYSTEM = platform.system()
 _PYTHON_VERSION = platform.python_version()
