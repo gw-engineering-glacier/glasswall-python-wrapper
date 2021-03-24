@@ -3,7 +3,6 @@
 import ctypes as ct
 import functools
 import io
-import logging
 import os
 from typing import Union
 

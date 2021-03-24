@@ -2,7 +2,6 @@
 
 import ctypes as ct
 import io
-import logging
 import os
 from contextlib import contextmanager
 from typing import Union

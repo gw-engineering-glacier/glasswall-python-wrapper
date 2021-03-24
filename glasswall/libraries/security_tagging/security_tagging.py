@@ -1,7 +1,6 @@
 
 
 import ctypes as ct
-import logging
 import os
 import sys
 
