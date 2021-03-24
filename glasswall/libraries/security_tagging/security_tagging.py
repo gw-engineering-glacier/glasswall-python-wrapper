@@ -1,15 +1,13 @@
 
 
 import ctypes as ct
-import logging
 import os
 import sys
 
 from glasswall import utils
+from glasswall.config.logging import log
 from glasswall.libraries.library import Library
 from glasswall.libraries.security_tagging import errors, successes
-
-log = logging.getLogger("glasswall")
 
 
 class SecurityTagging(Library):

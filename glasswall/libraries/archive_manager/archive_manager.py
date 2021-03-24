@@ -3,17 +3,14 @@
 import ctypes as ct
 import functools
 import io
-import logging
 import os
 from typing import Union
 
 import glasswall
 from glasswall import utils
+from glasswall.config.logging import log
 from glasswall.libraries.archive_manager import errors, successes
 from glasswall.libraries.library import Library
-
-
-log = logging.getLogger("glasswall")
 
 
 class ArchiveManager(Library):
