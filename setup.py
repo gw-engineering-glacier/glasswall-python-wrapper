@@ -21,4 +21,5 @@ setuptools.setup(
         "Programming Language :: Python :: 3.6",
     ],
     python_requires=">=3.6",
+    package_data={"": ["*.json"]}
 )
