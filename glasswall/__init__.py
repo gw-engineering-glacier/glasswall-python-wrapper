@@ -9,7 +9,7 @@ __version__ = "0.1.7"
 _OPERATING_SYSTEM = platform.system()
 _PYTHON_VERSION = platform.python_version()
 _ROOT = os.path.dirname(__file__)
-_TEMPDIR = os.path.join(tempfile.gettempdir(), "glasswall")
+_TEMPDIR = os.environ.get("AGENT_TEMPDIRECTORY", os.path.join(tempfile.gettempdir(), "glasswall"))
 
 from glasswall import config, content_management, determine_file_type, utils
 from glasswall.libraries.archive_manager.archive_manager import ArchiveManager
