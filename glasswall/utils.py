@@ -214,13 +214,14 @@ def get_library(library: str, directory: str):
     return library_file_path
 
 
-def list_file_paths(directory: str, recursive: bool = True, absolute: bool = True):
+def list_file_paths(directory: str, recursive: bool = True, absolute: bool = True, followlinks: bool = True):
     """ Returns a list of paths to files in a directory.
 
     Args:
         directory (str): The directory to list files from.
         recursive (bool, optional): Default True. Include subdirectories.
         absolute (bool, optional): Default True. Return paths as absolute paths. If False, returns relative paths.
+        followlinks (bool, optional): Default True. Follow symbolic links if True.
 
     Returns:
         files (list): A list of file paths.
@@ -239,6 +240,14 @@ def list_file_paths(directory: str, recursive: bool = True, absolute: bool = Tru
             os.path.normpath(os.path.join(directory, file_))
             for file_ in os.listdir(directory)
             if os.path.isfile(os.path.join(directory, file_))
+        ]
+
+    if followlinks:
+        files = [
+            os.readlink(file_)
+            if os.path.islink(file_)
+            else file_
+            for file_ in files
         ]
 
     if absolute:
