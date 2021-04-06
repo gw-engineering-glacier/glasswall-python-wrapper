@@ -519,7 +519,7 @@ class TestPolicy(unittest.TestCase):
         self.assertTrue(policy.pdfConfig.a.value == "b")
         self.assertTrue(policy.customConfig.customswitch.value == "customvalue")
 
-    def test_custom_editor_policy_with_attributes___attributes_(self):
+    def test_custom_editor_policy_with_attributes___attributes_set_and_not_included_as_switch(self):
         policy = glasswall.content_management.policies.Editor(
             config={
                 "customConfig": {
