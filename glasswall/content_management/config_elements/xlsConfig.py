@@ -17,6 +17,7 @@ class xlsConfig(ConfigElement):
 
     def __init__(self, default: str = "sanitise", **kwargs):
         self.name = self.__class__.__name__
+        self.default = default
         self.switches_module = switches.xls
         self.default_switches = [
             self.switches_module.dynamic_data_exchange,
@@ -28,24 +29,11 @@ class xlsConfig(ConfigElement):
             self.switches_module.metadata,
             self.switches_module.review_comments,
         ]
-        self.switches = []
 
-        # Add default switches
-        for switch in self.default_switches:
-            self.add_switch(switch(value=default))
-
-        # Add customised switches provided in `kwargs`
-        for name, value in kwargs.items():
-            # If switch is in switches_module, add it to this config element
-            if hasattr(self.switches_module, name):
-                self.add_switch(
-                    getattr(
-                        self.switches_module,
-                        name
-                    )(value=value))
-            
-            # Otherwise, create a new Switch and add it
-            else:
-                self.add_switch(Switch(name=name, value=value))
-
-        super().__init__(name=self.name, switches=self.switches)
+        super().__init__(
+            name=self.name,
+            default=self.default,
+            switches_module=self.switches_module,
+            default_switches=self.default_switches,
+            config=kwargs
+        )

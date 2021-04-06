@@ -4,7 +4,6 @@ from typing import Union
 
 from glasswall.content_management import switches
 from glasswall.content_management.config_elements.config_element import ConfigElement
-from glasswall.content_management.switches import Switch
 
 
 class archiveConfig(ConfigElement):
@@ -17,8 +16,9 @@ class archiveConfig(ConfigElement):
     archiveConfig(default="no_action", jpeg="discard", pdf="process")
     """
 
-    def __init__(self, default: str = "process", attributes: Union[dict, type(None)] = None, **kwargs):
+    def __init__(self, default: str = "process", attributes: dict = {}, **kwargs):
         self.name = self.__class__.__name__
+        self.default = default
         self.attributes = attributes or {}
         self.attributes = {
             **{
@@ -53,24 +53,11 @@ class archiveConfig(ConfigElement):
             self.switches_module.xls,
             self.switches_module.xlsx,
         ]
-        self.switches = []
-
-        # Add default switches
-        for switch in self.default_switches:
-            self.add_switch(switch(value=default))
-
-        # Add customised switches provided in `kwargs`
-        for name, value in kwargs.items():
-            # If switch is in switches_module, add it to this config element
-            if hasattr(self.switches_module, name):
-                self.add_switch(
-                    getattr(
-                        self.switches_module,
-                        name
-                    )(value=value))
-
-            # Otherwise, create a new Switch and add it
-            else:
-                self.add_switch(Switch(name=name, value=value))
-
-        super().__init__(name=self.name, switches=self.switches, attributes=self.attributes)
+        
+        super().__init__(
+            name=self.name,
+            default=self.default,
+            switches_module=self.switches_module,
+            default_switches=self.default_switches,
+            config=kwargs
+        )
