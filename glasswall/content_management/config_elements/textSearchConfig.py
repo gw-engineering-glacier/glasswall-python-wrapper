@@ -1,7 +1,5 @@
 
 
-from typing import Union
-
 from glasswall.content_management.config_elements.config_element import ConfigElement
 from glasswall.content_management.config_elements.textList import textList
 from glasswall.content_management.policies.policy import Policy

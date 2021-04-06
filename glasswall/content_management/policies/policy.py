@@ -4,8 +4,6 @@ from typing import Union
 
 import glasswall
 from glasswall import utils
-from glasswall import content_management
-from glasswall.content_management.config_elements.archiveConfig import archiveConfig
 from glasswall.content_management.config_elements.config_element import ConfigElement
 from glasswall.content_management.errors.config_elements import ConfigElementNotFound
 from glasswall.content_management.errors.switches import SwitchNotFound

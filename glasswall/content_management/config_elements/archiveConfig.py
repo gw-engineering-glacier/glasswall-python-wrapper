@@ -1,7 +1,5 @@
 
 
-from typing import Union
-
 from glasswall.content_management import switches
 from glasswall.content_management.config_elements.config_element import ConfigElement
 
@@ -53,7 +51,7 @@ class archiveConfig(ConfigElement):
             self.switches_module.xls,
             self.switches_module.xlsx,
         ]
-        
+
         super().__init__(
             name=self.name,
             default=self.default,

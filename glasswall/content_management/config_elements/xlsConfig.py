@@ -2,7 +2,6 @@
 
 from glasswall.content_management import switches
 from glasswall.content_management.config_elements.config_element import ConfigElement
-from glasswall.content_management.switches import Switch
 
 
 class xlsConfig(ConfigElement):
