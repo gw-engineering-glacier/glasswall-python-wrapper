@@ -51,7 +51,11 @@ class Policy:
                 config_element = config_element(attributes=Policy.get_attributes(switches), textList_subelements=switches.get("textList", []))
                 self.add_config_element(config_element)
                 continue
+            elif config_element == glasswall.content_management.config_elements.ConfigElement:
+                # base ConfigElement class
+                config_element = config_element(name=config_element_name, default=self.default)
             else:
+                # subclasses of ConfigElement that provide their own name
                 config_element = config_element(default=self.default)
 
             for switch_name, switch_value in switches.items():
