@@ -509,30 +509,32 @@ class TestPolicy(unittest.TestCase):
         )
 
     def test_custom_editor_policy___switch_names_and_values_in_text(self):
-        editor_policy = glasswall.content_management.policies.Editor(
+        policy = glasswall.content_management.policies.Editor(
             config={
-                "pdfConfig": {
-                    "customswitch": "customvalue",
-                }
+                "pdfConfig": {"a": "b",},
+                "customConfig": {"customswitch": "customvalue",},
             }
         )
 
-        # Text should contain "customswitch" and "customvalue"
-        self.assertTrue("customswitch" in editor_policy.text)
-        self.assertTrue("customvalue" in editor_policy.text)
+        self.assertTrue(policy.pdfConfig.a.value == "b")
+        self.assertTrue(policy.customConfig.customswitch.value == "customvalue")
 
-    def test_custom_rebuild_policy___switch_names_and_values_in_text(self):
-        rebuild_policy = glasswall.content_management.policies.Rebuild(
+
+    def test_custom_editor_policy_with_attributes___attributes_(self):
+        policy = glasswall.content_management.policies.Editor(
             config={
-                "pdfConfig": {
+                "customConfig": {
                     "customswitch": "customvalue",
+                    "@customattribute": "attributevalue",
                 }
             }
         )
+        
+        # Attribute added correctly
+        self.assertTrue(policy.customConfig.attributes.get("customattribute") == "attributevalue")
 
-        # Text should contain "customswitch" and "customvalue"
-        self.assertTrue("customswitch" in rebuild_policy.text)
-        self.assertTrue("customvalue" in rebuild_policy.text)
+        # Attribute not added as switch
+        self.assertTrue(not any(switch_name in policy.customConfig.get_switch_names() for switch_name in {"@customattribute", "customattribute"}))
 
 
 if __name__ == "__main__":
