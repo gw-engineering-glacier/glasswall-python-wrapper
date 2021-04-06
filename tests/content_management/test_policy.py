@@ -511,14 +511,13 @@ class TestPolicy(unittest.TestCase):
     def test_custom_editor_policy___switch_names_and_values_in_text(self):
         policy = glasswall.content_management.policies.Editor(
             config={
-                "pdfConfig": {"a": "b",},
-                "customConfig": {"customswitch": "customvalue",},
+                "pdfConfig": {"a": "b"},
+                "customConfig": {"customswitch": "customvalue"},
             }
         )
 
         self.assertTrue(policy.pdfConfig.a.value == "b")
         self.assertTrue(policy.customConfig.customswitch.value == "customvalue")
-
 
     def test_custom_editor_policy_with_attributes___attributes_(self):
         policy = glasswall.content_management.policies.Editor(
@@ -529,7 +528,7 @@ class TestPolicy(unittest.TestCase):
                 }
             }
         )
-        
+
         # Attribute added correctly
         self.assertTrue(policy.customConfig.attributes.get("customattribute") == "attributevalue")
 
