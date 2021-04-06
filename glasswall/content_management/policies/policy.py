@@ -80,6 +80,15 @@ class Policy:
     def __str__(self):
         return self.text
 
+    def __getattr__(self, name):
+        # Try to return matching ConfigElement from nonexistant attribute
+        config_element = next(iter(c for c in self.config_elements if c.name == name), None)
+
+        if config_element:
+            return config_element
+
+        raise AttributeError(name)
+
     @property
     def text(self):
         """ String representation of XML. """

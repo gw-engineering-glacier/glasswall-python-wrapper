@@ -60,6 +60,15 @@ class ConfigElement:
     def __str__(self):
         return self.text
 
+    def __getattr__(self, name):
+        # Try to return matching Switch from nonexistant attribute
+        switch = next(iter(s for s in self.switches if s.name == name), None)
+
+        if switch:
+            return switch
+
+        raise AttributeError(name)
+
     def __repr__(self):
         """ Change string representation of object. """
         return f'ConfigElement("{self.name}")'
