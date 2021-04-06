@@ -23,6 +23,7 @@ class WordSearch(Policy):
     """
 
     def __init__(self, default: str = "allow", config: dict = {}):
+        self.default = default
         self.default_config_elements = [
             glasswall.content_management.config_elements.pdfConfig,
             glasswall.content_management.config_elements.pptConfig,
@@ -30,51 +31,13 @@ class WordSearch(Policy):
             glasswall.content_management.config_elements.wordConfig,
             glasswall.content_management.config_elements.xlsConfig,
         ]
-        self.config_elements = []
+        self.config = config
 
-        # Add default config elements
-        for config_element in self.default_config_elements:
-            self.add_config_element(config_element(default=default))
-
-        # Add customised config elements provided in `config`
-        for config_element_name, switches in config.items():
-            # Handle textSearchConfig special case
-            if config_element_name == "textSearchConfig":
-                text_search_config = glasswall.content_management.config_elements.textSearchConfig(
-                    attributes={
-                        **{"libVersion": "core2"},
-                        **Policy.get_attributes(switches)
-                    },
-                    textList_subelements=switches.get("textList", [])
-                )
-                self.add_config_element(text_search_config)
-                continue
-
-            # Create config element
-            config_element = getattr(
-                glasswall.content_management.config_elements,
-                config_element_name,
-                ConfigElement
-            )(default=default)
-
-            for name, value in switches.items():
-                # If switch is an attribute, update attributes instead of adding switch
-                if name.startswith("@"):
-                    config_element.attributes.update({name.replace("@", "", 1): value})
-                    continue
-
-                # Create switch
-                switch = getattr(
-                    config_element.switches_module,
-                    name,
-                    Switch
-                )(name=name, value=value)
-
-                config_element.add_switch(switch)
-
-            self.add_config_element(config_element)
-
-        super().__init__(config_elements=self.config_elements)
+        super().__init__(
+            default=self.default,
+            default_config_elements=self.default_config_elements,
+            config=self.config,
+        )
 
     def add_textItem(self, text: str, replacementChar: str, textSetting: str = "redact", **kwargs):
         """ Adds a textItem to the textSearchConfig textList subelements. """

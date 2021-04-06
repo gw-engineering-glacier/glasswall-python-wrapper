@@ -22,9 +22,15 @@ class textSearchConfig(ConfigElement):
     )
     """
 
-    def __init__(self, attributes: dict = {}, textList_subelements: list = []):
+    def __init__(self, attributes: dict = {}, textList_subelements: list = [], **kwargs):
         self.name = self.__class__.__name__
         self.attributes = attributes or {}
+        self.attributes = {
+            **{
+                "libVersion": kwargs.get("libVersion", "core2"),
+            },
+            **self.attributes,
+        }
         subelements = []
         for textList_dict in textList_subelements:
             switch_list = []

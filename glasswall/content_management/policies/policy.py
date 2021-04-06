@@ -2,7 +2,10 @@
 
 from typing import Union
 
+import glasswall
 from glasswall import utils
+from glasswall import content_management
+from glasswall.content_management.config_elements.archiveConfig import archiveConfig
 from glasswall.content_management.config_elements.config_element import ConfigElement
 from glasswall.content_management.errors.config_elements import ConfigElementNotFound
 from glasswall.content_management.errors.switches import SwitchNotFound
@@ -12,8 +15,66 @@ from glasswall.content_management.switches.switch import Switch
 class Policy:
     """ A Content Management Policy made up of a list of ConfigElement instances. """
 
-    def __init__(self, config_elements: Union[list, type(None)] = None):
+    def __init__(self,
+                 config_elements: list = [],
+                 default: Union[str, type(None)] = None,
+                 default_config_elements: list = [],
+                 config: dict = {},
+                 **kwargs
+                 ):
         self.config_elements = config_elements or []
+        self.default = default
+        self.default_config_elements = default_config_elements or []
+        self.config = config or {}
+
+        # Add default config elements
+        for config_element in self.default_config_elements:
+            if config_element == glasswall.content_management.config_elements.archiveConfig:
+                # archiveConfig special case, use default_archive_manager (no_action, discard, process)
+                self.config_elements.append(config_element(default=self.default_archive_manager))
+            else:
+                self.config_elements.append(config_element(default=self.default))
+
+        # Add customised config elements provided in `config`
+        for config_element_name, switches in config.items():
+            # Create config element
+            config_element = getattr(
+                glasswall.content_management.config_elements,
+                config_element_name,
+                ConfigElement
+            )
+
+            if config_element == glasswall.content_management.config_elements.archiveConfig:
+                # ArchiveManager archiveConfig special case, use default_archive_manager (no_action, discard, process)
+                config_element = config_element(default=self.default_archive_manager)
+            elif config_element == glasswall.content_management.config_elements.textSearchConfig:
+                # WordSearch textSearchConfig special case, pass attributes and subelements
+                # construct directly within textSearchConfig as the format is very different
+                config_element = config_element(attributes=Policy.get_attributes(switches), textList_subelements=switches.get("textList", []))
+                self.add_config_element(config_element)
+                continue
+            else:
+                config_element = config_element(default=self.default)
+
+            for switch_name, switch_value in switches.items():
+                # If switch is an attribute, update attributes instead of adding switch
+                if switch_name.startswith("@"):
+                    config_element.attributes.update({switch_name.replace("@", "", 1): switch_value})
+                    continue
+
+                # If switch is in switches_module, add it to this config element
+                if hasattr(config_element.switches_module, switch_name):
+                    config_element.add_switch(
+                        getattr(
+                            config_element.switches_module,
+                            switch_name
+                        )(value=switch_value))
+
+                # Otherwise, create a new Switch and add it
+                else:
+                    config_element.add_switch(Switch(name=switch_name, value=switch_value))
+
+            self.add_config_element(config_element)
 
         # Sort self.config_elements by .name and .switches
         self.config_elements.sort()
