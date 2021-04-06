@@ -3,6 +3,7 @@
 import inspect
 import unittest
 
+import glasswall
 from glasswall.content_management.config_elements.config_element import ConfigElement
 from glasswall.content_management.errors.config_elements import ConfigElementNotFound
 from glasswall.content_management.errors.switches import SwitchNotFound
@@ -501,11 +502,37 @@ class TestPolicy(unittest.TestCase):
             """)
         )
 
-    def test_get_attributes_from_dictionary(self):
+    def test_get_attributes(self):
         self.assertDictEqual(
-            Policy.get_attributes_from_dictionary({"one": "1", "@two": "2", "@three": "3"}),
+            Policy.get_attributes({"one": "1", "@two": "2", "@three": "3"}),
             {"two": "2", "three": "3"}
         )
+
+    def test_custom_editor_policy___switch_names_and_values_in_text(self):
+        editor_policy = glasswall.content_management.policies.Editor(
+            config={
+                "pdfConfig": {
+                    "customswitch": "customvalue",
+                }
+            }
+        )
+
+        # Text should contain "customswitch" and "customvalue"
+        self.assertTrue("customswitch" in editor_policy.text)
+        self.assertTrue("customvalue" in editor_policy.text)
+
+    def test_custom_rebuild_policy___switch_names_and_values_in_text(self):
+        rebuild_policy = glasswall.content_management.policies.Rebuild(
+            config={
+                "pdfConfig": {
+                    "customswitch": "customvalue",
+                }
+            }
+        )
+
+        # Text should contain "customswitch" and "customvalue"
+        self.assertTrue("customswitch" in rebuild_policy.text)
+        self.assertTrue("customvalue" in rebuild_policy.text)
 
 
 if __name__ == "__main__":
