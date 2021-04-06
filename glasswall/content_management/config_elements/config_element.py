@@ -1,5 +1,6 @@
 
 
+import glasswall
 from typing import Union
 
 from glasswall.content_management.errors.switches import SwitchNotFound
@@ -15,6 +16,7 @@ class ConfigElement:
         self.attributes = attributes or {}
         self.switches = switches or []
         self.subelements = subelements or []
+        self.switches_module = glasswall.content_management.switches.switch
 
         # Sort self.switches by .name and .value
         self.switches.sort()

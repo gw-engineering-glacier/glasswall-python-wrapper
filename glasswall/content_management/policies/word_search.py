@@ -1,9 +1,9 @@
 
 
-from glasswall.content_management import config_elements, errors
-from glasswall.content_management.config_elements import ConfigElement
-from glasswall.content_management.policies import Policy
-from glasswall.content_management.switches import Switch
+import glasswall
+from glasswall.content_management.config_elements.config_element import ConfigElement
+from glasswall.content_management.policies.policy import Policy
+from glasswall.content_management.switches.switch import Switch
 
 
 class WordSearch(Policy):
@@ -23,21 +23,57 @@ class WordSearch(Policy):
     """
 
     def __init__(self, default: str = "allow", config: dict = {}):
-        self.config_elements = [
-            config_elements.pdfConfig(default=default, **config.get("pdfConfig", {})),
-            config_elements.pptConfig(default=default, **config.get("pptConfig", {})),
-            config_elements.sysConfig(**config.get("sysConfig", {})),
-            config_elements.textSearchConfig(
-                attributes={
-                    **{"libVersion": "core2"},
-                    **Policy.get_attributes_from_dictionary(config.get("textSearchConfig", {}))
-                },
-                textList_subelements=config.get("textSearchConfig", {}).get("textList", [])
-            ),
-            config_elements.tiffConfig(default=default, **config.get("tiffConfig", {})),
-            config_elements.wordConfig(default=default, **config.get("wordConfig", {})),
-            config_elements.xlsConfig(default=default, **config.get("xlsConfig", {})),
+        self.default_config_elements = [
+            glasswall.content_management.config_elements.pdfConfig,
+            glasswall.content_management.config_elements.pptConfig,
+            glasswall.content_management.config_elements.tiffConfig,
+            glasswall.content_management.config_elements.wordConfig,
+            glasswall.content_management.config_elements.xlsConfig,
         ]
+        self.config_elements = []
+
+        # Add default config elements
+        for config_element in self.default_config_elements:
+            self.add_config_element(config_element(default=default))
+
+        # Add customised config elements provided in `config`
+        for config_element_name, switches in config.items():
+            # Handle textSearchConfig special case
+            if config_element_name == "textSearchConfig":
+                text_search_config = glasswall.content_management.config_elements.textSearchConfig(
+                    attributes={
+                        **{"libVersion": "core2"},
+                        **Policy.get_attributes(switches)
+                    },
+                    textList_subelements=switches.get("textList", [])
+                )
+                self.add_config_element(text_search_config)
+                continue
+
+            # Create config element
+            config_element = getattr(
+                glasswall.content_management.config_elements,
+                config_element_name,
+                ConfigElement
+            )(default=default)
+
+            for name, value in switches.items():
+                # If switch is an attribute, update attributes instead of adding switch
+                if name.startswith("@"):
+                    config_element.attributes.update({name.replace("@", "", 1): value})
+                    continue
+
+                # Create switch
+                switch = getattr(
+                    config_element.switches_module,
+                    name,
+                    Switch
+                )(name=name, value=value)
+
+                config_element.add_switch(switch)
+
+            self.add_config_element(config_element)
+
         super().__init__(config_elements=self.config_elements)
 
     def add_textItem(self, text: str, replacementChar: str, textSetting: str = "redact", **kwargs):
@@ -83,7 +119,7 @@ class WordSearch(Policy):
         """ Removes a textItem from the textSearchConfig textList subelements. """
         textSearchConfig = next(iter(c for c in self.config_elements if c.name == "textSearchConfig"), None)
         if not textSearchConfig:
-            raise errors.ConfigElementNotFound("textSearchConfig")
+            raise glasswall.content_management.errors.config_elements.ConfigElementNotFound("textSearchConfig")
 
         # Select the ConfigElement named textList
         textList = next(iter(s for s in textSearchConfig.subelements if s.name == "textList"))
@@ -95,7 +131,7 @@ class WordSearch(Policy):
             if switch.name == "text"
         ]
         if text not in all_textItem_texts:
-            raise errors.SwitchNotFound(f"No switch found with name: 'text' and value: '{text}'")
+            raise glasswall.content_management.errors.switches.SwitchNotFound(f"No switch found with name: 'text' and value: '{text}'")
 
         # If textList has a subelement textItem that contains a switch named "text" with the same .value as arg "text", delete it to avoid duplicates.
         #   (cannot redact "generic" with "*" and also redact "GeNeRiC" with "@")

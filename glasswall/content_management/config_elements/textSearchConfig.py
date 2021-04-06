@@ -31,7 +31,7 @@ class textSearchConfig(ConfigElement):
             # Construct switches
             for switch_dict in textList_dict.get("switches", []):
                 # Get switch attributes
-                attributes = Policy.get_attributes_from_dictionary(switch_dict)
+                attributes = Policy.get_attributes(switch_dict)
 
                 # Remove keys that are switches from switch_dict
                 switch_dict = {k: v for k, v in switch_dict.items() if not k.startswith("@")}

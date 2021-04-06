@@ -2,6 +2,7 @@
 
 from glasswall.content_management import switches
 from glasswall.content_management.config_elements.config_element import ConfigElement
+from glasswall.content_management.switches import Switch
 
 
 class pptConfig(ConfigElement):
@@ -16,13 +17,35 @@ class pptConfig(ConfigElement):
 
     def __init__(self, default: str = "sanitise", **kwargs):
         self.name = self.__class__.__name__
-        self.switches = [
-            switches.ppt.embedded_files(value=kwargs.get("embedded_files", default)),
-            switches.ppt.embedded_images(value=kwargs.get("embedded_images", default)),
-            switches.ppt.external_hyperlinks(value=kwargs.get("external_hyperlinks", default)),
-            switches.ppt.internal_hyperlinks(value=kwargs.get("internal_hyperlinks", default)),
-            switches.ppt.macros(value=kwargs.get("macros", default)),
-            switches.ppt.metadata(value=kwargs.get("metadata", default)),
-            switches.ppt.review_comments(value=kwargs.get("review_comments", default)),
+        self.switches_module = switches.ppt
+        self.default_switches = [
+            self.switches_module.embedded_files,
+            self.switches_module.embedded_images,
+            self.switches_module.external_hyperlinks,
+            self.switches_module.internal_hyperlinks,
+            self.switches_module.javascript,
+            self.switches_module.macros,
+            self.switches_module.metadata,
+            self.switches_module.review_comments,
         ]
+        self.switches = []
+
+        # Add default switches
+        for switch in self.default_switches:
+            self.add_switch(switch(value=default))
+
+        # Add customised switches provided in `kwargs`
+        for name, value in kwargs.items():
+            # If switch is in switches_module, add it to this config element
+            if hasattr(self.switches_module, name):
+                self.add_switch(
+                    getattr(
+                        self.switches_module,
+                        name
+                    )(value=value))
+            
+            # Otherwise, create a new Switch and add it
+            else:
+                self.add_switch(Switch(name=name, value=value))
+
         super().__init__(name=self.name, switches=self.switches)

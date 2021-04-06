@@ -4,6 +4,7 @@ from typing import Union
 
 from glasswall.content_management import switches
 from glasswall.content_management.config_elements.config_element import ConfigElement
+from glasswall.content_management.switches import Switch
 
 
 class archiveConfig(ConfigElement):
@@ -20,35 +21,56 @@ class archiveConfig(ConfigElement):
         self.name = self.__class__.__name__
         self.attributes = attributes or {}
         self.attributes = {
-            **self.attributes,
             **{
-                "defaultCompression": kwargs.get("defaultCompression", "zip"),
-                "libVersion": kwargs.get("libVersion", "core2"),
-                "recursionDepth": kwargs.get("recursionDepth", "2")
-            }
+                "defaultCompression": kwargs.get("@defaultCompression", "zip"),
+                "libVersion": kwargs.get("@libVersion", "core2"),
+                "recursionDepth": kwargs.get("@recursionDepth", "2")
+            },
+            **self.attributes,
         }
-        self.switches = [
-            switches.archive.bmp(value=kwargs.get("bmp", default)),
-            switches.archive.doc(value=kwargs.get("doc", default)),
-            switches.archive.docx(value=kwargs.get("docx", default)),
-            switches.archive.elf(value=kwargs.get("elf", default)),
-            switches.archive.emf(value=kwargs.get("emf", default)),
-            switches.archive.gif(value=kwargs.get("gif", default)),
-            switches.archive.jpeg(value=kwargs.get("jpeg", default)),
-            switches.archive.mp3(value=kwargs.get("mp3", default)),
-            switches.archive.mp4(value=kwargs.get("mp4", default)),
-            switches.archive.mpg(value=kwargs.get("mpg", default)),
-            switches.archive.o(value=kwargs.get("o", default)),
-            switches.archive.pdf(value=kwargs.get("pdf", default)),
-            switches.archive.pe(value=kwargs.get("pe", default)),
-            switches.archive.png(value=kwargs.get("png", default)),
-            switches.archive.ppt(value=kwargs.get("ppt", default)),
-            switches.archive.pptx(value=kwargs.get("pptx", default)),
-            switches.archive.tiff(value=kwargs.get("tiff", default)),
-            switches.archive.txt(value=kwargs.get("txt", default)),
-            switches.archive.wav(value=kwargs.get("wav", default)),
-            switches.archive.wmf(value=kwargs.get("wmf", default)),
-            switches.archive.xls(value=kwargs.get("xls", default)),
-            switches.archive.xlsx(value=kwargs.get("xlsx", default)),
+        self.switches_module = switches.archive
+        self.default_switches = [
+            self.switches_module.bmp,
+            self.switches_module.doc,
+            self.switches_module.docx,
+            self.switches_module.elf,
+            self.switches_module.emf,
+            self.switches_module.gif,
+            self.switches_module.jpeg,
+            self.switches_module.mp3,
+            self.switches_module.mp4,
+            self.switches_module.mpg,
+            self.switches_module.o,
+            self.switches_module.pdf,
+            self.switches_module.pe,
+            self.switches_module.png,
+            self.switches_module.ppt,
+            self.switches_module.pptx,
+            self.switches_module.tiff,
+            self.switches_module.txt,
+            self.switches_module.wav,
+            self.switches_module.wmf,
+            self.switches_module.xls,
+            self.switches_module.xlsx,
         ]
-        super().__init__(name=self.name, attributes=self.attributes, switches=self.switches)
+        self.switches = []
+
+        # Add default switches
+        for switch in self.default_switches:
+            self.add_switch(switch(value=default))
+
+        # Add customised switches provided in `kwargs`
+        for name, value in kwargs.items():
+            # If switch is in switches_module, add it to this config element
+            if hasattr(self.switches_module, name):
+                self.add_switch(
+                    getattr(
+                        self.switches_module,
+                        name
+                    )(value=value))
+
+            # Otherwise, create a new Switch and add it
+            else:
+                self.add_switch(Switch(name=name, value=value))
+
+        super().__init__(name=self.name, switches=self.switches, attributes=self.attributes)

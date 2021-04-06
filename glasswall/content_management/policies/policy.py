@@ -196,10 +196,19 @@ class Policy:
         return self
 
     @staticmethod
-    def get_attributes_from_dictionary(dictionary: dict):
+    def get_attributes(dictionary: dict):
         """ Returns attributes from arg "dictionary". Attributes are key value pairs that have a key starting with "@". The "@" is excluded in the returned keys. """
         return {
-            k[1:]: v
+            k.replace("@", "", 1): v
             for k, v in dictionary.items()
             if k.startswith("@")
+        }
+
+    @staticmethod
+    def get_switches(dictionary: dict):
+        """ Returns switches from arg "dictionary". Switches are key value pairs that do not have a key starting with "@". """
+        return {
+            k: v
+            for k, v in dictionary.items()
+            if not k.startswith("@")
         }
