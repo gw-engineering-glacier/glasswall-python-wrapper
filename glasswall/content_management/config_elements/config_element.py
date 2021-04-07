@@ -67,6 +67,12 @@ class ConfigElement:
         if switch:
             return switch
 
+        # or matching subelement from a WordSearch textSearchConfig
+        if isinstance(self, glasswall.content_management.config_elements.textSearchConfig):
+            subelement = next(iter(s for s in self.subelements if s.name == name), None)
+            if subelement:
+                return subelement
+
         raise AttributeError(name)
 
     def __repr__(self):
