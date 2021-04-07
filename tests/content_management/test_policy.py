@@ -553,6 +553,24 @@ class TestPolicy(unittest.TestCase):
         with self.assertRaises(AttributeError):
             policy.customConfig.switchNonexistant
 
+    def test_editor_policy___object_is_modifiable(self):
+        policy = glasswall.content_management.policies.Editor(default="sanitise")
+
+        # policy.pdfConfig.acroform.value should be sanitise
+        self.assertTrue(policy.pdfConfig.acroform.value == "sanitise")
+
+        # set policy.pdfConfig.acroform.value to allow
+        policy.pdfConfig.acroform.value = "allow"
+
+        # policy.pdfConfig.acroform.value should be allow
+        self.assertTrue(policy.pdfConfig.acroform.value == "allow")
+
+        # policy.pdfConfig.acroform.text should also be allow
+        self.assertEqual(
+            policy.pdfConfig.acroform.text,
+            "<acroform>allow</acroform>"
+        )
+
     def test_archive_manager_custom_policy___attributes_and_switches_customisable(self):
         policy = glasswall.content_management.policies.ArchiveManager(
             default="sanitise",
