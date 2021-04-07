@@ -519,7 +519,7 @@ class TestPolicy(unittest.TestCase):
         self.assertTrue(policy.pdfConfig.a.value == "b")
         self.assertTrue(policy.customConfig.customswitch.value == "customvalue")
 
-    def test_custom_editor_policy_with_attributes___attributes_set_and_not_included_as_switch(self):
+    def test_editor_custom_policy_with_attributes___attributes_set_and_not_included_as_switch(self):
         policy = glasswall.content_management.policies.Editor(
             config={
                 "customConfig": {
@@ -534,6 +534,115 @@ class TestPolicy(unittest.TestCase):
 
         # Attribute not added as switch
         self.assertTrue(not any(switch_name in policy.customConfig.get_switch_names() for switch_name in {"@customattribute", "customattribute"}))
+
+    def test_editor_policy___getattr_missing_config_raises_AttributeError(self):
+        policy = glasswall.content_management.policies.Editor(
+            config={
+                "customConfig": {
+                    "customswitch": "customvalue",
+                    "@customattribute": "attributevalue",
+                }
+            }
+        )
+
+        # getattr on missing config should raise AttributeError
+        with self.assertRaises(AttributeError):
+            policy.configNonexistant
+
+        # getattr on missing switch should raise AttributeError
+        with self.assertRaises(AttributeError):
+            policy.customConfig.switchNonexistant
+
+    def test_archive_manager_custom_policy___attributes_and_switches_customisable(self):
+        policy = glasswall.content_management.policies.ArchiveManager(
+            default="sanitise",
+            default_archive_manager="process",
+            config={
+                "archiveConfig": {
+                    "@recursionDepth": 1,
+                    "@customAttribute": "customValue",
+                    "bmp": "no_action",
+                    "doc": "discard",
+                }
+            }
+        )
+
+        # archiveConfig has recursionDepth attribute with value 1
+        self.assertTrue(policy.archiveConfig.attributes.get("recursionDepth") == 1)
+
+        # archiveConfig has customAttribute attribute with value customValue
+        self.assertTrue(policy.archiveConfig.attributes.get("customAttribute") == "customValue")
+
+        # archiveConfig bmp switch is set to no_action
+        self.assertTrue(policy.archiveConfig.bmp.value == "no_action")
+
+        # archiveConfig doc switch is set to discard
+        self.assertTrue(policy.archiveConfig.doc.value == "discard")
+
+    def test_word_search_custom_policy___textList_order_maintained(self):
+        policy = glasswall.content_management.policies.WordSearch(
+            default="allow",
+            config={
+                "textSearchConfig": {
+                    "textList": [
+                        {"name": "textItem", "switches": [
+                            {"name": "text", "value": "password"},
+                            {"name": "textSetting", "@replacementChar": "*", "value": "redact"},
+                        ]},
+                        {"name": "textItem", "switches": [
+                            {"name": "text", "value": "abc"},
+                            {"name": "textSetting", "@replacementChar": "!", "value": "redact"},
+                        ]},
+                        {"name": "textItem", "switches": [
+                            {"name": "text", "value": "xyz"},
+                            {"name": "textSetting", "@replacementChar": "X", "value": "redact"},
+                        ]},
+                    ]
+                }
+            }
+        )
+
+        # Order should be unchanged
+        self.assertEqual(
+            policy.textSearchConfig.textList.text,
+            inspect.cleandoc("""
+            <textList>
+                <textItem>
+                    <text>password</text>
+                    <textSetting replacementChar="*">redact</textSetting>
+                </textItem>
+                <textItem>
+                    <text>abc</text>
+                    <textSetting replacementChar="!">redact</textSetting>
+                </textItem>
+                <textItem>
+                    <text>xyz</text>
+                    <textSetting replacementChar="X">redact</textSetting>
+                </textItem>
+            </textList>
+            """)
+        )
+
+    def test_word_search_custom_policy___attributes_customisable(self):
+        policy = glasswall.content_management.policies.WordSearch(
+            default="allow",
+            config={
+                "textSearchConfig": {
+                    "textList": [
+                        {"name": "textItem", "switches": [
+                            {"name": "text", "value": "password"},
+                            {"name": "textSetting", "@replacementChar": "*", "value": "redact", "@customAttribute": "customValue"},
+                        ]},
+                    ]
+                }
+            }
+        )
+
+        # textSetting attributes are customisable
+        self.assertTrue(policy.textSearchConfig.textList.subelements[0].switches[1].attributes.get("customAttribute") == "customValue")
+
+        # replacementChar attribute exists
+        self.assertTrue(policy.textSearchConfig.textList.subelements[0].switches[1].attributes.get("replacementChar") == "*")
 
 
 if __name__ == "__main__":
