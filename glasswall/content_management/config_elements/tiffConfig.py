@@ -16,7 +16,16 @@ class tiffConfig(ConfigElement):
 
     def __init__(self, default: str = "sanitise", **kwargs):
         self.name = self.__class__.__name__
-        self.switches = [
-            switches.tiff.geotiff(value=kwargs.get("geotiff", default)),
+        self.default = default
+        self.switches_module = switches.tiff
+        self.default_switches = [
+            self.switches_module.geotiff,
         ]
-        super().__init__(name=self.name, switches=self.switches)
+
+        super().__init__(
+            name=self.name,
+            default=self.default,
+            switches_module=self.switches_module,
+            default_switches=self.default_switches,
+            config=kwargs
+        )

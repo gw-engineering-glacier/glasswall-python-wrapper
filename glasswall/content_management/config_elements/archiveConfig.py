@@ -1,7 +1,5 @@
 
 
-from typing import Union
-
 from glasswall.content_management import switches
 from glasswall.content_management.config_elements.config_element import ConfigElement
 
@@ -16,39 +14,48 @@ class archiveConfig(ConfigElement):
     archiveConfig(default="no_action", jpeg="discard", pdf="process")
     """
 
-    def __init__(self, default: str = "process", attributes: Union[dict, type(None)] = None, **kwargs):
+    def __init__(self, default: str = "process", attributes: dict = {}, **kwargs):
         self.name = self.__class__.__name__
+        self.default = default
         self.attributes = attributes or {}
         self.attributes = {
-            **self.attributes,
             **{
-                "defaultCompression": kwargs.get("defaultCompression", "zip"),
-                "libVersion": kwargs.get("libVersion", "core2"),
-                "recursionDepth": kwargs.get("recursionDepth", "2")
-            }
+                "defaultCompression": kwargs.get("@defaultCompression", "zip"),
+                "libVersion": kwargs.get("@libVersion", "core2"),
+                "recursionDepth": kwargs.get("@recursionDepth", "2")
+            },
+            **self.attributes,
         }
-        self.switches = [
-            switches.archive.bmp(value=kwargs.get("bmp", default)),
-            switches.archive.doc(value=kwargs.get("doc", default)),
-            switches.archive.docx(value=kwargs.get("docx", default)),
-            switches.archive.elf(value=kwargs.get("elf", default)),
-            switches.archive.emf(value=kwargs.get("emf", default)),
-            switches.archive.gif(value=kwargs.get("gif", default)),
-            switches.archive.jpeg(value=kwargs.get("jpeg", default)),
-            switches.archive.mp3(value=kwargs.get("mp3", default)),
-            switches.archive.mp4(value=kwargs.get("mp4", default)),
-            switches.archive.mpg(value=kwargs.get("mpg", default)),
-            switches.archive.o(value=kwargs.get("o", default)),
-            switches.archive.pdf(value=kwargs.get("pdf", default)),
-            switches.archive.pe(value=kwargs.get("pe", default)),
-            switches.archive.png(value=kwargs.get("png", default)),
-            switches.archive.ppt(value=kwargs.get("ppt", default)),
-            switches.archive.pptx(value=kwargs.get("pptx", default)),
-            switches.archive.tiff(value=kwargs.get("tiff", default)),
-            switches.archive.txt(value=kwargs.get("txt", default)),
-            switches.archive.wav(value=kwargs.get("wav", default)),
-            switches.archive.wmf(value=kwargs.get("wmf", default)),
-            switches.archive.xls(value=kwargs.get("xls", default)),
-            switches.archive.xlsx(value=kwargs.get("xlsx", default)),
+        self.switches_module = switches.archive
+        self.default_switches = [
+            self.switches_module.bmp,
+            self.switches_module.doc,
+            self.switches_module.docx,
+            self.switches_module.elf,
+            self.switches_module.emf,
+            self.switches_module.gif,
+            self.switches_module.jpeg,
+            self.switches_module.mp3,
+            self.switches_module.mp4,
+            self.switches_module.mpg,
+            self.switches_module.o,
+            self.switches_module.pdf,
+            self.switches_module.pe,
+            self.switches_module.png,
+            self.switches_module.ppt,
+            self.switches_module.pptx,
+            self.switches_module.tiff,
+            self.switches_module.txt,
+            self.switches_module.wav,
+            self.switches_module.wmf,
+            self.switches_module.xls,
+            self.switches_module.xlsx,
         ]
-        super().__init__(name=self.name, attributes=self.attributes, switches=self.switches)
+
+        super().__init__(
+            name=self.name,
+            default=self.default,
+            switches_module=self.switches_module,
+            default_switches=self.default_switches,
+            config=kwargs
+        )

@@ -34,7 +34,7 @@ class Switch:
     def value(self, value):
         self._value = value
         if self.restrict_values and value not in self.restrict_values:
-            raise RestrictedValue(f"{self} has an unexpected value: '{value}'. Its value is restricted to: {sorted(self.restrict_values)}")
+            raise RestrictedValue(f"{self.name} has an unexpected value: '{value}'. Its value is restricted to: {self.restrict_values}")
 
     @property
     def text(self):

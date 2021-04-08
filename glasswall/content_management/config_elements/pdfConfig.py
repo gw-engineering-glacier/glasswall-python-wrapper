@@ -16,15 +16,24 @@ class pdfConfig(ConfigElement):
 
     def __init__(self, default: str = "sanitise", **kwargs):
         self.name = self.__class__.__name__
-        self.switches = [
-            switches.pdf.acroform(value=kwargs.get("acroform", default)),
-            switches.pdf.actions_all(value=kwargs.get("actions_all", default)),
-            switches.pdf.digital_signatures(value=kwargs.get("digital_signatures", default)),
-            switches.pdf.embedded_files(value=kwargs.get("embedded_files", default)),
-            switches.pdf.embedded_images(value=kwargs.get("embedded_images", default)),
-            switches.pdf.external_hyperlinks(value=kwargs.get("external_hyperlinks", default)),
-            switches.pdf.internal_hyperlinks(value=kwargs.get("internal_hyperlinks", default)),
-            switches.pdf.javascript(value=kwargs.get("javascript", default)),
-            switches.pdf.metadata(value=kwargs.get("metadata", default)),
+        self.default = default
+        self.switches_module = switches.pdf
+        self.default_switches = [
+            self.switches_module.acroform,
+            self.switches_module.actions_all,
+            self.switches_module.digital_signatures,
+            self.switches_module.embedded_files,
+            self.switches_module.embedded_images,
+            self.switches_module.external_hyperlinks,
+            self.switches_module.internal_hyperlinks,
+            self.switches_module.javascript,
+            self.switches_module.metadata,
         ]
-        super().__init__(name=self.name, switches=self.switches)
+
+        super().__init__(
+            name=self.name,
+            default=self.default,
+            switches_module=self.switches_module,
+            default_switches=self.default_switches,
+            config=kwargs
+        )

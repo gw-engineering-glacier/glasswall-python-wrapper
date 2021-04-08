@@ -13,8 +13,15 @@ class sysConfig(ConfigElement):
 
     def __init__(self, **kwargs):
         self.name = self.__class__.__name__
-        self.switches = [
-            switches.sys.interchange_type(value=kwargs.get("interchange_type", "sisl")),
-            switches.sys.interchange_pretty(value=kwargs.get("interchange_pretty", "false")),
+        self.switches_module = switches.sys
+        self.default_switches = [
+            self.switches_module.interchange_type,
+            self.switches_module.interchange_pretty,
         ]
-        super().__init__(name=self.name, switches=self.switches)
+
+        super().__init__(
+            name=self.name,
+            switches_module=self.switches_module,
+            default_switches=self.default_switches,
+            config=kwargs
+        )

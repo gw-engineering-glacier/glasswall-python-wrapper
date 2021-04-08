@@ -1,6 +1,6 @@
 
 
-from glasswall.content_management import config_elements
+import glasswall
 from glasswall.content_management.policies.policy import Policy
 
 
@@ -20,7 +20,7 @@ class ArchiveManager(Policy):
                 "pdfConfig": {"embeddedImages": "disallow"},
                 "wordConfig": {"embeddedImages": "disallow"},
                 "archiveConfig": {
-                    "recursionDepth": "100",
+                    "@recursionDepth": "100",
                     "jpeg": "discard"
                 }
             }
@@ -28,12 +28,21 @@ class ArchiveManager(Policy):
     """
 
     def __init__(self, default: str = "sanitise", default_archive_manager: str = "process", config: dict = {}):
-        self.config_elements = [
-            config_elements.archiveConfig(default=default_archive_manager, **config.get("archiveConfig", {})),
-            config_elements.pdfConfig(default=default, **config.get("pdfConfig", {})),
-            config_elements.pptConfig(default=default, **config.get("pptConfig", {})),
-            config_elements.tiffConfig(default=default, **config.get("tiffConfig", {})),
-            config_elements.wordConfig(default=default, **config.get("wordConfig", {})),
-            config_elements.xlsConfig(default=default, **config.get("xlsConfig", {})),
+        self.default = default
+        self.default_archive_manager = default_archive_manager
+        self.default_config_elements = [
+            glasswall.content_management.config_elements.archiveConfig,
+            glasswall.content_management.config_elements.pdfConfig,
+            glasswall.content_management.config_elements.pptConfig,
+            glasswall.content_management.config_elements.tiffConfig,
+            glasswall.content_management.config_elements.wordConfig,
+            glasswall.content_management.config_elements.xlsConfig,
         ]
-        super().__init__(config_elements=self.config_elements)
+        self.config = config or {}
+
+        super().__init__(
+            default=self.default,
+            default_archive_manager=default_archive_manager,
+            default_config_elements=self.default_config_elements,
+            config=self.config,
+        )

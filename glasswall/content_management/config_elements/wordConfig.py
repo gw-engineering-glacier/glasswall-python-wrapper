@@ -16,14 +16,23 @@ class wordConfig(ConfigElement):
 
     def __init__(self, default: str = "sanitise", **kwargs):
         self.name = self.__class__.__name__
-        self.switches = [
-            switches.word.dynamic_data_exchange(value=kwargs.get("dynamic_data_exchange", default)),
-            switches.word.embedded_files(value=kwargs.get("embedded_files", default)),
-            switches.word.embedded_images(value=kwargs.get("embedded_images", default)),
-            switches.word.external_hyperlinks(value=kwargs.get("external_hyperlinks", default)),
-            switches.word.internal_hyperlinks(value=kwargs.get("internal_hyperlinks", default)),
-            switches.word.macros(value=kwargs.get("macros", default)),
-            switches.word.metadata(value=kwargs.get("metadata", default)),
-            switches.word.review_comments(value=kwargs.get("review_comments", default)),
+        self.default = default
+        self.switches_module = switches.word
+        self.default_switches = [
+            self.switches_module.dynamic_data_exchange,
+            self.switches_module.embedded_files,
+            self.switches_module.embedded_images,
+            self.switches_module.external_hyperlinks,
+            self.switches_module.internal_hyperlinks,
+            self.switches_module.macros,
+            self.switches_module.metadata,
+            self.switches_module.review_comments,
         ]
-        super().__init__(name=self.name, switches=self.switches)
+
+        super().__init__(
+            name=self.name,
+            default=self.default,
+            switches_module=self.switches_module,
+            default_switches=self.default_switches,
+            config=kwargs
+        )

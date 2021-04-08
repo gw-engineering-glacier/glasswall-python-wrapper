@@ -2,6 +2,7 @@
 
 from typing import Union
 
+import glasswall
 from glasswall.content_management.errors.switches import SwitchNotFound
 from glasswall.content_management.switches import Switch
 
@@ -9,18 +10,70 @@ from glasswall.content_management.switches import Switch
 class ConfigElement:
     """ A Content Management Policy configuration element which has a name, and can have attributes, switches, and subelements. """
 
-    def __init__(self, name: str, attributes: Union[dict, type(None)] = None, switches: Union[list, type(None)] = None, subelements: Union[list, type(None)] = None):
+    def __init__(self,
+                 name: str,
+                 attributes: dict = {},
+                 switches: list = [],
+                 subelements: list = [],
+                 default: Union[str, type(None)] = None,
+                 default_switches: list = [],
+                 config: dict = {},
+                 switches_module: "glasswall.content_management.switches" = Switch
+                 ):
         self._indent = 0
         self.name = name
         self.attributes = attributes or {}
         self.switches = switches or []
         self.subelements = subelements or []
+        self.default = default
+        self.default_switches = default_switches or []
+        self.config = config or {}
+        self.switches_module = switches_module
+
+        # Add default switches
+        for switch in self.default_switches:
+            if self.default:
+                self.add_switch(switch(value=self.default))
+            else:
+                try:
+                    self.add_switch(switch(value=switch.default))
+                except AttributeError as e:
+                    raise type(e)(str(e) + "\nThe provided 'default' argument is None and no fallback is available")
+
+        # Add customised switches provided in `config`
+        for switch_name, switch_value in self.config.items():
+            # If switch is in switches_module, add it to this config element
+            if hasattr(self.switches_module, switch_name):
+                self.add_switch(
+                    getattr(
+                        self.switches_module,
+                        switch_name
+                    )(value=switch_value))
+
+            # Otherwise, create a new Switch and add it
+            else:
+                self.add_switch(Switch(name=switch_name, value=switch_value))
 
         # Sort self.switches by .name and .value
         self.switches.sort()
 
     def __str__(self):
         return self.text
+
+    def __getattr__(self, name):
+        # Try to return matching Switch from nonexistant attribute
+        switch = next(iter(s for s in self.switches if s.name == name), None)
+
+        if switch:
+            return switch
+
+        # or matching subelement from a WordSearch textSearchConfig
+        if isinstance(self, glasswall.content_management.config_elements.textSearchConfig):
+            subelement = next(iter(s for s in self.subelements if s.name == name), None)
+            if subelement:
+                return subelement
+
+        raise AttributeError(name)
 
     def __repr__(self):
         """ Change string representation of object. """

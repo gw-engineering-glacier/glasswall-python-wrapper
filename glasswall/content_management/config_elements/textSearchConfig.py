@@ -1,7 +1,5 @@
 
 
-from typing import Union
-
 from glasswall.content_management.config_elements.config_element import ConfigElement
 from glasswall.content_management.config_elements.textList import textList
 from glasswall.content_management.policies.policy import Policy
@@ -22,26 +20,24 @@ class textSearchConfig(ConfigElement):
     )
     """
 
-    def __init__(self, attributes: Union[dict, type(None)] = None, textList_subelements: Union[list, type(None)] = None):
+    def __init__(self, attributes: dict = {}, textList_subelements: list = [], **kwargs):
         self.name = self.__class__.__name__
         self.attributes = attributes or {}
+        self.attributes = {
+            **{
+                "libVersion": kwargs.get("libVersion", "core2"),
+            },
+            **self.attributes,
+        }
         subelements = []
         for textList_dict in textList_subelements:
             switch_list = []
-            # Construct switches
             for switch_dict in textList_dict.get("switches", []):
-                # Get switch attributes
-                attributes = Policy.get_attributes_from_dictionary(switch_dict)
-
-                # Remove keys that are switches from switch_dict
-                switch_dict = {k: v for k, v in switch_dict.items() if not k.startswith("@")}
-
-                if attributes:
-                    # Merge attributes
-                    switch_dict = {**switch_dict, **{"attributes": attributes}}
-
                 # Construct switch
-                switch = Switch(**switch_dict)
+                switch = Switch(
+                    **Policy.get_switches(switch_dict),
+                    attributes=Policy.get_attributes(switch_dict)
+                )
 
                 # Append switch to switch_list
                 switch_list.append(switch)

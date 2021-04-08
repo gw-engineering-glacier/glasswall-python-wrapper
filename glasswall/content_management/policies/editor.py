@@ -1,6 +1,6 @@
 
 
-from glasswall.content_management import config_elements
+import glasswall
 from glasswall.content_management.policies.policy import Policy
 
 
@@ -8,12 +8,19 @@ class Editor(Policy):
     """ A content management policy for Editor."""
 
     def __init__(self, default: str = "sanitise", config: dict = {}):
-        self.config_elements = [
-            config_elements.pdfConfig(default=default, **{**config.get("pdfConfig", {}), **{"digital_signatures": "disallow"}}),  # force Editor digital_signatures disallow
-            config_elements.pptConfig(default=default, **config.get("pptConfig", {})),
-            config_elements.sysConfig(**config.get("sysConfig", {})),
-            config_elements.tiffConfig(default=default, **config.get("tiffConfig", {})),
-            config_elements.wordConfig(default=default, **config.get("wordConfig", {})),
-            config_elements.xlsConfig(default=default, **config.get("xlsConfig", {})),
+        self.default = default
+        self.default_config_elements = [
+            glasswall.content_management.config_elements.pdfConfig,
+            glasswall.content_management.config_elements.pptConfig,
+            glasswall.content_management.config_elements.sysConfig,
+            glasswall.content_management.config_elements.tiffConfig,
+            glasswall.content_management.config_elements.wordConfig,
+            glasswall.content_management.config_elements.xlsConfig,
         ]
-        super().__init__(config_elements=self.config_elements)
+        self.config = config or {}
+
+        super().__init__(
+            default=self.default,
+            default_config_elements=self.default_config_elements,
+            config=self.config,
+        )
