@@ -331,7 +331,7 @@ class TempDirectoryPath:
         self.delete = delete
 
         while self.temp_directory is None or os.path.isdir(self.temp_directory):
-            self.temp_directory = os.path.join(glasswall._TEMPDIR, next(tempfile._get_candidate_names()), "")
+            self.temp_directory = os.path.join(glasswall._TEMPDIR, next(tempfile._get_candidate_names()))
 
         # Create temp directory
         os.makedirs(self.temp_directory, exist_ok=True)
