@@ -389,7 +389,7 @@ class ArchiveManager(Library):
             "bz2",
             "gz",
             "rar",
-            "tar"
+            "tar",
             "zip",
         }
 
