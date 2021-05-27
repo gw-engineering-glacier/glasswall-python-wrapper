@@ -408,15 +408,26 @@ class ArchiveManager(Library):
         return ArchiveManager.filter_archives(glasswall.utils.list_file_paths(directory))
 
     def recursively_unpack(self, input_file: str, output_directory: str, file_type: Optional[str] = None, raise_unsupported: bool = True, delete_origin: bool = False):
+        # Maintain directory structure of archives, converting archives to directories
+        archive_basename = os.path.splitext(os.path.basename(input_file))[0]
+        output_directory_basename = os.path.basename(output_directory)
+        if not delete_origin or delete_origin and archive_basename != output_directory_basename:
+            output_directory = os.path.join(output_directory, archive_basename)
+
+        # Unpack
         status = self.file_to_file_unpack(input_file=input_file, output_directory=output_directory, file_type=file_type).status
+
+        # Delete subarchives that have been unpacked
         if delete_origin:
             os.remove(input_file)
+
+        # Recurse subdirectories on success and unpack all subarchives
         if status in successes.success_codes:
-            archive_basename = os.path.splitext(os.path.basename(input_file))[0]
-            unpacked_directory = os.path.join(output_directory, archive_basename)
-            if os.path.isdir(unpacked_directory):
-                for subarchive in ArchiveManager.get_archives(unpacked_directory):
+            if os.path.isdir(output_directory):
+                for subarchive in ArchiveManager.get_archives(output_directory):
                     subarchive_parent_directory = os.path.dirname(subarchive)
                     self.recursively_unpack(input_file=subarchive, output_directory=subarchive_parent_directory, delete_origin=True)
+            else:
+                log.warning(f"Directory doesn't exist.\n{locals()}")
         else:
-            print(f"Bad status. Something went wrong.\n{locals()}")
+            log.warning(f"Bad status.\n{locals()}")
