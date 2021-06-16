@@ -569,29 +569,29 @@ class Editor(Library):
                 # Ensure memory allocated is not garbage collected until after run_session
                 content_management_policy, register_input, register_output
 
-        if status not in successes.success_codes:
-            if raise_unsupported:
-                raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
-            else:
-                file_bytes = None
-        else:
-            # Get file bytes
-            if isinstance(output_file, str):
-                # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
-                if not os.path.isfile(output_file):
-                    log.warning(f"Glasswall returned success code: {status} but no output file was found: {output_file}")
-                    file_bytes = None
+                if status not in successes.success_codes:
+                    if raise_unsupported:
+                        raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+                    else:
+                        file_bytes = None
                 else:
-                    with open(output_file, "rb") as f:
-                        file_bytes = f.read()
-            else:
-                # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
-                file_bytes = utils.buffer_to_bytes(
-                    register_output.buffer,
-                    register_output.buffer_length
-                )
+                    # Get file bytes
+                    if isinstance(output_file, str):
+                        # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
+                        if not os.path.isfile(output_file):
+                            log.warning(f"Glasswall returned success code: {status} but no output file was found: {output_file}")
+                            file_bytes = None
+                        else:
+                            with open(output_file, "rb") as f:
+                                file_bytes = f.read()
+                    else:
+                        # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
+                        file_bytes = utils.buffer_to_bytes(
+                            register_output.buffer,
+                            register_output.buffer_length
+                        )
 
-        return file_bytes
+                return file_bytes
 
     def protect_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.Policy"] = None, raise_unsupported: bool = True):
         """ Recursively processes all files in a directory in protect mode using the given content management policy.
@@ -679,29 +679,29 @@ class Editor(Library):
                 # Ensure memory allocated is not garbage collected until after run_session
                 content_management_policy, register_input, register_analysis
 
-        if status not in successes.success_codes:
-            if raise_unsupported:
-                raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
-            else:
-                file_bytes = None
-        else:
-            # Get file bytes
-            if isinstance(output_file, str):
-                # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
-                if not os.path.isfile(output_file):
-                    log.warning(f"Glasswall returned success code: {status} but no output file was found: {output_file}")
-                    file_bytes = None
+                if status not in successes.success_codes:
+                    if raise_unsupported:
+                        raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+                    else:
+                        file_bytes = None
                 else:
-                    with open(output_file, "rb") as f:
-                        file_bytes = f.read()
-            else:
-                # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
-                file_bytes = utils.buffer_to_bytes(
-                    register_analysis.buffer,
-                    register_analysis.buffer_length
-                )
+                    # Get file bytes
+                    if isinstance(output_file, str):
+                        # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
+                        if not os.path.isfile(output_file):
+                            log.warning(f"Glasswall returned success code: {status} but no output file was found: {output_file}")
+                            file_bytes = None
+                        else:
+                            with open(output_file, "rb") as f:
+                                file_bytes = f.read()
+                    else:
+                        # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
+                        file_bytes = utils.buffer_to_bytes(
+                            register_analysis.buffer,
+                            register_analysis.buffer_length
+                        )
 
-        return file_bytes
+                return file_bytes
 
     def analyse_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.Policy"] = None, raise_unsupported: bool = True):
         """ Analyses all files in a directory and its subdirectories. The analysis files are written to output_directory maintaining the same directory structure as input_directory.
@@ -853,30 +853,30 @@ class Editor(Library):
                 # Ensure memory allocated is not garbage collected until after run_session
                 content_management_policy, register_input, register_export
 
-        if status not in successes.success_codes:
-            log.warning(f"\n\tsession: {session}\n\tstatus: {status}")
-            if raise_unsupported:
-                raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
-            else:
-                file_bytes = None
-        else:
-            # Get file bytes
-            if isinstance(output_file, str):
-                # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
-                if not os.path.isfile(output_file):
-                    log.warning(f"Glasswall returned success code: {status} but no output file was found: {output_file}")
-                    file_bytes = None
+                if status not in successes.success_codes:
+                    log.warning(f"\n\tsession: {session}\n\tstatus: {status}")
+                    if raise_unsupported:
+                        raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+                    else:
+                        file_bytes = None
                 else:
-                    with open(output_file, "rb") as f:
-                        file_bytes = f.read()
-            else:
-                # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
-                file_bytes = utils.buffer_to_bytes(
-                    register_export.buffer,
-                    register_export.buffer_length
-                )
+                    # Get file bytes
+                    if isinstance(output_file, str):
+                        # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
+                        if not os.path.isfile(output_file):
+                            log.warning(f"Glasswall returned success code: {status} but no output file was found: {output_file}")
+                            file_bytes = None
+                        else:
+                            with open(output_file, "rb") as f:
+                                file_bytes = f.read()
+                    else:
+                        # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
+                        file_bytes = utils.buffer_to_bytes(
+                            register_export.buffer,
+                            register_export.buffer_length
+                        )
 
-        return file_bytes
+                return file_bytes
 
     def export_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.Policy"] = None, raise_unsupported: bool = True):
         """ Exports all files in a directory and its subdirectories. The export files are written to output_directory maintaining the same directory structure as input_directory.
@@ -1032,30 +1032,30 @@ class Editor(Library):
                 # Ensure memory allocated is not garbage collected until after run_session
                 content_management_policy, register_import, register_output
 
-        if status not in successes.success_codes:
-            log.warning(f"\n\tsession: {session}\n\tstatus: {status}")
-            if raise_unsupported:
-                raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
-            else:
-                file_bytes = None
-        else:
-            # Get file bytes
-            if isinstance(output_file, str):
-                # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
-                if not os.path.isfile(output_file):
-                    log.warning(f"Glasswall returned success code: {status} but no output file was found: {output_file}")
-                    file_bytes = None
+                if status not in successes.success_codes:
+                    log.warning(f"\n\tsession: {session}\n\tstatus: {status}")
+                    if raise_unsupported:
+                        raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+                    else:
+                        file_bytes = None
                 else:
-                    with open(output_file, "rb") as f:
-                        file_bytes = f.read()
-            else:
-                # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
-                file_bytes = utils.buffer_to_bytes(
-                    register_output.buffer,
-                    register_output.buffer_length
-                )
+                    # Get file bytes
+                    if isinstance(output_file, str):
+                        # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
+                        if not os.path.isfile(output_file):
+                            log.warning(f"Glasswall returned success code: {status} but no output file was found: {output_file}")
+                            file_bytes = None
+                        else:
+                            with open(output_file, "rb") as f:
+                                file_bytes = f.read()
+                    else:
+                        # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
+                        file_bytes = utils.buffer_to_bytes(
+                            register_output.buffer,
+                            register_output.buffer_length
+                        )
 
-        return file_bytes
+                return file_bytes
 
     def import_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.Policy"] = None, raise_unsupported: bool = True):
         """ Imports all files in a directory and its subdirectories. Files are expected as .zip but this is not forced.
