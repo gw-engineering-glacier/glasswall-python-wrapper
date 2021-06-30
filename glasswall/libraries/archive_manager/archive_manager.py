@@ -125,9 +125,13 @@ class ArchiveManager(Library):
                 ct_content_management_policy
             )
 
+        input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
         if gw_return_object.status not in successes.success_codes:
+            log.warning(f"\n\tinput_file: {input_file_repr}\n\tstatus: {gw_return_object.status}")
             if raise_unsupported:
                 raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
+        else:
+            log.debug(f"\n\tinput_file: {input_file_repr}\n\tstatus: {gw_return_object.status}")
 
         gw_return_object.output_file = utils.buffer_to_bytes(
             ct_output_buffer,
@@ -264,9 +268,13 @@ class ArchiveManager(Library):
                 ct_content_management_policy
             )
 
+        input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
         if gw_return_object.status not in successes.success_codes:
+            log.warning(f"\n\tinput_file: {input_file_repr}\n\tstatus: {gw_return_object.status}")
             if raise_unsupported:
                 raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
+        else:
+            log.debug(f"\n\tinput_file: {input_file_repr}\n\tstatus: {gw_return_object.status}")
 
         gw_return_object.output_file = utils.buffer_to_bytes(
             ct_output_buffer,
@@ -359,9 +367,13 @@ class ArchiveManager(Library):
                 gw_return_object.ct_file_type,
             )
 
+        input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
         if gw_return_object.status not in successes.success_codes:
+            log.warning(f"\n\tinput_file: {input_file_repr}\n\tstatus: {gw_return_object.status}")
             if raise_unsupported:
                 raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
+        else:
+            log.debug(f"\n\tinput_file: {input_file_repr}\n\tstatus: {gw_return_object.status}")
 
         self.release()
 
