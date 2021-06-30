@@ -240,7 +240,7 @@ class ArchiveManager(Library):
         content_management_policy = utils.validate_xml(content_management_policy)
 
         # API function declaration
-        self.library.GwFileAnalysisArchive.argtypes = [
+        self.library.GwFileProtectAndReportArchive.argtypes = [
             ct.c_void_p,
             ct.c_size_t,
             ct.POINTER(ct.c_void_p),
