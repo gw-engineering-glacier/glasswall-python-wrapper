@@ -421,7 +421,7 @@ class ArchiveManager(Library):
             output_directory = os.path.join(output_directory, archive_basename)
 
         # Unpack
-        status = self.file_to_file_unpack(input_file=input_file, output_directory=output_directory, file_type=file_type).status
+        status = self.file_to_file_unpack(input_file=input_file, output_directory=output_directory, file_type=file_type, raise_unsupported=raise_unsupported).status
 
         # Delete subarchives that have been unpacked
         if delete_origin:
