@@ -1,7 +1,6 @@
 
 
 import ctypes as ct
-import functools
 import io
 import os
 from typing import Union, Optional
