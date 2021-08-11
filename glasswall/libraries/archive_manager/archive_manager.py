@@ -14,6 +14,14 @@ from glasswall.libraries.library import Library
 
 class ArchiveManager(Library):
     """ A high level Python wrapper for Glasswall Archive Manager. """
+    supported_archive_list = [
+        "7z",
+        "bz2",
+        "gz",
+        "rar",
+        "tar",
+        "zip",
+    ]
 
     def __init__(self, library_path):
         super().__init__(library_path)
@@ -351,7 +359,7 @@ class ArchiveManager(Library):
         if not isinstance(output_directory, str):
             raise TypeError(output_directory)
         if not file_type:
-            file_type = ArchiveManager.get_archive_type(input_file)
+            file_type = utils.get_file_type(input_file)
 
         # API function declaration
         self.library.GwFileToFileUnpack.argtypes = [
@@ -367,80 +375,202 @@ class ArchiveManager(Library):
         gw_return_object.ct_file_type = ct.c_char_p(file_type.encode())  # const char *fileType
 
         with utils.CwdHandler(new_cwd=self.library_path):
+            try:
+                # API call
+                gw_return_object.status = self.library.GwFileToFileUnpack(
+                    gw_return_object.ct_input_file,
+                    gw_return_object.ct_output_directory,
+                    gw_return_object.ct_file_type,
+                )
+            except OSError:
+                # bz2, gz currently OSError on unpack, not supported unpacking
+                # OSError: exception: access violation reading 0x0000000000000000
+                if raise_unsupported:
+                    raise
+
+                return 0
+
+        if gw_return_object.status not in successes.success_codes:
+            log.warning(f"\n\tinput_file: {input_file}\n\tstatus: {gw_return_object.status}")
+            if raise_unsupported:
+                raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
+        else:
+            log.debug(f"\n\tinput_file: {input_file}\n\tstatus: {gw_return_object.status}")
+
+        self.release()
+
+        return gw_return_object
+
+    def file_to_file_pack(self, input_directory: str, output_directory: str, file_type: Optional[str] = None, raise_unsupported: bool = True):
+        # Validate arg types
+        if not isinstance(input_directory, str):
+            raise TypeError(input_directory)
+        elif not os.path.isdir(input_directory):
+            raise NotADirectoryError(input_directory)
+        if not isinstance(output_directory, str):
+            raise TypeError(output_directory)
+        if not file_type:
+            file_type = utils.get_file_type(input_directory)
+
+        # Ensure output_directory exists
+        os.makedirs(output_directory, exist_ok=True)
+
+        # API function declaration
+        self.library.GwFileToFilePack.argtypes = [
+            ct.c_char_p,
+            ct.c_char_p,
+            ct.c_char_p,
+        ]
+
+        # Variable initialisation
+        gw_return_object = glasswall.GwReturnObj()
+        gw_return_object.ct_input_directory = ct.c_char_p(input_directory.encode())  # const char* inputDirPath
+        gw_return_object.ct_output_directory = ct.c_char_p(output_directory.encode())  # const char* outputDirPath
+        gw_return_object.ct_file_type = ct.c_char_p(file_type.encode())  # const char *fileType
+
+        with utils.CwdHandler(new_cwd=self.library_path):
             # API call
-            gw_return_object.status = self.library.GwFileToFileUnpack(
-                gw_return_object.ct_input_file,
+            gw_return_object.status = self.library.GwFileToFilePack(
+                gw_return_object.ct_input_directory,
                 gw_return_object.ct_output_directory,
                 gw_return_object.ct_file_type,
             )
 
-        input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
         if gw_return_object.status not in successes.success_codes:
-            log.warning(f"\n\tinput_file: {input_file_repr}\n\tstatus: {gw_return_object.status}")
+            log.warning(f"\n\tinput_directory: {input_directory}\n\tstatus: {gw_return_object.status}")
             if raise_unsupported:
                 raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
         else:
-            log.debug(f"\n\tinput_file: {input_file_repr}\n\tstatus: {gw_return_object.status}")
+            log.debug(f"\n\tinput_directory: {input_directory}\n\tstatus: {gw_return_object.status}")
 
         self.release()
 
         return gw_return_object
 
     @staticmethod
-    def get_archive_type(file_path: str):
-        """ Returns the archive type of a file path """
-        file_type = os.path.splitext(file_path)[-1].replace(".", "", 1)
-        if not file_type:
-            raise Exception(f"File type not indentifiable: {file_path}")
-        return file_type
+    def is_supported_archive(file_path: str):
+        """ Returns True if the file_path is an archive format that is supported. """
+        return file_path in ArchiveManager.supported_archive_list
 
     @staticmethod
-    def is_supported_archive_type(archive_type: str):
-        """ Returns True if the file_path is an archive that is supported. """
-        return archive_type in {
-            "7z",
-            "bz2",
-            "gz",
-            "rar",
-            "tar",
-            "zip",
-        }
-
-    @staticmethod
-    def filter_archives(file_paths: list):
-        """ Filters a list of files, returning supported archives only. """
+    def list_archive_paths(directory: str, recursive: bool = True, absolute: bool = True, followlinks: bool = True):
+        """ Returns a list of file paths of supported archives in a directory and all of its subdirectories. """
         return [
             file_path
-            for file_path in file_paths
-            if ArchiveManager.is_supported_archive_type(ArchiveManager.get_archive_type(file_path))
+            for file_path in glasswall.utils.list_file_paths(
+                directory=directory,
+                recursive=recursive,
+                absolute=absolute,
+                followlinks=followlinks,
+            )
+            if ArchiveManager.is_supported_archive(
+                utils.get_file_type(file_path)
+            )
         ]
 
-    @staticmethod
-    def get_archives(directory: str):
-        """ Returns a list of supported archives in a directory and all subdirectories. """
-        return ArchiveManager.filter_archives(glasswall.utils.list_file_paths(directory))
+    def unpack(self, input_file: str, output_directory: str, recursive: bool = True, file_type: Optional[str] = None, include_file_type: Optional[bool] = False, raise_unsupported: bool = True, delete_origin: bool = False):
+        """ Unpack an archive, maintaining directory structure. Supported archive formats are: "7z", "bz2", "gz", "rar", "tar", "zip".
 
-    def recursively_unpack(self, input_file: str, output_directory: str, file_type: Optional[str] = None, raise_unsupported: bool = True, delete_origin: bool = False):
-        # Maintain directory structure of archives, converting archives to directories
-        archive_basename = os.path.splitext(os.path.basename(input_file))[0]
-        output_directory_basename = os.path.basename(output_directory)
-        if not delete_origin or delete_origin and archive_basename != output_directory_basename:
-            output_directory = os.path.join(output_directory, archive_basename)
+        Args:
+            input_file (str): The archive file path
+            output_directory (str): The output directory where the archive will be unpacked to a new directory.
+            recursive (bool, optional): Default True. Recursively unpack all nested archives.
+            file_type (str, optional): Default None (use extension). The archive file type.
+            include_file_type (bool, optional): Default False. Include the archive format in the directory name. Useful when there are multiple same-named archives of different formats.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+            delete_origin (bool, optional): Default False. Delete input_file after unpacking to output_directory.
+        """
+        # Convert to absolute paths
+        input_file = os.path.abspath(input_file)
+        output_directory = os.path.abspath(output_directory)
+
+        if include_file_type:
+            archive_name = os.path.basename(input_file)
+        else:
+            archive_name = os.path.splitext(os.path.basename(input_file))[0]
+        archive_output_directory = os.path.join(output_directory, archive_name)
 
         # Unpack
-        status = self.file_to_file_unpack(input_file=input_file, output_directory=output_directory, file_type=file_type, raise_unsupported=raise_unsupported).status
+        log.debug(f"Unpacking\n\tsrc: {input_file}\n\tdst: {archive_output_directory}")
+        status = self.file_to_file_unpack(input_file=input_file, output_directory=archive_output_directory, file_type=file_type, raise_unsupported=raise_unsupported).status
 
-        # Delete subarchives that have been unpacked
+        if status not in successes.success_codes:
+            log.warning(f"\n\tinput_file: {input_file}\n\tstatus: {status}")
+            if raise_unsupported:
+                raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+        else:
+            log.debug(f"\n\tinput_file: {input_file}\n\tstatus: {status}")
+
         if delete_origin:
             os.remove(input_file)
 
-        # Recurse subdirectories on success and unpack all subarchives
-        if status in successes.success_codes:
-            if os.path.isdir(output_directory):
-                for subarchive in ArchiveManager.get_archives(output_directory):
-                    subarchive_parent_directory = os.path.dirname(subarchive)
-                    self.recursively_unpack(input_file=subarchive, output_directory=subarchive_parent_directory, delete_origin=True)
-            else:
-                log.warning(f"Directory doesn't exist.\n{locals()}")
+        if recursive:
+            # Unpack sub archives
+            for subarchive in self.list_archive_paths(archive_output_directory):
+                self.unpack(
+                    input_file=subarchive,
+                    output_directory=archive_output_directory,
+                    recursive=recursive,
+                    raise_unsupported=raise_unsupported,
+                    delete_origin=True
+                )
+
+        return status
+
+    def unpack_directory(self, input_directory: str, output_directory: str, recursive: bool = True, file_type: Optional[str] = None, include_file_type: Optional[bool] = False, raise_unsupported: bool = True, delete_origin: bool = False):
+        """ Unpack a directory of archives, maintaining directory structure.
+
+        Args:
+            input_directory (str): The input directory containing archives to unpack.
+            output_directory (str): The output directory where archives will be unpacked to a new directory.
+            recursive (bool, optional): Default True. Recursively unpack all nested archives.
+            file_type (str, optional): Default None (use extension). The archive file type of all archives within the directory.
+            include_file_type (bool, optional): Default False. Include the archive format in the directory name. Useful when there are multiple same-named archives of different formats.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+            delete_origin (bool, optional): Default False. Delete input_file after unpacking to output_directory.
+        """
+        # Convert to absolute paths
+        input_directory = os.path.abspath(input_directory)
+        output_directory = os.path.abspath(output_directory)
+
+        for archive_input_file in self.list_archive_paths(input_directory):
+            relative_path = os.path.relpath(archive_input_file, input_directory)
+            archive_output_file = os.path.dirname(os.path.join(output_directory, relative_path))
+            self.unpack(
+                input_file=archive_input_file,
+                output_directory=archive_output_file,
+                recursive=recursive,
+                file_type=file_type,
+                include_file_type=include_file_type,
+                raise_unsupported=raise_unsupported,
+                delete_origin=delete_origin
+            )
+
+    def pack_directory(self, input_directory: str, output_directory: str, file_type: str, raise_unsupported: bool = True, delete_origin: bool = False):
+        """ Pack a directory. Supported archive formats are: "7z", "bz2", "gz", "rar", "tar", "zip".
+
+        Args:
+            input_file (str): The archive file path
+            output_directory (str): The output directory where the archive will be unpacked to a new directory.
+            recursive (bool, optional): Default True. Recursively unpack all nested archives.
+            file_type (str): The archive file type.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+            delete_origin (bool, optional): Default False. Delete input_file after unpacking to output_directory.
+        """
+        # Convert to absolute paths
+        input_directory = os.path.abspath(input_directory)
+        output_directory = os.path.abspath(output_directory)
+
+        # Pack
+        log.debug(f"Packing\n\tsrc: {input_directory}\n\tdst: {output_directory}")
+        status = self.file_to_file_pack(input_directory=input_directory, output_directory=output_directory, file_type=file_type, raise_unsupported=raise_unsupported).status
+
+        if status not in successes.success_codes:
+            log.warning(f"\n\tinput_directory: {input_directory}\n\tstatus: {status}")
+            if raise_unsupported:
+                raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
         else:
-            log.warning(f"Bad status.\n{locals()}")
+            log.debug(f"\n\tinput_directory: {input_directory}\n\tstatus: {status}")
+
+        if delete_origin:
+            utils.delete_directory(input_directory)

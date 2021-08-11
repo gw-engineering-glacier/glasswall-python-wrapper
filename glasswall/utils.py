@@ -156,6 +156,11 @@ def flatten_list(list_: Iterable):
     ]
 
 
+def get_file_type(file_path: str):
+    """ Returns the filetype of a file. "data/files/splat.zip" -> "zip" """
+    return os.path.splitext(file_path)[-1].replace(".", "")
+
+
 def get_libraries(directory: str, ignore_errors: bool = False):
     """ Recursively calls get_library on each library from glasswall.libraries.os_info on the given directory.
 
