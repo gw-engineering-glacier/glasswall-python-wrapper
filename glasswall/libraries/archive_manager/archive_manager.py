@@ -14,10 +14,10 @@ from glasswall.libraries.library import Library
 
 class ArchiveManager(Library):
     """ A high level Python wrapper for Glasswall Archive Manager. """
-    supported_archive_list = [
+    supported_archives = [
         "7z",
-        "bz2",
-        "gz",
+        # "bz2",
+        # "gz",
         "rar",
         "tar",
         "zip",
@@ -450,7 +450,7 @@ class ArchiveManager(Library):
     @staticmethod
     def is_supported_archive(file_path: str):
         """ Returns True if the file_path is an archive format that is supported. """
-        return file_path in ArchiveManager.supported_archive_list
+        return file_path in ArchiveManager.supported_archives
 
     @staticmethod
     def list_archive_paths(directory: str, recursive: bool = True, absolute: bool = True, followlinks: bool = True):
