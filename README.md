@@ -25,7 +25,7 @@ pip install glasswall
 <details>
 <summary>Loading a Glasswall library</summary>
 
-Currently the following libraries are supported:
+Each library is a subclass of the `glasswall.libraries.library.Library` class and can be accessed from the top level of the `glasswall` module. The following subclasses are available:
 
 * ArchiveManager
 * Editor
@@ -33,17 +33,19 @@ Currently the following libraries are supported:
 * SecurityTagging
 * WordSearch
 
+Libraries are loaded on initialisation and have one required argument: `library_path` which can be the path to a file or a directory. If a directory is specified it is recursively searched and the library with the latest change time will be loaded.
+
 ```py
 import glasswall
 
 
+# Load the Glasswall Editor library
 editor = glasswall.Editor(library_path=r"C:\azure\sdk.editor\2.173")
 ```
 ```
 >>> 2021-03-15 12:27:42.337 glasswall INFO     __init__                  Loaded Glasswall Editor version 2.173 from C:\azure\sdk.editor\2.173\windows-drop-no-kill-switch\glasswall_core2.dll
 ```
 
-`library_path` can be a path to a directory or a path to a file. When a directory is specified all subdirectories are recursively searched for the library file with the latest creation time.
 </details>
 
 <details>
@@ -68,6 +70,7 @@ import logging
 
 import glasswall
 
+
 # Modify logging level for logs to the console
 glasswall.config.logging.console.setLevel(logging.DEBUG)
 
@@ -76,15 +79,98 @@ glasswall.config.logging.log.setLevel(logging.DEBUG)
 ```
 </details>
 
-<details>
-<summary>Protecting a directory</summary>
 
-If no content management policy is provided then the default `sanitise` all policy is used.
+<details>
+<summary>Content management policies</summary>
+
+Content management policies can be fully customised using the `glasswall.content_management.policies.Policy` class and its subclasses:
+
+* ArchiveManager
+* Editor
+* Rebuild
+* WordSearch
+
+```py
+import glasswall
+
+# Print the default Editor content management policy
+print(glasswall.content_management.policies.Editor())
+```
+<details>
+<summary>default Editor policy</summary>
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <pdfConfig>
+        <acroform>sanitise</acroform>
+        <actions_all>sanitise</actions_all>
+        <digital_signatures>sanitise</digital_signatures>
+        <embedded_files>sanitise</embedded_files>        
+        <embedded_images>sanitise</embedded_images>
+        <external_hyperlinks>sanitise</external_hyperlinks>
+        <internal_hyperlinks>sanitise</internal_hyperlinks>
+        <javascript>sanitise</javascript>
+        <metadata>sanitise</metadata>
+    </pdfConfig>
+    <pptConfig>
+        <embedded_files>sanitise</embedded_files>
+        <embedded_images>sanitise</embedded_images>
+        <external_hyperlinks>sanitise</external_hyperlinks>
+        <internal_hyperlinks>sanitise</internal_hyperlinks>
+        <javascript>sanitise</javascript>
+        <macros>sanitise</macros>
+        <metadata>sanitise</metadata>
+        <review_comments>sanitise</review_comments>
+    </pptConfig>
+    <sysConfig>
+        <interchange_pretty>false</interchange_pretty>
+        <interchange_type>sisl</interchange_type>
+    </sysConfig>
+    <tiffConfig>
+        <geotiff>sanitise</geotiff>
+    </tiffConfig>
+    <wordConfig>
+        <dynamic_data_exchange>sanitise</dynamic_data_exchange>
+        <embedded_files>sanitise</embedded_files>
+        <embedded_images>sanitise</embedded_images>
+        <external_hyperlinks>sanitise</external_hyperlinks>
+        <internal_hyperlinks>sanitise</internal_hyperlinks>
+        <macros>sanitise</macros>
+        <metadata>sanitise</metadata>
+        <review_comments>sanitise</review_comments>
+    </wordConfig>
+    <xlsConfig>
+        <dynamic_data_exchange>sanitise</dynamic_data_exchange>
+        <embedded_files>sanitise</embedded_files>
+        <embedded_images>sanitise</embedded_images>
+        <external_hyperlinks>sanitise</external_hyperlinks>
+        <internal_hyperlinks>sanitise</internal_hyperlinks>
+        <macros>sanitise</macros>
+        <metadata>sanitise</metadata>
+        <review_comments>sanitise</review_comments>
+    </xlsConfig>
+</config>
+```
+</details>
+
+</details>
+
+### Editor
+
+<details>
+<summary>Protecting all files in a directory</summary>
+
 ```py
 import glasswall
 
 
+# Load the Glasswall Editor library
 editor = glasswall.Editor(library_path=r"C:\azure\sdk.editor\2.173")
+
+
+# Use the default sanitise all policy to protect a directory of files, writing
+# the sanitised files to a new directory
 editor.protect_directory(
     input_directory=r"C:\test_files",
     output_directory=r"C:\test_files_sanitised"
@@ -94,7 +180,7 @@ editor.protect_directory(
 </details>
 
 <details>
-<summary>Protecting a directory with a customised content management policy</summary>
+<summary>Protecting all files in a directory using a custom content management policy</summary>
 
 Using `glasswall.content_management.policies.Editor`:
 ```py
@@ -145,7 +231,7 @@ editor.protect_directory(
 import glasswall
 
 # Load the Glasswall Archive Manager library
-am = glasswall.ArchiveManager(r"C:\path\to\your\library\sdk.archive.manager")
+am = glasswall.ArchiveManager(r"C:\azure\sdk.archive.manager")
 
 print(am.supported_archives)
 
@@ -161,7 +247,7 @@ print(am.supported_archives)
 import glasswall
 
 # Load the Glasswall Archive Manager library
-am = glasswall.ArchiveManager(r"C:\path\to\your\library\sdk.archive.manager")
+am = glasswall.ArchiveManager(r"C:\azure\sdk.archive.manager")
 
 # Unpack the Nested_4_layers.zip archive to a new directory
 am.unpack(
@@ -175,7 +261,7 @@ A new directory is created: `C:\Users\AngusRoberts\Desktop\unpacked_archives\nes
 import glasswall
 
 # Load the Glasswall Archive Manager library
-am = glasswall.ArchiveManager(r"C:\path\to\your\library\sdk.archive.manager")
+am = glasswall.ArchiveManager(r"C:\azure\sdk.archive.manager")
 
 # Unpack the Nested_4_layers.zip archive to a new directory without recursing the archive.
 am.unpack(
@@ -199,7 +285,7 @@ Other useful arguments:
 import glasswall
 
 # Load the Glasswall Archive Manager library
-am = glasswall.ArchiveManager(r"C:\path\to\your\library\sdk.archive.manager")
+am = glasswall.ArchiveManager(r"C:\azure\sdk.archive.manager")
 
 # Recursively unpack all archives found in the `archives` directory
 am.unpack_directory(
@@ -219,7 +305,7 @@ The `unpack_directory` method shares the same optional arguments as `unpack`. Se
 import glasswall
 
 # Load the Glasswall Archive Manager library
-am = glasswall.ArchiveManager(r"C:\path\to\your\library\sdk.archive.manager")
+am = glasswall.ArchiveManager(r"C:\azure\sdk.archive.manager")
 
 # Pack the `assorted_files` directory as zip to `assorted_files.zip`
 am.pack_directory(
@@ -233,7 +319,7 @@ Pack to multiple formats with ease:
 import glasswall
 
 # Load the Glasswall Archive Manager library
-am = glasswall.ArchiveManager(r"C:\path\to\your\library\sdk.archive.manager")
+am = glasswall.ArchiveManager(r"C:\azure\sdk.archive.manager")
 
 # Pack the `assorted_files` directory in each supported file format
 for file_type in am.supported_archives:
