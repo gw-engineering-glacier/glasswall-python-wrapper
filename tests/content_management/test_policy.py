@@ -571,6 +571,14 @@ class TestPolicy(unittest.TestCase):
             "<acroform>allow</acroform>"
         )
 
+    def test_policies___sysconfig_default_is_not_a_switch(self):
+        # 2021/08/12 - was a bug with sysConfig containing the switch `default="sanitise"`
+        for policy_subclass in glasswall.content_management.policies.Policy.__subclasses__():
+            policy = getattr(glasswall.content_management.policies, policy_subclass.__name__)()
+
+            if hasattr(policy, "sysConfig"):
+                self.assertTrue("default" not in policy.sysConfig.get_switch_names())
+
     def test_archive_manager_custom_policy___attributes_and_switches_customisable(self):
         policy = glasswall.content_management.policies.ArchiveManager(
             default="sanitise",

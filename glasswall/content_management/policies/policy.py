@@ -27,11 +27,7 @@ class Policy:
 
         # Add default config elements
         for config_element in self.default_config_elements:
-            if config_element == glasswall.content_management.config_elements.archiveConfig:
-                # archiveConfig special case, use default_archive_manager (no_action, discard, process)
-                self.add_config_element(config_element(default=self.default_archive_manager))
-            else:
-                self.add_config_element(config_element(default=self.default))
+            self.add_config_element(config_element)
 
         # Add customised config elements provided in `config`
         for config_element_name, switches in config.items():
