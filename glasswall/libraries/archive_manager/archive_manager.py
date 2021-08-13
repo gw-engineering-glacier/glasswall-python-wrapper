@@ -62,7 +62,7 @@ class ArchiveManager(Library):
             raise TypeError(output_file)
         if not isinstance(output_report, (type(None), str)):
             raise TypeError(output_report)
-        if not isinstance(content_management_policy, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy)):
+        if not isinstance(content_management_policy, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy)):
             raise TypeError(content_management_policy)
 
         # Convert string path arguments to absolute paths
@@ -212,7 +212,7 @@ class ArchiveManager(Library):
             raise TypeError(output_file)
         if not isinstance(output_report, (type(None), str)):
             raise TypeError(output_report)
-        if not isinstance(content_management_policy, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy)):
+        if not isinstance(content_management_policy, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy)):
             raise TypeError(content_management_policy)
 
         # Convert string path arguments to absolute paths

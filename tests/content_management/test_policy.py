@@ -573,7 +573,7 @@ class TestPolicy(unittest.TestCase):
 
     def test_policies___sysconfig_default_is_not_a_switch(self):
         # 2021/08/12 - was a bug with sysConfig containing the switch `default="sanitise"`
-        for policy_subclass in glasswall.content_management.policies.Policy.__subclasses__():
+        for policy_subclass in glasswall.content_management.policies.policy.Policy.__subclasses__():
             policy = getattr(glasswall.content_management.policies, policy_subclass.__name__)()
 
             if hasattr(policy, "sysConfig"):
