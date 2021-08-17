@@ -1,0 +1,3035 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>glasswall.libraries.rebuild.rebuild API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>glasswall.libraries.rebuild.rebuild</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import ctypes as ct
+import io
+import os
+from typing import Union
+
+import glasswall
+from glasswall import determine_file_type as dft
+from glasswall import utils
+from glasswall.config.logging import log
+from glasswall.libraries.library import Library
+from glasswall.libraries.rebuild import errors, successes
+
+
+class Rebuild(Library):
+    &#34;&#34;&#34; A high level Python wrapper for Glasswall Rebuild / Classic. &#34;&#34;&#34;
+
+    def __init__(self, library_path: str):
+        super().__init__(library_path=library_path)
+        self.library = self.load_library(os.path.abspath(library_path))
+
+        # Set content management configuration to default
+        self.set_content_management_policy(input_file=None)
+
+        # Validate killswitch has not activated
+        self.validate_license()
+
+        log.info(f&#34;Loaded Glasswall {self.__class__.__name__} version {self.version()} from {self.library_path}&#34;)
+
+    def validate_license(self):
+        &#34;&#34;&#34; Validates the license of the library by attempting to call protect_file on a known supported file.
+
+        Raises:
+            RebuildError: If the license could not be validated.
+        &#34;&#34;&#34;
+        # Call protect file on a known good bitmap to see if license has expired
+        try:
+            self.protect_file(
+                input_file=b&#34;BM:\x00\x00\x00\x00\x00\x00\x006\x00\x00\x00(\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x18\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\x00&#34;,
+                raise_unsupported=True
+            )
+            log.debug(f&#34;{self.__class__.__name__} license validated successfully.&#34;)
+        except errors.RebuildError:
+            log.warning(f&#34;{self.__class__.__name__} license validation failed.&#34;)
+            raise
+
+    def version(self):
+        &#34;&#34;&#34; Returns the Glasswall library version.
+
+        Returns:
+            version (str): The Glasswall library version.
+        &#34;&#34;&#34;
+
+        # Declare the return type
+        self.library.GWFileVersion.restype = ct.c_wchar_p
+
+        # API call
+        version = self.library.GWFileVersion()
+
+        return version
+
+    def determine_file_type(self, input_file: Union[str, bytes, bytearray, io.BytesIO], as_string: bool = False):
+        &#34;&#34;&#34; Returns an int representing the file type / file format of a file.
+
+        Args:
+            input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file, can be a local path.
+            as_string (bool, optional): Return file type as string, eg: &#34;bmp&#34; instead of: 29. Defaults to False.
+
+        Returns:
+            file_type (Union[int, str]): The file format.
+        &#34;&#34;&#34;
+
+        if isinstance(input_file, str):
+            if not os.path.isfile(input_file):
+                raise FileNotFoundError(input_file)
+
+            self.library.GWDetermineFileTypeFromFile.argtypes = [ct.c_wchar_p]
+            self.library.GWDetermineFileTypeFromFile.restype = ct.c_int
+
+            # convert to ct.c_wchar_p
+            ct_input_file = ct.c_wchar_p(input_file)
+
+            # API call
+            file_type = self.library.GWDetermineFileTypeFromFile(ct_input_file)
+
+        elif isinstance(input_file, (bytes, bytearray, io.BytesIO)):
+            self.library.GWDetermineFileTypeFromFileInMem.argtypes = [ct.c_char_p, ct.c_size_t]
+            self.library.GWDetermineFileTypeFromFileInMem.restype = ct.c_int
+
+            # convert to bytes
+            bytes_input_file = utils.as_bytes(input_file)
+
+            # ctypes conversion
+            ct_input_buffer = ct.c_char_p(bytes_input_file)
+            ct_butter_length = ct.c_size_t(len(bytes_input_file))
+
+            # API call
+            file_type = self.library.GWDetermineFileTypeFromFileInMem(
+                ct_input_buffer,
+                ct_butter_length
+            )
+
+        file_type_as_string = dft.file_type_int_to_str(file_type)
+        input_file_repr = f&#34;{type(input_file)} length {len(input_file)}&#34; if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
+
+        if not dft.is_success(file_type):
+            log.warning(f&#34;\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}&#34;)
+            raise dft.int_class_map.get(file_type, dft.errors.UnknownErrorCode)(file_type)
+        else:
+            log.debug(f&#34;\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}&#34;)
+
+        if as_string:
+            return file_type_as_string
+
+        return file_type
+
+    def get_content_management_policy(self):
+        &#34;&#34;&#34; Gets the current content management configuration.
+
+        Returns:
+            xml_string (str): The XML string of the current content management configuration.
+        &#34;&#34;&#34;
+
+        # Declare argument types
+        self.library.GWFileConfigGet.argtypes = [
+            ct.POINTER(ct.POINTER(ct.c_wchar)),
+            ct.POINTER(ct.c_size_t)
+        ]
+
+        # Variable initialisation
+        ct_input_buffer = ct.POINTER(ct.c_wchar)()
+        ct_input_size = ct.c_size_t(0)
+
+        # API call
+        status = self.library.GWFileConfigGet(
+            ct.byref(ct_input_buffer),
+            ct.byref(ct_input_size)
+        )
+
+        if status not in successes.success_codes:
+            log.warning(f&#34;\n\tstatus: {status}&#34;)
+            raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+        else:
+            log.debug(f&#34;\n\tstatus: {status}&#34;)
+
+        # As string
+        xml_string = utils.validate_xml(ct.wstring_at(ct_input_buffer))
+
+        return xml_string
+
+    def set_content_management_policy(self, input_file: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None):
+        &#34;&#34;&#34; Sets the content management policy configuration. If input_file is None then default settings (sanitise) are applied.
+
+        Args:
+            input_file (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): Default None (sanitise). The content management policy to apply.
+
+        Returns:
+            status (int): The result of the Glasswall API call.
+        &#34;&#34;&#34;
+        # Validate type
+        if not isinstance(input_file, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy)):
+            raise TypeError(input_file)
+
+        # self.library.GWFileConfigRevertToDefaults doesn&#39;t work, load default instead
+        # Set input_file to default if input_file is None
+        if input_file is None:
+            input_file = glasswall.content_management.policies.Rebuild(default=&#34;sanitise&#34;)
+
+        # Validate xml content is parsable
+        xml_string = utils.validate_xml(input_file)
+
+        # Declare argument types
+        self.library.GWFileConfigXML.argtypes = [ct.c_wchar_p]
+
+        # API call
+        status = self.library.GWFileConfigXML(
+            ct.c_wchar_p(xml_string)
+        )
+
+        if status not in successes.success_codes:
+            log.warning(f&#34;\n\tstatus: {status}&#34;)
+            raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+        else:
+            log.debug(f&#34;\n\tstatus: {status}&#34;)
+
+        return status
+
+    def protect_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None, raise_unsupported: bool = True):
+        &#34;&#34;&#34; Protects a file using the current content management configuration, returning the file bytes. The protected file is written to output_file if it is provided.
+
+        Args:
+            input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
+            output_file (Union[None, str], optional): The output file path where the protected file will be written.
+            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): The content management policy to apply.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            file_bytes (bytes): The protected file bytes.
+        &#34;&#34;&#34;
+        # Validate arg types
+        if not isinstance(input_file, (str, bytes, bytearray, io.BytesIO)):
+            raise TypeError(input_file)
+        if not isinstance(output_file, (type(None), str)):
+            raise TypeError(output_file)
+        if not isinstance(content_management_policy, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy)):
+            raise TypeError(content_management_policy)
+        if not isinstance(raise_unsupported, bool):
+            raise TypeError(raise_unsupported)
+
+        # Convert string path arguments to absolute paths
+        if isinstance(input_file, str):
+            if not os.path.isfile(input_file):
+                raise FileNotFoundError(input_file)
+            input_file = os.path.abspath(input_file)
+        if isinstance(output_file, str):
+            output_file = os.path.abspath(output_file)
+            # make directories that do not exist
+            os.makedirs(os.path.dirname(output_file), exist_ok=True)
+        if isinstance(content_management_policy, str) and os.path.isfile(content_management_policy):
+            content_management_policy = os.path.abspath(content_management_policy)
+
+        # Check that file type is supported
+        try:
+            file_type = self.determine_file_type(input_file=input_file)
+        except dft.errors.FileTypeEnumError:
+            if raise_unsupported:
+                raise
+            else:
+                return None
+
+        # Convert memory inputs to bytes
+        if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
+            input_file = utils.as_bytes(input_file)
+
+        with utils.CwdHandler(self.library_path):
+            # Set content management policy
+            if content_management_policy:
+                self.set_content_management_policy(content_management_policy)
+
+            # file to file
+            if isinstance(input_file, str) and isinstance(output_file, str):
+                # API function declaration
+                self.library.GWFileToFileProtect.argtypes = [
+                    ct.c_wchar_p,
+                    ct.c_wchar_p,
+                    ct.c_wchar_p
+                ]
+
+                # Variable initialisation
+                ct_input_file = ct.c_wchar_p(input_file)
+                ct_file_type = ct.c_wchar_p(dft.file_type_int_to_str(file_type))
+                ct_output_file = ct.c_wchar_p(output_file)
+
+                # API call
+                status = self.library.GWFileToFileProtect(
+                    ct_input_file,
+                    ct_file_type,
+                    ct_output_file
+                )
+
+            # file to memory
+            elif isinstance(input_file, str) and output_file is None:
+                # API function declaration
+                self.library.GWFileProtect.argtypes = [
+                    ct.c_wchar_p,
+                    ct.c_wchar_p,
+                    ct.POINTER(ct.c_void_p),
+                    ct.POINTER(ct.c_size_t)
+                ]
+
+                # Variable initialisation
+                ct_input_file = ct.c_wchar_p(input_file)
+                ct_file_type = ct.c_wchar_p(dft.file_type_int_to_str(file_type))
+                ct_output_buffer = ct.c_void_p(0)
+                ct_output_size = ct.c_size_t(0)
+
+                # API call
+                status = self.library.GWFileProtect(
+                    ct_input_file,
+                    ct_file_type,
+                    ct.byref(ct_output_buffer),
+                    ct.byref(ct_output_size)
+                )
+
+            # memory to memory and memory to file
+            elif isinstance(input_file, bytes):
+                # API function declaration
+                self.library.GWMemoryToMemoryProtect.argtypes = [
+                    ct.c_void_p,
+                    ct.c_size_t,
+                    ct.c_wchar_p,
+                    ct.POINTER(ct.c_void_p),
+                    ct.POINTER(ct.c_size_t)
+                ]
+
+                # Variable initialization
+                bytearray_buffer = bytearray(input_file)
+                ct_input_buffer = (ct.c_ubyte * len(bytearray_buffer)).from_buffer(bytearray_buffer)
+                ct_input_size = ct.c_size_t(len(input_file))
+                ct_file_type = ct.c_wchar_p(dft.file_type_int_to_str(file_type))
+                ct_output_buffer = ct.c_void_p(0)
+                ct_output_size = ct.c_size_t(0)
+
+                status = self.library.GWMemoryToMemoryProtect(
+                    ct_input_buffer,
+                    ct_input_size,
+                    ct_file_type,
+                    ct.byref(ct_output_buffer),
+                    ct.byref(ct_output_size)
+                )
+
+            input_file_repr = f&#34;{type(input_file)} length {len(input_file)}&#34; if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
+            if status not in successes.success_codes:
+                log.warning(f&#34;\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}&#34;)
+                if raise_unsupported:
+                    raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+                else:
+                    file_bytes = None
+            else:
+                log.debug(f&#34;\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}&#34;)
+                if isinstance(input_file, str) and isinstance(output_file, str):
+                    # file to file, read the bytes of the file Glasswall has already written
+                    if not os.path.isfile(output_file):
+                        log.warning(f&#34;\n\tstatus: {status}\n\toutput_file: {output_file}&#34;)
+                        file_bytes = None
+                    else:
+                        with open(output_file, &#34;rb&#34;) as f:
+                            file_bytes = f.read()
+                else:
+                    # file to memory, memory to memory
+                    file_bytes = utils.buffer_to_bytes(
+                        ct_output_buffer,
+                        ct_output_size
+                    )
+                    if isinstance(output_file, str):
+                        # memory to file
+                        # no Glasswall function exists for memory to file, write the memory to file ourselves
+                        with open(output_file, &#34;wb&#34;) as f:
+                            f.write(file_bytes)
+
+            return file_bytes
+
+    def protect_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None, raise_unsupported: bool = True):
+        &#34;&#34;&#34; Recursively processes all files in a directory in protect mode using the given content management policy.
+        The protected files are written to output_directory maintaining the same directory structure as input_directory.
+
+        Args:
+            input_directory (str): The input directory containing files to protect.
+            output_directory (Union[None, str]): The output directory where the protected file will be written, or None to not write files.
+            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): Default None (sanitise). The content management policy to apply.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            protected_files_dict (dict): A dictionary of file paths relative to input_directory, and file bytes.
+        &#34;&#34;&#34;
+        protected_files_dict = {}
+        # Call protect_file on each file in input_directory to output_directory
+        for input_file in utils.list_file_paths(input_directory):
+            relative_path = os.path.relpath(input_file, input_directory)
+            output_file = None if output_directory is None else os.path.join(os.path.abspath(output_directory), relative_path)
+
+            protected_bytes = self.protect_file(
+                input_file=input_file,
+                output_file=output_file,
+                raise_unsupported=raise_unsupported,
+                content_management_policy=content_management_policy,
+            )
+
+            protected_files_dict[relative_path] = protected_bytes
+
+        return protected_files_dict
+
+    def analyse_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None, raise_unsupported: bool = True):
+        &#34;&#34;&#34; Analyses a file, returning the analysis bytes. The analysis is written to output_file if it is provided.
+
+        Args:
+            input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
+            output_file (Union[None, str], optional): The output file path where the analysis file will be written.
+            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): The content management policy to apply.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            file_bytes (bytes): The analysis file bytes.
+        &#34;&#34;&#34;
+        # Validate arg types
+        if not isinstance(input_file, (str, bytes, bytearray, io.BytesIO)):
+            raise TypeError(input_file)
+        if not isinstance(output_file, (type(None), str)):
+            raise TypeError(output_file)
+        if not isinstance(content_management_policy, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy)):
+            raise TypeError(content_management_policy)
+        if not isinstance(raise_unsupported, bool):
+            raise TypeError(raise_unsupported)
+
+        # Convert string path arguments to absolute paths
+        if isinstance(input_file, str):
+            if not os.path.isfile(input_file):
+                raise FileNotFoundError(input_file)
+            input_file = os.path.abspath(input_file)
+        if isinstance(output_file, str):
+            output_file = os.path.abspath(output_file)
+            # make directories that do not exist
+            os.makedirs(os.path.dirname(output_file), exist_ok=True)
+        if isinstance(content_management_policy, str) and os.path.isfile(content_management_policy):
+            content_management_policy = os.path.abspath(content_management_policy)
+
+        # Check that file type is supported
+        try:
+            file_type = self.determine_file_type(input_file=input_file)
+        except dft.errors.FileTypeEnumError:
+            if raise_unsupported:
+                raise
+            else:
+                return None
+
+        # Convert memory inputs to bytes
+        if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
+            input_file = utils.as_bytes(input_file)
+
+        with utils.CwdHandler(self.library_path):
+            # Set content management policy
+            self.set_content_management_policy(content_management_policy)
+
+            # file to file
+            if isinstance(input_file, str) and isinstance(output_file, str):
+                # API function declaration
+                self.library.GWFileToFileAnalysisAudit.argtypes = [
+                    ct.c_wchar_p,
+                    ct.c_wchar_p,
+                    ct.c_wchar_p
+                ]
+
+                # Variable initialisation
+                ct_input_file = ct.c_wchar_p(input_file)
+                ct_file_type = ct.c_wchar_p(dft.file_type_int_to_str(file_type))
+                ct_output_file = ct.c_wchar_p(output_file)
+
+                # API call
+                status = self.library.GWFileToFileAnalysisAudit(
+                    ct_input_file,
+                    ct_file_type,
+                    ct_output_file
+                )
+
+            # file to memory
+            elif isinstance(input_file, str) and output_file is None:
+                # API function declaration
+                self.library.GWFileAnalysisAudit.argtypes = [
+                    ct.c_wchar_p,
+                    ct.c_wchar_p,
+                    ct.POINTER(ct.c_void_p),
+                    ct.POINTER(ct.c_size_t)
+                ]
+
+                # Variable initialisation
+                ct_input_file = ct.c_wchar_p(input_file)
+                ct_file_type = ct.c_wchar_p(dft.file_type_int_to_str(file_type))
+                ct_output_buffer = ct.c_void_p(0)
+                ct_output_size = ct.c_size_t(0)
+
+                # API call
+                status = self.library.GWFileAnalysisAudit(
+                    ct_input_file,
+                    ct_file_type,
+                    ct.byref(ct_output_buffer),
+                    ct.byref(ct_output_size)
+                )
+
+            # memory to memory and memory to file
+            elif isinstance(input_file, bytes):
+                # API function declaration
+                self.library.GWMemoryToMemoryAnalysisAudit.argtypes = [
+                    ct.c_void_p,
+                    ct.c_size_t,
+                    ct.c_wchar_p,
+                    ct.POINTER(ct.c_void_p),
+                    ct.POINTER(ct.c_size_t)
+                ]
+
+                # Variable initialization
+                bytearray_buffer = bytearray(input_file)
+                ct_input_buffer = (ct.c_ubyte * len(bytearray_buffer)).from_buffer(bytearray_buffer)
+                ct_input_size = ct.c_size_t(len(input_file))
+                ct_file_type = ct.c_wchar_p(dft.file_type_int_to_str(file_type))
+                ct_output_buffer = ct.c_void_p(0)
+                ct_output_size = ct.c_size_t(0)
+
+                status = self.library.GWMemoryToMemoryAnalysisAudit(
+                    ct.byref(ct_input_buffer),
+                    ct_input_size,
+                    ct_file_type,
+                    ct.byref(ct_output_buffer),
+                    ct.byref(ct_output_size)
+                )
+
+            input_file_repr = f&#34;{type(input_file)} length {len(input_file)}&#34; if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
+            if status not in successes.success_codes:
+                log.warning(f&#34;\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}&#34;)
+                if raise_unsupported:
+                    raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+                else:
+                    file_bytes = None
+            else:
+                log.debug(f&#34;\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}&#34;)
+                if isinstance(input_file, str) and isinstance(output_file, str):
+                    # file to file, read the bytes of the file Glasswall has already written
+                    if not os.path.isfile(output_file):
+                        log.warning(f&#34;\n\tstatus: {status}\n\toutput_file: {output_file}&#34;)
+                        file_bytes = None
+                    else:
+                        with open(output_file, &#34;rb&#34;) as f:
+                            file_bytes = f.read()
+                else:
+                    # file to memory, memory to memory
+                    file_bytes = utils.buffer_to_bytes(
+                        ct_output_buffer,
+                        ct_output_size
+                    )
+                    if isinstance(output_file, str):
+                        # memory to file
+                        # no Glasswall function exists for memory to file, write the memory to file ourselves
+                        with open(output_file, &#34;wb&#34;) as f:
+                            f.write(file_bytes)
+
+            return file_bytes
+
+    def analyse_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None, raise_unsupported: bool = True):
+        &#34;&#34;&#34; Analyses all files in a directory and its subdirectories. The analysis files are written to output_directory maintaining the same directory structure as input_directory.
+
+        Args:
+            input_directory (str): The input directory containing files to analyse.
+            output_directory (Union[None, str]): The output directory where the analysis files will be written, or None to not write files.
+            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): Default None (sanitise). The content management policy to apply.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            analysis_files_dict (dict): A dictionary of file paths relative to input_directory, and file bytes.
+        &#34;&#34;&#34;
+        analysis_files_dict = {}
+        # Call analyse_file on each file in input_directory to output_directory
+        for input_file in utils.list_file_paths(input_directory):
+            relative_path = os.path.relpath(input_file, input_directory) + &#34;.xml&#34;
+            output_file = None if output_directory is None else os.path.join(os.path.abspath(output_directory), relative_path)
+
+            analysis_bytes = self.analyse_file(
+                input_file=input_file,
+                output_file=output_file,
+                raise_unsupported=raise_unsupported,
+                content_management_policy=content_management_policy,
+            )
+
+            analysis_files_dict[relative_path] = analysis_bytes
+
+        return analysis_files_dict
+
+    def export_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None, raise_unsupported: bool = True):
+        &#34;&#34;&#34; Export a file, returning the .zip file bytes. The .zip file is written to output_file.
+
+        Args:
+            input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
+            output_file (Union[None, str], optional): The output file path where the .zip file will be written.
+            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): The content management policy to apply.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            file_bytes (bytes): The exported .zip file.
+        &#34;&#34;&#34;
+        # Validate arg types
+        if not isinstance(input_file, (str, bytes, bytearray, io.BytesIO)):
+            raise TypeError(input_file)
+        if not isinstance(output_file, (type(None), str)):
+            raise TypeError(output_file)
+        if not isinstance(content_management_policy, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy)):
+            raise TypeError(content_management_policy)
+        if not isinstance(raise_unsupported, bool):
+            raise TypeError(raise_unsupported)
+
+        # Convert string path arguments to absolute paths
+        if isinstance(input_file, str):
+            if not os.path.isfile(input_file):
+                raise FileNotFoundError(input_file)
+            input_file = os.path.abspath(input_file)
+        if isinstance(output_file, str):
+            output_file = os.path.abspath(output_file)
+            # make directories that do not exist
+            os.makedirs(os.path.dirname(output_file), exist_ok=True)
+        if isinstance(content_management_policy, str) and os.path.isfile(content_management_policy):
+            content_management_policy = os.path.abspath(content_management_policy)
+
+        # Check that file type is supported
+        try:
+            self.determine_file_type(input_file=input_file)
+        except dft.errors.FileTypeEnumError:
+            if raise_unsupported:
+                raise
+            else:
+                return None
+
+        # Convert memory inputs to bytes
+        if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
+            input_file = utils.as_bytes(input_file)
+
+        with utils.CwdHandler(self.library_path):
+            # Set content management policy
+            self.set_content_management_policy(content_management_policy)
+
+            # file to file
+            if isinstance(input_file, str) and isinstance(output_file, str):
+                # API function declaration
+                self.library.GWFileToFileAnalysisProtectAndExport.argtypes = [
+                    ct.c_wchar_p,
+                    ct.c_wchar_p
+                ]
+
+                # Variable initialisation
+                ct_input_file = ct.c_wchar_p(input_file)
+                ct_output_file = ct.c_wchar_p(output_file)
+
+                # API call
+                status = self.library.GWFileToFileAnalysisProtectAndExport(
+                    ct_input_file,
+                    ct_output_file
+                )
+
+            # file to memory
+            elif isinstance(input_file, str) and output_file is None:
+                # API function declaration
+                self.library.GWFileToMemoryAnalysisProtectAndExport.argtypes = [
+                    ct.c_wchar_p,
+                    ct.POINTER(ct.c_void_p),
+                    ct.POINTER(ct.c_size_t)
+                ]
+
+                # Variable initialisation
+                ct_input_file = ct.c_wchar_p(input_file)
+                ct_output_buffer = ct.c_void_p(0)
+                ct_output_size = ct.c_size_t(0)
+
+                # API call
+                status = self.library.GWFileToMemoryAnalysisProtectAndExport(
+                    ct_input_file,
+                    ct.byref(ct_output_buffer),
+                    ct.byref(ct_output_size)
+                )
+
+            # memory to memory and memory to file
+            elif isinstance(input_file, bytes):
+                # API function declaration
+                self.library.GWMemoryToMemoryAnalysisProtectAndExport.argtypes = [
+                    ct.c_void_p,
+                    ct.c_size_t,
+                    ct.POINTER(ct.c_void_p),
+                    ct.POINTER(ct.c_size_t)
+                ]
+
+                # Variable initialization
+                bytearray_buffer = bytearray(input_file)
+                ct_input_buffer = (ct.c_ubyte * len(bytearray_buffer)).from_buffer(bytearray_buffer)
+                ct_input_size = ct.c_size_t(len(input_file))
+                ct_output_buffer = ct.c_void_p(0)
+                ct_output_size = ct.c_size_t(0)
+
+                status = self.library.GWMemoryToMemoryAnalysisProtectAndExport(
+                    ct_input_buffer,
+                    ct_input_size,
+                    ct.byref(ct_output_buffer),
+                    ct.byref(ct_output_size)
+                )
+
+            input_file_repr = f&#34;{type(input_file)} length {len(input_file)}&#34; if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
+            if status not in successes.success_codes:
+                log.warning(f&#34;\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}&#34;)
+                if raise_unsupported:
+                    raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+                else:
+                    file_bytes = None
+            else:
+                log.debug(f&#34;\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}&#34;)
+                if isinstance(input_file, str) and isinstance(output_file, str):
+                    # file to file, read the bytes of the file Glasswall has already written
+                    if not os.path.isfile(output_file):
+                        log.warning(f&#34;\n\tstatus: {status}\n\toutput_file: {output_file}&#34;)
+                        file_bytes = None
+                    else:
+                        with open(output_file, &#34;rb&#34;) as f:
+                            file_bytes = f.read()
+                else:
+                    # file to memory, memory to memory
+                    file_bytes = utils.buffer_to_bytes(
+                        ct_output_buffer,
+                        ct_output_size
+                    )
+                    if isinstance(output_file, str):
+                        # memory to file
+                        # no Glasswall function exists for memory to file, write the memory to file ourselves
+                        with open(output_file, &#34;wb&#34;) as f:
+                            f.write(file_bytes)
+
+            return file_bytes
+
+    def export_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None, raise_unsupported: bool = True):
+        &#34;&#34;&#34; Exports all files in a directory and its subdirectories. The export files are written to output_directory maintaining the same directory structure as input_directory.
+
+        Args:
+            input_directory (str): The input directory containing files to export.
+            output_directory (Union[None, str]): The output directory where the export files will be written, or None to not write files.
+            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): Default None (sanitise). The content management policy to apply.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            export_files_dict (dict): A dictionary of file paths relative to input_directory, and file bytes.
+        &#34;&#34;&#34;
+        export_files_dict = {}
+        # Call export_file on each file in input_directory to output_directory
+        for input_file in utils.list_file_paths(input_directory):
+            relative_path = os.path.relpath(input_file, input_directory) + &#34;.zip&#34;
+            output_file = None if output_directory is None else os.path.join(os.path.abspath(output_directory), relative_path)
+
+            export_bytes = self.export_file(
+                input_file=input_file,
+                output_file=output_file,
+                raise_unsupported=raise_unsupported,
+                content_management_policy=content_management_policy,
+            )
+
+            export_files_dict[relative_path] = export_bytes
+
+        return export_files_dict
+
+    def import_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None, raise_unsupported: bool = True):
+        &#34;&#34;&#34; Import a .zip file, constructs a file from the .zip file and returns the file bytes. The file is written to output_file if it is provided.
+
+        Args:
+            input_file (Union[str, bytes, bytearray, io.BytesIO]): The .zip input file path or bytes.
+            output_file (Union[None, str], optional): The output file path where the constructed file will be written.
+            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): The content management policy to apply to the session.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            file_bytes (bytes): The imported file bytes.
+        &#34;&#34;&#34;
+        # Validate arg types
+        if not isinstance(input_file, (str, bytes, bytearray, io.BytesIO)):
+            raise TypeError(input_file)
+        if not isinstance(output_file, (type(None), str)):
+            raise TypeError(output_file)
+        if not isinstance(content_management_policy, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy)):
+            raise TypeError(content_management_policy)
+        if not isinstance(raise_unsupported, bool):
+            raise TypeError(raise_unsupported)
+
+        # Convert string path arguments to absolute paths
+        if isinstance(input_file, str):
+            if not os.path.isfile(input_file):
+                raise FileNotFoundError(input_file)
+            input_file = os.path.abspath(input_file)
+        if isinstance(output_file, str):
+            output_file = os.path.abspath(output_file)
+            # make directories that do not exist
+            os.makedirs(os.path.dirname(output_file), exist_ok=True)
+        if isinstance(content_management_policy, str) and os.path.isfile(content_management_policy):
+            content_management_policy = os.path.abspath(content_management_policy)
+
+        # Check that file type is supported
+        try:
+            self.determine_file_type(input_file=input_file)
+        except dft.errors.FileTypeEnumError:
+            if raise_unsupported:
+                raise
+            else:
+                return None
+
+        # Convert memory inputs to bytes
+        if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
+            input_file = utils.as_bytes(input_file)
+
+        with utils.CwdHandler(self.library_path):
+            # Set content management policy
+            self.set_content_management_policy(content_management_policy)
+
+            # file to file
+            if isinstance(input_file, str) and isinstance(output_file, str):
+                # API function declaration
+                self.library.GWFileToFileProtectAndImport.argtypes = [
+                    ct.c_wchar_p,
+                    ct.c_wchar_p
+                ]
+
+                # Variable initialisation
+                ct_input_file = ct.c_wchar_p(input_file)
+                ct_output_file = ct.c_wchar_p(output_file)
+
+                # API call
+                status = self.library.GWFileToFileProtectAndImport(
+                    ct_input_file,
+                    ct_output_file
+                )
+
+            # file to memory
+            elif isinstance(input_file, str) and output_file is None:
+                # API function declaration
+                self.library.GWFileToMemoryProtectAndImport.argtypes = [
+                    ct.c_wchar_p,
+                    ct.POINTER(ct.c_void_p),
+                    ct.POINTER(ct.c_size_t)
+                ]
+
+                # Variable initialisation
+                ct_input_file = ct.c_wchar_p(input_file)
+                ct_output_buffer = ct.c_void_p(0)
+                ct_output_size = ct.c_size_t(0)
+
+                # API call
+                status = self.library.GWFileToMemoryProtectAndImport(
+                    ct_input_file,
+                    ct.byref(ct_output_buffer),
+                    ct.byref(ct_output_size)
+                )
+
+            # memory to memory and memory to file
+            elif isinstance(input_file, bytes):
+                # API function declaration
+                self.library.GWMemoryToMemoryProtectAndImport.argtypes = [
+                    ct.c_void_p,
+                    ct.c_size_t,
+                    ct.POINTER(ct.c_void_p),
+                    ct.POINTER(ct.c_size_t)
+                ]
+
+                # Variable initialization
+                bytearray_buffer = bytearray(input_file)
+                ct_input_buffer = (ct.c_ubyte * len(bytearray_buffer)).from_buffer(bytearray_buffer)
+                ct_input_size = ct.c_size_t(len(input_file))
+                ct_output_buffer = ct.c_void_p(0)
+                ct_output_size = ct.c_size_t(0)
+
+                status = self.library.GWMemoryToMemoryProtectAndImport(
+                    ct_input_buffer,
+                    ct_input_size,
+                    ct.byref(ct_output_buffer),
+                    ct.byref(ct_output_size)
+                )
+
+            input_file_repr = f&#34;{type(input_file)} length {len(input_file)}&#34; if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
+            if status not in successes.success_codes:
+                log.warning(f&#34;\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}&#34;)
+                if raise_unsupported:
+                    raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+                else:
+                    file_bytes = None
+            else:
+                log.debug(f&#34;\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}&#34;)
+                if isinstance(input_file, str) and isinstance(output_file, str):
+                    # file to file, read the bytes of the file Glasswall has already written
+                    if not os.path.isfile(output_file):
+                        log.warning(f&#34;\n\tstatus: {status}\n\toutput_file: {output_file}&#34;)
+                        file_bytes = None
+                    else:
+                        with open(output_file, &#34;rb&#34;) as f:
+                            file_bytes = f.read()
+                else:
+                    # file to memory, memory to memory
+                    file_bytes = utils.buffer_to_bytes(
+                        ct_output_buffer,
+                        ct_output_size
+                    )
+                    if isinstance(output_file, str):
+                        # memory to file
+                        # no Glasswall function exists for memory to file, write the memory to file ourselves
+                        with open(output_file, &#34;wb&#34;) as f:
+                            f.write(file_bytes)
+
+            return file_bytes
+
+    def import_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None, raise_unsupported: bool = True):
+        &#34;&#34;&#34; Imports all files in a directory and its subdirectories. Files are expected as .zip but this is not forced.
+        The constructed files are written to output_directory maintaining the same directory structure as input_directory.
+
+        Args:
+            input_directory (str): The input directory containing files to import.
+            output_directory (Union[None, str]): The output directory where the constructed files will be written, or None to not write files.
+            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): Default None (sanitise). The content management policy to apply.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            import_files_dict (dict): A dictionary of file paths relative to input_directory, and file bytes.
+        &#34;&#34;&#34;
+        import_files_dict = {}
+        # Call import_file on each file in input_directory to output_directory
+        for input_file in utils.list_file_paths(input_directory):
+            relative_path = os.path.relpath(input_file, input_directory)
+            # Remove .zip extension from relative_path
+            relative_path = os.path.splitext(relative_path)[0]
+            output_file = None if output_directory is None else os.path.join(os.path.abspath(output_directory), relative_path)
+
+            import_bytes = self.import_file(
+                input_file=input_file,
+                output_file=output_file,
+                raise_unsupported=raise_unsupported,
+                content_management_policy=content_management_policy,
+            )
+
+            import_files_dict[relative_path] = import_bytes
+
+        return import_files_dict</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="glasswall.libraries.rebuild.rebuild.Rebuild"><code class="flex name class">
+<span>class <span class="ident">Rebuild</span></span>
+<span>(</span><span>library_path: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>A high level Python wrapper for Glasswall Rebuild / Classic.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Rebuild(Library):
+    &#34;&#34;&#34; A high level Python wrapper for Glasswall Rebuild / Classic. &#34;&#34;&#34;
+
+    def __init__(self, library_path: str):
+        super().__init__(library_path=library_path)
+        self.library = self.load_library(os.path.abspath(library_path))
+
+        # Set content management configuration to default
+        self.set_content_management_policy(input_file=None)
+
+        # Validate killswitch has not activated
+        self.validate_license()
+
+        log.info(f&#34;Loaded Glasswall {self.__class__.__name__} version {self.version()} from {self.library_path}&#34;)
+
+    def validate_license(self):
+        &#34;&#34;&#34; Validates the license of the library by attempting to call protect_file on a known supported file.
+
+        Raises:
+            RebuildError: If the license could not be validated.
+        &#34;&#34;&#34;
+        # Call protect file on a known good bitmap to see if license has expired
+        try:
+            self.protect_file(
+                input_file=b&#34;BM:\x00\x00\x00\x00\x00\x00\x006\x00\x00\x00(\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x18\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\x00&#34;,
+                raise_unsupported=True
+            )
+            log.debug(f&#34;{self.__class__.__name__} license validated successfully.&#34;)
+        except errors.RebuildError:
+            log.warning(f&#34;{self.__class__.__name__} license validation failed.&#34;)
+            raise
+
+    def version(self):
+        &#34;&#34;&#34; Returns the Glasswall library version.
+
+        Returns:
+            version (str): The Glasswall library version.
+        &#34;&#34;&#34;
+
+        # Declare the return type
+        self.library.GWFileVersion.restype = ct.c_wchar_p
+
+        # API call
+        version = self.library.GWFileVersion()
+
+        return version
+
+    def determine_file_type(self, input_file: Union[str, bytes, bytearray, io.BytesIO], as_string: bool = False):
+        &#34;&#34;&#34; Returns an int representing the file type / file format of a file.
+
+        Args:
+            input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file, can be a local path.
+            as_string (bool, optional): Return file type as string, eg: &#34;bmp&#34; instead of: 29. Defaults to False.
+
+        Returns:
+            file_type (Union[int, str]): The file format.
+        &#34;&#34;&#34;
+
+        if isinstance(input_file, str):
+            if not os.path.isfile(input_file):
+                raise FileNotFoundError(input_file)
+
+            self.library.GWDetermineFileTypeFromFile.argtypes = [ct.c_wchar_p]
+            self.library.GWDetermineFileTypeFromFile.restype = ct.c_int
+
+            # convert to ct.c_wchar_p
+            ct_input_file = ct.c_wchar_p(input_file)
+
+            # API call
+            file_type = self.library.GWDetermineFileTypeFromFile(ct_input_file)
+
+        elif isinstance(input_file, (bytes, bytearray, io.BytesIO)):
+            self.library.GWDetermineFileTypeFromFileInMem.argtypes = [ct.c_char_p, ct.c_size_t]
+            self.library.GWDetermineFileTypeFromFileInMem.restype = ct.c_int
+
+            # convert to bytes
+            bytes_input_file = utils.as_bytes(input_file)
+
+            # ctypes conversion
+            ct_input_buffer = ct.c_char_p(bytes_input_file)
+            ct_butter_length = ct.c_size_t(len(bytes_input_file))
+
+            # API call
+            file_type = self.library.GWDetermineFileTypeFromFileInMem(
+                ct_input_buffer,
+                ct_butter_length
+            )
+
+        file_type_as_string = dft.file_type_int_to_str(file_type)
+        input_file_repr = f&#34;{type(input_file)} length {len(input_file)}&#34; if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
+
+        if not dft.is_success(file_type):
+            log.warning(f&#34;\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}&#34;)
+            raise dft.int_class_map.get(file_type, dft.errors.UnknownErrorCode)(file_type)
+        else:
+            log.debug(f&#34;\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}&#34;)
+
+        if as_string:
+            return file_type_as_string
+
+        return file_type
+
+    def get_content_management_policy(self):
+        &#34;&#34;&#34; Gets the current content management configuration.
+
+        Returns:
+            xml_string (str): The XML string of the current content management configuration.
+        &#34;&#34;&#34;
+
+        # Declare argument types
+        self.library.GWFileConfigGet.argtypes = [
+            ct.POINTER(ct.POINTER(ct.c_wchar)),
+            ct.POINTER(ct.c_size_t)
+        ]
+
+        # Variable initialisation
+        ct_input_buffer = ct.POINTER(ct.c_wchar)()
+        ct_input_size = ct.c_size_t(0)
+
+        # API call
+        status = self.library.GWFileConfigGet(
+            ct.byref(ct_input_buffer),
+            ct.byref(ct_input_size)
+        )
+
+        if status not in successes.success_codes:
+            log.warning(f&#34;\n\tstatus: {status}&#34;)
+            raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+        else:
+            log.debug(f&#34;\n\tstatus: {status}&#34;)
+
+        # As string
+        xml_string = utils.validate_xml(ct.wstring_at(ct_input_buffer))
+
+        return xml_string
+
+    def set_content_management_policy(self, input_file: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None):
+        &#34;&#34;&#34; Sets the content management policy configuration. If input_file is None then default settings (sanitise) are applied.
+
+        Args:
+            input_file (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): Default None (sanitise). The content management policy to apply.
+
+        Returns:
+            status (int): The result of the Glasswall API call.
+        &#34;&#34;&#34;
+        # Validate type
+        if not isinstance(input_file, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy)):
+            raise TypeError(input_file)
+
+        # self.library.GWFileConfigRevertToDefaults doesn&#39;t work, load default instead
+        # Set input_file to default if input_file is None
+        if input_file is None:
+            input_file = glasswall.content_management.policies.Rebuild(default=&#34;sanitise&#34;)
+
+        # Validate xml content is parsable
+        xml_string = utils.validate_xml(input_file)
+
+        # Declare argument types
+        self.library.GWFileConfigXML.argtypes = [ct.c_wchar_p]
+
+        # API call
+        status = self.library.GWFileConfigXML(
+            ct.c_wchar_p(xml_string)
+        )
+
+        if status not in successes.success_codes:
+            log.warning(f&#34;\n\tstatus: {status}&#34;)
+            raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+        else:
+            log.debug(f&#34;\n\tstatus: {status}&#34;)
+
+        return status
+
+    def protect_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None, raise_unsupported: bool = True):
+        &#34;&#34;&#34; Protects a file using the current content management configuration, returning the file bytes. The protected file is written to output_file if it is provided.
+
+        Args:
+            input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
+            output_file (Union[None, str], optional): The output file path where the protected file will be written.
+            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): The content management policy to apply.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            file_bytes (bytes): The protected file bytes.
+        &#34;&#34;&#34;
+        # Validate arg types
+        if not isinstance(input_file, (str, bytes, bytearray, io.BytesIO)):
+            raise TypeError(input_file)
+        if not isinstance(output_file, (type(None), str)):
+            raise TypeError(output_file)
+        if not isinstance(content_management_policy, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy)):
+            raise TypeError(content_management_policy)
+        if not isinstance(raise_unsupported, bool):
+            raise TypeError(raise_unsupported)
+
+        # Convert string path arguments to absolute paths
+        if isinstance(input_file, str):
+            if not os.path.isfile(input_file):
+                raise FileNotFoundError(input_file)
+            input_file = os.path.abspath(input_file)
+        if isinstance(output_file, str):
+            output_file = os.path.abspath(output_file)
+            # make directories that do not exist
+            os.makedirs(os.path.dirname(output_file), exist_ok=True)
+        if isinstance(content_management_policy, str) and os.path.isfile(content_management_policy):
+            content_management_policy = os.path.abspath(content_management_policy)
+
+        # Check that file type is supported
+        try:
+            file_type = self.determine_file_type(input_file=input_file)
+        except dft.errors.FileTypeEnumError:
+            if raise_unsupported:
+                raise
+            else:
+                return None
+
+        # Convert memory inputs to bytes
+        if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
+            input_file = utils.as_bytes(input_file)
+
+        with utils.CwdHandler(self.library_path):
+            # Set content management policy
+            if content_management_policy:
+                self.set_content_management_policy(content_management_policy)
+
+            # file to file
+            if isinstance(input_file, str) and isinstance(output_file, str):
+                # API function declaration
+                self.library.GWFileToFileProtect.argtypes = [
+                    ct.c_wchar_p,
+                    ct.c_wchar_p,
+                    ct.c_wchar_p
+                ]
+
+                # Variable initialisation
+                ct_input_file = ct.c_wchar_p(input_file)
+                ct_file_type = ct.c_wchar_p(dft.file_type_int_to_str(file_type))
+                ct_output_file = ct.c_wchar_p(output_file)
+
+                # API call
+                status = self.library.GWFileToFileProtect(
+                    ct_input_file,
+                    ct_file_type,
+                    ct_output_file
+                )
+
+            # file to memory
+            elif isinstance(input_file, str) and output_file is None:
+                # API function declaration
+                self.library.GWFileProtect.argtypes = [
+                    ct.c_wchar_p,
+                    ct.c_wchar_p,
+                    ct.POINTER(ct.c_void_p),
+                    ct.POINTER(ct.c_size_t)
+                ]
+
+                # Variable initialisation
+                ct_input_file = ct.c_wchar_p(input_file)
+                ct_file_type = ct.c_wchar_p(dft.file_type_int_to_str(file_type))
+                ct_output_buffer = ct.c_void_p(0)
+                ct_output_size = ct.c_size_t(0)
+
+                # API call
+                status = self.library.GWFileProtect(
+                    ct_input_file,
+                    ct_file_type,
+                    ct.byref(ct_output_buffer),
+                    ct.byref(ct_output_size)
+                )
+
+            # memory to memory and memory to file
+            elif isinstance(input_file, bytes):
+                # API function declaration
+                self.library.GWMemoryToMemoryProtect.argtypes = [
+                    ct.c_void_p,
+                    ct.c_size_t,
+                    ct.c_wchar_p,
+                    ct.POINTER(ct.c_void_p),
+                    ct.POINTER(ct.c_size_t)
+                ]
+
+                # Variable initialization
+                bytearray_buffer = bytearray(input_file)
+                ct_input_buffer = (ct.c_ubyte * len(bytearray_buffer)).from_buffer(bytearray_buffer)
+                ct_input_size = ct.c_size_t(len(input_file))
+                ct_file_type = ct.c_wchar_p(dft.file_type_int_to_str(file_type))
+                ct_output_buffer = ct.c_void_p(0)
+                ct_output_size = ct.c_size_t(0)
+
+                status = self.library.GWMemoryToMemoryProtect(
+                    ct_input_buffer,
+                    ct_input_size,
+                    ct_file_type,
+                    ct.byref(ct_output_buffer),
+                    ct.byref(ct_output_size)
+                )
+
+            input_file_repr = f&#34;{type(input_file)} length {len(input_file)}&#34; if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
+            if status not in successes.success_codes:
+                log.warning(f&#34;\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}&#34;)
+                if raise_unsupported:
+                    raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+                else:
+                    file_bytes = None
+            else:
+                log.debug(f&#34;\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}&#34;)
+                if isinstance(input_file, str) and isinstance(output_file, str):
+                    # file to file, read the bytes of the file Glasswall has already written
+                    if not os.path.isfile(output_file):
+                        log.warning(f&#34;\n\tstatus: {status}\n\toutput_file: {output_file}&#34;)
+                        file_bytes = None
+                    else:
+                        with open(output_file, &#34;rb&#34;) as f:
+                            file_bytes = f.read()
+                else:
+                    # file to memory, memory to memory
+                    file_bytes = utils.buffer_to_bytes(
+                        ct_output_buffer,
+                        ct_output_size
+                    )
+                    if isinstance(output_file, str):
+                        # memory to file
+                        # no Glasswall function exists for memory to file, write the memory to file ourselves
+                        with open(output_file, &#34;wb&#34;) as f:
+                            f.write(file_bytes)
+
+            return file_bytes
+
+    def protect_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None, raise_unsupported: bool = True):
+        &#34;&#34;&#34; Recursively processes all files in a directory in protect mode using the given content management policy.
+        The protected files are written to output_directory maintaining the same directory structure as input_directory.
+
+        Args:
+            input_directory (str): The input directory containing files to protect.
+            output_directory (Union[None, str]): The output directory where the protected file will be written, or None to not write files.
+            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): Default None (sanitise). The content management policy to apply.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            protected_files_dict (dict): A dictionary of file paths relative to input_directory, and file bytes.
+        &#34;&#34;&#34;
+        protected_files_dict = {}
+        # Call protect_file on each file in input_directory to output_directory
+        for input_file in utils.list_file_paths(input_directory):
+            relative_path = os.path.relpath(input_file, input_directory)
+            output_file = None if output_directory is None else os.path.join(os.path.abspath(output_directory), relative_path)
+
+            protected_bytes = self.protect_file(
+                input_file=input_file,
+                output_file=output_file,
+                raise_unsupported=raise_unsupported,
+                content_management_policy=content_management_policy,
+            )
+
+            protected_files_dict[relative_path] = protected_bytes
+
+        return protected_files_dict
+
+    def analyse_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None, raise_unsupported: bool = True):
+        &#34;&#34;&#34; Analyses a file, returning the analysis bytes. The analysis is written to output_file if it is provided.
+
+        Args:
+            input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
+            output_file (Union[None, str], optional): The output file path where the analysis file will be written.
+            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): The content management policy to apply.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            file_bytes (bytes): The analysis file bytes.
+        &#34;&#34;&#34;
+        # Validate arg types
+        if not isinstance(input_file, (str, bytes, bytearray, io.BytesIO)):
+            raise TypeError(input_file)
+        if not isinstance(output_file, (type(None), str)):
+            raise TypeError(output_file)
+        if not isinstance(content_management_policy, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy)):
+            raise TypeError(content_management_policy)
+        if not isinstance(raise_unsupported, bool):
+            raise TypeError(raise_unsupported)
+
+        # Convert string path arguments to absolute paths
+        if isinstance(input_file, str):
+            if not os.path.isfile(input_file):
+                raise FileNotFoundError(input_file)
+            input_file = os.path.abspath(input_file)
+        if isinstance(output_file, str):
+            output_file = os.path.abspath(output_file)
+            # make directories that do not exist
+            os.makedirs(os.path.dirname(output_file), exist_ok=True)
+        if isinstance(content_management_policy, str) and os.path.isfile(content_management_policy):
+            content_management_policy = os.path.abspath(content_management_policy)
+
+        # Check that file type is supported
+        try:
+            file_type = self.determine_file_type(input_file=input_file)
+        except dft.errors.FileTypeEnumError:
+            if raise_unsupported:
+                raise
+            else:
+                return None
+
+        # Convert memory inputs to bytes
+        if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
+            input_file = utils.as_bytes(input_file)
+
+        with utils.CwdHandler(self.library_path):
+            # Set content management policy
+            self.set_content_management_policy(content_management_policy)
+
+            # file to file
+            if isinstance(input_file, str) and isinstance(output_file, str):
+                # API function declaration
+                self.library.GWFileToFileAnalysisAudit.argtypes = [
+                    ct.c_wchar_p,
+                    ct.c_wchar_p,
+                    ct.c_wchar_p
+                ]
+
+                # Variable initialisation
+                ct_input_file = ct.c_wchar_p(input_file)
+                ct_file_type = ct.c_wchar_p(dft.file_type_int_to_str(file_type))
+                ct_output_file = ct.c_wchar_p(output_file)
+
+                # API call
+                status = self.library.GWFileToFileAnalysisAudit(
+                    ct_input_file,
+                    ct_file_type,
+                    ct_output_file
+                )
+
+            # file to memory
+            elif isinstance(input_file, str) and output_file is None:
+                # API function declaration
+                self.library.GWFileAnalysisAudit.argtypes = [
+                    ct.c_wchar_p,
+                    ct.c_wchar_p,
+                    ct.POINTER(ct.c_void_p),
+                    ct.POINTER(ct.c_size_t)
+                ]
+
+                # Variable initialisation
+                ct_input_file = ct.c_wchar_p(input_file)
+                ct_file_type = ct.c_wchar_p(dft.file_type_int_to_str(file_type))
+                ct_output_buffer = ct.c_void_p(0)
+                ct_output_size = ct.c_size_t(0)
+
+                # API call
+                status = self.library.GWFileAnalysisAudit(
+                    ct_input_file,
+                    ct_file_type,
+                    ct.byref(ct_output_buffer),
+                    ct.byref(ct_output_size)
+                )
+
+            # memory to memory and memory to file
+            elif isinstance(input_file, bytes):
+                # API function declaration
+                self.library.GWMemoryToMemoryAnalysisAudit.argtypes = [
+                    ct.c_void_p,
+                    ct.c_size_t,
+                    ct.c_wchar_p,
+                    ct.POINTER(ct.c_void_p),
+                    ct.POINTER(ct.c_size_t)
+                ]
+
+                # Variable initialization
+                bytearray_buffer = bytearray(input_file)
+                ct_input_buffer = (ct.c_ubyte * len(bytearray_buffer)).from_buffer(bytearray_buffer)
+                ct_input_size = ct.c_size_t(len(input_file))
+                ct_file_type = ct.c_wchar_p(dft.file_type_int_to_str(file_type))
+                ct_output_buffer = ct.c_void_p(0)
+                ct_output_size = ct.c_size_t(0)
+
+                status = self.library.GWMemoryToMemoryAnalysisAudit(
+                    ct.byref(ct_input_buffer),
+                    ct_input_size,
+                    ct_file_type,
+                    ct.byref(ct_output_buffer),
+                    ct.byref(ct_output_size)
+                )
+
+            input_file_repr = f&#34;{type(input_file)} length {len(input_file)}&#34; if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
+            if status not in successes.success_codes:
+                log.warning(f&#34;\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}&#34;)
+                if raise_unsupported:
+                    raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+                else:
+                    file_bytes = None
+            else:
+                log.debug(f&#34;\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}&#34;)
+                if isinstance(input_file, str) and isinstance(output_file, str):
+                    # file to file, read the bytes of the file Glasswall has already written
+                    if not os.path.isfile(output_file):
+                        log.warning(f&#34;\n\tstatus: {status}\n\toutput_file: {output_file}&#34;)
+                        file_bytes = None
+                    else:
+                        with open(output_file, &#34;rb&#34;) as f:
+                            file_bytes = f.read()
+                else:
+                    # file to memory, memory to memory
+                    file_bytes = utils.buffer_to_bytes(
+                        ct_output_buffer,
+                        ct_output_size
+                    )
+                    if isinstance(output_file, str):
+                        # memory to file
+                        # no Glasswall function exists for memory to file, write the memory to file ourselves
+                        with open(output_file, &#34;wb&#34;) as f:
+                            f.write(file_bytes)
+
+            return file_bytes
+
+    def analyse_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None, raise_unsupported: bool = True):
+        &#34;&#34;&#34; Analyses all files in a directory and its subdirectories. The analysis files are written to output_directory maintaining the same directory structure as input_directory.
+
+        Args:
+            input_directory (str): The input directory containing files to analyse.
+            output_directory (Union[None, str]): The output directory where the analysis files will be written, or None to not write files.
+            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): Default None (sanitise). The content management policy to apply.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            analysis_files_dict (dict): A dictionary of file paths relative to input_directory, and file bytes.
+        &#34;&#34;&#34;
+        analysis_files_dict = {}
+        # Call analyse_file on each file in input_directory to output_directory
+        for input_file in utils.list_file_paths(input_directory):
+            relative_path = os.path.relpath(input_file, input_directory) + &#34;.xml&#34;
+            output_file = None if output_directory is None else os.path.join(os.path.abspath(output_directory), relative_path)
+
+            analysis_bytes = self.analyse_file(
+                input_file=input_file,
+                output_file=output_file,
+                raise_unsupported=raise_unsupported,
+                content_management_policy=content_management_policy,
+            )
+
+            analysis_files_dict[relative_path] = analysis_bytes
+
+        return analysis_files_dict
+
+    def export_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None, raise_unsupported: bool = True):
+        &#34;&#34;&#34; Export a file, returning the .zip file bytes. The .zip file is written to output_file.
+
+        Args:
+            input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
+            output_file (Union[None, str], optional): The output file path where the .zip file will be written.
+            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): The content management policy to apply.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            file_bytes (bytes): The exported .zip file.
+        &#34;&#34;&#34;
+        # Validate arg types
+        if not isinstance(input_file, (str, bytes, bytearray, io.BytesIO)):
+            raise TypeError(input_file)
+        if not isinstance(output_file, (type(None), str)):
+            raise TypeError(output_file)
+        if not isinstance(content_management_policy, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy)):
+            raise TypeError(content_management_policy)
+        if not isinstance(raise_unsupported, bool):
+            raise TypeError(raise_unsupported)
+
+        # Convert string path arguments to absolute paths
+        if isinstance(input_file, str):
+            if not os.path.isfile(input_file):
+                raise FileNotFoundError(input_file)
+            input_file = os.path.abspath(input_file)
+        if isinstance(output_file, str):
+            output_file = os.path.abspath(output_file)
+            # make directories that do not exist
+            os.makedirs(os.path.dirname(output_file), exist_ok=True)
+        if isinstance(content_management_policy, str) and os.path.isfile(content_management_policy):
+            content_management_policy = os.path.abspath(content_management_policy)
+
+        # Check that file type is supported
+        try:
+            self.determine_file_type(input_file=input_file)
+        except dft.errors.FileTypeEnumError:
+            if raise_unsupported:
+                raise
+            else:
+                return None
+
+        # Convert memory inputs to bytes
+        if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
+            input_file = utils.as_bytes(input_file)
+
+        with utils.CwdHandler(self.library_path):
+            # Set content management policy
+            self.set_content_management_policy(content_management_policy)
+
+            # file to file
+            if isinstance(input_file, str) and isinstance(output_file, str):
+                # API function declaration
+                self.library.GWFileToFileAnalysisProtectAndExport.argtypes = [
+                    ct.c_wchar_p,
+                    ct.c_wchar_p
+                ]
+
+                # Variable initialisation
+                ct_input_file = ct.c_wchar_p(input_file)
+                ct_output_file = ct.c_wchar_p(output_file)
+
+                # API call
+                status = self.library.GWFileToFileAnalysisProtectAndExport(
+                    ct_input_file,
+                    ct_output_file
+                )
+
+            # file to memory
+            elif isinstance(input_file, str) and output_file is None:
+                # API function declaration
+                self.library.GWFileToMemoryAnalysisProtectAndExport.argtypes = [
+                    ct.c_wchar_p,
+                    ct.POINTER(ct.c_void_p),
+                    ct.POINTER(ct.c_size_t)
+                ]
+
+                # Variable initialisation
+                ct_input_file = ct.c_wchar_p(input_file)
+                ct_output_buffer = ct.c_void_p(0)
+                ct_output_size = ct.c_size_t(0)
+
+                # API call
+                status = self.library.GWFileToMemoryAnalysisProtectAndExport(
+                    ct_input_file,
+                    ct.byref(ct_output_buffer),
+                    ct.byref(ct_output_size)
+                )
+
+            # memory to memory and memory to file
+            elif isinstance(input_file, bytes):
+                # API function declaration
+                self.library.GWMemoryToMemoryAnalysisProtectAndExport.argtypes = [
+                    ct.c_void_p,
+                    ct.c_size_t,
+                    ct.POINTER(ct.c_void_p),
+                    ct.POINTER(ct.c_size_t)
+                ]
+
+                # Variable initialization
+                bytearray_buffer = bytearray(input_file)
+                ct_input_buffer = (ct.c_ubyte * len(bytearray_buffer)).from_buffer(bytearray_buffer)
+                ct_input_size = ct.c_size_t(len(input_file))
+                ct_output_buffer = ct.c_void_p(0)
+                ct_output_size = ct.c_size_t(0)
+
+                status = self.library.GWMemoryToMemoryAnalysisProtectAndExport(
+                    ct_input_buffer,
+                    ct_input_size,
+                    ct.byref(ct_output_buffer),
+                    ct.byref(ct_output_size)
+                )
+
+            input_file_repr = f&#34;{type(input_file)} length {len(input_file)}&#34; if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
+            if status not in successes.success_codes:
+                log.warning(f&#34;\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}&#34;)
+                if raise_unsupported:
+                    raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+                else:
+                    file_bytes = None
+            else:
+                log.debug(f&#34;\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}&#34;)
+                if isinstance(input_file, str) and isinstance(output_file, str):
+                    # file to file, read the bytes of the file Glasswall has already written
+                    if not os.path.isfile(output_file):
+                        log.warning(f&#34;\n\tstatus: {status}\n\toutput_file: {output_file}&#34;)
+                        file_bytes = None
+                    else:
+                        with open(output_file, &#34;rb&#34;) as f:
+                            file_bytes = f.read()
+                else:
+                    # file to memory, memory to memory
+                    file_bytes = utils.buffer_to_bytes(
+                        ct_output_buffer,
+                        ct_output_size
+                    )
+                    if isinstance(output_file, str):
+                        # memory to file
+                        # no Glasswall function exists for memory to file, write the memory to file ourselves
+                        with open(output_file, &#34;wb&#34;) as f:
+                            f.write(file_bytes)
+
+            return file_bytes
+
+    def export_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None, raise_unsupported: bool = True):
+        &#34;&#34;&#34; Exports all files in a directory and its subdirectories. The export files are written to output_directory maintaining the same directory structure as input_directory.
+
+        Args:
+            input_directory (str): The input directory containing files to export.
+            output_directory (Union[None, str]): The output directory where the export files will be written, or None to not write files.
+            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): Default None (sanitise). The content management policy to apply.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            export_files_dict (dict): A dictionary of file paths relative to input_directory, and file bytes.
+        &#34;&#34;&#34;
+        export_files_dict = {}
+        # Call export_file on each file in input_directory to output_directory
+        for input_file in utils.list_file_paths(input_directory):
+            relative_path = os.path.relpath(input_file, input_directory) + &#34;.zip&#34;
+            output_file = None if output_directory is None else os.path.join(os.path.abspath(output_directory), relative_path)
+
+            export_bytes = self.export_file(
+                input_file=input_file,
+                output_file=output_file,
+                raise_unsupported=raise_unsupported,
+                content_management_policy=content_management_policy,
+            )
+
+            export_files_dict[relative_path] = export_bytes
+
+        return export_files_dict
+
+    def import_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None, raise_unsupported: bool = True):
+        &#34;&#34;&#34; Import a .zip file, constructs a file from the .zip file and returns the file bytes. The file is written to output_file if it is provided.
+
+        Args:
+            input_file (Union[str, bytes, bytearray, io.BytesIO]): The .zip input file path or bytes.
+            output_file (Union[None, str], optional): The output file path where the constructed file will be written.
+            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): The content management policy to apply to the session.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            file_bytes (bytes): The imported file bytes.
+        &#34;&#34;&#34;
+        # Validate arg types
+        if not isinstance(input_file, (str, bytes, bytearray, io.BytesIO)):
+            raise TypeError(input_file)
+        if not isinstance(output_file, (type(None), str)):
+            raise TypeError(output_file)
+        if not isinstance(content_management_policy, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy)):
+            raise TypeError(content_management_policy)
+        if not isinstance(raise_unsupported, bool):
+            raise TypeError(raise_unsupported)
+
+        # Convert string path arguments to absolute paths
+        if isinstance(input_file, str):
+            if not os.path.isfile(input_file):
+                raise FileNotFoundError(input_file)
+            input_file = os.path.abspath(input_file)
+        if isinstance(output_file, str):
+            output_file = os.path.abspath(output_file)
+            # make directories that do not exist
+            os.makedirs(os.path.dirname(output_file), exist_ok=True)
+        if isinstance(content_management_policy, str) and os.path.isfile(content_management_policy):
+            content_management_policy = os.path.abspath(content_management_policy)
+
+        # Check that file type is supported
+        try:
+            self.determine_file_type(input_file=input_file)
+        except dft.errors.FileTypeEnumError:
+            if raise_unsupported:
+                raise
+            else:
+                return None
+
+        # Convert memory inputs to bytes
+        if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
+            input_file = utils.as_bytes(input_file)
+
+        with utils.CwdHandler(self.library_path):
+            # Set content management policy
+            self.set_content_management_policy(content_management_policy)
+
+            # file to file
+            if isinstance(input_file, str) and isinstance(output_file, str):
+                # API function declaration
+                self.library.GWFileToFileProtectAndImport.argtypes = [
+                    ct.c_wchar_p,
+                    ct.c_wchar_p
+                ]
+
+                # Variable initialisation
+                ct_input_file = ct.c_wchar_p(input_file)
+                ct_output_file = ct.c_wchar_p(output_file)
+
+                # API call
+                status = self.library.GWFileToFileProtectAndImport(
+                    ct_input_file,
+                    ct_output_file
+                )
+
+            # file to memory
+            elif isinstance(input_file, str) and output_file is None:
+                # API function declaration
+                self.library.GWFileToMemoryProtectAndImport.argtypes = [
+                    ct.c_wchar_p,
+                    ct.POINTER(ct.c_void_p),
+                    ct.POINTER(ct.c_size_t)
+                ]
+
+                # Variable initialisation
+                ct_input_file = ct.c_wchar_p(input_file)
+                ct_output_buffer = ct.c_void_p(0)
+                ct_output_size = ct.c_size_t(0)
+
+                # API call
+                status = self.library.GWFileToMemoryProtectAndImport(
+                    ct_input_file,
+                    ct.byref(ct_output_buffer),
+                    ct.byref(ct_output_size)
+                )
+
+            # memory to memory and memory to file
+            elif isinstance(input_file, bytes):
+                # API function declaration
+                self.library.GWMemoryToMemoryProtectAndImport.argtypes = [
+                    ct.c_void_p,
+                    ct.c_size_t,
+                    ct.POINTER(ct.c_void_p),
+                    ct.POINTER(ct.c_size_t)
+                ]
+
+                # Variable initialization
+                bytearray_buffer = bytearray(input_file)
+                ct_input_buffer = (ct.c_ubyte * len(bytearray_buffer)).from_buffer(bytearray_buffer)
+                ct_input_size = ct.c_size_t(len(input_file))
+                ct_output_buffer = ct.c_void_p(0)
+                ct_output_size = ct.c_size_t(0)
+
+                status = self.library.GWMemoryToMemoryProtectAndImport(
+                    ct_input_buffer,
+                    ct_input_size,
+                    ct.byref(ct_output_buffer),
+                    ct.byref(ct_output_size)
+                )
+
+            input_file_repr = f&#34;{type(input_file)} length {len(input_file)}&#34; if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
+            if status not in successes.success_codes:
+                log.warning(f&#34;\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}&#34;)
+                if raise_unsupported:
+                    raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+                else:
+                    file_bytes = None
+            else:
+                log.debug(f&#34;\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}&#34;)
+                if isinstance(input_file, str) and isinstance(output_file, str):
+                    # file to file, read the bytes of the file Glasswall has already written
+                    if not os.path.isfile(output_file):
+                        log.warning(f&#34;\n\tstatus: {status}\n\toutput_file: {output_file}&#34;)
+                        file_bytes = None
+                    else:
+                        with open(output_file, &#34;rb&#34;) as f:
+                            file_bytes = f.read()
+                else:
+                    # file to memory, memory to memory
+                    file_bytes = utils.buffer_to_bytes(
+                        ct_output_buffer,
+                        ct_output_size
+                    )
+                    if isinstance(output_file, str):
+                        # memory to file
+                        # no Glasswall function exists for memory to file, write the memory to file ourselves
+                        with open(output_file, &#34;wb&#34;) as f:
+                            f.write(file_bytes)
+
+            return file_bytes
+
+    def import_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None, raise_unsupported: bool = True):
+        &#34;&#34;&#34; Imports all files in a directory and its subdirectories. Files are expected as .zip but this is not forced.
+        The constructed files are written to output_directory maintaining the same directory structure as input_directory.
+
+        Args:
+            input_directory (str): The input directory containing files to import.
+            output_directory (Union[None, str]): The output directory where the constructed files will be written, or None to not write files.
+            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): Default None (sanitise). The content management policy to apply.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            import_files_dict (dict): A dictionary of file paths relative to input_directory, and file bytes.
+        &#34;&#34;&#34;
+        import_files_dict = {}
+        # Call import_file on each file in input_directory to output_directory
+        for input_file in utils.list_file_paths(input_directory):
+            relative_path = os.path.relpath(input_file, input_directory)
+            # Remove .zip extension from relative_path
+            relative_path = os.path.splitext(relative_path)[0]
+            output_file = None if output_directory is None else os.path.join(os.path.abspath(output_directory), relative_path)
+
+            import_bytes = self.import_file(
+                input_file=input_file,
+                output_file=output_file,
+                raise_unsupported=raise_unsupported,
+                content_management_policy=content_management_policy,
+            )
+
+            import_files_dict[relative_path] = import_bytes
+
+        return import_files_dict</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="glasswall.libraries.library.Library" href="../library.html#glasswall.libraries.library.Library">Library</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="glasswall.libraries.rebuild.rebuild.Rebuild.analyse_directory"><code class="name flex">
+<span>def <span class="ident">analyse_directory</span></span>(<span>self, input_directory: str, output_directory: Optional[str], content_management_policy: Union[NoneType, str, bytes, bytearray, _io.BytesIO, _ForwardRef('glasswall.content_management.policies.Policy')] = None, raise_unsupported: bool = True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Analyses all files in a directory and its subdirectories. The analysis files are written to output_directory maintaining the same directory structure as input_directory.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>input_directory</code></strong> :&ensp;<code>str</code></dt>
+<dd>The input directory containing files to analyse.</dd>
+<dt><strong><code>output_directory</code></strong> :&ensp;<code>Union[None, str]</code></dt>
+<dd>The output directory where the analysis files will be written, or None to not write files.</dd>
+<dt><strong><code>content_management_policy</code></strong> :&ensp;<code>Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy]</code>, optional</dt>
+<dd>Default None (sanitise). The content management policy to apply.</dd>
+<dt><strong><code>raise_unsupported</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>analysis_files_dict (dict): A dictionary of file paths relative to input_directory, and file bytes.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def analyse_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None, raise_unsupported: bool = True):
+    &#34;&#34;&#34; Analyses all files in a directory and its subdirectories. The analysis files are written to output_directory maintaining the same directory structure as input_directory.
+
+    Args:
+        input_directory (str): The input directory containing files to analyse.
+        output_directory (Union[None, str]): The output directory where the analysis files will be written, or None to not write files.
+        content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): Default None (sanitise). The content management policy to apply.
+        raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+    Returns:
+        analysis_files_dict (dict): A dictionary of file paths relative to input_directory, and file bytes.
+    &#34;&#34;&#34;
+    analysis_files_dict = {}
+    # Call analyse_file on each file in input_directory to output_directory
+    for input_file in utils.list_file_paths(input_directory):
+        relative_path = os.path.relpath(input_file, input_directory) + &#34;.xml&#34;
+        output_file = None if output_directory is None else os.path.join(os.path.abspath(output_directory), relative_path)
+
+        analysis_bytes = self.analyse_file(
+            input_file=input_file,
+            output_file=output_file,
+            raise_unsupported=raise_unsupported,
+            content_management_policy=content_management_policy,
+        )
+
+        analysis_files_dict[relative_path] = analysis_bytes
+
+    return analysis_files_dict</code></pre>
+</details>
+</dd>
+<dt id="glasswall.libraries.rebuild.rebuild.Rebuild.analyse_file"><code class="name flex">
+<span>def <span class="ident">analyse_file</span></span>(<span>self, input_file: Union[str, bytes, bytearray, _io.BytesIO], output_file: Optional[str] = None, content_management_policy: Union[NoneType, str, bytes, bytearray, _io.BytesIO, _ForwardRef('glasswall.content_management.policies.Policy')] = None, raise_unsupported: bool = True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Analyses a file, returning the analysis bytes. The analysis is written to output_file if it is provided.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>input_file</code></strong> :&ensp;<code>Union[str, bytes, bytearray, io.BytesIO]</code></dt>
+<dd>The input file path or bytes.</dd>
+<dt><strong><code>output_file</code></strong> :&ensp;<code>Union[None, str]</code>, optional</dt>
+<dd>The output file path where the analysis file will be written.</dd>
+<dt><strong><code>content_management_policy</code></strong> :&ensp;<code>Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy]</code>, optional</dt>
+<dd>The content management policy to apply.</dd>
+<dt><strong><code>raise_unsupported</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>file_bytes (bytes): The analysis file bytes.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def analyse_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None, raise_unsupported: bool = True):
+    &#34;&#34;&#34; Analyses a file, returning the analysis bytes. The analysis is written to output_file if it is provided.
+
+    Args:
+        input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
+        output_file (Union[None, str], optional): The output file path where the analysis file will be written.
+        content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): The content management policy to apply.
+        raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+    Returns:
+        file_bytes (bytes): The analysis file bytes.
+    &#34;&#34;&#34;
+    # Validate arg types
+    if not isinstance(input_file, (str, bytes, bytearray, io.BytesIO)):
+        raise TypeError(input_file)
+    if not isinstance(output_file, (type(None), str)):
+        raise TypeError(output_file)
+    if not isinstance(content_management_policy, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy)):
+        raise TypeError(content_management_policy)
+    if not isinstance(raise_unsupported, bool):
+        raise TypeError(raise_unsupported)
+
+    # Convert string path arguments to absolute paths
+    if isinstance(input_file, str):
+        if not os.path.isfile(input_file):
+            raise FileNotFoundError(input_file)
+        input_file = os.path.abspath(input_file)
+    if isinstance(output_file, str):
+        output_file = os.path.abspath(output_file)
+        # make directories that do not exist
+        os.makedirs(os.path.dirname(output_file), exist_ok=True)
+    if isinstance(content_management_policy, str) and os.path.isfile(content_management_policy):
+        content_management_policy = os.path.abspath(content_management_policy)
+
+    # Check that file type is supported
+    try:
+        file_type = self.determine_file_type(input_file=input_file)
+    except dft.errors.FileTypeEnumError:
+        if raise_unsupported:
+            raise
+        else:
+            return None
+
+    # Convert memory inputs to bytes
+    if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
+        input_file = utils.as_bytes(input_file)
+
+    with utils.CwdHandler(self.library_path):
+        # Set content management policy
+        self.set_content_management_policy(content_management_policy)
+
+        # file to file
+        if isinstance(input_file, str) and isinstance(output_file, str):
+            # API function declaration
+            self.library.GWFileToFileAnalysisAudit.argtypes = [
+                ct.c_wchar_p,
+                ct.c_wchar_p,
+                ct.c_wchar_p
+            ]
+
+            # Variable initialisation
+            ct_input_file = ct.c_wchar_p(input_file)
+            ct_file_type = ct.c_wchar_p(dft.file_type_int_to_str(file_type))
+            ct_output_file = ct.c_wchar_p(output_file)
+
+            # API call
+            status = self.library.GWFileToFileAnalysisAudit(
+                ct_input_file,
+                ct_file_type,
+                ct_output_file
+            )
+
+        # file to memory
+        elif isinstance(input_file, str) and output_file is None:
+            # API function declaration
+            self.library.GWFileAnalysisAudit.argtypes = [
+                ct.c_wchar_p,
+                ct.c_wchar_p,
+                ct.POINTER(ct.c_void_p),
+                ct.POINTER(ct.c_size_t)
+            ]
+
+            # Variable initialisation
+            ct_input_file = ct.c_wchar_p(input_file)
+            ct_file_type = ct.c_wchar_p(dft.file_type_int_to_str(file_type))
+            ct_output_buffer = ct.c_void_p(0)
+            ct_output_size = ct.c_size_t(0)
+
+            # API call
+            status = self.library.GWFileAnalysisAudit(
+                ct_input_file,
+                ct_file_type,
+                ct.byref(ct_output_buffer),
+                ct.byref(ct_output_size)
+            )
+
+        # memory to memory and memory to file
+        elif isinstance(input_file, bytes):
+            # API function declaration
+            self.library.GWMemoryToMemoryAnalysisAudit.argtypes = [
+                ct.c_void_p,
+                ct.c_size_t,
+                ct.c_wchar_p,
+                ct.POINTER(ct.c_void_p),
+                ct.POINTER(ct.c_size_t)
+            ]
+
+            # Variable initialization
+            bytearray_buffer = bytearray(input_file)
+            ct_input_buffer = (ct.c_ubyte * len(bytearray_buffer)).from_buffer(bytearray_buffer)
+            ct_input_size = ct.c_size_t(len(input_file))
+            ct_file_type = ct.c_wchar_p(dft.file_type_int_to_str(file_type))
+            ct_output_buffer = ct.c_void_p(0)
+            ct_output_size = ct.c_size_t(0)
+
+            status = self.library.GWMemoryToMemoryAnalysisAudit(
+                ct.byref(ct_input_buffer),
+                ct_input_size,
+                ct_file_type,
+                ct.byref(ct_output_buffer),
+                ct.byref(ct_output_size)
+            )
+
+        input_file_repr = f&#34;{type(input_file)} length {len(input_file)}&#34; if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
+        if status not in successes.success_codes:
+            log.warning(f&#34;\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}&#34;)
+            if raise_unsupported:
+                raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+            else:
+                file_bytes = None
+        else:
+            log.debug(f&#34;\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}&#34;)
+            if isinstance(input_file, str) and isinstance(output_file, str):
+                # file to file, read the bytes of the file Glasswall has already written
+                if not os.path.isfile(output_file):
+                    log.warning(f&#34;\n\tstatus: {status}\n\toutput_file: {output_file}&#34;)
+                    file_bytes = None
+                else:
+                    with open(output_file, &#34;rb&#34;) as f:
+                        file_bytes = f.read()
+            else:
+                # file to memory, memory to memory
+                file_bytes = utils.buffer_to_bytes(
+                    ct_output_buffer,
+                    ct_output_size
+                )
+                if isinstance(output_file, str):
+                    # memory to file
+                    # no Glasswall function exists for memory to file, write the memory to file ourselves
+                    with open(output_file, &#34;wb&#34;) as f:
+                        f.write(file_bytes)
+
+        return file_bytes</code></pre>
+</details>
+</dd>
+<dt id="glasswall.libraries.rebuild.rebuild.Rebuild.determine_file_type"><code class="name flex">
+<span>def <span class="ident">determine_file_type</span></span>(<span>self, input_file: Union[str, bytes, bytearray, _io.BytesIO], as_string: bool = False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns an int representing the file type / file format of a file.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>input_file</code></strong> :&ensp;<code>Union[str, bytes, bytearray, io.BytesIO]</code></dt>
+<dd>The input file, can be a local path.</dd>
+<dt><strong><code>as_string</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Return file type as string, eg: "bmp" instead of: 29. Defaults to False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>file_type (Union[int, str]): The file format.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def determine_file_type(self, input_file: Union[str, bytes, bytearray, io.BytesIO], as_string: bool = False):
+    &#34;&#34;&#34; Returns an int representing the file type / file format of a file.
+
+    Args:
+        input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file, can be a local path.
+        as_string (bool, optional): Return file type as string, eg: &#34;bmp&#34; instead of: 29. Defaults to False.
+
+    Returns:
+        file_type (Union[int, str]): The file format.
+    &#34;&#34;&#34;
+
+    if isinstance(input_file, str):
+        if not os.path.isfile(input_file):
+            raise FileNotFoundError(input_file)
+
+        self.library.GWDetermineFileTypeFromFile.argtypes = [ct.c_wchar_p]
+        self.library.GWDetermineFileTypeFromFile.restype = ct.c_int
+
+        # convert to ct.c_wchar_p
+        ct_input_file = ct.c_wchar_p(input_file)
+
+        # API call
+        file_type = self.library.GWDetermineFileTypeFromFile(ct_input_file)
+
+    elif isinstance(input_file, (bytes, bytearray, io.BytesIO)):
+        self.library.GWDetermineFileTypeFromFileInMem.argtypes = [ct.c_char_p, ct.c_size_t]
+        self.library.GWDetermineFileTypeFromFileInMem.restype = ct.c_int
+
+        # convert to bytes
+        bytes_input_file = utils.as_bytes(input_file)
+
+        # ctypes conversion
+        ct_input_buffer = ct.c_char_p(bytes_input_file)
+        ct_butter_length = ct.c_size_t(len(bytes_input_file))
+
+        # API call
+        file_type = self.library.GWDetermineFileTypeFromFileInMem(
+            ct_input_buffer,
+            ct_butter_length
+        )
+
+    file_type_as_string = dft.file_type_int_to_str(file_type)
+    input_file_repr = f&#34;{type(input_file)} length {len(input_file)}&#34; if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
+
+    if not dft.is_success(file_type):
+        log.warning(f&#34;\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}&#34;)
+        raise dft.int_class_map.get(file_type, dft.errors.UnknownErrorCode)(file_type)
+    else:
+        log.debug(f&#34;\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}&#34;)
+
+    if as_string:
+        return file_type_as_string
+
+    return file_type</code></pre>
+</details>
+</dd>
+<dt id="glasswall.libraries.rebuild.rebuild.Rebuild.export_directory"><code class="name flex">
+<span>def <span class="ident">export_directory</span></span>(<span>self, input_directory: str, output_directory: Optional[str], content_management_policy: Union[NoneType, str, bytes, bytearray, _io.BytesIO, _ForwardRef('glasswall.content_management.policies.Policy')] = None, raise_unsupported: bool = True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Exports all files in a directory and its subdirectories. The export files are written to output_directory maintaining the same directory structure as input_directory.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>input_directory</code></strong> :&ensp;<code>str</code></dt>
+<dd>The input directory containing files to export.</dd>
+<dt><strong><code>output_directory</code></strong> :&ensp;<code>Union[None, str]</code></dt>
+<dd>The output directory where the export files will be written, or None to not write files.</dd>
+<dt><strong><code>content_management_policy</code></strong> :&ensp;<code>Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy]</code>, optional</dt>
+<dd>Default None (sanitise). The content management policy to apply.</dd>
+<dt><strong><code>raise_unsupported</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>export_files_dict (dict): A dictionary of file paths relative to input_directory, and file bytes.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def export_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None, raise_unsupported: bool = True):
+    &#34;&#34;&#34; Exports all files in a directory and its subdirectories. The export files are written to output_directory maintaining the same directory structure as input_directory.
+
+    Args:
+        input_directory (str): The input directory containing files to export.
+        output_directory (Union[None, str]): The output directory where the export files will be written, or None to not write files.
+        content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): Default None (sanitise). The content management policy to apply.
+        raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+    Returns:
+        export_files_dict (dict): A dictionary of file paths relative to input_directory, and file bytes.
+    &#34;&#34;&#34;
+    export_files_dict = {}
+    # Call export_file on each file in input_directory to output_directory
+    for input_file in utils.list_file_paths(input_directory):
+        relative_path = os.path.relpath(input_file, input_directory) + &#34;.zip&#34;
+        output_file = None if output_directory is None else os.path.join(os.path.abspath(output_directory), relative_path)
+
+        export_bytes = self.export_file(
+            input_file=input_file,
+            output_file=output_file,
+            raise_unsupported=raise_unsupported,
+            content_management_policy=content_management_policy,
+        )
+
+        export_files_dict[relative_path] = export_bytes
+
+    return export_files_dict</code></pre>
+</details>
+</dd>
+<dt id="glasswall.libraries.rebuild.rebuild.Rebuild.export_file"><code class="name flex">
+<span>def <span class="ident">export_file</span></span>(<span>self, input_file: Union[str, bytes, bytearray, _io.BytesIO], output_file: Optional[str] = None, content_management_policy: Union[NoneType, str, bytes, bytearray, _io.BytesIO, _ForwardRef('glasswall.content_management.policies.Policy')] = None, raise_unsupported: bool = True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Export a file, returning the .zip file bytes. The .zip file is written to output_file.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>input_file</code></strong> :&ensp;<code>Union[str, bytes, bytearray, io.BytesIO]</code></dt>
+<dd>The input file path or bytes.</dd>
+<dt><strong><code>output_file</code></strong> :&ensp;<code>Union[None, str]</code>, optional</dt>
+<dd>The output file path where the .zip file will be written.</dd>
+<dt><strong><code>content_management_policy</code></strong> :&ensp;<code>Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy]</code>, optional</dt>
+<dd>The content management policy to apply.</dd>
+<dt><strong><code>raise_unsupported</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>file_bytes (bytes): The exported .zip file.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def export_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None, raise_unsupported: bool = True):
+    &#34;&#34;&#34; Export a file, returning the .zip file bytes. The .zip file is written to output_file.
+
+    Args:
+        input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
+        output_file (Union[None, str], optional): The output file path where the .zip file will be written.
+        content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): The content management policy to apply.
+        raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+    Returns:
+        file_bytes (bytes): The exported .zip file.
+    &#34;&#34;&#34;
+    # Validate arg types
+    if not isinstance(input_file, (str, bytes, bytearray, io.BytesIO)):
+        raise TypeError(input_file)
+    if not isinstance(output_file, (type(None), str)):
+        raise TypeError(output_file)
+    if not isinstance(content_management_policy, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy)):
+        raise TypeError(content_management_policy)
+    if not isinstance(raise_unsupported, bool):
+        raise TypeError(raise_unsupported)
+
+    # Convert string path arguments to absolute paths
+    if isinstance(input_file, str):
+        if not os.path.isfile(input_file):
+            raise FileNotFoundError(input_file)
+        input_file = os.path.abspath(input_file)
+    if isinstance(output_file, str):
+        output_file = os.path.abspath(output_file)
+        # make directories that do not exist
+        os.makedirs(os.path.dirname(output_file), exist_ok=True)
+    if isinstance(content_management_policy, str) and os.path.isfile(content_management_policy):
+        content_management_policy = os.path.abspath(content_management_policy)
+
+    # Check that file type is supported
+    try:
+        self.determine_file_type(input_file=input_file)
+    except dft.errors.FileTypeEnumError:
+        if raise_unsupported:
+            raise
+        else:
+            return None
+
+    # Convert memory inputs to bytes
+    if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
+        input_file = utils.as_bytes(input_file)
+
+    with utils.CwdHandler(self.library_path):
+        # Set content management policy
+        self.set_content_management_policy(content_management_policy)
+
+        # file to file
+        if isinstance(input_file, str) and isinstance(output_file, str):
+            # API function declaration
+            self.library.GWFileToFileAnalysisProtectAndExport.argtypes = [
+                ct.c_wchar_p,
+                ct.c_wchar_p
+            ]
+
+            # Variable initialisation
+            ct_input_file = ct.c_wchar_p(input_file)
+            ct_output_file = ct.c_wchar_p(output_file)
+
+            # API call
+            status = self.library.GWFileToFileAnalysisProtectAndExport(
+                ct_input_file,
+                ct_output_file
+            )
+
+        # file to memory
+        elif isinstance(input_file, str) and output_file is None:
+            # API function declaration
+            self.library.GWFileToMemoryAnalysisProtectAndExport.argtypes = [
+                ct.c_wchar_p,
+                ct.POINTER(ct.c_void_p),
+                ct.POINTER(ct.c_size_t)
+            ]
+
+            # Variable initialisation
+            ct_input_file = ct.c_wchar_p(input_file)
+            ct_output_buffer = ct.c_void_p(0)
+            ct_output_size = ct.c_size_t(0)
+
+            # API call
+            status = self.library.GWFileToMemoryAnalysisProtectAndExport(
+                ct_input_file,
+                ct.byref(ct_output_buffer),
+                ct.byref(ct_output_size)
+            )
+
+        # memory to memory and memory to file
+        elif isinstance(input_file, bytes):
+            # API function declaration
+            self.library.GWMemoryToMemoryAnalysisProtectAndExport.argtypes = [
+                ct.c_void_p,
+                ct.c_size_t,
+                ct.POINTER(ct.c_void_p),
+                ct.POINTER(ct.c_size_t)
+            ]
+
+            # Variable initialization
+            bytearray_buffer = bytearray(input_file)
+            ct_input_buffer = (ct.c_ubyte * len(bytearray_buffer)).from_buffer(bytearray_buffer)
+            ct_input_size = ct.c_size_t(len(input_file))
+            ct_output_buffer = ct.c_void_p(0)
+            ct_output_size = ct.c_size_t(0)
+
+            status = self.library.GWMemoryToMemoryAnalysisProtectAndExport(
+                ct_input_buffer,
+                ct_input_size,
+                ct.byref(ct_output_buffer),
+                ct.byref(ct_output_size)
+            )
+
+        input_file_repr = f&#34;{type(input_file)} length {len(input_file)}&#34; if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
+        if status not in successes.success_codes:
+            log.warning(f&#34;\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}&#34;)
+            if raise_unsupported:
+                raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+            else:
+                file_bytes = None
+        else:
+            log.debug(f&#34;\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}&#34;)
+            if isinstance(input_file, str) and isinstance(output_file, str):
+                # file to file, read the bytes of the file Glasswall has already written
+                if not os.path.isfile(output_file):
+                    log.warning(f&#34;\n\tstatus: {status}\n\toutput_file: {output_file}&#34;)
+                    file_bytes = None
+                else:
+                    with open(output_file, &#34;rb&#34;) as f:
+                        file_bytes = f.read()
+            else:
+                # file to memory, memory to memory
+                file_bytes = utils.buffer_to_bytes(
+                    ct_output_buffer,
+                    ct_output_size
+                )
+                if isinstance(output_file, str):
+                    # memory to file
+                    # no Glasswall function exists for memory to file, write the memory to file ourselves
+                    with open(output_file, &#34;wb&#34;) as f:
+                        f.write(file_bytes)
+
+        return file_bytes</code></pre>
+</details>
+</dd>
+<dt id="glasswall.libraries.rebuild.rebuild.Rebuild.get_content_management_policy"><code class="name flex">
+<span>def <span class="ident">get_content_management_policy</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Gets the current content management configuration.</p>
+<h2 id="returns">Returns</h2>
+<p>xml_string (str): The XML string of the current content management configuration.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_content_management_policy(self):
+    &#34;&#34;&#34; Gets the current content management configuration.
+
+    Returns:
+        xml_string (str): The XML string of the current content management configuration.
+    &#34;&#34;&#34;
+
+    # Declare argument types
+    self.library.GWFileConfigGet.argtypes = [
+        ct.POINTER(ct.POINTER(ct.c_wchar)),
+        ct.POINTER(ct.c_size_t)
+    ]
+
+    # Variable initialisation
+    ct_input_buffer = ct.POINTER(ct.c_wchar)()
+    ct_input_size = ct.c_size_t(0)
+
+    # API call
+    status = self.library.GWFileConfigGet(
+        ct.byref(ct_input_buffer),
+        ct.byref(ct_input_size)
+    )
+
+    if status not in successes.success_codes:
+        log.warning(f&#34;\n\tstatus: {status}&#34;)
+        raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+    else:
+        log.debug(f&#34;\n\tstatus: {status}&#34;)
+
+    # As string
+    xml_string = utils.validate_xml(ct.wstring_at(ct_input_buffer))
+
+    return xml_string</code></pre>
+</details>
+</dd>
+<dt id="glasswall.libraries.rebuild.rebuild.Rebuild.import_directory"><code class="name flex">
+<span>def <span class="ident">import_directory</span></span>(<span>self, input_directory: str, output_directory: Optional[str], content_management_policy: Union[NoneType, str, bytes, bytearray, _io.BytesIO, _ForwardRef('glasswall.content_management.policies.Policy')] = None, raise_unsupported: bool = True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Imports all files in a directory and its subdirectories. Files are expected as .zip but this is not forced.
+The constructed files are written to output_directory maintaining the same directory structure as input_directory.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>input_directory</code></strong> :&ensp;<code>str</code></dt>
+<dd>The input directory containing files to import.</dd>
+<dt><strong><code>output_directory</code></strong> :&ensp;<code>Union[None, str]</code></dt>
+<dd>The output directory where the constructed files will be written, or None to not write files.</dd>
+<dt><strong><code>content_management_policy</code></strong> :&ensp;<code>Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy]</code>, optional</dt>
+<dd>Default None (sanitise). The content management policy to apply.</dd>
+<dt><strong><code>raise_unsupported</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>import_files_dict (dict): A dictionary of file paths relative to input_directory, and file bytes.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def import_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None, raise_unsupported: bool = True):
+    &#34;&#34;&#34; Imports all files in a directory and its subdirectories. Files are expected as .zip but this is not forced.
+    The constructed files are written to output_directory maintaining the same directory structure as input_directory.
+
+    Args:
+        input_directory (str): The input directory containing files to import.
+        output_directory (Union[None, str]): The output directory where the constructed files will be written, or None to not write files.
+        content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): Default None (sanitise). The content management policy to apply.
+        raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+    Returns:
+        import_files_dict (dict): A dictionary of file paths relative to input_directory, and file bytes.
+    &#34;&#34;&#34;
+    import_files_dict = {}
+    # Call import_file on each file in input_directory to output_directory
+    for input_file in utils.list_file_paths(input_directory):
+        relative_path = os.path.relpath(input_file, input_directory)
+        # Remove .zip extension from relative_path
+        relative_path = os.path.splitext(relative_path)[0]
+        output_file = None if output_directory is None else os.path.join(os.path.abspath(output_directory), relative_path)
+
+        import_bytes = self.import_file(
+            input_file=input_file,
+            output_file=output_file,
+            raise_unsupported=raise_unsupported,
+            content_management_policy=content_management_policy,
+        )
+
+        import_files_dict[relative_path] = import_bytes
+
+    return import_files_dict</code></pre>
+</details>
+</dd>
+<dt id="glasswall.libraries.rebuild.rebuild.Rebuild.import_file"><code class="name flex">
+<span>def <span class="ident">import_file</span></span>(<span>self, input_file: Union[str, bytes, bytearray, _io.BytesIO], output_file: Optional[str] = None, content_management_policy: Union[NoneType, str, bytes, bytearray, _io.BytesIO, _ForwardRef('glasswall.content_management.policies.Policy')] = None, raise_unsupported: bool = True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Import a .zip file, constructs a file from the .zip file and returns the file bytes. The file is written to output_file if it is provided.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>input_file</code></strong> :&ensp;<code>Union[str, bytes, bytearray, io.BytesIO]</code></dt>
+<dd>The .zip input file path or bytes.</dd>
+<dt><strong><code>output_file</code></strong> :&ensp;<code>Union[None, str]</code>, optional</dt>
+<dd>The output file path where the constructed file will be written.</dd>
+<dt><strong><code>content_management_policy</code></strong> :&ensp;<code>Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy]</code>, optional</dt>
+<dd>The content management policy to apply to the session.</dd>
+<dt><strong><code>raise_unsupported</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>file_bytes (bytes): The imported file bytes.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def import_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None, raise_unsupported: bool = True):
+    &#34;&#34;&#34; Import a .zip file, constructs a file from the .zip file and returns the file bytes. The file is written to output_file if it is provided.
+
+    Args:
+        input_file (Union[str, bytes, bytearray, io.BytesIO]): The .zip input file path or bytes.
+        output_file (Union[None, str], optional): The output file path where the constructed file will be written.
+        content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): The content management policy to apply to the session.
+        raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+    Returns:
+        file_bytes (bytes): The imported file bytes.
+    &#34;&#34;&#34;
+    # Validate arg types
+    if not isinstance(input_file, (str, bytes, bytearray, io.BytesIO)):
+        raise TypeError(input_file)
+    if not isinstance(output_file, (type(None), str)):
+        raise TypeError(output_file)
+    if not isinstance(content_management_policy, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy)):
+        raise TypeError(content_management_policy)
+    if not isinstance(raise_unsupported, bool):
+        raise TypeError(raise_unsupported)
+
+    # Convert string path arguments to absolute paths
+    if isinstance(input_file, str):
+        if not os.path.isfile(input_file):
+            raise FileNotFoundError(input_file)
+        input_file = os.path.abspath(input_file)
+    if isinstance(output_file, str):
+        output_file = os.path.abspath(output_file)
+        # make directories that do not exist
+        os.makedirs(os.path.dirname(output_file), exist_ok=True)
+    if isinstance(content_management_policy, str) and os.path.isfile(content_management_policy):
+        content_management_policy = os.path.abspath(content_management_policy)
+
+    # Check that file type is supported
+    try:
+        self.determine_file_type(input_file=input_file)
+    except dft.errors.FileTypeEnumError:
+        if raise_unsupported:
+            raise
+        else:
+            return None
+
+    # Convert memory inputs to bytes
+    if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
+        input_file = utils.as_bytes(input_file)
+
+    with utils.CwdHandler(self.library_path):
+        # Set content management policy
+        self.set_content_management_policy(content_management_policy)
+
+        # file to file
+        if isinstance(input_file, str) and isinstance(output_file, str):
+            # API function declaration
+            self.library.GWFileToFileProtectAndImport.argtypes = [
+                ct.c_wchar_p,
+                ct.c_wchar_p
+            ]
+
+            # Variable initialisation
+            ct_input_file = ct.c_wchar_p(input_file)
+            ct_output_file = ct.c_wchar_p(output_file)
+
+            # API call
+            status = self.library.GWFileToFileProtectAndImport(
+                ct_input_file,
+                ct_output_file
+            )
+
+        # file to memory
+        elif isinstance(input_file, str) and output_file is None:
+            # API function declaration
+            self.library.GWFileToMemoryProtectAndImport.argtypes = [
+                ct.c_wchar_p,
+                ct.POINTER(ct.c_void_p),
+                ct.POINTER(ct.c_size_t)
+            ]
+
+            # Variable initialisation
+            ct_input_file = ct.c_wchar_p(input_file)
+            ct_output_buffer = ct.c_void_p(0)
+            ct_output_size = ct.c_size_t(0)
+
+            # API call
+            status = self.library.GWFileToMemoryProtectAndImport(
+                ct_input_file,
+                ct.byref(ct_output_buffer),
+                ct.byref(ct_output_size)
+            )
+
+        # memory to memory and memory to file
+        elif isinstance(input_file, bytes):
+            # API function declaration
+            self.library.GWMemoryToMemoryProtectAndImport.argtypes = [
+                ct.c_void_p,
+                ct.c_size_t,
+                ct.POINTER(ct.c_void_p),
+                ct.POINTER(ct.c_size_t)
+            ]
+
+            # Variable initialization
+            bytearray_buffer = bytearray(input_file)
+            ct_input_buffer = (ct.c_ubyte * len(bytearray_buffer)).from_buffer(bytearray_buffer)
+            ct_input_size = ct.c_size_t(len(input_file))
+            ct_output_buffer = ct.c_void_p(0)
+            ct_output_size = ct.c_size_t(0)
+
+            status = self.library.GWMemoryToMemoryProtectAndImport(
+                ct_input_buffer,
+                ct_input_size,
+                ct.byref(ct_output_buffer),
+                ct.byref(ct_output_size)
+            )
+
+        input_file_repr = f&#34;{type(input_file)} length {len(input_file)}&#34; if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
+        if status not in successes.success_codes:
+            log.warning(f&#34;\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}&#34;)
+            if raise_unsupported:
+                raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+            else:
+                file_bytes = None
+        else:
+            log.debug(f&#34;\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}&#34;)
+            if isinstance(input_file, str) and isinstance(output_file, str):
+                # file to file, read the bytes of the file Glasswall has already written
+                if not os.path.isfile(output_file):
+                    log.warning(f&#34;\n\tstatus: {status}\n\toutput_file: {output_file}&#34;)
+                    file_bytes = None
+                else:
+                    with open(output_file, &#34;rb&#34;) as f:
+                        file_bytes = f.read()
+            else:
+                # file to memory, memory to memory
+                file_bytes = utils.buffer_to_bytes(
+                    ct_output_buffer,
+                    ct_output_size
+                )
+                if isinstance(output_file, str):
+                    # memory to file
+                    # no Glasswall function exists for memory to file, write the memory to file ourselves
+                    with open(output_file, &#34;wb&#34;) as f:
+                        f.write(file_bytes)
+
+        return file_bytes</code></pre>
+</details>
+</dd>
+<dt id="glasswall.libraries.rebuild.rebuild.Rebuild.protect_directory"><code class="name flex">
+<span>def <span class="ident">protect_directory</span></span>(<span>self, input_directory: str, output_directory: Optional[str], content_management_policy: Union[NoneType, str, bytes, bytearray, _io.BytesIO, _ForwardRef('glasswall.content_management.policies.Policy')] = None, raise_unsupported: bool = True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Recursively processes all files in a directory in protect mode using the given content management policy.
+The protected files are written to output_directory maintaining the same directory structure as input_directory.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>input_directory</code></strong> :&ensp;<code>str</code></dt>
+<dd>The input directory containing files to protect.</dd>
+<dt><strong><code>output_directory</code></strong> :&ensp;<code>Union[None, str]</code></dt>
+<dd>The output directory where the protected file will be written, or None to not write files.</dd>
+<dt><strong><code>content_management_policy</code></strong> :&ensp;<code>Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy]</code>, optional</dt>
+<dd>Default None (sanitise). The content management policy to apply.</dd>
+<dt><strong><code>raise_unsupported</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>protected_files_dict (dict): A dictionary of file paths relative to input_directory, and file bytes.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def protect_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None, raise_unsupported: bool = True):
+    &#34;&#34;&#34; Recursively processes all files in a directory in protect mode using the given content management policy.
+    The protected files are written to output_directory maintaining the same directory structure as input_directory.
+
+    Args:
+        input_directory (str): The input directory containing files to protect.
+        output_directory (Union[None, str]): The output directory where the protected file will be written, or None to not write files.
+        content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): Default None (sanitise). The content management policy to apply.
+        raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+    Returns:
+        protected_files_dict (dict): A dictionary of file paths relative to input_directory, and file bytes.
+    &#34;&#34;&#34;
+    protected_files_dict = {}
+    # Call protect_file on each file in input_directory to output_directory
+    for input_file in utils.list_file_paths(input_directory):
+        relative_path = os.path.relpath(input_file, input_directory)
+        output_file = None if output_directory is None else os.path.join(os.path.abspath(output_directory), relative_path)
+
+        protected_bytes = self.protect_file(
+            input_file=input_file,
+            output_file=output_file,
+            raise_unsupported=raise_unsupported,
+            content_management_policy=content_management_policy,
+        )
+
+        protected_files_dict[relative_path] = protected_bytes
+
+    return protected_files_dict</code></pre>
+</details>
+</dd>
+<dt id="glasswall.libraries.rebuild.rebuild.Rebuild.protect_file"><code class="name flex">
+<span>def <span class="ident">protect_file</span></span>(<span>self, input_file: Union[str, bytes, bytearray, _io.BytesIO], output_file: Optional[str] = None, content_management_policy: Union[NoneType, str, bytes, bytearray, _io.BytesIO, _ForwardRef('glasswall.content_management.policies.Policy')] = None, raise_unsupported: bool = True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Protects a file using the current content management configuration, returning the file bytes. The protected file is written to output_file if it is provided.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>input_file</code></strong> :&ensp;<code>Union[str, bytes, bytearray, io.BytesIO]</code></dt>
+<dd>The input file path or bytes.</dd>
+<dt><strong><code>output_file</code></strong> :&ensp;<code>Union[None, str]</code>, optional</dt>
+<dd>The output file path where the protected file will be written.</dd>
+<dt><strong><code>content_management_policy</code></strong> :&ensp;<code>Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy]</code>, optional</dt>
+<dd>The content management policy to apply.</dd>
+<dt><strong><code>raise_unsupported</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>file_bytes (bytes): The protected file bytes.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def protect_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None, raise_unsupported: bool = True):
+    &#34;&#34;&#34; Protects a file using the current content management configuration, returning the file bytes. The protected file is written to output_file if it is provided.
+
+    Args:
+        input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
+        output_file (Union[None, str], optional): The output file path where the protected file will be written.
+        content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): The content management policy to apply.
+        raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+    Returns:
+        file_bytes (bytes): The protected file bytes.
+    &#34;&#34;&#34;
+    # Validate arg types
+    if not isinstance(input_file, (str, bytes, bytearray, io.BytesIO)):
+        raise TypeError(input_file)
+    if not isinstance(output_file, (type(None), str)):
+        raise TypeError(output_file)
+    if not isinstance(content_management_policy, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy)):
+        raise TypeError(content_management_policy)
+    if not isinstance(raise_unsupported, bool):
+        raise TypeError(raise_unsupported)
+
+    # Convert string path arguments to absolute paths
+    if isinstance(input_file, str):
+        if not os.path.isfile(input_file):
+            raise FileNotFoundError(input_file)
+        input_file = os.path.abspath(input_file)
+    if isinstance(output_file, str):
+        output_file = os.path.abspath(output_file)
+        # make directories that do not exist
+        os.makedirs(os.path.dirname(output_file), exist_ok=True)
+    if isinstance(content_management_policy, str) and os.path.isfile(content_management_policy):
+        content_management_policy = os.path.abspath(content_management_policy)
+
+    # Check that file type is supported
+    try:
+        file_type = self.determine_file_type(input_file=input_file)
+    except dft.errors.FileTypeEnumError:
+        if raise_unsupported:
+            raise
+        else:
+            return None
+
+    # Convert memory inputs to bytes
+    if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
+        input_file = utils.as_bytes(input_file)
+
+    with utils.CwdHandler(self.library_path):
+        # Set content management policy
+        if content_management_policy:
+            self.set_content_management_policy(content_management_policy)
+
+        # file to file
+        if isinstance(input_file, str) and isinstance(output_file, str):
+            # API function declaration
+            self.library.GWFileToFileProtect.argtypes = [
+                ct.c_wchar_p,
+                ct.c_wchar_p,
+                ct.c_wchar_p
+            ]
+
+            # Variable initialisation
+            ct_input_file = ct.c_wchar_p(input_file)
+            ct_file_type = ct.c_wchar_p(dft.file_type_int_to_str(file_type))
+            ct_output_file = ct.c_wchar_p(output_file)
+
+            # API call
+            status = self.library.GWFileToFileProtect(
+                ct_input_file,
+                ct_file_type,
+                ct_output_file
+            )
+
+        # file to memory
+        elif isinstance(input_file, str) and output_file is None:
+            # API function declaration
+            self.library.GWFileProtect.argtypes = [
+                ct.c_wchar_p,
+                ct.c_wchar_p,
+                ct.POINTER(ct.c_void_p),
+                ct.POINTER(ct.c_size_t)
+            ]
+
+            # Variable initialisation
+            ct_input_file = ct.c_wchar_p(input_file)
+            ct_file_type = ct.c_wchar_p(dft.file_type_int_to_str(file_type))
+            ct_output_buffer = ct.c_void_p(0)
+            ct_output_size = ct.c_size_t(0)
+
+            # API call
+            status = self.library.GWFileProtect(
+                ct_input_file,
+                ct_file_type,
+                ct.byref(ct_output_buffer),
+                ct.byref(ct_output_size)
+            )
+
+        # memory to memory and memory to file
+        elif isinstance(input_file, bytes):
+            # API function declaration
+            self.library.GWMemoryToMemoryProtect.argtypes = [
+                ct.c_void_p,
+                ct.c_size_t,
+                ct.c_wchar_p,
+                ct.POINTER(ct.c_void_p),
+                ct.POINTER(ct.c_size_t)
+            ]
+
+            # Variable initialization
+            bytearray_buffer = bytearray(input_file)
+            ct_input_buffer = (ct.c_ubyte * len(bytearray_buffer)).from_buffer(bytearray_buffer)
+            ct_input_size = ct.c_size_t(len(input_file))
+            ct_file_type = ct.c_wchar_p(dft.file_type_int_to_str(file_type))
+            ct_output_buffer = ct.c_void_p(0)
+            ct_output_size = ct.c_size_t(0)
+
+            status = self.library.GWMemoryToMemoryProtect(
+                ct_input_buffer,
+                ct_input_size,
+                ct_file_type,
+                ct.byref(ct_output_buffer),
+                ct.byref(ct_output_size)
+            )
+
+        input_file_repr = f&#34;{type(input_file)} length {len(input_file)}&#34; if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
+        if status not in successes.success_codes:
+            log.warning(f&#34;\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}&#34;)
+            if raise_unsupported:
+                raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+            else:
+                file_bytes = None
+        else:
+            log.debug(f&#34;\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}&#34;)
+            if isinstance(input_file, str) and isinstance(output_file, str):
+                # file to file, read the bytes of the file Glasswall has already written
+                if not os.path.isfile(output_file):
+                    log.warning(f&#34;\n\tstatus: {status}\n\toutput_file: {output_file}&#34;)
+                    file_bytes = None
+                else:
+                    with open(output_file, &#34;rb&#34;) as f:
+                        file_bytes = f.read()
+            else:
+                # file to memory, memory to memory
+                file_bytes = utils.buffer_to_bytes(
+                    ct_output_buffer,
+                    ct_output_size
+                )
+                if isinstance(output_file, str):
+                    # memory to file
+                    # no Glasswall function exists for memory to file, write the memory to file ourselves
+                    with open(output_file, &#34;wb&#34;) as f:
+                        f.write(file_bytes)
+
+        return file_bytes</code></pre>
+</details>
+</dd>
+<dt id="glasswall.libraries.rebuild.rebuild.Rebuild.set_content_management_policy"><code class="name flex">
+<span>def <span class="ident">set_content_management_policy</span></span>(<span>self, input_file: Union[NoneType, str, bytes, bytearray, _io.BytesIO, _ForwardRef('glasswall.content_management.policies.Policy')] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Sets the content management policy configuration. If input_file is None then default settings (sanitise) are applied.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>input_file</code></strong> :&ensp;<code>Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy]</code>, optional</dt>
+<dd>Default None (sanitise). The content management policy to apply.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>status (int): The result of the Glasswall API call.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_content_management_policy(self, input_file: Union[None, str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;] = None):
+    &#34;&#34;&#34; Sets the content management policy configuration. If input_file is None then default settings (sanitise) are applied.
+
+    Args:
+        input_file (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): Default None (sanitise). The content management policy to apply.
+
+    Returns:
+        status (int): The result of the Glasswall API call.
+    &#34;&#34;&#34;
+    # Validate type
+    if not isinstance(input_file, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy)):
+        raise TypeError(input_file)
+
+    # self.library.GWFileConfigRevertToDefaults doesn&#39;t work, load default instead
+    # Set input_file to default if input_file is None
+    if input_file is None:
+        input_file = glasswall.content_management.policies.Rebuild(default=&#34;sanitise&#34;)
+
+    # Validate xml content is parsable
+    xml_string = utils.validate_xml(input_file)
+
+    # Declare argument types
+    self.library.GWFileConfigXML.argtypes = [ct.c_wchar_p]
+
+    # API call
+    status = self.library.GWFileConfigXML(
+        ct.c_wchar_p(xml_string)
+    )
+
+    if status not in successes.success_codes:
+        log.warning(f&#34;\n\tstatus: {status}&#34;)
+        raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+    else:
+        log.debug(f&#34;\n\tstatus: {status}&#34;)
+
+    return status</code></pre>
+</details>
+</dd>
+<dt id="glasswall.libraries.rebuild.rebuild.Rebuild.validate_license"><code class="name flex">
+<span>def <span class="ident">validate_license</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Validates the license of the library by attempting to call protect_file on a known supported file.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RebuildError</code></dt>
+<dd>If the license could not be validated.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def validate_license(self):
+    &#34;&#34;&#34; Validates the license of the library by attempting to call protect_file on a known supported file.
+
+    Raises:
+        RebuildError: If the license could not be validated.
+    &#34;&#34;&#34;
+    # Call protect file on a known good bitmap to see if license has expired
+    try:
+        self.protect_file(
+            input_file=b&#34;BM:\x00\x00\x00\x00\x00\x00\x006\x00\x00\x00(\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x18\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\x00&#34;,
+            raise_unsupported=True
+        )
+        log.debug(f&#34;{self.__class__.__name__} license validated successfully.&#34;)
+    except errors.RebuildError:
+        log.warning(f&#34;{self.__class__.__name__} license validation failed.&#34;)
+        raise</code></pre>
+</details>
+</dd>
+<dt id="glasswall.libraries.rebuild.rebuild.Rebuild.version"><code class="name flex">
+<span>def <span class="ident">version</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns the Glasswall library version.</p>
+<h2 id="returns">Returns</h2>
+<p>version (str): The Glasswall library version.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def version(self):
+    &#34;&#34;&#34; Returns the Glasswall library version.
+
+    Returns:
+        version (str): The Glasswall library version.
+    &#34;&#34;&#34;
+
+    # Declare the return type
+    self.library.GWFileVersion.restype = ct.c_wchar_p
+
+    # API call
+    version = self.library.GWFileVersion()
+
+    return version</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="glasswall.libraries.rebuild" href="index.html">glasswall.libraries.rebuild</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="glasswall.libraries.rebuild.rebuild.Rebuild" href="#glasswall.libraries.rebuild.rebuild.Rebuild">Rebuild</a></code></h4>
+<ul class="">
+<li><code><a title="glasswall.libraries.rebuild.rebuild.Rebuild.analyse_directory" href="#glasswall.libraries.rebuild.rebuild.Rebuild.analyse_directory">analyse_directory</a></code></li>
+<li><code><a title="glasswall.libraries.rebuild.rebuild.Rebuild.analyse_file" href="#glasswall.libraries.rebuild.rebuild.Rebuild.analyse_file">analyse_file</a></code></li>
+<li><code><a title="glasswall.libraries.rebuild.rebuild.Rebuild.determine_file_type" href="#glasswall.libraries.rebuild.rebuild.Rebuild.determine_file_type">determine_file_type</a></code></li>
+<li><code><a title="glasswall.libraries.rebuild.rebuild.Rebuild.export_directory" href="#glasswall.libraries.rebuild.rebuild.Rebuild.export_directory">export_directory</a></code></li>
+<li><code><a title="glasswall.libraries.rebuild.rebuild.Rebuild.export_file" href="#glasswall.libraries.rebuild.rebuild.Rebuild.export_file">export_file</a></code></li>
+<li><code><a title="glasswall.libraries.rebuild.rebuild.Rebuild.get_content_management_policy" href="#glasswall.libraries.rebuild.rebuild.Rebuild.get_content_management_policy">get_content_management_policy</a></code></li>
+<li><code><a title="glasswall.libraries.rebuild.rebuild.Rebuild.import_directory" href="#glasswall.libraries.rebuild.rebuild.Rebuild.import_directory">import_directory</a></code></li>
+<li><code><a title="glasswall.libraries.rebuild.rebuild.Rebuild.import_file" href="#glasswall.libraries.rebuild.rebuild.Rebuild.import_file">import_file</a></code></li>
+<li><code><a title="glasswall.libraries.rebuild.rebuild.Rebuild.protect_directory" href="#glasswall.libraries.rebuild.rebuild.Rebuild.protect_directory">protect_directory</a></code></li>
+<li><code><a title="glasswall.libraries.rebuild.rebuild.Rebuild.protect_file" href="#glasswall.libraries.rebuild.rebuild.Rebuild.protect_file">protect_file</a></code></li>
+<li><code><a title="glasswall.libraries.rebuild.rebuild.Rebuild.set_content_management_policy" href="#glasswall.libraries.rebuild.rebuild.Rebuild.set_content_management_policy">set_content_management_policy</a></code></li>
+<li><code><a title="glasswall.libraries.rebuild.rebuild.Rebuild.validate_license" href="#glasswall.libraries.rebuild.rebuild.Rebuild.validate_license">validate_license</a></code></li>
+<li><code><a title="glasswall.libraries.rebuild.rebuild.Rebuild.version" href="#glasswall.libraries.rebuild.rebuild.Rebuild.version">version</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>
