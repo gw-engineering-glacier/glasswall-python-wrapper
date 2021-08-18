@@ -38,7 +38,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(library_path=r"C:\azure\sdk.editor\2.173")
+editor = glasswall.Editor(r"C:\azure\sdk.editor\2.173")
 ```
 
 ```
@@ -50,7 +50,7 @@ editor = glasswall.Editor(library_path=r"C:\azure\sdk.editor\2.173")
 <details>
 <summary>Logging</summary>
 
-Logs are saved in the OS-specific temp directory and are also output to console with a default logging level of INFO. You can view the file path of the temp directory or the log file:
+Logs are saved to the temp directory and are also output to console with a default logging level of INFO. You can view the file path of the temp directory or the log file:
 
 ```py
 import glasswall
@@ -85,7 +85,7 @@ glasswall.config.logging.log.setLevel(logging.DEBUG)
 <details>
 <summary>Content management policies</summary>
 
-Subclasses of the `glasswall.content_management.policies.Policy` class can be used to easily create content management policies of varying complexity for each library by passing arguments for `default` and `config`. Subclasses include:
+Subclasses of the `glasswall.content_management.policies.Policy` class can be used to easily create content management policies of varying complexity by passing the `default` and `config` keyword arguments. Subclasses include:
 
 - ArchiveManager
 - Editor
@@ -95,7 +95,7 @@ Subclasses of the `glasswall.content_management.policies.Policy` class can be us
 Some examples of content management policies are below.
 
 <details>
-<summary>default sanitise all Editor policy</summary>
+<summary>Default sanitise all Editor policy</summary>
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -247,6 +247,26 @@ Any functionality that requires a content management policy will use its default
 ### Editor
 
 <details>
+<summary>Protecting a file</summary>
+
+```py
+import glasswall
+
+
+# Load the Glasswall Editor library
+editor = glasswall.Editor(r"C:\azure\sdk.editor\2.173")
+
+# Use the default sanitise all policy to sanitise a file, writing the sanitised
+# file to a new directory
+editor.protect_file(
+    input_file=r"C:\test_files\InternalHyp_Review.doc",
+    output_file=r"C:\test_files_sanitised\InternalHyp_Review.doc"
+)
+```
+
+</details>
+
+<details>
 <summary>Protecting all files in a directory</summary>
 
 ```py
@@ -254,11 +274,13 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(library_path=r"C:\azure\sdk.editor\2.173")
-
+editor = glasswall.Editor(r"C:\azure\sdk.editor\2.173")
 
 # Use the default sanitise all policy to protect a directory of files, writing
-# the sanitised files to a new directory
+# the sanitised files to a new directory.
+# NOTE: Passing `raise_unsupported=False` can be useful when working with a
+# directory containing a mixture of supported and unsupported file types. By
+# default this value is True, and an error will be raised on the first failure.
 editor.protect_directory(
     input_directory=r"C:\test_files",
     output_directory=r"C:\test_files_sanitised"
@@ -276,7 +298,13 @@ Using `glasswall.content_management.policies.Editor`:
 import glasswall
 
 
-editor = glasswall.Editor(library_path=r"C:\azure\sdk.editor\2.173")
+# Load the Glasswall Editor library
+editor = glasswall.Editor(r"C:\azure\sdk.editor\2.173")
+
+# Use a custom Editor policy to sanitise all files in the test_files directory
+# and write them to the test_files_sanitised directory. Internal hyperlinks in
+# ppt and word files will not be sanitised, and if macros are present then
+# withhold the file
 editor.protect_directory(
     input_directory=r"C:\test_files",
     output_directory=r"C:\test_files_sanitised",
@@ -301,7 +329,9 @@ Using a custom `.xml` file:
 import glasswall
 
 
-editor = glasswall.Editor(library_path=r"C:\azure\sdk.editor\2.173")
+# Load the Glasswall Editor library
+editor = glasswall.Editor(r"C:\azure\sdk.editor\2.173")
+
 editor.protect_directory(
     input_directory=r"C:\test_files",
     output_directory=r"C:\test_files_sanitised",
@@ -331,6 +361,60 @@ print(am.supported_archives)
 </details>
 
 <details>
+<summary>Protecting an archive</summary>
+
+```py
+
+import glasswall
+
+# Load the Glasswall Archive Manager library
+am = glasswall.ArchiveManager(r"C:\azure\sdk.archive.manager")
+
+# Use the default Archive Manager policy: sanitise all, process all, writing
+# the sanitised archive and the analysis report to different directories.
+am.protect_archive(
+    input_file=r"C:\archives\7Zip\0000192.doc.7z",
+    output_file=r"C:\archives_sanitised\7Zip\0000192.doc.7z",
+    output_report=r"C:\archives_reports\7Zip\0000192.doc.7z.xml"
+)
+```
+
+</details>
+
+<details>
+<summary>Protecting all archives in a directory using a custom content management policy</summary>
+
+```py
+
+import glasswall
+
+# Load the Glasswall Archive Manager library
+am = glasswall.ArchiveManager(r"C:\azure\sdk.archive.manager")
+
+# Use a custom Archive Manager policy: sanitise all, process all, but discard
+# mp3 and mp4 files. Write the sanitised archives and the analysis reports to
+# different directories
+am.protect_directory(
+    input_directory=r"C:\archives\7Zip",
+    output_directory=r"C:\archives_sanitised\7Zip",
+    output_report_directory=r"C:\archives_analysis_reports\7Zip",
+    content_management_policy=glasswall.content_management.policies.ArchiveManager(
+        default="sanitise",
+        default_archive_manager="process",
+        config={
+            "archiveConfig": {
+                "mp3": "discard",
+                "mp4": "discard"
+            }
+        }
+    ),
+    raise_unsupported=False
+)
+```
+
+</details>
+
+<details>
 <summary>Extraction - Unpacking an archive</summary>
 
 ```py
@@ -341,12 +425,12 @@ am = glasswall.ArchiveManager(r"C:\azure\sdk.archive.manager")
 
 # Unpack the Nested_4_layers.zip archive to a new directory
 am.unpack(
-    input_file=r"C:\Users\AngusRoberts\Desktop\archives\nested\Nested_4_layers.zip",
-    output_directory=r"C:\Users\AngusRoberts\Desktop\unpacked_archives\nested"
+    input_file=r"C:\archives\nested\Nested_4_layers.zip",
+    output_directory=r"C:\unpacked_archives\nested"
 )
 ```
 
-A new directory is created: `C:\Users\AngusRoberts\Desktop\unpacked_archives\nested\Nested_4_layers` containing the unpacked contents of the `Nested_4_layers` zip archive. Nested archives are recursively unpacked while maintaining the same directory structure. To disable recursive unpacking use the `recursive` arg:
+A new directory is created: `C:\unpacked_archives\nested\Nested_4_layers` containing the unpacked contents of the `Nested_4_layers` zip archive. Nested archives are recursively unpacked while maintaining the same directory structure. To disable recursive unpacking use the `recursive` arg:
 
 ```py
 import glasswall
@@ -356,8 +440,8 @@ am = glasswall.ArchiveManager(r"C:\azure\sdk.archive.manager")
 
 # Unpack the Nested_4_layers.zip archive to a new directory without recursing the archive.
 am.unpack(
-    input_file=r"C:\Users\AngusRoberts\Desktop\archives\nested\Nested_4_layers.zip",
-    output_directory=r"C:\Users\AngusRoberts\Desktop\unpacked_archives\nested",
+    input_file=r"C:\archives\nested\Nested_4_layers.zip",
+    output_directory=r"C:\unpacked_archives\nested",
     recursive=False
 )
 ```
@@ -382,8 +466,8 @@ am = glasswall.ArchiveManager(r"C:\azure\sdk.archive.manager")
 
 # Recursively unpack all archives found in the `archives` directory
 am.unpack_directory(
-    input_directory=r"C:\Users\AngusRoberts\Desktop\archives",
-    output_directory=r"C:\Users\AngusRoberts\Desktop\unpacked_archives"
+    input_directory=r"C:\archives",
+    output_directory=r"C:\unpacked_archives"
 )
 ```
 
@@ -402,13 +486,13 @@ am = glasswall.ArchiveManager(r"C:\azure\sdk.archive.manager")
 
 # Pack the `assorted_files` directory as zip to `assorted_files.zip`
 am.pack_directory(
-    input_directory=r"C:\Users\AngusRoberts\Desktop\assorted_files",
-    output_directory=r"C:\Users\AngusRoberts\Desktop",
+    input_directory=r"C:\test_files\assorted_files",
+    output_directory=r"C:\test_files",
     file_type="zip",
 )
 ```
 
-Pack to multiple formats with ease:
+Pack to multiple formats with ease by iterating the `supported_archives` attribute:
 
 ```py
 import glasswall
@@ -419,8 +503,8 @@ am = glasswall.ArchiveManager(r"C:\azure\sdk.archive.manager")
 # Pack the `assorted_files` directory in each supported file format
 for file_type in am.supported_archives:
     am.pack_directory(
-        input_directory=r"C:\Users\AngusRoberts\Desktop\assorted_files",
-        output_directory=fr"C:\Users\AngusRoberts\Desktop",
+        input_directory=r"C:\test_files\assorted_files",
+        output_directory=fr"C:\test_files",
         file_type=file_type,
     )
 ```
