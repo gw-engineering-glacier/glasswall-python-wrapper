@@ -511,6 +511,10 @@ for file_type in am.supported_archives:
 
 </details>
 
+## Documentation
+
+https://filetrust.github.io/glasswall-python-wrapper/
+
 ## Built With
 
 - [Python 3.6.8 64-bit](https://www.python.org/downloads/release/python-368/)
