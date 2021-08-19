@@ -19,15 +19,15 @@ class pdfConfig(ConfigElement):
         self.default = default
         self.switches_module = switches.pdf
         self.default_switches = [
-            self.switches_module.acroform,
-            self.switches_module.actions_all,
-            self.switches_module.digital_signatures,
-            self.switches_module.embedded_files,
-            self.switches_module.embedded_images,
-            self.switches_module.external_hyperlinks,
-            self.switches_module.internal_hyperlinks,
-            self.switches_module.javascript,
-            self.switches_module.metadata,
+            self.switches_module.acroform(value=default),
+            self.switches_module.actions_all(value=default),
+            self.switches_module.digital_signatures(value=default),
+            self.switches_module.embedded_files(value=default),
+            self.switches_module.embedded_images(value=default),
+            self.switches_module.external_hyperlinks(value=default),
+            self.switches_module.internal_hyperlinks(value=default),
+            self.switches_module.javascript(value=default),
+            self.switches_module.metadata(value=default),
         ]
 
         super().__init__(

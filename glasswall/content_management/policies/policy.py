@@ -62,11 +62,10 @@ class Policy:
 
                 # If switch is in switches_module, add it to this config element
                 if hasattr(config_element.switches_module, switch_name):
-                    config_element.add_switch(
-                        getattr(
-                            config_element.switches_module,
-                            switch_name
-                        )(value=switch_value))
+                    config_element.add_switch(getattr(
+                        config_element.switches_module,
+                        switch_name
+                    )(value=switch_value))
 
                 # Otherwise, create a new Switch and add it
                 else:

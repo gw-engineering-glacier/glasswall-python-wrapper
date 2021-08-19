@@ -15,8 +15,8 @@ class sysConfig(ConfigElement):
         self.name = self.__class__.__name__
         self.switches_module = switches.sys
         self.default_switches = [
-            self.switches_module.interchange_type,
-            self.switches_module.interchange_pretty,
+            self.switches_module.interchange_type(value="sisl"),
+            self.switches_module.interchange_pretty(value="false"),
         ]
 
         super().__init__(

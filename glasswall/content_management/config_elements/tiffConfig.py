@@ -19,7 +19,7 @@ class tiffConfig(ConfigElement):
         self.default = default
         self.switches_module = switches.tiff
         self.default_switches = [
-            self.switches_module.geotiff,
+            self.switches_module.geotiff(value=default),
         ]
 
         super().__init__(
