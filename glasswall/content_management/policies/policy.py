@@ -1,6 +1,6 @@
 
 
-from typing import Union
+from typing import Optional, Union
 
 import glasswall
 from glasswall import utils
@@ -15,7 +15,7 @@ class Policy:
 
     def __init__(self,
                  config_elements: list = [],
-                 default: Union[str, type(None)] = None,
+                 default: Optional[str] = None,
                  default_config_elements: list = [],
                  config: dict = {},
                  **kwargs

@@ -1,6 +1,6 @@
 
 
-from typing import Union
+from typing import Optional
 
 from glasswall.content_management.errors.switches import RestrictedValue
 
@@ -8,7 +8,7 @@ from glasswall.content_management.errors.switches import RestrictedValue
 class Switch:
     """ A Content Management Policy switch which has a name and a value, and can have attributes. """
 
-    def __init__(self, name: str, value: str, attributes: Union[dict, type(None)] = None, restrict_values: Union[list, type(None)] = None):
+    def __init__(self, name: str, value: str, attributes: Optional[dict] = None, restrict_values: Optional[list] = None):
         self._indent = 0
         self.restrict_values = restrict_values or []
         self.name = name

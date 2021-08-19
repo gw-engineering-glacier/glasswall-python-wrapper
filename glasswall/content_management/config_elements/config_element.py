@@ -1,6 +1,6 @@
 
 
-from typing import Union
+from typing import Optional, Union
 
 import glasswall
 from glasswall.content_management.errors.switches import SwitchNotFound
@@ -15,7 +15,7 @@ class ConfigElement:
                  attributes: dict = {},
                  switches: list = [],
                  subelements: list = [],
-                 default: Union[str, type(None)] = None,
+                 default: Optional[str] = None,
                  default_switches: list = [],
                  config: dict = {},
                  switches_module: "glasswall.content_management.switches" = Switch

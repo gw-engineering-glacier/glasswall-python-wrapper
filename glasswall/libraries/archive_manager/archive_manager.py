@@ -3,7 +3,7 @@
 import ctypes as ct
 import io
 import os
-from typing import Union, Optional
+from typing import Optional, Union
 
 import glasswall
 from glasswall import utils
