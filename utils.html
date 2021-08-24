@@ -182,6 +182,11 @@ def flatten_list(list_: Iterable):
     ]
 
 
+def get_file_type(file_path: str):
+    &#34;&#34;&#34; Returns the filetype of a file. &#34;data/files/splat.zip&#34; -&gt; &#34;zip&#34; &#34;&#34;&#34;
+    return os.path.splitext(file_path)[-1].replace(&#34;.&#34;, &#34;&#34;)
+
+
 def get_libraries(directory: str, ignore_errors: bool = False):
     &#34;&#34;&#34; Recursively calls get_library on each library from glasswall.libraries.os_info on the given directory.
 
@@ -730,6 +735,20 @@ buffer_length (ct.c_size_t()): The file buffer length.</p>
     ]</code></pre>
 </details>
 </dd>
+<dt id="glasswall.utils.get_file_type"><code class="name flex">
+<span>def <span class="ident">get_file_type</span></span>(<span>file_path: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns the filetype of a file. "data/files/splat.zip" -&gt; "zip"</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_file_type(file_path: str):
+    &#34;&#34;&#34; Returns the filetype of a file. &#34;data/files/splat.zip&#34; -&gt; &#34;zip&#34; &#34;&#34;&#34;
+    return os.path.splitext(file_path)[-1].replace(&#34;.&#34;, &#34;&#34;)</code></pre>
+</details>
+</dd>
 <dt id="glasswall.utils.get_libraries"><code class="name flex">
 <span>def <span class="ident">get_libraries</span></span>(<span>directory: str, ignore_errors: bool = False)</span>
 </code></dt>
@@ -1266,6 +1285,7 @@ buffer_length (ct.c_size_t()): The file buffer length.</p>
 <li><code><a title="glasswall.utils.delete_directory" href="#glasswall.utils.delete_directory">delete_directory</a></code></li>
 <li><code><a title="glasswall.utils.delete_empty_subdirectories" href="#glasswall.utils.delete_empty_subdirectories">delete_empty_subdirectories</a></code></li>
 <li><code><a title="glasswall.utils.flatten_list" href="#glasswall.utils.flatten_list">flatten_list</a></code></li>
+<li><code><a title="glasswall.utils.get_file_type" href="#glasswall.utils.get_file_type">get_file_type</a></code></li>
 <li><code><a title="glasswall.utils.get_libraries" href="#glasswall.utils.get_libraries">get_libraries</a></code></li>
 <li><code><a title="glasswall.utils.get_library" href="#glasswall.utils.get_library">get_library</a></code></li>
 <li><code><a title="glasswall.utils.list_file_paths" href="#glasswall.utils.list_file_paths">list_file_paths</a></code></li>

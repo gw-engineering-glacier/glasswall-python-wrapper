@@ -30,7 +30,7 @@
 import platform
 import tempfile
 
-__version__ = &#34;0.2.4&#34;
+__version__ = &#34;0.2.5&#34;
 
 _OPERATING_SYSTEM = platform.system()
 _PYTHON_VERSION = platform.python_version()
@@ -46,7 +46,10 @@ from glasswall.libraries.word_search.word_search import WordSearch
 
 
 class GwReturnObj:
-    &#34;&#34;&#34; A Glasswall return object. &#34;&#34;&#34;
+    &#34;&#34;&#34; An object intended mostly for internal use that has different
+    attributes depending on which library and functionality utilises it, such
+    as `status`, `buffer`, and `buffer_bytes`
+    &#34;&#34;&#34;
 
     def __init__(self, **kwargs):
         [setattr(self, k, v) for k, v in kwargs.items()]</code></pre>
@@ -89,13 +92,18 @@ class GwReturnObj:
 <span>(</span><span>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>A Glasswall return object.</p></div>
+<div class="desc"><p>An object intended mostly for internal use that has different
+attributes depending on which library and functionality utilises it, such
+as <code>status</code>, <code>buffer</code>, and <code>buffer_bytes</code></p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class GwReturnObj:
-    &#34;&#34;&#34; A Glasswall return object. &#34;&#34;&#34;
+    &#34;&#34;&#34; An object intended mostly for internal use that has different
+    attributes depending on which library and functionality utilises it, such
+    as `status`, `buffer`, and `buffer_bytes`
+    &#34;&#34;&#34;
 
     def __init__(self, **kwargs):
         [setattr(self, k, v) for k, v in kwargs.items()]</code></pre>
