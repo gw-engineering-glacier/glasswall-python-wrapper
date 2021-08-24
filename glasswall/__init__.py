@@ -4,7 +4,7 @@ import os
 import platform
 import tempfile
 
-__version__ = "0.2.4"
+__version__ = "0.2.5"
 
 _OPERATING_SYSTEM = platform.system()
 _PYTHON_VERSION = platform.python_version()
@@ -20,7 +20,10 @@ from glasswall.libraries.word_search.word_search import WordSearch
 
 
 class GwReturnObj:
-    """ A Glasswall return object. """
+    """ An object intended mostly for internal use that has different
+    attributes depending on which library and functionality utilises it, such
+    as `status`, `buffer`, and `buffer_bytes`
+    """
 
     def __init__(self, **kwargs):
         [setattr(self, k, v) for k, v in kwargs.items()]
