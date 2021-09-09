@@ -494,34 +494,33 @@ class Rebuild(Library):
                     ct.byref(ct_output_size)
                 )
 
+            if isinstance(input_file, str) and isinstance(output_file, str):
+                # file to file, read the bytes of the file Glasswall has already written
+                if not os.path.isfile(output_file):
+                    log.warning(f"\n\tstatus: {status}\n\toutput_file: {output_file}")
+                    file_bytes = None
+                else:
+                    with open(output_file, "rb") as f:
+                        file_bytes = f.read()
+            else:
+                # file to memory, memory to memory
+                file_bytes = utils.buffer_to_bytes(
+                    ct_output_buffer,
+                    ct_output_size
+                )
+                if isinstance(output_file, str):
+                    # memory to file
+                    # no Glasswall function exists for memory to file, write the memory to file ourselves
+                    with open(output_file, "wb") as f:
+                        f.write(file_bytes)
+
             input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
             if status not in successes.success_codes:
                 log.warning(f"\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}")
                 if raise_unsupported:
                     raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
-                else:
-                    file_bytes = None
             else:
                 log.debug(f"\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}")
-                if isinstance(input_file, str) and isinstance(output_file, str):
-                    # file to file, read the bytes of the file Glasswall has already written
-                    if not os.path.isfile(output_file):
-                        log.warning(f"\n\tstatus: {status}\n\toutput_file: {output_file}")
-                        file_bytes = None
-                    else:
-                        with open(output_file, "rb") as f:
-                            file_bytes = f.read()
-                else:
-                    # file to memory, memory to memory
-                    file_bytes = utils.buffer_to_bytes(
-                        ct_output_buffer,
-                        ct_output_size
-                    )
-                    if isinstance(output_file, str):
-                        # memory to file
-                        # no Glasswall function exists for memory to file, write the memory to file ourselves
-                        with open(output_file, "wb") as f:
-                            f.write(file_bytes)
 
             return file_bytes
 
