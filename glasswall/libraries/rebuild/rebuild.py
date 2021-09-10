@@ -320,9 +320,9 @@ class Rebuild(Library):
             else:
                 log.debug(f"\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}")
                 if isinstance(input_file, str) and isinstance(output_file, str):
-                    # file to file, read the bytes of the file Glasswall has already written
+                    # file to file, read the bytes of the file that Rebuild has already written
                     if not os.path.isfile(output_file):
-                        log.warning(f"\n\tstatus: {status}\n\toutput_file: {output_file}")
+                        log.warning(f"Rebuild returned success code: {status} and no output file was found: {output_file}")
                         file_bytes = None
                     else:
                         with open(output_file, "rb") as f:
@@ -335,7 +335,7 @@ class Rebuild(Library):
                     )
                     if isinstance(output_file, str):
                         # memory to file
-                        # no Glasswall function exists for memory to file, write the memory to file ourselves
+                        # no Rebuild function exists for memory to file, write the memory to file ourselves
                         with open(output_file, "wb") as f:
                             f.write(file_bytes)
 
@@ -495,9 +495,9 @@ class Rebuild(Library):
                 )
 
             if isinstance(input_file, str) and isinstance(output_file, str):
-                # file to file, read the bytes of the file Glasswall has already written
+                # file to file, read the bytes of the file that Rebuild has already written
                 if not os.path.isfile(output_file):
-                    log.warning(f"\n\tstatus: {status}\n\toutput_file: {output_file}")
+                    log.warning(f"Rebuild returned success code: {status} and no output file was found: {output_file}")
                     file_bytes = None
                 else:
                     with open(output_file, "rb") as f:
@@ -510,7 +510,7 @@ class Rebuild(Library):
                 )
                 if isinstance(output_file, str):
                     # memory to file
-                    # no Glasswall function exists for memory to file, write the memory to file ourselves
+                    # no Rebuild function exists for memory to file, write the memory to file ourselves
                     with open(output_file, "wb") as f:
                         f.write(file_bytes)
 
@@ -677,9 +677,9 @@ class Rebuild(Library):
             else:
                 log.debug(f"\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}")
                 if isinstance(input_file, str) and isinstance(output_file, str):
-                    # file to file, read the bytes of the file Glasswall has already written
+                    # file to file, read the bytes of the file that Rebuild has already written
                     if not os.path.isfile(output_file):
-                        log.warning(f"\n\tstatus: {status}\n\toutput_file: {output_file}")
+                        log.warning(f"Rebuild returned success code: {status} and no output file was found: {output_file}")
                         file_bytes = None
                     else:
                         with open(output_file, "rb") as f:
@@ -692,7 +692,7 @@ class Rebuild(Library):
                     )
                     if isinstance(output_file, str):
                         # memory to file
-                        # no Glasswall function exists for memory to file, write the memory to file ourselves
+                        # no Rebuild function exists for memory to file, write the memory to file ourselves
                         with open(output_file, "wb") as f:
                             f.write(file_bytes)
 
@@ -851,9 +851,9 @@ class Rebuild(Library):
             else:
                 log.debug(f"\n\tstatus: {status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}")
                 if isinstance(input_file, str) and isinstance(output_file, str):
-                    # file to file, read the bytes of the file Glasswall has already written
+                    # file to file, read the bytes of the file that Rebuild has already written
                     if not os.path.isfile(output_file):
-                        log.warning(f"\n\tstatus: {status}\n\toutput_file: {output_file}")
+                        log.warning(f"Rebuild returned success code: {status} and no output file was found: {output_file}")
                         file_bytes = None
                     else:
                         with open(output_file, "rb") as f:
@@ -866,7 +866,7 @@ class Rebuild(Library):
                     )
                     if isinstance(output_file, str):
                         # memory to file
-                        # no Glasswall function exists for memory to file, write the memory to file ourselves
+                        # no Rebuild function exists for memory to file, write the memory to file ourselves
                         with open(output_file, "wb") as f:
                             f.write(file_bytes)
 
