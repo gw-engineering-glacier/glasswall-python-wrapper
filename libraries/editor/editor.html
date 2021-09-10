@@ -603,15 +603,15 @@ class Editor(Library):
                 else:
                     # Get file bytes
                     if isinstance(output_file, str):
-                        # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
+                        # File to file and memory to file, Editor wrote to a file, read it to get the file bytes
                         if not os.path.isfile(output_file):
-                            log.warning(f&#34;Glasswall returned success code: {status} but no output file was found: {output_file}&#34;)
+                            log.warning(f&#34;Editor returned success code: {status} but no output file was found: {output_file}&#34;)
                             file_bytes = None
                         else:
                             with open(output_file, &#34;rb&#34;) as f:
                                 file_bytes = f.read()
                     else:
-                        # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
+                        # File to memory and memory to memory, Editor wrote to a buffer, convert it to bytes
                         file_bytes = utils.buffer_to_bytes(
                             register_output.buffer,
                             register_output.buffer_length
@@ -705,27 +705,24 @@ class Editor(Library):
                 # Ensure memory allocated is not garbage collected until after run_session
                 content_management_policy, register_input, register_analysis
 
+                if isinstance(output_file, str):
+                    # File to file and memory to file, Editor wrote to a file, read it to get the file bytes
+                    if not os.path.isfile(output_file):
+                        log.warning(f&#34;Editor returned success code: {status} and no output file was found: {output_file}&#34;)
+                        file_bytes = None
+                    else:
+                        with open(output_file, &#34;rb&#34;) as f:
+                            file_bytes = f.read()
+                else:
+                    # File to memory and memory to memory, Editor wrote to a buffer, convert it to bytes
+                    file_bytes = utils.buffer_to_bytes(
+                        register_analysis.buffer,
+                        register_analysis.buffer_length
+                    )
+
                 if status not in successes.success_codes:
                     if raise_unsupported:
                         raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
-                    else:
-                        file_bytes = None
-                else:
-                    # Get file bytes
-                    if isinstance(output_file, str):
-                        # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
-                        if not os.path.isfile(output_file):
-                            log.warning(f&#34;Glasswall returned success code: {status} but no output file was found: {output_file}&#34;)
-                            file_bytes = None
-                        else:
-                            with open(output_file, &#34;rb&#34;) as f:
-                                file_bytes = f.read()
-                    else:
-                        # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
-                        file_bytes = utils.buffer_to_bytes(
-                            register_analysis.buffer,
-                            register_analysis.buffer_length
-                        )
 
                 return file_bytes
 
@@ -888,15 +885,15 @@ class Editor(Library):
                 else:
                     # Get file bytes
                     if isinstance(output_file, str):
-                        # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
+                        # File to file and memory to file, Editor wrote to a file, read it to get the file bytes
                         if not os.path.isfile(output_file):
-                            log.warning(f&#34;Glasswall returned success code: {status} but no output file was found: {output_file}&#34;)
+                            log.warning(f&#34;Editor returned success code: {status} but no output file was found: {output_file}&#34;)
                             file_bytes = None
                         else:
                             with open(output_file, &#34;rb&#34;) as f:
                                 file_bytes = f.read()
                     else:
-                        # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
+                        # File to memory and memory to memory, Editor wrote to a buffer, convert it to bytes
                         file_bytes = utils.buffer_to_bytes(
                             register_export.buffer,
                             register_export.buffer_length
@@ -1067,15 +1064,15 @@ class Editor(Library):
                 else:
                     # Get file bytes
                     if isinstance(output_file, str):
-                        # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
+                        # File to file and memory to file, Editor wrote to a file, read it to get the file bytes
                         if not os.path.isfile(output_file):
-                            log.warning(f&#34;Glasswall returned success code: {status} but no output file was found: {output_file}&#34;)
+                            log.warning(f&#34;Editor returned success code: {status} but no output file was found: {output_file}&#34;)
                             file_bytes = None
                         else:
                             with open(output_file, &#34;rb&#34;) as f:
                                 file_bytes = f.read()
                     else:
-                        # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
+                        # File to memory and memory to memory, Editor wrote to a buffer, convert it to bytes
                         file_bytes = utils.buffer_to_bytes(
                             register_output.buffer,
                             register_output.buffer_length
@@ -1698,15 +1695,15 @@ class Editor(Library):
                 else:
                     # Get file bytes
                     if isinstance(output_file, str):
-                        # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
+                        # File to file and memory to file, Editor wrote to a file, read it to get the file bytes
                         if not os.path.isfile(output_file):
-                            log.warning(f&#34;Glasswall returned success code: {status} but no output file was found: {output_file}&#34;)
+                            log.warning(f&#34;Editor returned success code: {status} but no output file was found: {output_file}&#34;)
                             file_bytes = None
                         else:
                             with open(output_file, &#34;rb&#34;) as f:
                                 file_bytes = f.read()
                     else:
-                        # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
+                        # File to memory and memory to memory, Editor wrote to a buffer, convert it to bytes
                         file_bytes = utils.buffer_to_bytes(
                             register_output.buffer,
                             register_output.buffer_length
@@ -1800,27 +1797,24 @@ class Editor(Library):
                 # Ensure memory allocated is not garbage collected until after run_session
                 content_management_policy, register_input, register_analysis
 
+                if isinstance(output_file, str):
+                    # File to file and memory to file, Editor wrote to a file, read it to get the file bytes
+                    if not os.path.isfile(output_file):
+                        log.warning(f&#34;Editor returned success code: {status} and no output file was found: {output_file}&#34;)
+                        file_bytes = None
+                    else:
+                        with open(output_file, &#34;rb&#34;) as f:
+                            file_bytes = f.read()
+                else:
+                    # File to memory and memory to memory, Editor wrote to a buffer, convert it to bytes
+                    file_bytes = utils.buffer_to_bytes(
+                        register_analysis.buffer,
+                        register_analysis.buffer_length
+                    )
+
                 if status not in successes.success_codes:
                     if raise_unsupported:
                         raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
-                    else:
-                        file_bytes = None
-                else:
-                    # Get file bytes
-                    if isinstance(output_file, str):
-                        # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
-                        if not os.path.isfile(output_file):
-                            log.warning(f&#34;Glasswall returned success code: {status} but no output file was found: {output_file}&#34;)
-                            file_bytes = None
-                        else:
-                            with open(output_file, &#34;rb&#34;) as f:
-                                file_bytes = f.read()
-                    else:
-                        # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
-                        file_bytes = utils.buffer_to_bytes(
-                            register_analysis.buffer,
-                            register_analysis.buffer_length
-                        )
 
                 return file_bytes
 
@@ -1983,15 +1977,15 @@ class Editor(Library):
                 else:
                     # Get file bytes
                     if isinstance(output_file, str):
-                        # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
+                        # File to file and memory to file, Editor wrote to a file, read it to get the file bytes
                         if not os.path.isfile(output_file):
-                            log.warning(f&#34;Glasswall returned success code: {status} but no output file was found: {output_file}&#34;)
+                            log.warning(f&#34;Editor returned success code: {status} but no output file was found: {output_file}&#34;)
                             file_bytes = None
                         else:
                             with open(output_file, &#34;rb&#34;) as f:
                                 file_bytes = f.read()
                     else:
-                        # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
+                        # File to memory and memory to memory, Editor wrote to a buffer, convert it to bytes
                         file_bytes = utils.buffer_to_bytes(
                             register_export.buffer,
                             register_export.buffer_length
@@ -2162,15 +2156,15 @@ class Editor(Library):
                 else:
                     # Get file bytes
                     if isinstance(output_file, str):
-                        # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
+                        # File to file and memory to file, Editor wrote to a file, read it to get the file bytes
                         if not os.path.isfile(output_file):
-                            log.warning(f&#34;Glasswall returned success code: {status} but no output file was found: {output_file}&#34;)
+                            log.warning(f&#34;Editor returned success code: {status} but no output file was found: {output_file}&#34;)
                             file_bytes = None
                         else:
                             with open(output_file, &#34;rb&#34;) as f:
                                 file_bytes = f.read()
                     else:
-                        # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
+                        # File to memory and memory to memory, Editor wrote to a buffer, convert it to bytes
                         file_bytes = utils.buffer_to_bytes(
                             register_output.buffer,
                             register_output.buffer_length
@@ -2346,27 +2340,24 @@ class Editor(Library):
             # Ensure memory allocated is not garbage collected until after run_session
             content_management_policy, register_input, register_analysis
 
+            if isinstance(output_file, str):
+                # File to file and memory to file, Editor wrote to a file, read it to get the file bytes
+                if not os.path.isfile(output_file):
+                    log.warning(f&#34;Editor returned success code: {status} and no output file was found: {output_file}&#34;)
+                    file_bytes = None
+                else:
+                    with open(output_file, &#34;rb&#34;) as f:
+                        file_bytes = f.read()
+            else:
+                # File to memory and memory to memory, Editor wrote to a buffer, convert it to bytes
+                file_bytes = utils.buffer_to_bytes(
+                    register_analysis.buffer,
+                    register_analysis.buffer_length
+                )
+
             if status not in successes.success_codes:
                 if raise_unsupported:
                     raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
-                else:
-                    file_bytes = None
-            else:
-                # Get file bytes
-                if isinstance(output_file, str):
-                    # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
-                    if not os.path.isfile(output_file):
-                        log.warning(f&#34;Glasswall returned success code: {status} but no output file was found: {output_file}&#34;)
-                        file_bytes = None
-                    else:
-                        with open(output_file, &#34;rb&#34;) as f:
-                            file_bytes = f.read()
-                else:
-                    # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
-                    file_bytes = utils.buffer_to_bytes(
-                        register_analysis.buffer,
-                        register_analysis.buffer_length
-                    )
 
             return file_bytes</code></pre>
 </details>
@@ -2625,15 +2616,15 @@ class Editor(Library):
             else:
                 # Get file bytes
                 if isinstance(output_file, str):
-                    # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
+                    # File to file and memory to file, Editor wrote to a file, read it to get the file bytes
                     if not os.path.isfile(output_file):
-                        log.warning(f&#34;Glasswall returned success code: {status} but no output file was found: {output_file}&#34;)
+                        log.warning(f&#34;Editor returned success code: {status} but no output file was found: {output_file}&#34;)
                         file_bytes = None
                     else:
                         with open(output_file, &#34;rb&#34;) as f:
                             file_bytes = f.read()
                 else:
-                    # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
+                    # File to memory and memory to memory, Editor wrote to a buffer, convert it to bytes
                     file_bytes = utils.buffer_to_bytes(
                         register_export.buffer,
                         register_export.buffer_length
@@ -2820,15 +2811,15 @@ The constructed files are written to output_directory maintaining the same direc
             else:
                 # Get file bytes
                 if isinstance(output_file, str):
-                    # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
+                    # File to file and memory to file, Editor wrote to a file, read it to get the file bytes
                     if not os.path.isfile(output_file):
-                        log.warning(f&#34;Glasswall returned success code: {status} but no output file was found: {output_file}&#34;)
+                        log.warning(f&#34;Editor returned success code: {status} but no output file was found: {output_file}&#34;)
                         file_bytes = None
                     else:
                         with open(output_file, &#34;rb&#34;) as f:
                             file_bytes = f.read()
                 else:
-                    # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
+                    # File to memory and memory to memory, Editor wrote to a buffer, convert it to bytes
                     file_bytes = utils.buffer_to_bytes(
                         register_output.buffer,
                         register_output.buffer_length
@@ -3021,15 +3012,15 @@ The protected files are written to output_directory maintaining the same directo
             else:
                 # Get file bytes
                 if isinstance(output_file, str):
-                    # File to file and memory to file, Glasswall wrote to a file, read it to get the file bytes
+                    # File to file and memory to file, Editor wrote to a file, read it to get the file bytes
                     if not os.path.isfile(output_file):
-                        log.warning(f&#34;Glasswall returned success code: {status} but no output file was found: {output_file}&#34;)
+                        log.warning(f&#34;Editor returned success code: {status} but no output file was found: {output_file}&#34;)
                         file_bytes = None
                     else:
                         with open(output_file, &#34;rb&#34;) as f:
                             file_bytes = f.read()
                 else:
-                    # File to memory and memory to memory, Glasswall wrote to a buffer, convert it to bytes
+                    # File to memory and memory to memory, Editor wrote to a buffer, convert it to bytes
                     file_bytes = utils.buffer_to_bytes(
                         register_output.buffer,
                         register_output.buffer_length
