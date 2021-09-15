@@ -54,6 +54,7 @@ class archiveConfig(ConfigElement):
 
         super().__init__(
             name=self.name,
+            attributes=self.attributes,
             default=self.default,
             switches_module=self.switches_module,
             default_switches=self.default_switches,
