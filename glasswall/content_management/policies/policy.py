@@ -1,6 +1,6 @@
 
 
-from typing import Union
+from typing import Optional, Union
 
 import glasswall
 from glasswall import utils
@@ -15,7 +15,7 @@ class Policy:
 
     def __init__(self,
                  config_elements: list = [],
-                 default: Union[str, type(None)] = None,
+                 default: Optional[str] = None,
                  default_config_elements: list = [],
                  config: dict = {},
                  **kwargs
@@ -27,11 +27,7 @@ class Policy:
 
         # Add default config elements
         for config_element in self.default_config_elements:
-            if config_element == glasswall.content_management.config_elements.archiveConfig:
-                # archiveConfig special case, use default_archive_manager (no_action, discard, process)
-                self.add_config_element(config_element(default=self.default_archive_manager))
-            else:
-                self.add_config_element(config_element(default=self.default))
+            self.add_config_element(config_element)
 
         # Add customised config elements provided in `config`
         for config_element_name, switches in config.items():
@@ -66,11 +62,10 @@ class Policy:
 
                 # If switch is in switches_module, add it to this config element
                 if hasattr(config_element.switches_module, switch_name):
-                    config_element.add_switch(
-                        getattr(
-                            config_element.switches_module,
-                            switch_name
-                        )(value=switch_value))
+                    config_element.add_switch(getattr(
+                        config_element.switches_module,
+                        switch_name
+                    )(value=switch_value))
 
                 # Otherwise, create a new Switch and add it
                 else:

@@ -388,11 +388,11 @@ class TempFilePath:
 
 
 # NOTE typehint as string due to no "from __future__ import annotations" support on python 3.6 on ubuntu-16.04 / centos7
-def validate_xml(xml: Union[str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.Policy"]):
+def validate_xml(xml: Union[str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"]):
     """ Attempts to parse the xml provided, returning the xml as string. Raises ValueError if the xml cannot be parsed.
 
     Args:
-        xml (Union[str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy]): The xml string, or file path, bytes, or ContentManagementPolicy instance to parse.
+        xml (Union[str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy]): The xml string, or file path, bytes, or ContentManagementPolicy instance to parse.
 
     Returns:
         xml_string (str): A string representation of the xml.
@@ -419,7 +419,7 @@ def validate_xml(xml: Union[str, bytes, bytearray, io.BytesIO, "glasswall.conten
             tree = etree.parse(xml)
 
         # Get tree from ContentManagementPolicy instance
-        elif isinstance(xml, glasswall.content_management.policies.Policy):
+        elif isinstance(xml, glasswall.content_management.policies.policy.Policy):
             xml = xml.text.encode("utf-8")
             tree = etree.fromstring(xml)
 

@@ -233,12 +233,12 @@ class Editor(Library):
 
         # return file_bytes
 
-    def set_content_management_policy(self, session: int, input_file: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.Policy"] = None, file_format=0):
+    def set_content_management_policy(self, session: int, input_file: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, file_format=0):
         """ Sets the content management policy configuration. If input_file is None then default settings (sanitise) are applied.
 
         Args:
             session (int): The current session.
-            input_file (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): Default None (sanitise). The content management policy to apply.
+            input_file (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy], optional): Default None (sanitise). The content management policy to apply.
             file_format (int): The file format of the content management policy. 0 is xml.
 
         Returns:
@@ -247,7 +247,7 @@ class Editor(Library):
         # Validate type
         if not isinstance(session, int):
             raise TypeError(session)
-        if not isinstance(input_file, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy)):
+        if not isinstance(input_file, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy)):
             raise TypeError(input_file)
         if not isinstance(file_format, int):
             raise TypeError(file_format)
@@ -282,12 +282,12 @@ class Editor(Library):
             )
 
         # From memory
-        elif isinstance(input_file, (str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy)):
+        elif isinstance(input_file, (str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy)):
             # Convert bytearray, io.BytesIO to bytes
             if isinstance(input_file, (bytearray, io.BytesIO)):
                 input_file = utils.as_bytes(input_file)
             # Convert string xml or Policy to bytes
-            if isinstance(input_file, (str, glasswall.content_management.policies.Policy)):
+            if isinstance(input_file, (str, glasswall.content_management.policies.policy.Policy)):
                 input_file = input_file.encode("utf-8")
 
             # API function declaration
@@ -513,13 +513,13 @@ class Editor(Library):
 
         return gw_return_object
 
-    def protect_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.Policy"] = None, raise_unsupported: bool = True):
+    def protect_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
         """ Protects a file using the current content management configuration, returning the file bytes. The protected file is written to output_file if it is provided.
 
         Args:
             input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
             output_file (Union[None, str], optional): The output file path where the protected file will be written.
-            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): The content management policy to apply to the session.
+            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy], optional): The content management policy to apply to the session.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
@@ -530,7 +530,7 @@ class Editor(Library):
             raise TypeError(input_file)
         if not isinstance(output_file, (type(None), str)):
             raise TypeError(output_file)
-        if not isinstance(content_management_policy, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy)):
+        if not isinstance(content_management_policy, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy)):
             raise TypeError(content_management_policy)
         if not isinstance(raise_unsupported, bool):
             raise TypeError(raise_unsupported)
@@ -593,14 +593,14 @@ class Editor(Library):
 
                 return file_bytes
 
-    def protect_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.Policy"] = None, raise_unsupported: bool = True):
+    def protect_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
         """ Recursively processes all files in a directory in protect mode using the given content management policy.
         The protected files are written to output_directory maintaining the same directory structure as input_directory.
 
         Args:
             input_directory (str): The input directory containing files to protect.
             output_directory (Union[None, str]): The output directory where the protected file will be written, or None to not write files.
-            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): Default None (sanitise). The content management policy to apply.
+            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy], optional): Default None (sanitise). The content management policy to apply.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
@@ -623,13 +623,13 @@ class Editor(Library):
 
         return protected_files_dict
 
-    def analyse_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.Policy"] = None, raise_unsupported: bool = True):
+    def analyse_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
         """ Analyses a file, returning the analysis bytes. The analysis is written to output_file if it is provided.
 
         Args:
             input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
             output_file (Union[None, str], optional): The output file path where the analysis file will be written.
-            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): The content management policy to apply to the session.
+            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy], optional): The content management policy to apply to the session.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
@@ -640,7 +640,7 @@ class Editor(Library):
             raise TypeError(input_file)
         if not isinstance(output_file, (type(None), str)):
             raise TypeError(output_file)
-        if not isinstance(content_management_policy, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy)):
+        if not isinstance(content_management_policy, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy)):
             raise TypeError(content_management_policy)
         if not isinstance(raise_unsupported, bool):
             raise TypeError(raise_unsupported)
@@ -700,13 +700,13 @@ class Editor(Library):
 
                 return file_bytes
 
-    def analyse_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.Policy"] = None, raise_unsupported: bool = True):
+    def analyse_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
         """ Analyses all files in a directory and its subdirectories. The analysis files are written to output_directory maintaining the same directory structure as input_directory.
 
         Args:
             input_directory (str): The input directory containing files to analyse.
             output_directory (Union[None, str]): The output directory where the analysis files will be written, or None to not write files.
-            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): Default None (sanitise). The content management policy to apply.
+            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy], optional): Default None (sanitise). The content management policy to apply.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
@@ -794,13 +794,13 @@ class Editor(Library):
 
         return gw_return_object
 
-    def export_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.Policy"] = None, raise_unsupported: bool = True):
+    def export_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
         """ Export a file, returning the .zip file bytes. The .zip file is written to output_file if it is provided.
 
         Args:
             input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
             output_file (Union[None, str], optional): The output file path where the .zip file will be written.
-            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): The content management policy to apply to the session.
+            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy], optional): The content management policy to apply to the session.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
@@ -811,7 +811,7 @@ class Editor(Library):
             raise TypeError(input_file)
         if not isinstance(output_file, (type(None), str)):
             raise TypeError(output_file)
-        if not isinstance(content_management_policy, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy)):
+        if not isinstance(content_management_policy, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy)):
             raise TypeError(content_management_policy)
         if not isinstance(raise_unsupported, bool):
             raise TypeError(raise_unsupported)
@@ -875,13 +875,13 @@ class Editor(Library):
 
                 return file_bytes
 
-    def export_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.Policy"] = None, raise_unsupported: bool = True):
+    def export_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
         """ Exports all files in a directory and its subdirectories. The export files are written to output_directory maintaining the same directory structure as input_directory.
 
         Args:
             input_directory (str): The input directory containing files to export.
             output_directory (Union[None, str]): The output directory where the export files will be written, or None to not write files.
-            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): Default None (sanitise). The content management policy to apply.
+            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy], optional): Default None (sanitise). The content management policy to apply.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
@@ -973,13 +973,13 @@ class Editor(Library):
 
         return gw_return_object
 
-    def import_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.Policy"] = None, raise_unsupported: bool = True):
+    def import_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
         """ Import a .zip file, constructs a file from the .zip file and returns the file bytes. The file is written to output_file if it is provided.
 
         Args:
             input_file (Union[str, bytes, bytearray, io.BytesIO]): The .zip input file path or bytes.
             output_file (Union[None, str], optional): The output file path where the constructed file will be written.
-            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): The content management policy to apply to the session.
+            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy], optional): The content management policy to apply to the session.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
@@ -990,7 +990,7 @@ class Editor(Library):
             raise TypeError(input_file)
         if not isinstance(output_file, (type(None), str)):
             raise TypeError(output_file)
-        if not isinstance(content_management_policy, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy)):
+        if not isinstance(content_management_policy, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy)):
             raise TypeError(content_management_policy)
         if not isinstance(raise_unsupported, bool):
             raise TypeError(raise_unsupported)
@@ -1054,14 +1054,14 @@ class Editor(Library):
 
                 return file_bytes
 
-    def import_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.Policy"] = None, raise_unsupported: bool = True):
+    def import_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
         """ Imports all files in a directory and its subdirectories. Files are expected as .zip but this is not forced.
         The constructed files are written to output_directory maintaining the same directory structure as input_directory.
 
         Args:
             input_directory (str): The input directory containing files to import.
             output_directory (Union[None, str]): The output directory where the constructed files will be written, or None to not write files.
-            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy], optional): Default None (sanitise). The content management policy to apply.
+            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy], optional): Default None (sanitise). The content management policy to apply.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:

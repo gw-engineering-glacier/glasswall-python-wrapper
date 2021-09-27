@@ -1,6 +1,6 @@
 
 
-from typing import Union
+from typing import Optional, Union
 
 import glasswall
 from glasswall.content_management.errors.switches import SwitchNotFound
@@ -15,7 +15,7 @@ class ConfigElement:
                  attributes: dict = {},
                  switches: list = [],
                  subelements: list = [],
-                 default: Union[str, type(None)] = None,
+                 default: Optional[str] = None,
                  default_switches: list = [],
                  config: dict = {},
                  switches_module: "glasswall.content_management.switches" = Switch
@@ -32,23 +32,16 @@ class ConfigElement:
 
         # Add default switches
         for switch in self.default_switches:
-            if self.default:
-                self.add_switch(switch(value=self.default))
-            else:
-                try:
-                    self.add_switch(switch(value=switch.default))
-                except AttributeError as e:
-                    raise type(e)(str(e) + "\nThe provided 'default' argument is None and no fallback is available")
+            self.add_switch(switch)
 
         # Add customised switches provided in `config`
         for switch_name, switch_value in self.config.items():
             # If switch is in switches_module, add it to this config element
             if hasattr(self.switches_module, switch_name):
-                self.add_switch(
-                    getattr(
-                        self.switches_module,
-                        switch_name
-                    )(value=switch_value))
+                self.add_switch(getattr(
+                    self.switches_module,
+                    switch_name
+                )(value=switch_value))
 
             # Otherwise, create a new Switch and add it
             else:

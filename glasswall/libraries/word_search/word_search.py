@@ -61,7 +61,7 @@ class WordSearch(Library):
             raise TypeError(output_report)
         if not isinstance(homoglyphs, (type(None), str, bytes, bytearray, io.BytesIO)):
             raise TypeError(homoglyphs)
-        if not isinstance(xml_config, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy)):
+        if not isinstance(xml_config, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy)):
             raise TypeError(xml_config)
 
         # Convert string path arguments to absolute paths
