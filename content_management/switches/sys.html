@@ -29,22 +29,18 @@
 <pre><code class="python">from glasswall.content_management.switches.switch import Switch
 
 
-class interchange_pretty(Switch):
-    default = &#34;false&#34;
-
+class interchange_type(Switch):
     def __init__(self, value: str):
         self.name = self.__class__.__name__
-        self.restrict_values = [&#34;false&#34;, &#34;true&#34;]
+        self.restrict_values = [&#34;sisl&#34;, &#34;xml&#34;]
         self.value = value
         super().__init__(name=self.name, value=self.value, restrict_values=self.restrict_values)
 
 
-class interchange_type(Switch):
-    default = &#34;sisl&#34;
-
+class interchange_pretty(Switch):
     def __init__(self, value: str):
         self.name = self.__class__.__name__
-        self.restrict_values = [&#34;sisl&#34;, &#34;xml&#34;]
+        self.restrict_values = [&#34;false&#34;, &#34;true&#34;]
         self.value = value
         super().__init__(name=self.name, value=self.value, restrict_values=self.restrict_values)</code></pre>
 </details>
@@ -69,8 +65,6 @@ class interchange_type(Switch):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class interchange_pretty(Switch):
-    default = &#34;false&#34;
-
     def __init__(self, value: str):
         self.name = self.__class__.__name__
         self.restrict_values = [&#34;false&#34;, &#34;true&#34;]
@@ -81,13 +75,6 @@ class interchange_type(Switch):
 <ul class="hlist">
 <li><a title="glasswall.content_management.switches.switch.Switch" href="switch.html#glasswall.content_management.switches.switch.Switch">Switch</a></li>
 </ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="glasswall.content_management.switches.sys.interchange_pretty.default"><code class="name">var <span class="ident">default</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="glasswall.content_management.switches.switch.Switch" href="switch.html#glasswall.content_management.switches.switch.Switch">Switch</a></b></code>:
@@ -108,8 +95,6 @@ class interchange_type(Switch):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class interchange_type(Switch):
-    default = &#34;sisl&#34;
-
     def __init__(self, value: str):
         self.name = self.__class__.__name__
         self.restrict_values = [&#34;sisl&#34;, &#34;xml&#34;]
@@ -120,13 +105,6 @@ class interchange_type(Switch):
 <ul class="hlist">
 <li><a title="glasswall.content_management.switches.switch.Switch" href="switch.html#glasswall.content_management.switches.switch.Switch">Switch</a></li>
 </ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="glasswall.content_management.switches.sys.interchange_type.default"><code class="name">var <span class="ident">default</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="glasswall.content_management.switches.switch.Switch" href="switch.html#glasswall.content_management.switches.switch.Switch">Switch</a></b></code>:
@@ -154,15 +132,9 @@ class interchange_type(Switch):
 <ul>
 <li>
 <h4><code><a title="glasswall.content_management.switches.sys.interchange_pretty" href="#glasswall.content_management.switches.sys.interchange_pretty">interchange_pretty</a></code></h4>
-<ul class="">
-<li><code><a title="glasswall.content_management.switches.sys.interchange_pretty.default" href="#glasswall.content_management.switches.sys.interchange_pretty.default">default</a></code></li>
-</ul>
 </li>
 <li>
 <h4><code><a title="glasswall.content_management.switches.sys.interchange_type" href="#glasswall.content_management.switches.sys.interchange_type">interchange_type</a></code></h4>
-<ul class="">
-<li><code><a title="glasswall.content_management.switches.sys.interchange_type.default" href="#glasswall.content_management.switches.sys.interchange_type.default">default</a></code></li>
-</ul>
 </li>
 </ul>
 </li>

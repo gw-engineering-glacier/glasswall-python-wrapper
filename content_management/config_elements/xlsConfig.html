@@ -45,14 +45,14 @@ class xlsConfig(ConfigElement):
         self.default = default
         self.switches_module = switches.xls
         self.default_switches = [
-            self.switches_module.dynamic_data_exchange,
-            self.switches_module.embedded_files,
-            self.switches_module.embedded_images,
-            self.switches_module.external_hyperlinks,
-            self.switches_module.internal_hyperlinks,
-            self.switches_module.macros,
-            self.switches_module.metadata,
-            self.switches_module.review_comments,
+            self.switches_module.dynamic_data_exchange(value=default),
+            self.switches_module.embedded_files(value=default),
+            self.switches_module.embedded_images(value=default),
+            self.switches_module.external_hyperlinks(value=default),
+            self.switches_module.internal_hyperlinks(value=default),
+            self.switches_module.macros(value=default),
+            self.switches_module.metadata(value=default),
+            self.switches_module.review_comments(value=default),
         ]
 
         super().__init__(
@@ -105,14 +105,14 @@ xlsConfig(default="allow", embedded_images="sanitise")</p></div>
         self.default = default
         self.switches_module = switches.xls
         self.default_switches = [
-            self.switches_module.dynamic_data_exchange,
-            self.switches_module.embedded_files,
-            self.switches_module.embedded_images,
-            self.switches_module.external_hyperlinks,
-            self.switches_module.internal_hyperlinks,
-            self.switches_module.macros,
-            self.switches_module.metadata,
-            self.switches_module.review_comments,
+            self.switches_module.dynamic_data_exchange(value=default),
+            self.switches_module.embedded_files(value=default),
+            self.switches_module.embedded_images(value=default),
+            self.switches_module.external_hyperlinks(value=default),
+            self.switches_module.internal_hyperlinks(value=default),
+            self.switches_module.macros(value=default),
+            self.switches_module.metadata(value=default),
+            self.switches_module.review_comments(value=default),
         ]
 
         super().__init__(

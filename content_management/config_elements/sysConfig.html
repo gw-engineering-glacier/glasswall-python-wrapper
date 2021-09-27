@@ -41,8 +41,8 @@ class sysConfig(ConfigElement):
         self.name = self.__class__.__name__
         self.switches_module = switches.sys
         self.default_switches = [
-            self.switches_module.interchange_type,
-            self.switches_module.interchange_pretty,
+            self.switches_module.interchange_type(value=&#34;sisl&#34;),
+            self.switches_module.interchange_pretty(value=&#34;false&#34;),
         ]
 
         super().__init__(
@@ -85,8 +85,8 @@ sysConfig(interchange_type="xml", interchange_pretty="false")</p></div>
         self.name = self.__class__.__name__
         self.switches_module = switches.sys
         self.default_switches = [
-            self.switches_module.interchange_type,
-            self.switches_module.interchange_pretty,
+            self.switches_module.interchange_type(value=&#34;sisl&#34;),
+            self.switches_module.interchange_pretty(value=&#34;false&#34;),
         ]
 
         super().__init__(

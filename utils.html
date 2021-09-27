@@ -414,11 +414,11 @@ class TempFilePath:
 
 
 # NOTE typehint as string due to no &#34;from __future__ import annotations&#34; support on python 3.6 on ubuntu-16.04 / centos7
-def validate_xml(xml: Union[str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;]):
+def validate_xml(xml: Union[str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.policy.Policy&#34;]):
     &#34;&#34;&#34; Attempts to parse the xml provided, returning the xml as string. Raises ValueError if the xml cannot be parsed.
 
     Args:
-        xml (Union[str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy]): The xml string, or file path, bytes, or ContentManagementPolicy instance to parse.
+        xml (Union[str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy]): The xml string, or file path, bytes, or ContentManagementPolicy instance to parse.
 
     Returns:
         xml_string (str): A string representation of the xml.
@@ -445,7 +445,7 @@ def validate_xml(xml: Union[str, bytes, bytearray, io.BytesIO, &#34;glasswall.co
             tree = etree.parse(xml)
 
         # Get tree from ContentManagementPolicy instance
-        elif isinstance(xml, glasswall.content_management.policies.Policy):
+        elif isinstance(xml, glasswall.content_management.policies.policy.Policy):
             xml = xml.text.encode(&#34;utf-8&#34;)
             tree = etree.fromstring(xml)
 
@@ -1012,13 +1012,13 @@ buffer_length (ct.c_size_t()): The file buffer length.</p>
 </details>
 </dd>
 <dt id="glasswall.utils.validate_xml"><code class="name flex">
-<span>def <span class="ident">validate_xml</span></span>(<span>xml: Union[str, bytes, bytearray, _io.BytesIO, _ForwardRef('glasswall.content_management.policies.Policy')])</span>
+<span>def <span class="ident">validate_xml</span></span>(<span>xml: Union[str, bytes, bytearray, _io.BytesIO, _ForwardRef('<a title="glasswall.content_management.policies.policy.Policy" href="content_management/policies/policy.html#glasswall.content_management.policies.policy.Policy">Policy</a>')])</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Attempts to parse the xml provided, returning the xml as string. Raises ValueError if the xml cannot be parsed.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>xml</code></strong> :&ensp;<code>Union[str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy]</code></dt>
+<dt><strong><code>xml</code></strong> :&ensp;<code>Union[str, bytes, bytearray, io.BytesIO, <a title="glasswall.content_management.policies.policy.Policy" href="content_management/policies/policy.html#glasswall.content_management.policies.policy.Policy">Policy</a>]</code></dt>
 <dd>The xml string, or file path, bytes, or ContentManagementPolicy instance to parse.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
@@ -1034,11 +1034,11 @@ buffer_length (ct.c_size_t()): The file buffer length.</p>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def validate_xml(xml: Union[str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.Policy&#34;]):
+<pre><code class="python">def validate_xml(xml: Union[str, bytes, bytearray, io.BytesIO, &#34;glasswall.content_management.policies.policy.Policy&#34;]):
     &#34;&#34;&#34; Attempts to parse the xml provided, returning the xml as string. Raises ValueError if the xml cannot be parsed.
 
     Args:
-        xml (Union[str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.Policy]): The xml string, or file path, bytes, or ContentManagementPolicy instance to parse.
+        xml (Union[str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy]): The xml string, or file path, bytes, or ContentManagementPolicy instance to parse.
 
     Returns:
         xml_string (str): A string representation of the xml.
@@ -1065,7 +1065,7 @@ buffer_length (ct.c_size_t()): The file buffer length.</p>
             tree = etree.parse(xml)
 
         # Get tree from ContentManagementPolicy instance
-        elif isinstance(xml, glasswall.content_management.policies.Policy):
+        elif isinstance(xml, glasswall.content_management.policies.policy.Policy):
             xml = xml.text.encode(&#34;utf-8&#34;)
             tree = etree.fromstring(xml)
 

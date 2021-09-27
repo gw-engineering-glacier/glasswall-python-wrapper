@@ -51,11 +51,11 @@ class WordSearch(Policy):
     def __init__(self, default: str = &#34;allow&#34;, config: dict = {}):
         self.default = default
         self.default_config_elements = [
-            glasswall.content_management.config_elements.pdfConfig,
-            glasswall.content_management.config_elements.pptConfig,
-            glasswall.content_management.config_elements.tiffConfig,
-            glasswall.content_management.config_elements.wordConfig,
-            glasswall.content_management.config_elements.xlsConfig,
+            glasswall.content_management.config_elements.pdfConfig(default=default),
+            glasswall.content_management.config_elements.pptConfig(default=default),
+            glasswall.content_management.config_elements.tiffConfig(default=default),
+            glasswall.content_management.config_elements.wordConfig(default=default),
+            glasswall.content_management.config_elements.xlsConfig(default=default),
         ]
         self.config = config
 
@@ -180,11 +180,11 @@ class WordSearch(Policy):
     def __init__(self, default: str = &#34;allow&#34;, config: dict = {}):
         self.default = default
         self.default_config_elements = [
-            glasswall.content_management.config_elements.pdfConfig,
-            glasswall.content_management.config_elements.pptConfig,
-            glasswall.content_management.config_elements.tiffConfig,
-            glasswall.content_management.config_elements.wordConfig,
-            glasswall.content_management.config_elements.xlsConfig,
+            glasswall.content_management.config_elements.pdfConfig(default=default),
+            glasswall.content_management.config_elements.pptConfig(default=default),
+            glasswall.content_management.config_elements.tiffConfig(default=default),
+            glasswall.content_management.config_elements.wordConfig(default=default),
+            glasswall.content_management.config_elements.xlsConfig(default=default),
         ]
         self.config = config
 
