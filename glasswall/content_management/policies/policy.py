@@ -52,7 +52,11 @@ class Policy:
                 config_element = config_element(name=config_element_name, default=self.default)
             else:
                 # subclasses of ConfigElement that provide their own name
-                config_element = config_element(default=self.default)
+                if hasattr(config_element, "default"):
+                    config_element = config_element(default=self.default)
+                else:
+                    # Don't attempt to set attribute `default` if is not currently set
+                    config_element = config_element()
 
             for switch_name, switch_value in switches.items():
                 # If switch is an attribute, update attributes instead of adding switch
