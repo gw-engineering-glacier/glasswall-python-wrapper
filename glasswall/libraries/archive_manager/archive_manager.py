@@ -692,6 +692,39 @@ class ArchiveManager(Library):
 
         return gw_return_object
 
+    def export_directory(self, input_directory: str, output_directory: Optional[str], output_report_directory: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager] = None, raise_unsupported: bool = True):
+        """ Calls export_archive on each file in input_directory. The exported archives are written to output_directory maintaining the same directory structure as input_directory.
+
+        Args:
+            input_directory (str): The input directory containing archives to export.
+            output_directory (Optional[str], optional): Default None. If str, the output directory where the archives will be written.
+            output_report_directory (Optional[str], optional): Default None. If str, the output directory where xml reports for each archive will be written.
+            content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager], optional): The content management policy to apply.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            exported_archives_dict (dict): A dictionary of file paths relative to input_directory, and glasswall.GwReturnObj with attributes: "status" (int), "output_file" (bytes), "output_report" (bytes)
+        """
+        exported_archives_dict = {}
+        # Call export_archive on each file in input_directory to output_directory
+        for input_file in utils.list_file_paths(input_directory):
+            relative_path = os.path.relpath(input_file, input_directory)
+            # Construct paths for output file and output report
+            output_file = None if output_directory is None else os.path.join(os.path.abspath(output_directory), relative_path)
+            output_report = None if output_report_directory is None else os.path.join(os.path.abspath(output_report_directory), relative_path + ".xml")
+
+            result = self.export_archive(
+                input_file=input_file,
+                output_file=output_file,
+                output_report=output_report,
+                content_management_policy=content_management_policy,
+                raise_unsupported=raise_unsupported,
+            )
+
+            exported_archives_dict[relative_path] = result
+
+        return exported_archives_dict
+
     def import_archive(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Optional[str] = None, output_report: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager] = None, raise_unsupported: bool = True):
         """ Imports an archive using the Glasswall engine.
 
