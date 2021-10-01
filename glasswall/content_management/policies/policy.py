@@ -8,6 +8,7 @@ from glasswall.content_management.config_elements.config_element import ConfigEl
 from glasswall.content_management.errors.config_elements import ConfigElementNotFound
 from glasswall.content_management.errors.switches import SwitchNotFound
 from glasswall.content_management.switches.switch import Switch
+from lxml import etree
 
 
 class Policy:
@@ -283,3 +284,57 @@ class Policy:
             for k, v in dictionary.items()
             if not k.startswith("@")
         }
+
+    @staticmethod
+    def from_string(string: str):
+        """ Create Policy object from string.
+
+        Args:
+            string (str): A string representation of an xml content management policy, or a file path.
+
+        Returns:
+            new_policy (glasswall.content_management.policies.Policy): A Policy object.
+        """
+        try:
+            string = glasswall.utils.validate_xml(string)
+        except ValueError:
+            raise glasswall.content_management.errors.policies.ContentManagementPolicyError(string)
+
+        config = etree.fromstring(string.encode("utf-8"))
+
+        if config.tag != "config":
+            raise glasswall.content_management.errors.policies.ContentManagementPolicyError(string)
+
+        new_policy = glasswall.content_management.policies.Policy()
+
+        for config_element in config:
+            if hasattr(glasswall.content_management.config_elements, config_element.tag):
+                # Known config element exists, e.g. pdfConfig
+                new_config_element = getattr(glasswall.content_management.config_elements, config_element.tag)(attributes=config_element.attrib)
+            else:
+                # Create custom config element
+                new_config_element = glasswall.content_management.config_elements.ConfigElement(name=config_element.tag, attributes=config_element.attrib)
+
+            for switch in config_element:
+                # Add children, e.g. textList has child elements: textItem
+                if switch.getchildren():
+                    # if getchildren() then switch is actually a config element, such as textList
+                    textList = glasswall.content_management.config_elements.ConfigElement(name=switch.tag, attributes=switch.attrib)
+                    for textItem in switch.getchildren():
+                        new_textItem = glasswall.content_management.config_elements.ConfigElement(name=textItem.tag, attributes=textItem.attrib)
+                        for switch in textItem:
+                            new_textItem.add_switch(glasswall.content_management.switches.Switch(name=switch.tag, value=switch.text, attributes=switch.attrib))
+                        textList.subelements.append(new_textItem)
+                    new_config_element.subelements.append(textList)
+                    continue
+
+                if hasattr(new_config_element.switches_module, switch.tag):
+                    # Known switch exists, e.g. pdf.internal_hyperlinks
+                    new_switch = getattr(new_config_element.switches_module, switch.tag)(value=switch.text)
+                else:
+                    new_switch = glasswall.content_management.switches.Switch(name=switch.tag, value=switch.text, attributes=switch.attrib)
+                new_config_element.add_switch(new_switch)
+
+            new_policy.add_config_element(new_config_element)
+
+        return new_policy

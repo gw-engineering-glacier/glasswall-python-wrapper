@@ -678,6 +678,84 @@ class TestPolicy(unittest.TestCase):
         # replacementChar attribute exists
         self.assertTrue(policy.textSearchConfig.textList.subelements[0].switches[1].attributes.get("replacementChar") == "*")
 
+    def test_policy_from_string(self):
+        policies_to_test = [
+            glasswall.content_management.policies.ArchiveManager(
+                default="sanitise",
+                default_archive_manager="process",
+                config={
+                    "pdfConfig": {"embeddedImages": "disallow"},
+                    "wordConfig": {"embeddedImages": "disallow"},
+                    "archiveConfig": {
+                        "@recursionDepth": "50",
+                        "jpeg": "discard"
+                    }
+                }
+            ),
+            glasswall.content_management.policies.Editor(
+                default="allow",
+                config={
+                    "sysConfig": {
+                        "interchange_type": "sisl",
+                        "interchange_pretty": "true",
+                    },
+                    "xlsConfig": {
+                        "external_hyperlinks": "sanitise",
+                        "internal_hyperlinks": "sanitise",
+                    }
+                },
+            ),
+            glasswall.content_management.policies.Rebuild(
+                default="disallow",
+                config={
+                    "sysConfig": {
+                        "interchange_type": "xml",
+                        "interchange_pretty": "false",
+                    },
+                    "pdfConfig": {
+                        "external_hyperlinks": "sanitise",
+                        "internal_hyperlinks": "sanitise",
+                    }
+                },
+            ),
+            glasswall.content_management.policies.WordSearch(
+                default="allow",
+                config={
+                    "textSearchConfig": {
+                        "@libVersion": "core2",
+                        "textList": [
+                            {"name": "textItem", "switches": [
+                                {"name": "text", "value": "password"},
+                                {"name": "textSetting", "@replacementChar": "*", "value": "redact"},
+                            ]},
+                            {"name": "textItem", "switches": [
+                                {"name": "text", "value": "email"},
+                                {"name": "textSetting", "@replacementChar": "*", "value": "redact"},
+                            ]},
+                        ]
+                    }
+                }
+            ),
+            glasswall.content_management.policies.Policy(
+                config={
+                    "customConfig": {
+                        "customSwitch1": "customValue1",
+                        "customSwitch2": "customValue2",
+                    },
+                    "customConfig2": {
+                        "customSwitch3": "customValue3",
+                    }
+                }
+            )
+        ]
+
+        for policy in policies_to_test:
+            # Create a new Policy object from the using the Policy.from_string method
+            policy_from_string = glasswall.content_management.policies.Policy.from_string(policy.text)
+
+            # The two policies should be equal
+            self.assertTrue(policy.text == policy_from_string.text, msg=f"Policy texts not equal:\n{policy.text}\n{policy_from_string.text}")
+
 
 if __name__ == "__main__":
     unittest.main()
