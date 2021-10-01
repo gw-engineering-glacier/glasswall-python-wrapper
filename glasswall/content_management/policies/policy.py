@@ -315,12 +315,12 @@ class Policy:
                 # Create custom config element
                 new_config_element = glasswall.content_management.config_elements.ConfigElement(name=config_element.tag, attributes=config_element.attrib)
 
-            for switch in config_element:
+            for item in config_element:
                 # Add children, e.g. textList has child elements: textItem
-                if switch.getchildren():
-                    # if getchildren() then switch is actually a config element, such as textList
-                    textList = glasswall.content_management.config_elements.ConfigElement(name=switch.tag, attributes=switch.attrib)
-                    for textItem in switch.getchildren():
+                if item.getchildren():
+                    # if getchildren() then item is a config element, such as textList
+                    textList = glasswall.content_management.config_elements.ConfigElement(name=item.tag, attributes=item.attrib)
+                    for textItem in item.getchildren():
                         new_textItem = glasswall.content_management.config_elements.ConfigElement(name=textItem.tag, attributes=textItem.attrib)
                         for switch in textItem:
                             new_textItem.add_switch(glasswall.content_management.switches.Switch(name=switch.tag, value=switch.text, attributes=switch.attrib))
@@ -328,11 +328,12 @@ class Policy:
                     new_config_element.subelements.append(textList)
                     continue
 
-                if hasattr(new_config_element.switches_module, switch.tag):
+                # if not getchildren() then item is a switch
+                if hasattr(new_config_element.switches_module, item.tag):
                     # Known switch exists, e.g. pdf.internal_hyperlinks
-                    new_switch = getattr(new_config_element.switches_module, switch.tag)(value=switch.text)
+                    new_switch = getattr(new_config_element.switches_module, item.tag)(value=item.text)
                 else:
-                    new_switch = glasswall.content_management.switches.Switch(name=switch.tag, value=switch.text, attributes=switch.attrib)
+                    new_switch = glasswall.content_management.switches.Switch(name=item.tag, value=item.text, attributes=item.attrib)
                 new_config_element.add_switch(new_switch)
 
             new_policy.add_config_element(new_config_element)
