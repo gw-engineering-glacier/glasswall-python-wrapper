@@ -11,8 +11,9 @@ class sysConfig(ConfigElement):
     sysConfig(interchange_type="xml", interchange_pretty="false")
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, attributes={}, **kwargs):
         self.name = self.__class__.__name__
+        self.attributes = attributes
         self.switches_module = switches.sys
         self.default_switches = [
             self.switches_module.interchange_type(value="sisl"),
@@ -21,6 +22,7 @@ class sysConfig(ConfigElement):
 
         super().__init__(
             name=self.name,
+            attributes=self.attributes,
             switches_module=self.switches_module,
             default_switches=self.default_switches,
             config=kwargs
