@@ -678,7 +678,7 @@ class TestPolicy(unittest.TestCase):
         # replacementChar attribute exists
         self.assertTrue(policy.textSearchConfig.textList.subelements[0].switches[1].attributes.get("replacementChar") == "*")
 
-    def test_policy_from_string(self):
+    def test_policy_from_string___policy_strings_equal(self):
         policies_to_test = [
             glasswall.content_management.policies.ArchiveManager(
                 default="sanitise",
