@@ -40,9 +40,10 @@ class pptConfig(ConfigElement):
     pptConfig(default=&#34;allow&#34;, embedded_images=&#34;sanitise&#34;)
     &#34;&#34;&#34;
 
-    def __init__(self, default: str = &#34;sanitise&#34;, **kwargs):
+    def __init__(self, default: str = &#34;sanitise&#34;, attributes: dict = {}, **kwargs):
         self.name = self.__class__.__name__
         self.default = default
+        self.attributes = attributes
         self.switches_module = switches.ppt
         self.default_switches = [
             self.switches_module.embedded_files(value=default),
@@ -58,6 +59,7 @@ class pptConfig(ConfigElement):
         super().__init__(
             name=self.name,
             default=self.default,
+            attributes=self.attributes,
             switches_module=self.switches_module,
             default_switches=self.default_switches,
             config=kwargs
@@ -75,7 +77,7 @@ class pptConfig(ConfigElement):
 <dl>
 <dt id="glasswall.content_management.config_elements.pptConfig.pptConfig"><code class="flex name class">
 <span>class <span class="ident">pptConfig</span></span>
-<span>(</span><span>default: str = 'sanitise', **kwargs)</span>
+<span>(</span><span>default: str = 'sanitise', attributes: dict = {}, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>A pptConfig ConfigElement.</p>
@@ -100,9 +102,10 @@ pptConfig(default="allow", embedded_images="sanitise")</p></div>
     pptConfig(default=&#34;allow&#34;, embedded_images=&#34;sanitise&#34;)
     &#34;&#34;&#34;
 
-    def __init__(self, default: str = &#34;sanitise&#34;, **kwargs):
+    def __init__(self, default: str = &#34;sanitise&#34;, attributes: dict = {}, **kwargs):
         self.name = self.__class__.__name__
         self.default = default
+        self.attributes = attributes
         self.switches_module = switches.ppt
         self.default_switches = [
             self.switches_module.embedded_files(value=default),
@@ -118,6 +121,7 @@ pptConfig(default="allow", embedded_images="sanitise")</p></div>
         super().__init__(
             name=self.name,
             default=self.default,
+            attributes=self.attributes,
             switches_module=self.switches_module,
             default_switches=self.default_switches,
             config=kwargs

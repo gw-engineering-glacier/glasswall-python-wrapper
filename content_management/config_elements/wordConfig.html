@@ -40,9 +40,10 @@ class wordConfig(ConfigElement):
     wordConfig(default=&#34;allow&#34;, embedded_images=&#34;sanitise&#34;)
     &#34;&#34;&#34;
 
-    def __init__(self, default: str = &#34;sanitise&#34;, **kwargs):
+    def __init__(self, default: str = &#34;sanitise&#34;, attributes: dict = {}, **kwargs):
         self.name = self.__class__.__name__
         self.default = default
+        self.attributes = attributes
         self.switches_module = switches.word
         self.default_switches = [
             self.switches_module.dynamic_data_exchange(value=default),
@@ -58,6 +59,7 @@ class wordConfig(ConfigElement):
         super().__init__(
             name=self.name,
             default=self.default,
+            attributes=self.attributes,
             switches_module=self.switches_module,
             default_switches=self.default_switches,
             config=kwargs
@@ -75,7 +77,7 @@ class wordConfig(ConfigElement):
 <dl>
 <dt id="glasswall.content_management.config_elements.wordConfig.wordConfig"><code class="flex name class">
 <span>class <span class="ident">wordConfig</span></span>
-<span>(</span><span>default: str = 'sanitise', **kwargs)</span>
+<span>(</span><span>default: str = 'sanitise', attributes: dict = {}, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>A wordConfig ConfigElement.</p>
@@ -100,9 +102,10 @@ wordConfig(default="allow", embedded_images="sanitise")</p></div>
     wordConfig(default=&#34;allow&#34;, embedded_images=&#34;sanitise&#34;)
     &#34;&#34;&#34;
 
-    def __init__(self, default: str = &#34;sanitise&#34;, **kwargs):
+    def __init__(self, default: str = &#34;sanitise&#34;, attributes: dict = {}, **kwargs):
         self.name = self.__class__.__name__
         self.default = default
+        self.attributes = attributes
         self.switches_module = switches.word
         self.default_switches = [
             self.switches_module.dynamic_data_exchange(value=default),
@@ -118,6 +121,7 @@ wordConfig(default="allow", embedded_images="sanitise")</p></div>
         super().__init__(
             name=self.name,
             default=self.default,
+            attributes=self.attributes,
             switches_module=self.switches_module,
             default_switches=self.default_switches,
             config=kwargs

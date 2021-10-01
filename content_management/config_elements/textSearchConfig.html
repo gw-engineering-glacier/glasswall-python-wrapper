@@ -77,9 +77,12 @@ class textSearchConfig(ConfigElement):
             # Append constructed config_element to subelements
             subelements.append(config_element)
 
-        self.subelements = [
-            textList(subelements=subelements)
-        ]
+        if subelements:
+            self.subelements = [
+                textList(subelements=subelements)
+            ]
+        else:
+            self.subelements = []
 
         super().__init__(name=self.name, attributes=self.attributes, subelements=self.subelements)</code></pre>
 </details>
@@ -157,9 +160,12 @@ textList_subelements=[
             # Append constructed config_element to subelements
             subelements.append(config_element)
 
-        self.subelements = [
-            textList(subelements=subelements)
-        ]
+        if subelements:
+            self.subelements = [
+                textList(subelements=subelements)
+            ]
+        else:
+            self.subelements = []
 
         super().__init__(name=self.name, attributes=self.attributes, subelements=self.subelements)</code></pre>
 </details>

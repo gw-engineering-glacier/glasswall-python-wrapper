@@ -37,8 +37,9 @@ class sysConfig(ConfigElement):
     sysConfig(interchange_type=&#34;xml&#34;, interchange_pretty=&#34;false&#34;)
     &#34;&#34;&#34;
 
-    def __init__(self, **kwargs):
+    def __init__(self, attributes={}, **kwargs):
         self.name = self.__class__.__name__
+        self.attributes = attributes
         self.switches_module = switches.sys
         self.default_switches = [
             self.switches_module.interchange_type(value=&#34;sisl&#34;),
@@ -47,6 +48,7 @@ class sysConfig(ConfigElement):
 
         super().__init__(
             name=self.name,
+            attributes=self.attributes,
             switches_module=self.switches_module,
             default_switches=self.default_switches,
             config=kwargs
@@ -64,7 +66,7 @@ class sysConfig(ConfigElement):
 <dl>
 <dt id="glasswall.content_management.config_elements.sysConfig.sysConfig"><code class="flex name class">
 <span>class <span class="ident">sysConfig</span></span>
-<span>(</span><span>**kwargs)</span>
+<span>(</span><span>attributes={}, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>A sysConfig ConfigElement.</p>
@@ -81,8 +83,9 @@ sysConfig(interchange_type="xml", interchange_pretty="false")</p></div>
     sysConfig(interchange_type=&#34;xml&#34;, interchange_pretty=&#34;false&#34;)
     &#34;&#34;&#34;
 
-    def __init__(self, **kwargs):
+    def __init__(self, attributes={}, **kwargs):
         self.name = self.__class__.__name__
+        self.attributes = attributes
         self.switches_module = switches.sys
         self.default_switches = [
             self.switches_module.interchange_type(value=&#34;sisl&#34;),
@@ -91,6 +94,7 @@ sysConfig(interchange_type="xml", interchange_pretty="false")</p></div>
 
         super().__init__(
             name=self.name,
+            attributes=self.attributes,
             switches_module=self.switches_module,
             default_switches=self.default_switches,
             config=kwargs

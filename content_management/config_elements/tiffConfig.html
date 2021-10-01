@@ -40,9 +40,10 @@ class tiffConfig(ConfigElement):
     tiffConfig(geotiff=&#34;sanitise&#34;)
     &#34;&#34;&#34;
 
-    def __init__(self, default: str = &#34;sanitise&#34;, **kwargs):
+    def __init__(self, default: str = &#34;sanitise&#34;, attributes={}, **kwargs):
         self.name = self.__class__.__name__
         self.default = default
+        self.attributes = attributes
         self.switches_module = switches.tiff
         self.default_switches = [
             self.switches_module.geotiff(value=default),
@@ -51,6 +52,7 @@ class tiffConfig(ConfigElement):
         super().__init__(
             name=self.name,
             default=self.default,
+            attributes=self.attributes,
             switches_module=self.switches_module,
             default_switches=self.default_switches,
             config=kwargs
@@ -68,7 +70,7 @@ class tiffConfig(ConfigElement):
 <dl>
 <dt id="glasswall.content_management.config_elements.tiffConfig.tiffConfig"><code class="flex name class">
 <span>class <span class="ident">tiffConfig</span></span>
-<span>(</span><span>default: str = 'sanitise', **kwargs)</span>
+<span>(</span><span>default: str = 'sanitise', attributes={}, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>A tiffConfig ConfigElement.</p>
@@ -93,9 +95,10 @@ tiffConfig(geotiff="sanitise")</p></div>
     tiffConfig(geotiff=&#34;sanitise&#34;)
     &#34;&#34;&#34;
 
-    def __init__(self, default: str = &#34;sanitise&#34;, **kwargs):
+    def __init__(self, default: str = &#34;sanitise&#34;, attributes={}, **kwargs):
         self.name = self.__class__.__name__
         self.default = default
+        self.attributes = attributes
         self.switches_module = switches.tiff
         self.default_switches = [
             self.switches_module.geotiff(value=default),
@@ -104,6 +107,7 @@ tiffConfig(geotiff="sanitise")</p></div>
         super().__init__(
             name=self.name,
             default=self.default,
+            attributes=self.attributes,
             switches_module=self.switches_module,
             default_switches=self.default_switches,
             config=kwargs
