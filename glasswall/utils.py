@@ -249,11 +249,12 @@ def list_file_paths(directory: str, recursive: bool = True, absolute: bool = Tru
 
     if followlinks:
         files = [
-            os.readlink(file_)
-            if os.path.islink(file_)
-            else file_
+            str(pathlib.Path(file_).resolve())
             for file_ in files
         ]
+
+        # Remove duplicate file paths, maintaining order (symlinks of same files or other symlinks)
+        files = list(dict.fromkeys(files))
 
     if absolute:
         files = [
