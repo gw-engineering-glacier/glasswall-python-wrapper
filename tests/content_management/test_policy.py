@@ -529,7 +529,6 @@ class TestPolicy(unittest.TestCase):
         # other xlsConfig switches should be default: `disallow`
         self.assertTrue(policy.xlsConfig.embedded_files.value == "disallow")
 
-
     def test_custom_editor_policy___switch_names_and_values_in_text(self):
         policy = glasswall.content_management.policies.Editor(
             config={
