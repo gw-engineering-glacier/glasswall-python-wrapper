@@ -284,7 +284,7 @@ class Editor(Library):
         # From memory
         elif isinstance(input_file, (str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy)):
             # Convert bytearray, io.BytesIO to bytes
-            if isinstance(input_file, (bytearray, io.BytesIO)):
+            if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
                 input_file = utils.as_bytes(input_file)
             # Convert string xml or Policy to bytes
             if isinstance(input_file, (str, glasswall.content_management.policies.policy.Policy)):

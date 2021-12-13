@@ -77,7 +77,7 @@ class WordSearch(Library):
                 raise FileNotFoundError(input_file)
             with open(input_file, "rb") as f:
                 input_file_bytes = f.read()
-        elif isinstance(input_file, (bytearray, io.BytesIO)):
+        elif isinstance(input_file, (bytes, bytearray, io.BytesIO)):
             input_file_bytes = utils.as_bytes(input_file)
 
         if isinstance(homoglyphs, str):
@@ -86,7 +86,7 @@ class WordSearch(Library):
                     homoglyphs_bytes = f.read()
             else:
                 raise FileNotFoundError(homoglyphs)
-        elif isinstance(homoglyphs, (bytearray, io.BytesIO)):
+        elif isinstance(homoglyphs, (bytes, bytearray, io.BytesIO)):
             homoglyphs_bytes = utils.as_bytes(homoglyphs)
         elif isinstance(homoglyphs, type(None)):
             # Load default

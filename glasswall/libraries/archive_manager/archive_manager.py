@@ -108,7 +108,7 @@ class ArchiveManager(Library):
                 raise FileNotFoundError(input_file)
             with open(input_file, "rb") as f:
                 input_file_bytes = f.read()
-        elif isinstance(input_file, (bytearray, io.BytesIO)):
+        elif isinstance(input_file, (bytes, bytearray, io.BytesIO)):
             input_file_bytes = utils.as_bytes(input_file)
 
         if isinstance(content_management_policy, str) and os.path.isfile(content_management_policy):
@@ -258,7 +258,7 @@ class ArchiveManager(Library):
                 raise FileNotFoundError(input_file)
             with open(input_file, "rb") as f:
                 input_file_bytes = f.read()
-        elif isinstance(input_file, (bytearray, io.BytesIO)):
+        elif isinstance(input_file, (bytes, bytearray, io.BytesIO)):
             input_file_bytes = utils.as_bytes(input_file)
 
         if isinstance(content_management_policy, str) and os.path.isfile(content_management_policy):
@@ -612,7 +612,7 @@ class ArchiveManager(Library):
                 raise FileNotFoundError(input_file)
             with open(input_file, "rb") as f:
                 input_file_bytes = f.read()
-        elif isinstance(input_file, (bytearray, io.BytesIO)):
+        elif isinstance(input_file, (bytes, bytearray, io.BytesIO)):
             input_file_bytes = utils.as_bytes(input_file)
 
         if isinstance(content_management_policy, str) and os.path.isfile(content_management_policy):
@@ -762,7 +762,7 @@ class ArchiveManager(Library):
                 raise FileNotFoundError(input_file)
             with open(input_file, "rb") as f:
                 input_file_bytes = f.read()
-        elif isinstance(input_file, (bytearray, io.BytesIO)):
+        elif isinstance(input_file, (bytes, bytearray, io.BytesIO)):
             input_file_bytes = utils.as_bytes(input_file)
 
         if isinstance(content_management_policy, str) and os.path.isfile(content_management_policy):
