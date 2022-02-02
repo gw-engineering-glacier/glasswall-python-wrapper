@@ -566,8 +566,6 @@ class Editor(Library):
                 register_input = self.register_input(session, input_file)
                 register_output = self.register_output(session, output_file=output_file)
                 status = self.run_session(session)
-                # Ensure memory allocated is not garbage collected until after run_session
-                content_management_policy, register_input, register_output
 
                 input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
                 if status not in successes.success_codes:
@@ -593,6 +591,9 @@ class Editor(Library):
                             register_output.buffer,
                             register_output.buffer_length
                         )
+
+                # Ensure memory allocated is not garbage collected
+                content_management_policy, register_input, register_output
 
                 return file_bytes
 
@@ -679,8 +680,6 @@ class Editor(Library):
                 register_input = self.register_input(session, input_file)
                 register_analysis = self.register_analysis(session, output_file)
                 status = self.run_session(session)
-                # Ensure memory allocated is not garbage collected until after run_session
-                content_management_policy, register_input, register_analysis
 
                 input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
                 if status not in successes.success_codes:
@@ -706,6 +705,9 @@ class Editor(Library):
                             register_analysis.buffer,
                             register_analysis.buffer_length
                         )
+
+                # Ensure memory allocated is not garbage collected
+                content_management_policy, register_input, register_analysis
 
                 return file_bytes
 
@@ -856,8 +858,6 @@ class Editor(Library):
                 register_input = self.register_input(session, input_file)
                 register_export = self.register_export(session, output_file)
                 status = self.run_session(session)
-                # Ensure memory allocated is not garbage collected until after run_session
-                content_management_policy, register_input, register_export
 
                 input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
                 if status not in successes.success_codes:
@@ -883,6 +883,9 @@ class Editor(Library):
                             register_export.buffer,
                             register_export.buffer_length
                         )
+
+                # Ensure memory allocated is not garbage collected
+                content_management_policy, register_input, register_export
 
                 return file_bytes
 
@@ -1037,8 +1040,6 @@ class Editor(Library):
                 register_import = self.register_import(session, input_file)
                 register_output = self.register_output(session, output_file)
                 status = self.run_session(session)
-                # Ensure memory allocated is not garbage collected until after run_session
-                content_management_policy, register_import, register_output
 
                 input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
                 if status not in successes.success_codes:
@@ -1064,6 +1065,9 @@ class Editor(Library):
                             register_output.buffer,
                             register_output.buffer_length
                         )
+
+                # Ensure memory allocated is not garbage collected
+                content_management_policy, register_import, register_output
 
                 return file_bytes
 
