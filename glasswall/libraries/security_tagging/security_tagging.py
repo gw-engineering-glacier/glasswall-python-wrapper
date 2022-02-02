@@ -86,7 +86,7 @@ class SecurityTagging(Library):
             )
 
             if status not in successes.success_codes:
-                log.warning(f"\n\tinput_file: {input_file}\n\toutput_file: {output_file}\n\tstatus: {status}\n\ttags_path: {tags_path}")
+                log.error(f"\n\tinput_file: {input_file}\n\toutput_file: {output_file}\n\tstatus: {status}\n\ttags_path: {tags_path}")
                 if raise_unsupported:
                     raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
             else:
@@ -95,7 +95,7 @@ class SecurityTagging(Library):
             # TODO remove, temp fix - check if tags are retrievable, if not delete the file just created by glasswall
             # if status not in successes.success_codes: # status is currently incorrect in the library
             if not os.path.isfile(output_file):
-                log.warning(f"\n\toutput file does not exist: {output_file}")
+                log.error(f"\n\toutput file does not exist: {output_file}")
                 status = "OUTPUT_NOT_CREATED"
             elif os.path.isfile(output_file):
                 with utils.TempFilePath() as temp_file:
@@ -210,7 +210,7 @@ class SecurityTagging(Library):
             )
 
             if status not in successes.success_codes:
-                log.warning(f"\n\tinput_file: {input_file}\n\toutput_file: {output_file}\n\tstatus: {status}")
+                log.error(f"\n\tinput_file: {input_file}\n\toutput_file: {output_file}\n\tstatus: {status}")
                 if raise_unsupported:
                     raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
             else:

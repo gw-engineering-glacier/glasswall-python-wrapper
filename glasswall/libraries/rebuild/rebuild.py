@@ -42,7 +42,7 @@ class Rebuild(Library):
             )
             log.debug(f"{self.__class__.__name__} license validated successfully.")
         except errors.RebuildError:
-            log.warning(f"{self.__class__.__name__} license validation failed.")
+            log.error(f"{self.__class__.__name__} license validation failed.")
             raise
 
     def version(self):
@@ -105,7 +105,7 @@ class Rebuild(Library):
         input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
 
         if not dft.is_success(file_type):
-            log.warning(f"\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}")
+            log.error(f"\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}")
             raise dft.int_class_map.get(file_type, dft.errors.UnknownErrorCode)(file_type)
         else:
             log.debug(f"\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}")
@@ -139,7 +139,7 @@ class Rebuild(Library):
         )
 
         if status not in successes.success_codes:
-            log.warning(f"\n\tstatus: {status}")
+            log.error(f"\n\tstatus: {status}")
             raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
         else:
             log.debug(f"\n\tstatus: {status}")
@@ -179,7 +179,7 @@ class Rebuild(Library):
         )
 
         if status not in successes.success_codes:
-            log.warning(f"\n\tstatus: {status}")
+            log.error(f"\n\tstatus: {status}")
             raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
         else:
             log.debug(f"\n\tstatus: {status}")
@@ -311,7 +311,7 @@ class Rebuild(Library):
 
             input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
             if status not in successes.success_codes:
-                log.warning(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {status}")
+                log.error(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {status}")
                 if raise_unsupported:
                     raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
                 else:
@@ -321,7 +321,7 @@ class Rebuild(Library):
                 if isinstance(input_file, str) and isinstance(output_file, str):
                     # file to file, read the bytes of the file that Rebuild has already written
                     if not os.path.isfile(output_file):
-                        log.warning(f"Rebuild returned success code: {status} but no output file was found: {output_file}")
+                        log.error(f"Rebuild returned success code: {status} but no output file was found: {output_file}")
                         file_bytes = None
                     else:
                         with open(output_file, "rb") as f:
@@ -495,7 +495,7 @@ class Rebuild(Library):
 
             input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
             if status not in successes.success_codes:
-                log.warning(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {status}")
+                log.error(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {status}")
                 if raise_unsupported:
                     raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
                 else:
@@ -505,7 +505,7 @@ class Rebuild(Library):
                 if isinstance(input_file, str) and isinstance(output_file, str):
                     # file to file, read the bytes of the file that Rebuild has already written
                     if not os.path.isfile(output_file):
-                        log.warning(f"Rebuild returned success code: {status} but no output file was found: {output_file}")
+                        log.error(f"Rebuild returned success code: {status} but no output file was found: {output_file}")
                         file_bytes = None
                     else:
                         with open(output_file, "rb") as f:
@@ -669,7 +669,7 @@ class Rebuild(Library):
 
             input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
             if status not in successes.success_codes:
-                log.warning(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {status}")
+                log.error(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {status}")
                 if raise_unsupported:
                     raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
                 else:
@@ -679,7 +679,7 @@ class Rebuild(Library):
                 if isinstance(input_file, str) and isinstance(output_file, str):
                     # file to file, read the bytes of the file that Rebuild has already written
                     if not os.path.isfile(output_file):
-                        log.warning(f"Rebuild returned success code: {status} but no output file was found: {output_file}")
+                        log.error(f"Rebuild returned success code: {status} but no output file was found: {output_file}")
                         file_bytes = None
                     else:
                         with open(output_file, "rb") as f:
@@ -843,7 +843,7 @@ class Rebuild(Library):
 
             input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
             if status not in successes.success_codes:
-                log.warning(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {status}")
+                log.error(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {status}")
                 if raise_unsupported:
                     raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
                 else:
@@ -853,7 +853,7 @@ class Rebuild(Library):
                 if isinstance(input_file, str) and isinstance(output_file, str):
                     # file to file, read the bytes of the file that Rebuild has already written
                     if not os.path.isfile(output_file):
-                        log.warning(f"Rebuild returned success code: {status} but no output file was found: {output_file}")
+                        log.error(f"Rebuild returned success code: {status} but no output file was found: {output_file}")
                         file_bytes = None
                     else:
                         with open(output_file, "rb") as f:

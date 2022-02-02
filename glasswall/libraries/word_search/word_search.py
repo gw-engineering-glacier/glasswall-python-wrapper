@@ -146,7 +146,7 @@ class WordSearch(Library):
         output_report_repr = f"{type(gw_return_object.output_report)} length {len(gw_return_object.output_report)}"
         homoglyphs_repr = f"{type(homoglyphs_bytes)} length {len(homoglyphs_bytes)}" if not isinstance(homoglyphs, str) else homoglyphs
         if gw_return_object.status not in successes.success_codes:
-            log.warning(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file_repr}\n\tstatus: {gw_return_object.status}\n\toutput_report: {output_report_repr}\n\thomoglyphs: {homoglyphs_repr}\n\txml_config:\n{xml_config}")
+            log.error(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file_repr}\n\tstatus: {gw_return_object.status}\n\toutput_report: {output_report_repr}\n\thomoglyphs: {homoglyphs_repr}\n\txml_config:\n{xml_config}")
             if raise_unsupported:
                 raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
         else:
@@ -154,9 +154,9 @@ class WordSearch(Library):
 
         if raise_unsupported:
             if not gw_return_object.output_file:
-                log.warning(f"output_file empty\n\toutput_buffer: {output_buffer}\n\toutput_buffer_length: {output_buffer_length}")
+                log.error(f"output_file empty\n\toutput_buffer: {output_buffer}\n\toutput_buffer_length: {output_buffer_length}")
             if not gw_return_object.output_report:
-                log.warning(f"output_report empty\n\toutput_report_buffer: {output_report_buffer}\n\toutput_report_buffer_length: {output_report_buffer_length}")
+                log.error(f"output_report empty\n\toutput_report_buffer: {output_report_buffer}\n\toutput_report_buffer_length: {output_report_buffer_length}")
 
         # Write output file
         if isinstance(output_file, str):

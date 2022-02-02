@@ -156,7 +156,7 @@ class ArchiveManager(Library):
 
         input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
         if gw_return_object.status not in successes.success_codes:
-            log.warning(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {gw_return_object.status}")
+            log.error(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {gw_return_object.status}")
             if raise_unsupported:
                 raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
         else:
@@ -306,7 +306,7 @@ class ArchiveManager(Library):
 
         input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
         if gw_return_object.status not in successes.success_codes:
-            log.warning(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {gw_return_object.status}")
+            log.error(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {gw_return_object.status}")
             if raise_unsupported:
                 raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
         else:
@@ -413,7 +413,7 @@ class ArchiveManager(Library):
                 return 0
 
         if gw_return_object.status not in successes.success_codes:
-            log.warning(f"\n\tinput_file: {input_file}\n\tstatus: {gw_return_object.status}")
+            log.error(f"\n\tinput_file: {input_file}\n\tstatus: {gw_return_object.status}")
             if raise_unsupported:
                 raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
         else:
@@ -459,7 +459,7 @@ class ArchiveManager(Library):
             )
 
         if gw_return_object.status not in successes.success_codes:
-            log.warning(f"\n\tinput_directory: {input_directory}\n\tstatus: {gw_return_object.status}")
+            log.error(f"\n\tinput_directory: {input_directory}\n\tstatus: {gw_return_object.status}")
             if raise_unsupported:
                 raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
         else:
@@ -496,7 +496,7 @@ class ArchiveManager(Library):
         status = self.file_to_file_unpack(input_file=input_file, output_directory=archive_output_directory, file_type=file_type, raise_unsupported=raise_unsupported).status
 
         if status not in successes.success_codes:
-            log.warning(f"\n\tinput_file: {input_file}\n\tstatus: {status}")
+            log.error(f"\n\tinput_file: {input_file}\n\tstatus: {status}")
             if raise_unsupported:
                 raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
         else:
@@ -567,7 +567,7 @@ class ArchiveManager(Library):
         status = self.file_to_file_pack(input_directory=input_directory, output_directory=output_directory, file_type=file_type, raise_unsupported=raise_unsupported).status
 
         if status not in successes.success_codes:
-            log.warning(f"\n\tinput_directory: {input_directory}\n\tstatus: {status}")
+            log.error(f"\n\tinput_directory: {input_directory}\n\tstatus: {status}")
             if raise_unsupported:
                 raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
         else:
@@ -660,7 +660,7 @@ class ArchiveManager(Library):
 
         input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
         if gw_return_object.status not in successes.success_codes:
-            log.warning(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {gw_return_object.status}")
+            log.error(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {gw_return_object.status}")
             if raise_unsupported:
                 raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
         else:
@@ -810,7 +810,7 @@ class ArchiveManager(Library):
 
         input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
         if gw_return_object.status not in successes.success_codes:
-            log.warning(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {gw_return_object.status}")
+            log.error(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {gw_return_object.status}")
             if raise_unsupported:
                 raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
         else:
