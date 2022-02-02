@@ -253,9 +253,6 @@ def list_file_paths(directory: str, recursive: bool = True, absolute: bool = Tru
             for file_ in files
         ]
 
-        # Remove duplicate file paths, maintaining order (symlinks of same files or other symlinks)
-        files = list(dict.fromkeys(files))
-
     if absolute:
         files = [
             os.path.abspath(file_)
@@ -266,6 +263,9 @@ def list_file_paths(directory: str, recursive: bool = True, absolute: bool = Tru
             os.path.relpath(file_, directory)
             for file_ in files
         ]
+
+    # Remove duplicate file paths (symlinks of same files or other symlinks), and sort
+    files = sorted(set(files))
 
     return files
 
