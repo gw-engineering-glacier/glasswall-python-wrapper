@@ -1000,15 +1000,6 @@ class Editor(Library):
         if not isinstance(raise_unsupported, bool):
             raise TypeError(raise_unsupported)
 
-        # Check that file type is supported
-        try:
-            self.determine_file_type(input_file=input_file)
-        except dft.errors.FileTypeEnumError:
-            if raise_unsupported:
-                raise
-            else:
-                return None
-
         # Convert string path arguments to absolute paths
         if isinstance(input_file, str):
             if not os.path.isfile(input_file):
@@ -1024,6 +1015,15 @@ class Editor(Library):
         # Convert memory inputs to bytes
         if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
             input_file = utils.as_bytes(input_file)
+
+        # Check that file type is supported
+        try:
+            self.determine_file_type(input_file=input_file)
+        except dft.errors.FileTypeEnumError:
+            if raise_unsupported:
+                raise
+            else:
+                return None
 
         with utils.CwdHandler(self.library_path):
             with self.new_session() as session:
