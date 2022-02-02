@@ -571,13 +571,13 @@ class Editor(Library):
 
                 input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
                 if status not in successes.success_codes:
-                    log.warning(f"\n\tinput_file: {input_file_repr}\n\tsession: {session}\n\tstatus: {status}")
+                    log.warning(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tsession: {session}\n\tstatus: {status}")
                     if raise_unsupported:
                         raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
                     else:
                         file_bytes = None
                 else:
-                    log.debug(f"\n\tinput_file: {input_file_repr}\n\tsession: {session}\n\tstatus: {status}")
+                    log.debug(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tsession: {session}\n\tstatus: {status}")
                     # Get file bytes
                     if isinstance(output_file, str):
                         # File to file and memory to file, Editor wrote to a file, read it to get the file bytes
@@ -684,13 +684,13 @@ class Editor(Library):
 
                 input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
                 if status not in successes.success_codes:
-                    log.warning(f"\n\tinput_file: {input_file_repr}\n\tsession: {session}\n\tstatus: {status}")
+                    log.warning(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tsession: {session}\n\tstatus: {status}")
                     if raise_unsupported:
                         raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
                     else:
                         file_bytes = None
                 else:
-                    log.debug(f"\n\tinput_file: {input_file_repr}\n\tsession: {session}\n\tstatus: {status}")
+                    log.debug(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tsession: {session}\n\tstatus: {status}")
                     # Get file bytes
                     if isinstance(output_file, str):
                         # File to file and memory to file, Editor wrote to a file, read it to get the file bytes
@@ -861,13 +861,13 @@ class Editor(Library):
 
                 input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
                 if status not in successes.success_codes:
-                    log.warning(f"\n\tinput_file: {input_file_repr}\n\tsession: {session}\n\tstatus: {status}")
+                    log.warning(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tsession: {session}\n\tstatus: {status}")
                     if raise_unsupported:
                         raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
                     else:
                         file_bytes = None
                 else:
-                    log.debug(f"\n\tinput_file: {input_file_repr}\n\tsession: {session}\n\tstatus: {status}")
+                    log.debug(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tsession: {session}\n\tstatus: {status}")
                     # Get file bytes
                     if isinstance(output_file, str):
                         # File to file and memory to file, Editor wrote to a file, read it to get the file bytes
@@ -1042,13 +1042,13 @@ class Editor(Library):
 
                 input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
                 if status not in successes.success_codes:
-                    log.warning(f"\n\tinput_file: {input_file_repr}\n\tsession: {session}\n\tstatus: {status}")
+                    log.warning(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tsession: {session}\n\tstatus: {status}")
                     if raise_unsupported:
                         raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
                     else:
                         file_bytes = None
                 else:
-                    log.debug(f"\n\tinput_file: {input_file_repr}\n\tsession: {session}\n\tstatus: {status}")
+                    log.debug(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tsession: {session}\n\tstatus: {status}")
                     # Get file bytes
                     if isinstance(output_file, str):
                         # File to file and memory to file, Editor wrote to a file, read it to get the file bytes
