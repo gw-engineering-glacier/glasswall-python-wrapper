@@ -146,12 +146,11 @@ class WordSearch(Library):
         output_report_repr = f"{type(gw_return_object.output_report)} length {len(gw_return_object.output_report)}"
         homoglyphs_repr = f"{type(homoglyphs_bytes)} length {len(homoglyphs_bytes)}" if not isinstance(homoglyphs, str) else homoglyphs
         if gw_return_object.status not in successes.success_codes:
-            log.warning(f"\n\tstatus: {gw_return_object.status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file_repr}\n\toutput_report: {output_report_repr}\n\thomoglyphs: {homoglyphs_repr}\n\txml_config:\n{xml_config}")
+            log.warning(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file_repr}\n\tstatus: {gw_return_object.status}\n\toutput_report: {output_report_repr}\n\thomoglyphs: {homoglyphs_repr}\n\txml_config:\n{xml_config}")
             if raise_unsupported:
                 raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
         else:
-            # TODO arabic UnicodeEncodeError
-            log.debug(f"\n\tstatus: {gw_return_object.status}\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file_repr}\n\toutput_report: {output_report_repr}\n\thomoglyphs: {homoglyphs_repr}\n\txml_config:\n{xml_config}")
+            log.debug(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file_repr}\n\tstatus: {gw_return_object.status}\n\toutput_report: {output_report_repr}\n\thomoglyphs: {homoglyphs_repr}\n\txml_config:\n{xml_config}")
 
         if raise_unsupported:
             if not gw_return_object.output_file:
