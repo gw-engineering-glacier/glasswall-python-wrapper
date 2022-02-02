@@ -220,6 +220,10 @@ class Rebuild(Library):
         if isinstance(content_management_policy, str) and os.path.isfile(content_management_policy):
             content_management_policy = os.path.abspath(content_management_policy)
 
+        # Convert memory inputs to bytes
+        if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
+            input_file = utils.as_bytes(input_file)
+
         # Check that file type is supported
         try:
             file_type = self.determine_file_type(input_file=input_file)
@@ -229,14 +233,9 @@ class Rebuild(Library):
             else:
                 return None
 
-        # Convert memory inputs to bytes
-        if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
-            input_file = utils.as_bytes(input_file)
-
         with utils.CwdHandler(self.library_path):
             # Set content management policy
-            if content_management_policy:
-                self.set_content_management_policy(content_management_policy)
+            self.set_content_management_policy(content_management_policy)
 
             # file to file
             if isinstance(input_file, str) and isinstance(output_file, str):
@@ -322,7 +321,7 @@ class Rebuild(Library):
                 if isinstance(input_file, str) and isinstance(output_file, str):
                     # file to file, read the bytes of the file that Rebuild has already written
                     if not os.path.isfile(output_file):
-                        log.warning(f"Rebuild returned success code: {status} and no output file was found: {output_file}")
+                        log.warning(f"Rebuild returned success code: {status} but no output file was found: {output_file}")
                         file_bytes = None
                     else:
                         with open(output_file, "rb") as f:
