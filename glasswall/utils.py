@@ -249,9 +249,7 @@ def list_file_paths(directory: str, recursive: bool = True, absolute: bool = Tru
 
     if followlinks:
         files = [
-            os.readlink(file_)
-            if os.path.islink(file_)
-            else file_
+            str(pathlib.Path(file_).resolve())
             for file_ in files
         ]
 
@@ -265,6 +263,9 @@ def list_file_paths(directory: str, recursive: bool = True, absolute: bool = Tru
             os.path.relpath(file_, directory)
             for file_ in files
         ]
+
+    # Remove duplicate file paths (symlinks of same files or other symlinks), and sort
+    files = sorted(set(files))
 
     return files
 

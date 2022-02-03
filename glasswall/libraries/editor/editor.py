@@ -41,7 +41,7 @@ class Editor(Library):
             )
             log.debug(f"{self.__class__.__name__} license validated successfully.")
         except errors.EditorError:
-            log.warning(f"{self.__class__.__name__} license validation failed.")
+            log.error(f"{self.__class__.__name__} license validation failed.")
             raise
 
     def version(self):
@@ -96,7 +96,7 @@ class Editor(Library):
         status = self.library.GW2CloseSession(ct_session)
 
         if status not in successes.success_codes:
-            log.warning(f"\n\tsession: {session}\n\tstatus: {status}")
+            log.error(f"\n\tsession: {session}\n\tstatus: {status}")
         else:
             log.debug(f"\n\tsession: {session}\n\tstatus: {status}")
 
@@ -130,7 +130,7 @@ class Editor(Library):
         status = self.library.GW2RunSession(ct_session)
 
         if status not in successes.success_codes:
-            log.warning(f"\n\tsession: {session}\n\tstatus: {status}")
+            log.error(f"\n\tsession: {session}\n\tstatus: {status}")
         else:
             log.debug(f"\n\tsession: {session}\n\tstatus: {status}")
 
@@ -177,7 +177,7 @@ class Editor(Library):
         input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
 
         if not dft.is_success(file_type):
-            log.warning(f"\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}")
+            log.error(f"\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}")
             raise dft.int_class_map.get(file_type, dft.errors.UnknownErrorCode)(file_type)
         else:
             log.debug(f"\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}")
@@ -284,7 +284,7 @@ class Editor(Library):
         # From memory
         elif isinstance(input_file, (str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy)):
             # Convert bytearray, io.BytesIO to bytes
-            if isinstance(input_file, (bytearray, io.BytesIO)):
+            if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
                 input_file = utils.as_bytes(input_file)
             # Convert string xml or Policy to bytes
             if isinstance(input_file, (str, glasswall.content_management.policies.policy.Policy)):
@@ -312,7 +312,7 @@ class Editor(Library):
             )
 
         if gw_return_object.status not in successes.success_codes:
-            log.warning(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
+            log.error(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
             raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
         else:
             log.debug(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
@@ -377,7 +377,7 @@ class Editor(Library):
             )
 
         if status not in successes.success_codes:
-            log.warning(f"\n\tsession: {session}\n\tstatus: {status}")
+            log.error(f"\n\tsession: {session}\n\tstatus: {status}")
             raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
         else:
             log.debug(f"\n\tsession: {session}\n\tstatus: {status}")
@@ -438,7 +438,7 @@ class Editor(Library):
             )
 
         if gw_return_object.status not in successes.success_codes:
-            log.warning(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
+            log.error(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
             raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
         else:
             log.debug(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
@@ -504,7 +504,7 @@ class Editor(Library):
             )
 
         if status not in successes.success_codes:
-            log.warning(f"\n\tsession: {session}\n\tstatus: {status}")
+            log.error(f"\n\tsession: {session}\n\tstatus: {status}")
             raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
         else:
             log.debug(f"\n\tsession: {session}\n\tstatus: {status}")
@@ -566,20 +566,21 @@ class Editor(Library):
                 register_input = self.register_input(session, input_file)
                 register_output = self.register_output(session, output_file=output_file)
                 status = self.run_session(session)
-                # Ensure memory allocated is not garbage collected until after run_session
-                content_management_policy, register_input, register_output
 
+                input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
                 if status not in successes.success_codes:
+                    log.error(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tsession: {session}\n\tstatus: {status}")
                     if raise_unsupported:
                         raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
                     else:
                         file_bytes = None
                 else:
+                    log.debug(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tsession: {session}\n\tstatus: {status}")
                     # Get file bytes
                     if isinstance(output_file, str):
                         # File to file and memory to file, Editor wrote to a file, read it to get the file bytes
                         if not os.path.isfile(output_file):
-                            log.warning(f"Editor returned success code: {status} but no output file was found: {output_file}")
+                            log.error(f"Editor returned success code: {status} but no output file was found: {output_file}")
                             file_bytes = None
                         else:
                             with open(output_file, "rb") as f:
@@ -590,6 +591,9 @@ class Editor(Library):
                             register_output.buffer,
                             register_output.buffer_length
                         )
+
+                # Ensure memory allocated is not garbage collected
+                content_management_policy, register_input, register_output
 
                 return file_bytes
 
@@ -645,15 +649,6 @@ class Editor(Library):
         if not isinstance(raise_unsupported, bool):
             raise TypeError(raise_unsupported)
 
-        # Check that file type is supported
-        try:
-            self.determine_file_type(input_file=input_file)
-        except dft.errors.FileTypeEnumError:
-            if raise_unsupported:
-                raise
-            else:
-                return None
-
         # Convert string path arguments to absolute paths
         if isinstance(input_file, str):
             if not os.path.isfile(input_file):
@@ -670,33 +665,49 @@ class Editor(Library):
         if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
             input_file = utils.as_bytes(input_file)
 
+        # Check that file type is supported
+        try:
+            self.determine_file_type(input_file=input_file)
+        except dft.errors.FileTypeEnumError:
+            if raise_unsupported:
+                raise
+            else:
+                return None
+
         with utils.CwdHandler(self.library_path):
             with self.new_session() as session:
                 content_management_policy = self.set_content_management_policy(session, content_management_policy)
                 register_input = self.register_input(session, input_file)
                 register_analysis = self.register_analysis(session, output_file)
                 status = self.run_session(session)
-                # Ensure memory allocated is not garbage collected until after run_session
-                content_management_policy, register_input, register_analysis
 
-                if isinstance(output_file, str):
-                    # File to file and memory to file, Editor wrote to a file, read it to get the file bytes
-                    if not os.path.isfile(output_file):
-                        log.warning(f"Editor returned success code: {status} and no output file was found: {output_file}")
-                        file_bytes = None
-                    else:
-                        with open(output_file, "rb") as f:
-                            file_bytes = f.read()
-                else:
-                    # File to memory and memory to memory, Editor wrote to a buffer, convert it to bytes
-                    file_bytes = utils.buffer_to_bytes(
-                        register_analysis.buffer,
-                        register_analysis.buffer_length
-                    )
-
+                input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
                 if status not in successes.success_codes:
+                    log.error(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tsession: {session}\n\tstatus: {status}")
                     if raise_unsupported:
                         raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+                    else:
+                        file_bytes = None
+                else:
+                    log.debug(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tsession: {session}\n\tstatus: {status}")
+                    # Get file bytes
+                    if isinstance(output_file, str):
+                        # File to file and memory to file, Editor wrote to a file, read it to get the file bytes
+                        if not os.path.isfile(output_file):
+                            log.error(f"Editor returned success code: {status} but no output file was found: {output_file}")
+                            file_bytes = None
+                        else:
+                            with open(output_file, "rb") as f:
+                                file_bytes = f.read()
+                    else:
+                        # File to memory and memory to memory, Editor wrote to a buffer, convert it to bytes
+                        file_bytes = utils.buffer_to_bytes(
+                            register_analysis.buffer,
+                            register_analysis.buffer_length
+                        )
+
+                # Ensure memory allocated is not garbage collected
+                content_management_policy, register_input, register_analysis
 
                 return file_bytes
 
@@ -785,7 +796,7 @@ class Editor(Library):
             )
 
         if status not in successes.success_codes:
-            log.warning(f"\n\tsession: {session}\n\tstatus: {status}")
+            log.error(f"\n\tsession: {session}\n\tstatus: {status}")
             raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
         else:
             log.debug(f"\n\tsession: {session}\n\tstatus: {status}")
@@ -816,15 +827,6 @@ class Editor(Library):
         if not isinstance(raise_unsupported, bool):
             raise TypeError(raise_unsupported)
 
-        # Check that file type is supported
-        try:
-            self.determine_file_type(input_file=input_file)
-        except dft.errors.FileTypeEnumError:
-            if raise_unsupported:
-                raise
-            else:
-                return None
-
         # Convert string path arguments to absolute paths
         if isinstance(input_file, str):
             if not os.path.isfile(input_file):
@@ -841,27 +843,36 @@ class Editor(Library):
         if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
             input_file = utils.as_bytes(input_file)
 
+        # Check that file type is supported
+        try:
+            self.determine_file_type(input_file=input_file)
+        except dft.errors.FileTypeEnumError:
+            if raise_unsupported:
+                raise
+            else:
+                return None
+
         with utils.CwdHandler(self.library_path):
             with self.new_session() as session:
                 content_management_policy = self.set_content_management_policy(session, content_management_policy)
                 register_input = self.register_input(session, input_file)
                 register_export = self.register_export(session, output_file)
                 status = self.run_session(session)
-                # Ensure memory allocated is not garbage collected until after run_session
-                content_management_policy, register_input, register_export
 
+                input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
                 if status not in successes.success_codes:
-                    log.warning(f"\n\tsession: {session}\n\tstatus: {status}")
+                    log.error(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tsession: {session}\n\tstatus: {status}")
                     if raise_unsupported:
                         raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
                     else:
                         file_bytes = None
                 else:
+                    log.debug(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tsession: {session}\n\tstatus: {status}")
                     # Get file bytes
                     if isinstance(output_file, str):
                         # File to file and memory to file, Editor wrote to a file, read it to get the file bytes
                         if not os.path.isfile(output_file):
-                            log.warning(f"Editor returned success code: {status} but no output file was found: {output_file}")
+                            log.error(f"Editor returned success code: {status} but no output file was found: {output_file}")
                             file_bytes = None
                         else:
                             with open(output_file, "rb") as f:
@@ -872,6 +883,9 @@ class Editor(Library):
                             register_export.buffer,
                             register_export.buffer_length
                         )
+
+                # Ensure memory allocated is not garbage collected
+                content_management_policy, register_input, register_export
 
                 return file_bytes
 
@@ -966,7 +980,7 @@ class Editor(Library):
             )
 
         if gw_return_object.status not in successes.success_codes:
-            log.warning(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
+            log.error(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
             raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
         else:
             log.debug(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
@@ -995,15 +1009,6 @@ class Editor(Library):
         if not isinstance(raise_unsupported, bool):
             raise TypeError(raise_unsupported)
 
-        # Check that file type is supported
-        try:
-            self.determine_file_type(input_file=input_file)
-        except dft.errors.FileTypeEnumError:
-            if raise_unsupported:
-                raise
-            else:
-                return None
-
         # Convert string path arguments to absolute paths
         if isinstance(input_file, str):
             if not os.path.isfile(input_file):
@@ -1020,27 +1025,36 @@ class Editor(Library):
         if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
             input_file = utils.as_bytes(input_file)
 
+        # Check that file type is supported
+        try:
+            self.determine_file_type(input_file=input_file)
+        except dft.errors.FileTypeEnumError:
+            if raise_unsupported:
+                raise
+            else:
+                return None
+
         with utils.CwdHandler(self.library_path):
             with self.new_session() as session:
                 content_management_policy = self.set_content_management_policy(session, content_management_policy)
                 register_import = self.register_import(session, input_file)
                 register_output = self.register_output(session, output_file)
                 status = self.run_session(session)
-                # Ensure memory allocated is not garbage collected until after run_session
-                content_management_policy, register_import, register_output
 
+                input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
                 if status not in successes.success_codes:
-                    log.warning(f"\n\tsession: {session}\n\tstatus: {status}")
+                    log.error(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tsession: {session}\n\tstatus: {status}")
                     if raise_unsupported:
                         raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
                     else:
                         file_bytes = None
                 else:
+                    log.debug(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tsession: {session}\n\tstatus: {status}")
                     # Get file bytes
                     if isinstance(output_file, str):
                         # File to file and memory to file, Editor wrote to a file, read it to get the file bytes
                         if not os.path.isfile(output_file):
-                            log.warning(f"Editor returned success code: {status} but no output file was found: {output_file}")
+                            log.error(f"Editor returned success code: {status} but no output file was found: {output_file}")
                             file_bytes = None
                         else:
                             with open(output_file, "rb") as f:
@@ -1051,6 +1065,9 @@ class Editor(Library):
                             register_output.buffer,
                             register_output.buffer_length
                         )
+
+                # Ensure memory allocated is not garbage collected
+                content_management_policy, register_import, register_output
 
                 return file_bytes
 

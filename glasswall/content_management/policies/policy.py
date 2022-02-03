@@ -53,10 +53,11 @@ class Policy:
                 config_element = config_element(name=config_element_name, default=self.default)
             else:
                 # subclasses of ConfigElement that provide their own name
-                if hasattr(config_element, "default"):
+                # if this config_element has a non-None `default` attribute, assign as `self.default`
+                if getattr(config_element(), "default", None):
                     config_element = config_element(default=self.default)
                 else:
-                    # Don't attempt to set attribute `default` if is not currently set
+                    # Don't set attribute `default`, e.g. `sysConfig`
                     config_element = config_element()
 
             for switch_name, switch_value in switches.items():

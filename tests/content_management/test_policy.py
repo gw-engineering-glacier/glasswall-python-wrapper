@@ -508,6 +508,27 @@ class TestPolicy(unittest.TestCase):
             {"two": "2", "three": "3"}
         )
 
+    def test_editor_policy_disallow_with_custom_config___config_defaults_correct(self):
+        policy = glasswall.content_management.policies.Editor(
+            default="disallow",
+            config={
+                "sysConfig": {
+                    "interchange_pretty": "false",
+                    "interchange_type": "sisl",
+                },
+                "xlsConfig": {
+                    "review_comments": "sanitise"
+                },
+            }
+        )
+
+        self.assertTrue(policy.sysConfig.interchange_pretty.value == "false")
+        self.assertTrue(policy.sysConfig.interchange_type.value == "sisl")
+        self.assertTrue(policy.xlsConfig.review_comments.value == "sanitise")
+
+        # other xlsConfig switches should be default: `disallow`
+        self.assertTrue(policy.xlsConfig.embedded_files.value == "disallow")
+
     def test_custom_editor_policy___switch_names_and_values_in_text(self):
         policy = glasswall.content_management.policies.Editor(
             config={
