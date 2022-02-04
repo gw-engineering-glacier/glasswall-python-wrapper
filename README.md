@@ -513,7 +513,7 @@ for file_type in am.supported_archives:
 
 ## Documentation
 
-https://filetrust.github.io/glasswall-python-wrapper/
+https://gw-engineering.github.io/glasswall-python-wrapper/
 
 ## Built With
 
