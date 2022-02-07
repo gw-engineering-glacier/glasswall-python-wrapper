@@ -139,7 +139,7 @@ class Rebuild(Library):
         )
 
         if status not in successes.success_codes:
-            log.error(f"\n\tstatus: {status}")
+            log.error(f"\n\tstatus: {status}\n\tGWFileErrorMsg: {self.GWFileErrorMsg()}")
             raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
         else:
             log.debug(f"\n\tstatus: {status}")
@@ -179,7 +179,7 @@ class Rebuild(Library):
         )
 
         if status not in successes.success_codes:
-            log.error(f"\n\tstatus: {status}")
+            log.error(f"\n\tstatus: {status}\n\tGWFileErrorMsg: {self.GWFileErrorMsg()}")
             raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
         else:
             log.debug(f"\n\tstatus: {status}")
@@ -311,7 +311,7 @@ class Rebuild(Library):
 
             input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
             if status not in successes.success_codes:
-                log.error(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {status}")
+                log.error(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {status}\n\tGWFileErrorMsg: {self.GWFileErrorMsg()}")
                 if raise_unsupported:
                     raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
                 else:
@@ -495,7 +495,7 @@ class Rebuild(Library):
 
             input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
             if status not in successes.success_codes:
-                log.error(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {status}")
+                log.error(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {status}\n\tGWFileErrorMsg: {self.GWFileErrorMsg()}")
                 if raise_unsupported:
                     raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
                 else:
@@ -669,7 +669,7 @@ class Rebuild(Library):
 
             input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
             if status not in successes.success_codes:
-                log.error(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {status}")
+                log.error(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {status}\n\tGWFileErrorMsg: {self.GWFileErrorMsg()}")
                 if raise_unsupported:
                     raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
                 else:
@@ -843,7 +843,7 @@ class Rebuild(Library):
 
             input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
             if status not in successes.success_codes:
-                log.error(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {status}")
+                log.error(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {status}\n\tGWFileErrorMsg: {self.GWFileErrorMsg()}")
                 if raise_unsupported:
                     raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
                 else:
@@ -903,3 +903,17 @@ class Rebuild(Library):
             import_files_dict[relative_path] = import_bytes
 
         return import_files_dict
+
+    def GWFileErrorMsg(self):
+        """ Retrieve the Glasswall Process error message.
+
+        Returns:
+            error_message (str): The Glasswall Process error message.
+        """
+        # Declare the return type
+        self.library.GWFileErrorMsg.restype = ct.c_wchar_p
+
+        # API call
+        error_message = self.library.GWFileErrorMsg()
+
+        return error_message
