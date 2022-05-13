@@ -796,7 +796,7 @@ class ArchiveManager(Library):
         ct_output_report_buffer = ct.c_void_p()  # void **outputReportBuffer
         ct_output_report_buffer_length = ct.c_size_t()  # size_t *outputReportBufferLength
         ct_content_management_policy = ct.c_char_p(content_management_policy.encode())  # const char *xmlConfigString
-        ct_include_analysis_report = ct.c_int(include_analysis_report) # int
+        ct_include_analysis_report = ct.c_int(include_analysis_report)  # int
         gw_return_object = glasswall.GwReturnObj()
 
         with utils.CwdHandler(new_cwd=self.library_path):
