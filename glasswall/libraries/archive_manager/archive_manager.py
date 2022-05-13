@@ -726,7 +726,7 @@ class ArchiveManager(Library):
 
         return exported_archives_dict
 
-    def import_archive(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Optional[str] = None, output_report: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager] = None, raise_unsupported: bool = True):
+    def import_archive(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Optional[str] = None, output_report: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager] = None, include_analysis_report: Optional[int] = 1, raise_unsupported: bool = True):
         """ Imports an archive using the Glasswall engine.
 
         Args:
@@ -734,6 +734,7 @@ class ArchiveManager(Library):
             output_file (Optional[str], optional): Default None. If str, write the archive to the output_file path.
             output_report (Optional[str], optional): Default None. If str, write the analysis report to the output_report path.
             content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager], optional): The content management policy to apply.
+            include_analysis_report (Optional[int], optional): Default 1. If 1, write the analysis report into imported archive.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
@@ -781,7 +782,8 @@ class ArchiveManager(Library):
             ct.POINTER(ct.c_size_t),
             ct.POINTER(ct.c_void_p),
             ct.POINTER(ct.c_size_t),
-            ct.c_char_p
+            ct.c_char_p,
+            ct.c_int
         ]
 
         # Variable initialisation
@@ -794,6 +796,7 @@ class ArchiveManager(Library):
         ct_output_report_buffer = ct.c_void_p()  # void **outputReportBuffer
         ct_output_report_buffer_length = ct.c_size_t()  # size_t *outputReportBufferLength
         ct_content_management_policy = ct.c_char_p(content_management_policy.encode())  # const char *xmlConfigString
+        ct_include_analysis_report = ct.c_int(include_analysis_report) # int
         gw_return_object = glasswall.GwReturnObj()
 
         with utils.CwdHandler(new_cwd=self.library_path):
@@ -805,7 +808,8 @@ class ArchiveManager(Library):
                 ct.byref(ct_output_buffer_length),
                 ct.byref(ct_output_report_buffer),
                 ct.byref(ct_output_report_buffer_length),
-                ct_content_management_policy
+                ct_content_management_policy,
+                ct_include_analysis_report
             )
 
         input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
