@@ -403,14 +403,18 @@ def validate_xml(xml: Union[str, bytes, bytearray, io.BytesIO, "glasswall.conten
         TypeError: if the type of arg "xml" is invalid
     """
     try:
-        # Get tree from file
-        if isinstance(xml, str) and os.path.isfile(xml):
-            tree = etree.parse(xml)
+        # Get tree from file/str
+        if isinstance(xml, str):
+            try:
+                is_file = os.path.isfile(os.path.abspath(xml))
+            except Exception:
+                is_file = False
 
-        # Get tree from xml string
-        elif isinstance(xml, str):
-            xml = xml.encode("utf-8")
-            tree = etree.fromstring(xml)
+            if is_file:
+                tree = etree.parse(xml)
+            else:
+                xml = xml.encode("utf-8")
+                tree = etree.fromstring(xml)
 
         # Get tree from bytes, bytearray, io.BytesIO
         elif isinstance(xml, (bytes, bytearray, io.BytesIO)):
