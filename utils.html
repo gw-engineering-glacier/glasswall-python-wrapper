@@ -429,14 +429,18 @@ def validate_xml(xml: Union[str, bytes, bytearray, io.BytesIO, &#34;glasswall.co
         TypeError: if the type of arg &#34;xml&#34; is invalid
     &#34;&#34;&#34;
     try:
-        # Get tree from file
-        if isinstance(xml, str) and os.path.isfile(xml):
-            tree = etree.parse(xml)
+        # Get tree from file/str
+        if isinstance(xml, str):
+            try:
+                is_file = os.path.isfile(os.path.abspath(xml))
+            except Exception:
+                is_file = False
 
-        # Get tree from xml string
-        elif isinstance(xml, str):
-            xml = xml.encode(&#34;utf-8&#34;)
-            tree = etree.fromstring(xml)
+            if is_file:
+                tree = etree.parse(xml)
+            else:
+                xml = xml.encode(&#34;utf-8&#34;)
+                tree = etree.fromstring(xml)
 
         # Get tree from bytes, bytearray, io.BytesIO
         elif isinstance(xml, (bytes, bytearray, io.BytesIO)):
@@ -1050,14 +1054,18 @@ buffer_length (ct.c_size_t()): The file buffer length.</p>
         TypeError: if the type of arg &#34;xml&#34; is invalid
     &#34;&#34;&#34;
     try:
-        # Get tree from file
-        if isinstance(xml, str) and os.path.isfile(xml):
-            tree = etree.parse(xml)
+        # Get tree from file/str
+        if isinstance(xml, str):
+            try:
+                is_file = os.path.isfile(os.path.abspath(xml))
+            except Exception:
+                is_file = False
 
-        # Get tree from xml string
-        elif isinstance(xml, str):
-            xml = xml.encode(&#34;utf-8&#34;)
-            tree = etree.fromstring(xml)
+            if is_file:
+                tree = etree.parse(xml)
+            else:
+                xml = xml.encode(&#34;utf-8&#34;)
+                tree = etree.fromstring(xml)
 
         # Get tree from bytes, bytearray, io.BytesIO
         elif isinstance(xml, (bytes, bytearray, io.BytesIO)):
