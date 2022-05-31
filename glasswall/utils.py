@@ -199,24 +199,31 @@ def get_library(library: str, directory: str):
         FileNotFoundError: Library was not found.
     """
     library = as_snake_case(library)
-    library_file_name = glasswall.libraries.os_info[glasswall._OPERATING_SYSTEM][library]["file_name"]
+    library_file_names = glasswall.libraries.os_info[glasswall._OPERATING_SYSTEM][library]["file_name"]
 
-    p = pathlib.Path(directory)
-    matching_files = list(p.rglob(library_file_name))
+    if isinstance(library_file_names, str):
+        library_file_names = [library_file_names]
 
-    if not matching_files:
-        raise FileNotFoundError(f'Could not find file: "{library_file_name}" under directory: "{directory}"')
+    for library_file_name in library_file_names:
+        p = pathlib.Path(directory)
+        matching_files = list(p.rglob(library_file_name))
 
-    library_file_path = str(max(matching_files, key=os.path.getctime).resolve())
+        if not matching_files:
+            continue
 
-    if len(matching_files) > 1:
-        # warn that multiple libraries found, list library paths if there are <= 5
-        if len(matching_files) <= 5:
-            log.warning(f"Found {len(matching_files)} {library} libraries, but expected only one:\n{chr(10).join(str(item) for item in matching_files)}\nLatest library: {library_file_path}")
-        else:
-            log.warning(f"Found {len(matching_files)} {library} libraries, but expected only one.\nLatest library: {library_file_path}")
+        library_file_path = str(max(matching_files, key=os.path.getctime).resolve())
 
-    return library_file_path
+        if len(matching_files) > 1:
+            # warn that multiple libraries found, list library paths if there are <= 5
+            if len(matching_files) <= 5:
+                log.warning(f"Found {len(matching_files)} {library} libraries, but expected only one:\n{chr(10).join(str(item) for item in matching_files)}\nLatest library: {library_file_path}")
+            else:
+                log.warning(f"Found {len(matching_files)} {library} libraries, but expected only one.\nLatest library: {library_file_path}")
+
+        return library_file_path
+
+    # exhausted, not found
+    raise FileNotFoundError(f'Could not find any files: "{library_file_names}" under directory: "{directory}"')
 
 
 def list_file_paths(directory: str, recursive: bool = True, absolute: bool = True, followlinks: bool = True):
