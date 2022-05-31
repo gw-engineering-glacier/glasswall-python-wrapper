@@ -221,9 +221,9 @@ def get_library(library: str, directory: str):
                 log.warning(f"Found {len(matching_files)} {library} libraries, but expected only one.\nLatest library: {library_file_path}")
 
         return library_file_path
-    else:
-        # exhausted, not found
-        raise FileNotFoundError(f'Could not find any files: "{library_file_names}" under directory: "{directory}"')
+
+    # exhausted, not found
+    raise FileNotFoundError(f'Could not find any files: "{library_file_names}" under directory: "{directory}"')
 
 
 def list_file_paths(directory: str, recursive: bool = True, absolute: bool = True, followlinks: bool = True):
