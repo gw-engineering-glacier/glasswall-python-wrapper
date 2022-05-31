@@ -16,8 +16,11 @@ os_info = {
                 "libquazip.so.1",
             ],
         },
-        "gwqtcli": {
-            "file_name": "GWQtCLI",
+        "cli": {
+            "file_name": [
+                "gwcli",
+                "GWQtCLI"
+            ],
             "dependencies": [],
         },
         "rebuild": {
@@ -55,8 +58,11 @@ os_info = {
                 "quazip.dll",
             ],
         },
-        "gwqtcli": {
-            "file_name": "GWQtCLI.exe",
+        "cli": {
+            "file_name": [
+                "gwcli.exe",
+                "GWQtCLI.exe"
+            ],
             "dependencies": [],
         },
         "rebuild": {
