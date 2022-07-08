@@ -27,11 +27,13 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">import ctypes as ct
+import functools
 import io
 import os
 import pathlib
 import tempfile
-from typing import Iterable, Union
+import warnings
+from typing import Any, Callable, Dict, Iterable, Union
 
 from lxml import etree
 
@@ -497,7 +499,53 @@ def xml_as_dict(xml):
     # Sort for ease of viewing logs
     dict_ = {k: v for k, v in sorted(dict_.items())}
 
-    return dict_</code></pre>
+    return dict_
+
+
+def deprecated_alias(**aliases: str) -&gt; Callable:
+    &#34;&#34;&#34; Decorator for deprecated function and method arguments.
+
+    Use as follows:
+
+    @deprecated_alias(old_arg=&#39;new_arg&#39;)
+    def myfunc(new_arg):
+        ...
+
+    https://stackoverflow.com/a/49802489
+    &#34;&#34;&#34;
+
+    def deco(f: Callable):
+        @functools.wraps(f)
+        def wrapper(*args, **kwargs):
+            rename_kwargs(f.__name__, kwargs, aliases)
+            return f(*args, **kwargs)
+
+        return wrapper
+
+    return deco
+
+
+def rename_kwargs(func_name: str, kwargs: Dict[str, Any], aliases: Dict[str, str]):
+    &#34;&#34;&#34; Helper function for deprecating function arguments.
+
+    https://stackoverflow.com/a/49802489
+    &#34;&#34;&#34;
+    for alias, new in aliases.items():
+        if alias in kwargs:
+            if new in kwargs:
+                raise TypeError(
+                    f&#34;{func_name} received both {alias} and {new} as arguments!&#34;
+                    f&#34; {alias} is deprecated, use {new} instead.&#34;
+                )
+            warnings.warn(
+                message=(
+                    f&#34;`{alias}` is deprecated as an argument to `{func_name}`; use&#34;
+                    f&#34; `{new}` instead.&#34;
+                ),
+                category=DeprecationWarning,
+                stacklevel=3,
+            )
+            kwargs[new] = kwargs.pop(alias)</code></pre>
 </details>
 </section>
 <section>
@@ -727,6 +775,43 @@ buffer_length (ct.c_size_t()): The file buffer length.</p>
                 os.rmdir(os.path.realpath(os.path.join(root, dir_)))
             except OSError:
                 pass</code></pre>
+</details>
+</dd>
+<dt id="glasswall.utils.deprecated_alias"><code class="name flex">
+<span>def <span class="ident">deprecated_alias</span></span>(<span>**aliases: str) ‑> Callable</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Decorator for deprecated function and method arguments.</p>
+<p>Use as follows:</p>
+<p>@deprecated_alias(old_arg='new_arg')
+def myfunc(new_arg):
+&hellip;</p>
+<p><a href="https://stackoverflow.com/a/49802489">https://stackoverflow.com/a/49802489</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def deprecated_alias(**aliases: str) -&gt; Callable:
+    &#34;&#34;&#34; Decorator for deprecated function and method arguments.
+
+    Use as follows:
+
+    @deprecated_alias(old_arg=&#39;new_arg&#39;)
+    def myfunc(new_arg):
+        ...
+
+    https://stackoverflow.com/a/49802489
+    &#34;&#34;&#34;
+
+    def deco(f: Callable):
+        @functools.wraps(f)
+        def wrapper(*args, **kwargs):
+            rename_kwargs(f.__name__, kwargs, aliases)
+            return f(*args, **kwargs)
+
+        return wrapper
+
+    return deco</code></pre>
 </details>
 </dd>
 <dt id="glasswall.utils.flatten_list"><code class="name flex">
@@ -1031,6 +1116,39 @@ buffer_length (ct.c_size_t()): The file buffer length.</p>
     return missing_dependencies</code></pre>
 </details>
 </dd>
+<dt id="glasswall.utils.rename_kwargs"><code class="name flex">
+<span>def <span class="ident">rename_kwargs</span></span>(<span>func_name: str, kwargs: Dict[str, Any], aliases: Dict[str, str])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Helper function for deprecating function arguments.</p>
+<p><a href="https://stackoverflow.com/a/49802489">https://stackoverflow.com/a/49802489</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def rename_kwargs(func_name: str, kwargs: Dict[str, Any], aliases: Dict[str, str]):
+    &#34;&#34;&#34; Helper function for deprecating function arguments.
+
+    https://stackoverflow.com/a/49802489
+    &#34;&#34;&#34;
+    for alias, new in aliases.items():
+        if alias in kwargs:
+            if new in kwargs:
+                raise TypeError(
+                    f&#34;{func_name} received both {alias} and {new} as arguments!&#34;
+                    f&#34; {alias} is deprecated, use {new} instead.&#34;
+                )
+            warnings.warn(
+                message=(
+                    f&#34;`{alias}` is deprecated as an argument to `{func_name}`; use&#34;
+                    f&#34; `{new}` instead.&#34;
+                ),
+                category=DeprecationWarning,
+                stacklevel=3,
+            )
+            kwargs[new] = kwargs.pop(alias)</code></pre>
+</details>
+</dd>
 <dt id="glasswall.utils.validate_xml"><code class="name flex">
 <span>def <span class="ident">validate_xml</span></span>(<span>xml: Union[str, bytes, bytearray, _io.BytesIO, _ForwardRef('<a title="glasswall.content_management.policies.policy.Policy" href="content_management/policies/policy.html#glasswall.content_management.policies.policy.Policy">Policy</a>')])</span>
 </code></dt>
@@ -1308,6 +1426,7 @@ buffer_length (ct.c_size_t()): The file buffer length.</p>
 <li><code><a title="glasswall.utils.buffer_to_bytes" href="#glasswall.utils.buffer_to_bytes">buffer_to_bytes</a></code></li>
 <li><code><a title="glasswall.utils.delete_directory" href="#glasswall.utils.delete_directory">delete_directory</a></code></li>
 <li><code><a title="glasswall.utils.delete_empty_subdirectories" href="#glasswall.utils.delete_empty_subdirectories">delete_empty_subdirectories</a></code></li>
+<li><code><a title="glasswall.utils.deprecated_alias" href="#glasswall.utils.deprecated_alias">deprecated_alias</a></code></li>
 <li><code><a title="glasswall.utils.flatten_list" href="#glasswall.utils.flatten_list">flatten_list</a></code></li>
 <li><code><a title="glasswall.utils.get_file_type" href="#glasswall.utils.get_file_type">get_file_type</a></code></li>
 <li><code><a title="glasswall.utils.get_libraries" href="#glasswall.utils.get_libraries">get_libraries</a></code></li>
@@ -1315,6 +1434,7 @@ buffer_length (ct.c_size_t()): The file buffer length.</p>
 <li><code><a title="glasswall.utils.list_file_paths" href="#glasswall.utils.list_file_paths">list_file_paths</a></code></li>
 <li><code><a title="glasswall.utils.list_subdirectory_paths" href="#glasswall.utils.list_subdirectory_paths">list_subdirectory_paths</a></code></li>
 <li><code><a title="glasswall.utils.load_dependencies" href="#glasswall.utils.load_dependencies">load_dependencies</a></code></li>
+<li><code><a title="glasswall.utils.rename_kwargs" href="#glasswall.utils.rename_kwargs">rename_kwargs</a></code></li>
 <li><code><a title="glasswall.utils.validate_xml" href="#glasswall.utils.validate_xml">validate_xml</a></code></li>
 <li><code><a title="glasswall.utils.xml_as_dict" href="#glasswall.utils.xml_as_dict">xml_as_dict</a></code></li>
 </ul>
