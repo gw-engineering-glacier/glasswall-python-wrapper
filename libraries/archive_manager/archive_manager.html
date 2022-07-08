@@ -215,7 +215,7 @@ class ArchiveManager(Library):
 
         return gw_return_object
 
-    def analyse_directory(self, input_directory: str, output_directory: Optional[str], output_report_directory: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager] = None, raise_unsupported: bool = True):
+    def analyse_directory(self, input_directory: str, output_directory: Optional[str] = None, output_report_directory: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager] = None, raise_unsupported: bool = True):
         &#34;&#34;&#34; Calls analyse_archive on each file in input_directory using the given content management configuration. The resulting archives and analysis reports are written to output_directory maintaining the same directory structure as input_directory.
 
         Args:
@@ -365,7 +365,7 @@ class ArchiveManager(Library):
 
         return gw_return_object
 
-    def protect_directory(self, input_directory: str, output_directory: Optional[str], output_report_directory: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager] = None, raise_unsupported: bool = True):
+    def protect_directory(self, input_directory: str, output_directory: Optional[str] = None, output_report_directory: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager] = None, raise_unsupported: bool = True):
         &#34;&#34;&#34; Calls protect_archive on each file in input_directory using the given content management configuration. The resulting archives are written to output_directory maintaining the same directory structure as input_directory.
 
         Args:
@@ -1102,7 +1102,7 @@ class ArchiveManager(Library):
 
         return gw_return_object
 
-    def analyse_directory(self, input_directory: str, output_directory: Optional[str], output_report_directory: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager] = None, raise_unsupported: bool = True):
+    def analyse_directory(self, input_directory: str, output_directory: Optional[str] = None, output_report_directory: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager] = None, raise_unsupported: bool = True):
         &#34;&#34;&#34; Calls analyse_archive on each file in input_directory using the given content management configuration. The resulting archives and analysis reports are written to output_directory maintaining the same directory structure as input_directory.
 
         Args:
@@ -1252,7 +1252,7 @@ class ArchiveManager(Library):
 
         return gw_return_object
 
-    def protect_directory(self, input_directory: str, output_directory: Optional[str], output_report_directory: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager] = None, raise_unsupported: bool = True):
+    def protect_directory(self, input_directory: str, output_directory: Optional[str] = None, output_report_directory: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager] = None, raise_unsupported: bool = True):
         &#34;&#34;&#34; Calls protect_archive on each file in input_directory using the given content management configuration. The resulting archives are written to output_directory maintaining the same directory structure as input_directory.
 
         Args:
@@ -1942,7 +1942,7 @@ class ArchiveManager(Library):
 </details>
 </dd>
 <dt id="glasswall.libraries.archive_manager.archive_manager.ArchiveManager.analyse_directory"><code class="name flex">
-<span>def <span class="ident">analyse_directory</span></span>(<span>self, input_directory: str, output_directory: Optional[str], output_report_directory: Optional[str] = None, content_management_policy: Union[NoneType, str, bytes, bytearray, _io.BytesIO, <a title="glasswall.content_management.policies.archive_manager.ArchiveManager" href="../../content_management/policies/archive_manager.html#glasswall.content_management.policies.archive_manager.ArchiveManager">ArchiveManager</a>] = None, raise_unsupported: bool = True)</span>
+<span>def <span class="ident">analyse_directory</span></span>(<span>self, input_directory: str, output_directory: Optional[str] = None, output_report_directory: Optional[str] = None, content_management_policy: Union[NoneType, str, bytes, bytearray, _io.BytesIO, <a title="glasswall.content_management.policies.archive_manager.ArchiveManager" href="../../content_management/policies/archive_manager.html#glasswall.content_management.policies.archive_manager.ArchiveManager">ArchiveManager</a>] = None, raise_unsupported: bool = True)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Calls analyse_archive on each file in input_directory using the given content management configuration. The resulting archives and analysis reports are written to output_directory maintaining the same directory structure as input_directory.</p>
@@ -1965,7 +1965,7 @@ class ArchiveManager(Library):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def analyse_directory(self, input_directory: str, output_directory: Optional[str], output_report_directory: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager] = None, raise_unsupported: bool = True):
+<pre><code class="python">def analyse_directory(self, input_directory: str, output_directory: Optional[str] = None, output_report_directory: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager] = None, raise_unsupported: bool = True):
     &#34;&#34;&#34; Calls analyse_archive on each file in input_directory using the given content management configuration. The resulting archives and analysis reports are written to output_directory maintaining the same directory structure as input_directory.
 
     Args:
@@ -2768,7 +2768,7 @@ def is_supported_archive(self, archive_type: str):
 </details>
 </dd>
 <dt id="glasswall.libraries.archive_manager.archive_manager.ArchiveManager.protect_directory"><code class="name flex">
-<span>def <span class="ident">protect_directory</span></span>(<span>self, input_directory: str, output_directory: Optional[str], output_report_directory: Optional[str] = None, content_management_policy: Union[NoneType, str, bytes, bytearray, _io.BytesIO, <a title="glasswall.content_management.policies.archive_manager.ArchiveManager" href="../../content_management/policies/archive_manager.html#glasswall.content_management.policies.archive_manager.ArchiveManager">ArchiveManager</a>] = None, raise_unsupported: bool = True)</span>
+<span>def <span class="ident">protect_directory</span></span>(<span>self, input_directory: str, output_directory: Optional[str] = None, output_report_directory: Optional[str] = None, content_management_policy: Union[NoneType, str, bytes, bytearray, _io.BytesIO, <a title="glasswall.content_management.policies.archive_manager.ArchiveManager" href="../../content_management/policies/archive_manager.html#glasswall.content_management.policies.archive_manager.ArchiveManager">ArchiveManager</a>] = None, raise_unsupported: bool = True)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Calls protect_archive on each file in input_directory using the given content management configuration. The resulting archives are written to output_directory maintaining the same directory structure as input_directory.</p>
@@ -2791,7 +2791,7 @@ def is_supported_archive(self, archive_type: str):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def protect_directory(self, input_directory: str, output_directory: Optional[str], output_report_directory: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager] = None, raise_unsupported: bool = True):
+<pre><code class="python">def protect_directory(self, input_directory: str, output_directory: Optional[str] = None, output_report_directory: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager] = None, raise_unsupported: bool = True):
     &#34;&#34;&#34; Calls protect_archive on each file in input_directory using the given content management configuration. The resulting archives are written to output_directory maintaining the same directory structure as input_directory.
 
     Args:
