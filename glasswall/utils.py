@@ -1,11 +1,13 @@
 
 
 import ctypes as ct
+import functools
 import io
 import os
 import pathlib
 import tempfile
-from typing import Iterable, Union
+import warnings
+from typing import Any, Callable, Dict, Iterable, Union
 
 from lxml import etree
 
@@ -472,3 +474,49 @@ def xml_as_dict(xml):
     dict_ = {k: v for k, v in sorted(dict_.items())}
 
     return dict_
+
+
+def deprecated_alias(**aliases: str) -> Callable:
+    """ Decorator for deprecated function and method arguments.
+
+    Use as follows:
+
+    @deprecated_alias(old_arg='new_arg')
+    def myfunc(new_arg):
+        ...
+
+    https://stackoverflow.com/a/49802489
+    """
+
+    def deco(f: Callable):
+        @functools.wraps(f)
+        def wrapper(*args, **kwargs):
+            rename_kwargs(f.__name__, kwargs, aliases)
+            return f(*args, **kwargs)
+
+        return wrapper
+
+    return deco
+
+
+def rename_kwargs(func_name: str, kwargs: Dict[str, Any], aliases: Dict[str, str]):
+    """ Helper function for deprecating function arguments.
+
+    https://stackoverflow.com/a/49802489
+    """
+    for alias, new in aliases.items():
+        if alias in kwargs:
+            if new in kwargs:
+                raise TypeError(
+                    f"{func_name} received both {alias} and {new} as arguments!"
+                    f" {alias} is deprecated, use {new} instead."
+                )
+            warnings.warn(
+                message=(
+                    f"`{alias}` is deprecated as an argument to `{func_name}`; use"
+                    f" `{new}` instead."
+                ),
+                category=DeprecationWarning,
+                stacklevel=3,
+            )
+            kwargs[new] = kwargs.pop(alias)
