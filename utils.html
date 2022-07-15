@@ -226,29 +226,32 @@ def get_library(library: str, directory: str):
         KeyError: Unsupported OS or library name was not found in glasswall.libraries.os_info.
         FileNotFoundError: Library was not found.
     &#34;&#34;&#34;
+    if not os.path.isdir(directory):
+        raise NotADirectoryError(directory)
+
     library = as_snake_case(library)
     library_file_names = glasswall.libraries.os_info[glasswall._OPERATING_SYSTEM][library][&#34;file_name&#34;]
 
     if isinstance(library_file_names, str):
         library_file_names = [library_file_names]
 
-    for library_file_name in library_file_names:
+    matches = []
+    for alias in library_file_names:
         p = pathlib.Path(directory)
-        matching_files = list(p.rglob(library_file_name))
+        alias_matches = list(p.rglob(alias))
+        matches.extend(alias_matches)
 
-        if not matching_files:
-            continue
-
-        library_file_path = str(max(matching_files, key=os.path.getctime).resolve())
-
-        if len(matching_files) &gt; 1:
+    if matches:
+        latest_library = str(max(matches, key=os.path.getctime).resolve())
+        if len(matches) &gt; 1:
             # warn that multiple libraries found, list library paths if there are &lt;= 5
-            if len(matching_files) &lt;= 5:
-                log.warning(f&#34;Found {len(matching_files)} {library} libraries, but expected only one:\n{chr(10).join(str(item) for item in matching_files)}\nLatest library: {library_file_path}&#34;)
+            if len(matches) &lt;= 5:
+                log.warning(f&#34;Found {len(matches)} {library} libraries, but expected only one:\n{chr(10).join(str(item) for item in matches)}\nLatest library: {latest_library}&#34;)
             else:
-                log.warning(f&#34;Found {len(matching_files)} {library} libraries, but expected only one.\nLatest library: {library_file_path}&#34;)
+                log.warning(f&#34;Found {len(matches)} {library} libraries, but expected only one.\nLatest library: {latest_library}&#34;)
 
-        return library_file_path
+        # Return library with latest change time
+        return latest_library
 
     # exhausted, not found
     raise FileNotFoundError(f&#39;Could not find any files: &#34;{library_file_names}&#34; under directory: &#34;{directory}&#34;&#39;)
@@ -926,29 +929,32 @@ def myfunc(new_arg):
         KeyError: Unsupported OS or library name was not found in glasswall.libraries.os_info.
         FileNotFoundError: Library was not found.
     &#34;&#34;&#34;
+    if not os.path.isdir(directory):
+        raise NotADirectoryError(directory)
+
     library = as_snake_case(library)
     library_file_names = glasswall.libraries.os_info[glasswall._OPERATING_SYSTEM][library][&#34;file_name&#34;]
 
     if isinstance(library_file_names, str):
         library_file_names = [library_file_names]
 
-    for library_file_name in library_file_names:
+    matches = []
+    for alias in library_file_names:
         p = pathlib.Path(directory)
-        matching_files = list(p.rglob(library_file_name))
+        alias_matches = list(p.rglob(alias))
+        matches.extend(alias_matches)
 
-        if not matching_files:
-            continue
-
-        library_file_path = str(max(matching_files, key=os.path.getctime).resolve())
-
-        if len(matching_files) &gt; 1:
+    if matches:
+        latest_library = str(max(matches, key=os.path.getctime).resolve())
+        if len(matches) &gt; 1:
             # warn that multiple libraries found, list library paths if there are &lt;= 5
-            if len(matching_files) &lt;= 5:
-                log.warning(f&#34;Found {len(matching_files)} {library} libraries, but expected only one:\n{chr(10).join(str(item) for item in matching_files)}\nLatest library: {library_file_path}&#34;)
+            if len(matches) &lt;= 5:
+                log.warning(f&#34;Found {len(matches)} {library} libraries, but expected only one:\n{chr(10).join(str(item) for item in matches)}\nLatest library: {latest_library}&#34;)
             else:
-                log.warning(f&#34;Found {len(matching_files)} {library} libraries, but expected only one.\nLatest library: {library_file_path}&#34;)
+                log.warning(f&#34;Found {len(matches)} {library} libraries, but expected only one.\nLatest library: {latest_library}&#34;)
 
-        return library_file_path
+        # Return library with latest change time
+        return latest_library
 
     # exhausted, not found
     raise FileNotFoundError(f&#39;Could not find any files: &#34;{library_file_names}&#34; under directory: &#34;{directory}&#34;&#39;)</code></pre>
