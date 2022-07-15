@@ -200,29 +200,32 @@ def get_library(library: str, directory: str):
         KeyError: Unsupported OS or library name was not found in glasswall.libraries.os_info.
         FileNotFoundError: Library was not found.
     """
+    if not os.path.isdir(directory):
+        raise NotADirectoryError(directory)
+
     library = as_snake_case(library)
     library_file_names = glasswall.libraries.os_info[glasswall._OPERATING_SYSTEM][library]["file_name"]
 
     if isinstance(library_file_names, str):
         library_file_names = [library_file_names]
 
-    for library_file_name in library_file_names:
+    matches = []
+    for alias in library_file_names:
         p = pathlib.Path(directory)
-        matching_files = list(p.rglob(library_file_name))
+        alias_matches = list(p.rglob(alias))
+        matches.extend(alias_matches)
 
-        if not matching_files:
-            continue
-
-        library_file_path = str(max(matching_files, key=os.path.getctime).resolve())
-
-        if len(matching_files) > 1:
+    if matches:
+        latest_library = str(max(matches, key=os.path.getctime).resolve())
+        if len(matches) > 1:
             # warn that multiple libraries found, list library paths if there are <= 5
-            if len(matching_files) <= 5:
-                log.warning(f"Found {len(matching_files)} {library} libraries, but expected only one:\n{chr(10).join(str(item) for item in matching_files)}\nLatest library: {library_file_path}")
+            if len(matches) <= 5:
+                log.warning(f"Found {len(matches)} {library} libraries, but expected only one:\n{chr(10).join(str(item) for item in matches)}\nLatest library: {latest_library}")
             else:
-                log.warning(f"Found {len(matching_files)} {library} libraries, but expected only one.\nLatest library: {library_file_path}")
+                log.warning(f"Found {len(matches)} {library} libraries, but expected only one.\nLatest library: {latest_library}")
 
-        return library_file_path
+        # Return library with latest change time
+        return latest_library
 
     # exhausted, not found
     raise FileNotFoundError(f'Could not find any files: "{library_file_names}" under directory: "{directory}"')
