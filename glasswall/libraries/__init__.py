@@ -24,7 +24,10 @@ os_info = {
             "dependencies": [],
         },
         "rebuild": {
-            "file_name": "libglasswall.classic.so",
+            "file_name": [
+                "libglasswall.classic.so",
+                "libglasswall.classic.pdf.so"
+            ],
             "dependencies": [],
         },
         "security_tagging": {
@@ -66,7 +69,10 @@ os_info = {
             "dependencies": [],
         },
         "rebuild": {
-            "file_name": "glasswall.classic.dll",
+            "file_name": [
+                "glasswall.classic.dll",
+                "glasswall.classic.pdf.dll"
+            ],
             "dependencies": [],
         },
         "security_tagging": {
