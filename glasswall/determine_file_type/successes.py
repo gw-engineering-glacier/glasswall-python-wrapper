@@ -129,6 +129,21 @@ class ft_json(FileTypeEnumSuccess):
     string = "json"
 
 
+class ft_vbamacros(FileTypeEnumSuccess):
+    integer = 41
+    string = "vba"
+
+
+class ft_svg(FileTypeEnumSuccess):
+    integer = 42
+    string = "svg"
+
+
+class ft_webp(FileTypeEnumSuccess):
+    integer = 43
+    string = "webp"
+
+
 # Supported by an external library.
 class ft_zip(FileTypeEnumSuccess):
     integer = 256
