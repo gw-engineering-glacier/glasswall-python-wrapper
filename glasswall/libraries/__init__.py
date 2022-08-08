@@ -12,9 +12,7 @@ os_info = {
         },
         "editor": {
             "file_name": "libglasswall_core2.so",
-            "dependencies": [
-                "libquazip.so.1",
-            ],
+            "dependencies": [],
         },
         "cli": {
             "file_name": [
@@ -38,8 +36,7 @@ os_info = {
                 "libicuuc.so.56",
                 "libQt5Core.so.5",
                 "libQt5Multimedia.so.5",
-                "libQt5XmlPatterns.so.5",
-                "libquazip.so.1"
+                "libQt5XmlPatterns.so.5"
             ],
         },
         "word_search": {
@@ -57,8 +54,7 @@ os_info = {
             "file_name": "glasswall_core2.dll",
             "dependencies": [
                 "Qt5Core.dll",
-                "Qt5Xml.dll",
-                "quazip.dll",
+                "Qt5Xml.dll"
             ],
         },
         "cli": {
@@ -82,8 +78,7 @@ os_info = {
                 "Qt5Gui.dll",
                 "Qt5Xml.dll",
                 "Qt5XmlPatterns.dll",
-                "Qt5Network.dll",
-                "quazip.dll"
+                "Qt5Network.dll"
             ],
         },
         "word_search": {
