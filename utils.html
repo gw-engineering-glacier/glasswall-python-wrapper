@@ -377,6 +377,9 @@ class TempDirectoryPath:
         while self.temp_directory is None or os.path.isdir(self.temp_directory):
             self.temp_directory = os.path.join(glasswall._TEMPDIR, next(tempfile._get_candidate_names()))
 
+        # Normalize
+        self.temp_directory = str(pathlib.Path(self.temp_directory).resolve())
+
         # Create temp directory
         os.makedirs(self.temp_directory, exist_ok=True)
 
@@ -413,6 +416,9 @@ class TempFilePath:
 
         while self.temp_file is None or os.path.isfile(self.temp_file):
             self.temp_file = os.path.join(self.directory, next(tempfile._get_candidate_names()))
+
+        # Normalize
+        self.temp_file = str(pathlib.Path(self.temp_file).resolve())
 
         # Create temp directory if it does not exist
         os.makedirs(os.path.dirname(self.temp_file), exist_ok=True)
@@ -1343,6 +1349,9 @@ def myfunc(new_arg):
         while self.temp_directory is None or os.path.isdir(self.temp_directory):
             self.temp_directory = os.path.join(glasswall._TEMPDIR, next(tempfile._get_candidate_names()))
 
+        # Normalize
+        self.temp_directory = str(pathlib.Path(self.temp_directory).resolve())
+
         # Create temp directory
         os.makedirs(self.temp_directory, exist_ok=True)
 
@@ -1396,6 +1405,9 @@ def myfunc(new_arg):
 
         while self.temp_file is None or os.path.isfile(self.temp_file):
             self.temp_file = os.path.join(self.directory, next(tempfile._get_candidate_names()))
+
+        # Normalize
+        self.temp_file = str(pathlib.Path(self.temp_file).resolve())
 
         # Create temp directory if it does not exist
         os.makedirs(os.path.dirname(self.temp_file), exist_ok=True)
