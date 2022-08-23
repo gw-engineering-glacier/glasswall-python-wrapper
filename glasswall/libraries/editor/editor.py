@@ -1150,3 +1150,162 @@ class Editor(Library):
         error_message = error_bytes.decode()
 
         return error_message
+
+
+    def GW2GetFileType(self, session: int, file_type_id):
+        """ Retrieve the file type as a string.
+
+        Args:
+            session (int): The session number.
+            file_type_id (int): The file type id.
+
+        Returns:
+            file_type (str): The formal file name for the corresponding file id.
+        """
+        # Validate arg types
+        if not isinstance(session, int):
+            raise TypeError(session)
+
+        # API function declaration
+        self.library.GW2GetFileType.argtypes = [
+            ct.c_size_t,
+            ct.c_size_t,
+            ct.POINTER(ct.c_size_t),
+            ct.POINTER(ct.c_void_p)
+        ]
+
+        # Variable initialisation
+        ct_session = ct.c_size_t(session)
+        ct_file_type = ct.c_size_t(file_type_id)
+        ct_buffer = ct.c_void_p()
+        ct_buffer_length = ct.c_size_t(0)
+
+        # API call
+        status = self.library.GW2GetFileType(
+            ct_session,
+            ct_file_type,
+            ct.byref(ct_buffer),
+            ct.byref(ct_buffer_length)
+        )
+
+        if status not in successes.success_codes:
+            log.error(f"\n\tsession: {session}\n\tstatus: {status}")
+            raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+        else:
+            log.debug(f"\n\tsession: {session}\n\tstatus: {status}")
+
+        # Editor wrote to a buffer, convert it to bytes
+        file_type_bytes = utils.buffer_to_bytes(
+            ct_buffer,
+            ct_buffer_length
+        )
+
+        file_type = file_type_bytes.decode()
+
+        return file_type
+
+
+    def GW2GetFileTypeID(self, session: int, file_type_str):
+        """ Retrieve the Glasswall file type id given a file type string.
+
+        Args:
+            session (int): The session number.
+            file_type_str (str): The file type as a string.
+
+        Returns:
+            file_type_id (str): The Glasswall file type id for the specified file type.
+        """
+        # Validate arg types
+        if not isinstance(session, int):
+            raise TypeError(session)
+
+        # API function declaration
+        self.library.GW2GetFileType.argtypes = [
+            ct.c_size_t,
+            ct.c_char_p,
+            ct.POINTER(ct.c_size_t),
+            ct.POINTER(ct.c_void_p)
+        ]
+
+        # Variable initialisation
+        ct_session = ct.c_size_t(session)
+        ct_file_type = ct.c_char_p(file_type_str)
+        ct_buffer = ct.c_void_p()
+        ct_buffer_length = ct.c_size_t(0)
+
+        # API call
+        status = self.library.GW2GetFileTypeID(
+            ct_session,
+            ct_file_type,
+            ct.byref(ct_buffer),
+            ct.byref(ct_buffer_length)
+        )
+
+        if status not in successes.success_codes:
+            log.error(f"\n\tsession: {session}\n\tstatus: {status}")
+            raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+        else:
+            log.debug(f"\n\tsession: {session}\n\tstatus: {status}")
+
+        # Editor wrote to a buffer, convert it to bytes
+        file_type_bytes = utils.buffer_to_bytes(
+            ct_buffer,
+            ct_buffer_length
+        )
+
+        file_type_id = file_type_bytes.decode()
+
+        return file_type_id
+
+    def get_file_info(self, file_type: Union[str, int], output_file: Union[None, str] = None, raise_unsupported: bool = True):
+        """ Get the Glasswall file type id on providing a file extension or get the formal name of a file corresponding to the Glasswall file type id.
+
+        Args:
+            file_type (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
+            output_file (Union[None, str], optional): The output file path where the protected file will be written.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            file_bytes (bytes): The file type information in bytes.
+        """
+        # Validate arg types
+        if not isinstance(file_type, (str, int)):
+            raise TypeError(file_type)
+        if not isinstance(output_file, (type(None), str)):
+            raise TypeError(output_file)
+        if not isinstance(raise_unsupported, bool):
+            raise TypeError(raise_unsupported)
+
+        # Convert string path arguments to absolute paths
+        if isinstance(output_file, str):
+            output_file = os.path.abspath(output_file)
+            # make directories that do not exist
+            os.makedirs(os.path.dirname(output_file), exist_ok=True)
+
+        with utils.CwdHandler(self.library_path):
+            with self.new_session() as session:
+                
+                if isinstance(file_type, str):
+                    status = self.GW2GetFileType(session, file_type)
+                if not isinstance(output_file, (type(None), int)):
+                    status = self.GW2GetFileTypeID(session, file_type)               
+
+                if status not in successes.success_codes:
+                    log.error(f"\n\tsession: {session}\n\tstatus: {status}")
+                    if raise_unsupported:
+                        raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+                    else:
+                        file_bytes = None
+                else:
+                    log.debug(f"session: {session}\n\tstatus: {status}")
+                    # Get file bytes
+                    if isinstance(output_file, str):
+                        # File to file and memory to file, Editor wrote to a file, read it to get the file bytes
+                        if not os.path.isfile(output_file):
+                            log.error(f"Editor returned success code: {status} but no output file was found: {output_file}")
+                            file_bytes = None
+                        else:
+                            with open(output_file, "rb") as f:
+                                file_bytes = f.read()
+
+                return file_bytes
