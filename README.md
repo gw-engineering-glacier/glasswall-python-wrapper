@@ -4,7 +4,7 @@
 
 # Glasswall Python Wrapper
 
-A high level Python wrapper for interfacing with Glasswall libraries.
+A high level Python wrapper for interfacing with Glasswall libraries
 
 ## Getting Started
 
