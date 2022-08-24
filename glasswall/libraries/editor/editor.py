@@ -1257,55 +1257,28 @@ class Editor(Library):
 
         return file_type_id
 
-    def get_file_info(self, file_type: Union[str, int], output_file: Union[None, str] = None, raise_unsupported: bool = True):
+    def get_file_info(self, file_type: Union[str, int], raise_unsupported: bool = True):
         """ Get the Glasswall file type id on providing a file extension or get the formal name of a file corresponding to the Glasswall file type id.
 
         Args:
             file_type (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
-            output_file (Union[None, str], optional): The output file path where the protected file will be written.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
-            file_bytes (bytes): The file type information in bytes.
+            file_type_info (str): The file type information(empty string returned when id not found or 0 returned when unable to determine file id from extension).
         """
         # Validate arg types
         if not isinstance(file_type, (str, int)):
             raise TypeError(file_type)
-        if not isinstance(output_file, (type(None), str)):
-            raise TypeError(output_file)
         if not isinstance(raise_unsupported, bool):
             raise TypeError(raise_unsupported)
-
-        # Convert string path arguments to absolute paths
-        if isinstance(output_file, str):
-            output_file = os.path.abspath(output_file)
-            # make directories that do not exist
-            os.makedirs(os.path.dirname(output_file), exist_ok=True)
 
         with utils.CwdHandler(self.library_path):
             with self.new_session() as session:
                 
                 if isinstance(file_type, int):
-                    status = self.GW2GetFileType(session, file_type)
+                    file_type_info = self.GW2GetFileType(session, file_type)
                 if isinstance(file_type, str):
-                    status = self.GW2GetFileTypeID(session, file_type)               
-
-                if status not in successes.success_codes:
-                    log.error(f"\n\tsession: {session}\n\tstatus: {status}")
-                    if raise_unsupported:
-                        raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
-                    else:
-                        file_bytes = None
-                else:
-                    log.debug(f"session: {session}\n\tstatus: {status}")
-                    # Get file bytes
-                    if isinstance(output_file, str):
-                        # File to file and memory to file, Editor wrote to a file, read it to get the file bytes
-                        if not os.path.isfile(output_file):
-                            log.error(f"Editor returned success code: {status} but no output file was found: {output_file}")
-                            file_bytes = None
-                        else:
-                            with open(output_file, "rb") as f:
-                                file_bytes = f.read()
-
-                return file_bytes
+                    file_type_info = self.GW2GetFileTypeID(session, file_type)               
+                
+                return file_type_info
