@@ -1177,15 +1177,15 @@ class Editor(Library):
         # Variable initialisation
         ct_session = ct.c_size_t(session)
         ct_file_type = ct.c_size_t(file_type_id)
-        ct_buffer = ct.c_void_p()
         ct_buffer_length = ct.c_size_t(0)
+        ct_buffer = ct.c_void_p()
 
         # API call
         status = self.library.GW2GetFileType(
             ct_session,
             ct_file_type,
-            ct.byref(ct_buffer),
-            ct.byref(ct_buffer_length)
+            ct.byref(ct_buffer_length),            
+            ct.byref(ct_buffer)
         )
 
         if status not in successes.success_codes:
@@ -1229,16 +1229,16 @@ class Editor(Library):
 
         # Variable initialisation
         ct_session = ct.c_size_t(session)
-        ct_file_type = ct.c_char_p(file_type_str)
-        ct_buffer = ct.c_void_p()
+        ct_file_type = ct.c_char_p(file_type_str.encode('utf-8'))
         ct_buffer_length = ct.c_size_t(0)
+        ct_buffer = ct.c_void_p()
 
         # API call
         status = self.library.GW2GetFileTypeID(
             ct_session,
-            ct_file_type,
-            ct.byref(ct_buffer),
-            ct.byref(ct_buffer_length)
+            ct_file_type,            
+            ct.byref(ct_buffer_length),
+            ct.byref(ct_buffer)
         )
 
         if status not in successes.success_codes:
@@ -1285,9 +1285,9 @@ class Editor(Library):
         with utils.CwdHandler(self.library_path):
             with self.new_session() as session:
                 
-                if isinstance(file_type, str):
+                if isinstance(file_type, int):
                     status = self.GW2GetFileType(session, file_type)
-                if not isinstance(output_file, (type(None), int)):
+                if isinstance(file_type, str):
                     status = self.GW2GetFileTypeID(session, file_type)               
 
                 if status not in successes.success_codes:
