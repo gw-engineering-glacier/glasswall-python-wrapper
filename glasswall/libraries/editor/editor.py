@@ -1151,7 +1151,6 @@ class Editor(Library):
 
         return error_message
 
-
     def GW2GetFileType(self, session: int, file_type_id):
         """ Retrieve the file type as a string.
 
@@ -1184,11 +1183,11 @@ class Editor(Library):
         status = self.library.GW2GetFileType(
             ct_session,
             ct_file_type,
-            ct.byref(ct_buffer_length),            
+            ct.byref(ct_buffer_length),
             ct.byref(ct_buffer)
         )
 
-        if status not in successes.success_codes:
+        if not status in successes.success_codes:
             log.error(f"\n\tsession: {session}\n\tstatus: {status}")
             raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
         else:
@@ -1241,7 +1240,7 @@ class Editor(Library):
             ct.byref(ct_buffer)
         )
 
-        if status not in successes.success_codes:
+        if not status in successes.success_codes:
             log.error(f"\n\tsession: {session}\n\tstatus: {status}")
             raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
         else:
@@ -1275,10 +1274,10 @@ class Editor(Library):
 
         with utils.CwdHandler(self.library_path):
             with self.new_session() as session:
-                
+
                 if isinstance(file_type, int):
                     file_type_info = self.GW2GetFileType(session, file_type)
                 if isinstance(file_type, str):
-                    file_type_info = self.GW2GetFileTypeID(session, file_type)               
-                
+                    file_type_info = self.GW2GetFileTypeID(session, file_type)
+
                 return file_type_info
