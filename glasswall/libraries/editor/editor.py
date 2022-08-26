@@ -1187,7 +1187,7 @@ class Editor(Library):
             ct.byref(ct_buffer)
         )
 
-        if not status in successes.success_codes:
+        if status not in successes.success_codes:
             log.error(f"\n\tsession: {session}\n\tstatus: {status}")
             raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
         else:
@@ -1202,7 +1202,6 @@ class Editor(Library):
         file_type = file_type_bytes.decode()
 
         return file_type
-
 
     def GW2GetFileTypeID(self, session: int, file_type_str):
         """ Retrieve the Glasswall file type id given a file type string.
@@ -1235,12 +1234,12 @@ class Editor(Library):
         # API call
         status = self.library.GW2GetFileTypeID(
             ct_session,
-            ct_file_type,            
+            ct_file_type,
             ct.byref(ct_buffer_length),
             ct.byref(ct_buffer)
         )
 
-        if not status in successes.success_codes:
+        if status not in successes.success_codes:
             log.error(f"\n\tsession: {session}\n\tstatus: {status}")
             raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
         else:
