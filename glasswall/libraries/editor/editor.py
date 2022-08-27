@@ -1150,3 +1150,133 @@ class Editor(Library):
         error_message = error_bytes.decode()
 
         return error_message
+
+    def GW2GetFileType(self, session: int, file_type_id):
+        """ Retrieve the file type as a string.
+
+        Args:
+            session (int): The session number.
+            file_type_id (int): The file type id.
+
+        Returns:
+            file_type (str): The formal file name for the corresponding file id.
+        """
+        # Validate arg types
+        if not isinstance(session, int):
+            raise TypeError(session)
+
+        # API function declaration
+        self.library.GW2GetFileType.argtypes = [
+            ct.c_size_t,
+            ct.c_size_t,
+            ct.POINTER(ct.c_size_t),
+            ct.POINTER(ct.c_void_p)
+        ]
+
+        # Variable initialisation
+        ct_session = ct.c_size_t(session)
+        ct_file_type = ct.c_size_t(file_type_id)
+        ct_buffer_length = ct.c_size_t(0)
+        ct_buffer = ct.c_void_p()
+
+        # API call
+        status = self.library.GW2GetFileType(
+            ct_session,
+            ct_file_type,
+            ct.byref(ct_buffer_length),
+            ct.byref(ct_buffer)
+        )
+
+        if status not in successes.success_codes:
+            log.error(f"\n\tsession: {session}\n\tstatus: {status}")
+            raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+        else:
+            log.debug(f"\n\tsession: {session}\n\tstatus: {status}")
+
+        # Editor wrote to a buffer, convert it to bytes
+        file_type_bytes = utils.buffer_to_bytes(
+            ct_buffer,
+            ct_buffer_length
+        )
+
+        file_type = file_type_bytes.decode()
+
+        return file_type
+
+    def GW2GetFileTypeID(self, session: int, file_type_str):
+        """ Retrieve the Glasswall file type id given a file type string.
+
+        Args:
+            session (int): The session number.
+            file_type_str (str): The file type as a string.
+
+        Returns:
+            file_type_id (str): The Glasswall file type id for the specified file type.
+        """
+        # Validate arg types
+        if not isinstance(session, int):
+            raise TypeError(session)
+
+        # API function declaration
+        self.library.GW2GetFileType.argtypes = [
+            ct.c_size_t,
+            ct.c_char_p,
+            ct.POINTER(ct.c_size_t),
+            ct.POINTER(ct.c_void_p)
+        ]
+
+        # Variable initialisation
+        ct_session = ct.c_size_t(session)
+        ct_file_type = ct.c_char_p(file_type_str.encode('utf-8'))
+        ct_buffer_length = ct.c_size_t(0)
+        ct_buffer = ct.c_void_p()
+
+        # API call
+        status = self.library.GW2GetFileTypeID(
+            ct_session,
+            ct_file_type,
+            ct.byref(ct_buffer_length),
+            ct.byref(ct_buffer)
+        )
+
+        if status not in successes.success_codes:
+            log.error(f"\n\tsession: {session}\n\tstatus: {status}")
+            raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+        else:
+            log.debug(f"\n\tsession: {session}\n\tstatus: {status}")
+
+        # Editor wrote to a buffer, convert it to bytes
+        file_type_bytes = utils.buffer_to_bytes(
+            ct_buffer,
+            ct_buffer_length
+        )
+
+        file_type_id = file_type_bytes.decode()
+
+        return file_type_id
+
+    def get_file_info(self, file_type: Union[str, int], raise_unsupported: bool = True):
+        """ Get the Glasswall file type id on providing a file extension or get the formal name of a file corresponding to the Glasswall file type id.
+
+        Args:
+            file_type (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            file_type_info (str): The file type information(empty string returned when id not found or 0 returned when unable to determine file id from extension).
+        """
+        # Validate arg types
+        if not isinstance(file_type, (str, int)):
+            raise TypeError(file_type)
+        if not isinstance(raise_unsupported, bool):
+            raise TypeError(raise_unsupported)
+
+        with utils.CwdHandler(self.library_path):
+            with self.new_session() as session:
+
+                if isinstance(file_type, int):
+                    file_type_info = self.GW2GetFileType(session, file_type)
+                if isinstance(file_type, str):
+                    file_type_info = self.GW2GetFileTypeID(session, file_type)
+
+                return file_type_info
