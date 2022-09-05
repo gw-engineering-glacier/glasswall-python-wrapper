@@ -144,6 +144,11 @@ class ft_webp(FileTypeEnumSuccess):
     string = "webp"
 
 
+class ft_dylib(FileTypeEnumSuccess):
+    integer = 44
+    string = "dylib"
+
+
 # Supported by an external library.
 class ft_zip(FileTypeEnumSuccess):
     integer = 256
