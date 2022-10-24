@@ -189,12 +189,12 @@ def get_file_type(file_path: str):
     return os.path.splitext(file_path)[-1].replace(&#34;.&#34;, &#34;&#34;)
 
 
-def get_libraries(directory: str, libraries: Optional[List[str]] = None, ignore_errors: bool = False):
+def get_libraries(directory: str, library_names: Optional[List[str]] = None, ignore_errors: bool = False):
     &#34;&#34;&#34; Recursively calls get_library on each library from glasswall.libraries.os_info on the given directory.
 
     Args:
         directory (str): The directory to search from.
-        libraries (List[str], optional): List of libraries to return, if None iterates all libraries found in glasswall.libraries.os_info
+        library_names (List[str], optional): List of libraries to return, if None iterates all libraries found in glasswall.libraries.os_info
         ignore_errors (bool, optional): Default False, prevents get_library raising FileNotFoundError when True.
 
     Returns:
@@ -202,10 +202,10 @@ def get_libraries(directory: str, libraries: Optional[List[str]] = None, ignore_
     &#34;&#34;&#34;
     libraries = {}
 
-    if not libraries:
-        libraries = glasswall.libraries.os_info[glasswall._OPERATING_SYSTEM].keys()
+    if not library_names:
+        library_names = glasswall.libraries.os_info[glasswall._OPERATING_SYSTEM].keys()
 
-    for library_name in libraries:
+    for library_name in library_names:
         try:
             libraries[library_name] = get_library(library_name, directory)
         except FileNotFoundError:
@@ -860,7 +860,7 @@ def myfunc(new_arg):
 </details>
 </dd>
 <dt id="glasswall.utils.get_libraries"><code class="name flex">
-<span>def <span class="ident">get_libraries</span></span>(<span>directory: str, libraries: Optional[List[str]] = None, ignore_errors: bool = False)</span>
+<span>def <span class="ident">get_libraries</span></span>(<span>directory: str, library_names: Optional[List[str]] = None, ignore_errors: bool = False)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Recursively calls get_library on each library from glasswall.libraries.os_info on the given directory.</p>
@@ -868,7 +868,7 @@ def myfunc(new_arg):
 <dl>
 <dt><strong><code>directory</code></strong> :&ensp;<code>str</code></dt>
 <dd>The directory to search from.</dd>
-<dt><strong><code>libraries</code></strong> :&ensp;<code>List[str]</code>, optional</dt>
+<dt><strong><code>library_names</code></strong> :&ensp;<code>List[str]</code>, optional</dt>
 <dd>List of libraries to return, if None iterates all libraries found in glasswall.libraries.os_info</dd>
 <dt><strong><code>ignore_errors</code></strong> :&ensp;<code>bool</code>, optional</dt>
 <dd>Default False, prevents get_library raising FileNotFoundError when True.</dd>
@@ -879,12 +879,12 @@ def myfunc(new_arg):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_libraries(directory: str, libraries: Optional[List[str]] = None, ignore_errors: bool = False):
+<pre><code class="python">def get_libraries(directory: str, library_names: Optional[List[str]] = None, ignore_errors: bool = False):
     &#34;&#34;&#34; Recursively calls get_library on each library from glasswall.libraries.os_info on the given directory.
 
     Args:
         directory (str): The directory to search from.
-        libraries (List[str], optional): List of libraries to return, if None iterates all libraries found in glasswall.libraries.os_info
+        library_names (List[str], optional): List of libraries to return, if None iterates all libraries found in glasswall.libraries.os_info
         ignore_errors (bool, optional): Default False, prevents get_library raising FileNotFoundError when True.
 
     Returns:
@@ -892,10 +892,10 @@ def myfunc(new_arg):
     &#34;&#34;&#34;
     libraries = {}
 
-    if not libraries:
-        libraries = glasswall.libraries.os_info[glasswall._OPERATING_SYSTEM].keys()
+    if not library_names:
+        library_names = glasswall.libraries.os_info[glasswall._OPERATING_SYSTEM].keys()
 
-    for library_name in libraries:
+    for library_name in library_names:
         try:
             libraries[library_name] = get_library(library_name, directory)
         except FileNotFoundError:
