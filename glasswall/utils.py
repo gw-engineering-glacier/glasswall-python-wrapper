@@ -163,12 +163,12 @@ def get_file_type(file_path: str):
     return os.path.splitext(file_path)[-1].replace(".", "")
 
 
-def get_libraries(directory: str, libraries: Optional[List[str]] = None, ignore_errors: bool = False):
+def get_libraries(directory: str, library_names: Optional[List[str]] = None, ignore_errors: bool = False):
     """ Recursively calls get_library on each library from glasswall.libraries.os_info on the given directory.
 
     Args:
         directory (str): The directory to search from.
-        libraries (List[str], optional): List of libraries to return, if None iterates all libraries found in glasswall.libraries.os_info
+        library_names (List[str], optional): List of libraries to return, if None iterates all libraries found in glasswall.libraries.os_info
         ignore_errors (bool, optional): Default False, prevents get_library raising FileNotFoundError when True.
 
     Returns:
@@ -176,10 +176,10 @@ def get_libraries(directory: str, libraries: Optional[List[str]] = None, ignore_
     """
     libraries = {}
 
-    if not libraries:
-        libraries = glasswall.libraries.os_info[glasswall._OPERATING_SYSTEM].keys()
+    if not library_names:
+        library_names = glasswall.libraries.os_info[glasswall._OPERATING_SYSTEM].keys()
 
-    for library_name in libraries:
+    for library_name in library_names:
         try:
             libraries[library_name] = get_library(library_name, directory)
         except FileNotFoundError:
