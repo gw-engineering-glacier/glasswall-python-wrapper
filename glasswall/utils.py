@@ -7,7 +7,7 @@ import os
 import pathlib
 import tempfile
 import warnings
-from typing import Any, Callable, Dict, Iterable, List, Union
+from typing import Any, Callable, Dict, Iterable, List, Optional, Union
 
 from lxml import etree
 
@@ -163,12 +163,12 @@ def get_file_type(file_path: str):
     return os.path.splitext(file_path)[-1].replace(".", "")
 
 
-def get_libraries(directory: str, libraries: Union[List[str], None] = None, ignore_errors: bool = False):
+def get_libraries(directory: str, libraries: Optional[List[str]] = None, ignore_errors: bool = False):
     """ Recursively calls get_library on each library from glasswall.libraries.os_info on the given directory.
 
     Args:
         directory (str): The directory to search from.
-        libraries (List[str]): List of libraries to return, if None iterates all libraries found in glasswall.libraries.os_info
+        libraries (List[str], optional): List of libraries to return, if None iterates all libraries found in glasswall.libraries.os_info
         ignore_errors (bool, optional): Default False, prevents get_library raising FileNotFoundError when True.
 
     Returns:
