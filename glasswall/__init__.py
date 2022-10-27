@@ -1,15 +1,16 @@
 
 
 import os
+import pathlib
 import platform
 import tempfile
 
-__version__ = "0.2.27"
+__version__ = "0.2.28"
 
 _OPERATING_SYSTEM = platform.system()
 _PYTHON_VERSION = platform.python_version()
 _ROOT = os.path.dirname(__file__)
-_TEMPDIR = os.path.join(os.environ.get("AGENT_TEMPDIRECTORY", tempfile.gettempdir()), "glasswall")
+_TEMPDIR = str(pathlib.Path(os.environ.get("AGENT_TEMPDIRECTORY", tempfile.gettempdir())).joinpath("glasswall").resolve())
 
 from glasswall import config, content_management, determine_file_type, utils
 from glasswall.libraries.archive_manager.archive_manager import ArchiveManager
