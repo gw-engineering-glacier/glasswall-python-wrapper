@@ -602,6 +602,8 @@ class ArchiveManager(Library):
         if delete_origin:
             utils.delete_directory(input_directory)
 
+        return status
+
     def export_archive(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Optional[str] = None, output_report: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager] = None, raise_unsupported: bool = True):
         &#34;&#34;&#34; Exports an archive using the Glasswall engine.
 
@@ -1488,6 +1490,8 @@ class ArchiveManager(Library):
 
         if delete_origin:
             utils.delete_directory(input_directory)
+
+        return status
 
     def export_archive(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Optional[str] = None, output_report: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager] = None, raise_unsupported: bool = True):
         &#34;&#34;&#34; Exports an archive using the Glasswall engine.
@@ -2622,7 +2626,9 @@ def is_supported_archive(self, archive_type: str):
         log.debug(f&#34;\n\tinput_directory: {input_directory}\n\tstatus: {status}&#34;)
 
     if delete_origin:
-        utils.delete_directory(input_directory)</code></pre>
+        utils.delete_directory(input_directory)
+
+    return status</code></pre>
 </details>
 </dd>
 <dt id="glasswall.libraries.archive_manager.archive_manager.ArchiveManager.protect_archive"><code class="name flex">
