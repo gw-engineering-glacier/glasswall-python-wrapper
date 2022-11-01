@@ -5,7 +5,7 @@ import pathlib
 import platform
 import tempfile
 
-__version__ = "0.2.28"
+__version__ = "0.2.29"
 
 _OPERATING_SYSTEM = platform.system()
 _PYTHON_VERSION = platform.python_version()
