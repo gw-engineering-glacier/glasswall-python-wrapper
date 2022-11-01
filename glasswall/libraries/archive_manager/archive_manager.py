@@ -576,6 +576,8 @@ class ArchiveManager(Library):
         if delete_origin:
             utils.delete_directory(input_directory)
 
+        return status
+
     def export_archive(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Optional[str] = None, output_report: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager] = None, raise_unsupported: bool = True):
         """ Exports an archive using the Glasswall engine.
 
