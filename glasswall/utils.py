@@ -151,7 +151,7 @@ def delete_empty_subdirectories(directory: str):
                 # directory might be read-only
                 try:
                     os.chmod(absolute_path, stat.S_IWRITE)
-                except Exception as e:
+                except Exception:
                     log.warning(f"PermissionError while attempting to delete {absolute_path}. Attempted chmod but failed.")
                 try:
                     os.rmdir(absolute_path)
