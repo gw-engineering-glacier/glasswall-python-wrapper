@@ -31,6 +31,7 @@ import functools
 import io
 import os
 import pathlib
+import stat
 import tempfile
 import warnings
 from typing import Any, Callable, Dict, Iterable, List, Optional, Union
@@ -146,7 +147,7 @@ def delete_directory(directory: str, keep_folder: bool = False):
     &#34;&#34;&#34;
     if os.path.isdir(directory):
         # Delete all files in directory
-        for file_ in list_file_paths(directory):
+        for file_ in list_file_paths(directory, followlinks=False):
             os.remove(file_)
 
         # Delete all empty subdirectories
@@ -166,12 +167,25 @@ def delete_empty_subdirectories(directory: str):
     Returns:
         None
     &#34;&#34;&#34;
+
     for root, dirs, _ in os.walk(directory, topdown=False):
         for dir_ in dirs:
+            absolute_path = os.path.join(root, dir_)
             try:
-                # Delete if empty
-                os.rmdir(os.path.realpath(os.path.join(root, dir_)))
+                os.rmdir(absolute_path)
+            except PermissionError:
+                # directory might be read-only
+                try:
+                    os.chmod(absolute_path, stat.S_IWRITE)
+                except Exception:
+                    log.warning(f&#34;PermissionError while attempting to delete {absolute_path}. Attempted chmod but failed.&#34;)
+                try:
+                    os.rmdir(absolute_path)
+                except OSError:
+                    # cannot be deleted
+                    pass
             except OSError:
+                # not empty, don&#39;t delete
                 pass
 
 
@@ -745,7 +759,7 @@ buffer_length (ct.c_size_t()): The file buffer length.</p>
     &#34;&#34;&#34;
     if os.path.isdir(directory):
         # Delete all files in directory
-        for file_ in list_file_paths(directory):
+        for file_ in list_file_paths(directory, followlinks=False):
             os.remove(file_)
 
         # Delete all empty subdirectories
@@ -781,12 +795,25 @@ buffer_length (ct.c_size_t()): The file buffer length.</p>
     Returns:
         None
     &#34;&#34;&#34;
+
     for root, dirs, _ in os.walk(directory, topdown=False):
         for dir_ in dirs:
+            absolute_path = os.path.join(root, dir_)
             try:
-                # Delete if empty
-                os.rmdir(os.path.realpath(os.path.join(root, dir_)))
+                os.rmdir(absolute_path)
+            except PermissionError:
+                # directory might be read-only
+                try:
+                    os.chmod(absolute_path, stat.S_IWRITE)
+                except Exception:
+                    log.warning(f&#34;PermissionError while attempting to delete {absolute_path}. Attempted chmod but failed.&#34;)
+                try:
+                    os.rmdir(absolute_path)
+                except OSError:
+                    # cannot be deleted
+                    pass
             except OSError:
+                # not empty, don&#39;t delete
                 pass</code></pre>
 </details>
 </dd>
