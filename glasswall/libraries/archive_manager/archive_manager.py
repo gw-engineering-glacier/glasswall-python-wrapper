@@ -394,19 +394,11 @@ class ArchiveManager(Library):
         gw_return_object.ct_output_directory = ct.c_char_p(output_directory.encode())  # const char* outputDirPath
 
         with utils.CwdHandler(new_cwd=self.library_path):
-            try:
-                # API call
-                gw_return_object.status = self.library.GwFileToFileUnpack(
-                    gw_return_object.ct_input_file,
-                    gw_return_object.ct_output_directory,
-                )
-            except OSError:
-                # bz2, gz currently OSError on unpack, not supported unpacking
-                # OSError: exception: access violation reading 0x0000000000000000
-                if raise_unsupported:
-                    raise
-
-                return 0
+            # API call
+            gw_return_object.status = self.library.GwFileToFileUnpack(
+                gw_return_object.ct_input_file,
+                gw_return_object.ct_output_directory,
+            )
 
         if gw_return_object.status not in successes.success_codes:
             log.error(f"\n\tinput_file: {input_file}\n\tstatus: {gw_return_object.status}")
