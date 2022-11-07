@@ -136,12 +136,13 @@ class Editor(Library):
 
         return status
 
-    def determine_file_type(self, input_file: Union[str, bytes, bytearray, io.BytesIO], as_string: bool = False):
+    def determine_file_type(self, input_file: Union[str, bytes, bytearray, io.BytesIO], as_string: bool = False, raise_unsupported: bool = True):
         """ Returns an int representing the file type / file format of a file.
 
         Args:
             input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file, can be a local path.
             as_string (bool, optional): Return file type as string, eg: "bmp" instead of: 29. Defaults to False.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
             file_type (Union[int, str]): The file format.
@@ -177,8 +178,11 @@ class Editor(Library):
         input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
 
         if not dft.is_success(file_type):
-            log.warning(f"\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}")
-            raise dft.int_class_map.get(file_type, dft.errors.UnknownErrorCode)(file_type)
+            if raise_unsupported:
+                log.warning(f"\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}")
+                raise dft.int_class_map.get(file_type, dft.errors.UnknownErrorCode)(file_type)
+            else:
+                log.debug(f"\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}")
         else:
             log.debug(f"\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}")
 
