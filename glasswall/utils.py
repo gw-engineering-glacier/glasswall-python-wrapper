@@ -5,6 +5,7 @@ import functools
 import io
 import os
 import pathlib
+import stat
 import tempfile
 import warnings
 from typing import Any, Callable, Dict, Iterable, List, Optional, Union
@@ -120,7 +121,7 @@ def delete_directory(directory: str, keep_folder: bool = False):
     """
     if os.path.isdir(directory):
         # Delete all files in directory
-        for file_ in list_file_paths(directory):
+        for file_ in list_file_paths(directory, followlinks=False):
             os.remove(file_)
 
         # Delete all empty subdirectories
@@ -140,12 +141,25 @@ def delete_empty_subdirectories(directory: str):
     Returns:
         None
     """
+
     for root, dirs, _ in os.walk(directory, topdown=False):
         for dir_ in dirs:
+            absolute_path = os.path.join(root, dir_)
             try:
-                # Delete if empty
-                os.rmdir(os.path.realpath(os.path.join(root, dir_)))
+                os.rmdir(absolute_path)
+            except PermissionError:
+                # directory might be read-only
+                try:
+                    os.chmod(absolute_path, stat.S_IWRITE)
+                except Exception:
+                    log.warning(f"PermissionError while attempting to delete {absolute_path}. Attempted chmod but failed.")
+                try:
+                    os.rmdir(absolute_path)
+                except OSError:
+                    # cannot be deleted
+                    pass
             except OSError:
+                # not empty, don't delete
                 pass
 
 
