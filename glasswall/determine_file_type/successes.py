@@ -180,6 +180,11 @@ class ft_tar(FileTypeEnumSuccess):
     string = "tar"
 
 
+class ft_xz(FileTypeEnumSuccess):
+    integer = 262
+    string = "xz"
+
+
 # Required since they can be embedded within other files.
 class ft_ooxml(FileTypeEnumSuccess):
     integer = 512
