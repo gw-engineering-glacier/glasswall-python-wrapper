@@ -86,12 +86,13 @@ class Rebuild(Library):
 
         return version
 
-    def determine_file_type(self, input_file: Union[str, bytes, bytearray, io.BytesIO], as_string: bool = False):
+    def determine_file_type(self, input_file: Union[str, bytes, bytearray, io.BytesIO], as_string: bool = False, raise_unsupported: bool = True):
         &#34;&#34;&#34; Returns an int representing the file type / file format of a file.
 
         Args:
             input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file, can be a local path.
             as_string (bool, optional): Return file type as string, eg: &#34;bmp&#34; instead of: 29. Defaults to False.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
             file_type (Union[int, str]): The file format.
@@ -131,8 +132,11 @@ class Rebuild(Library):
         input_file_repr = f&#34;{type(input_file)} length {len(input_file)}&#34; if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
 
         if not dft.is_success(file_type):
-            log.warning(f&#34;\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}&#34;)
-            raise dft.int_class_map.get(file_type, dft.errors.UnknownErrorCode)(file_type)
+            if raise_unsupported:
+                log.warning(f&#34;\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}&#34;)
+                raise dft.int_class_map.get(file_type, dft.errors.UnknownErrorCode)(file_type)
+            else:
+                log.debug(f&#34;\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}&#34;)
         else:
             log.debug(f&#34;\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}&#34;)
 
@@ -1011,12 +1015,13 @@ class Rebuild(Library):
 
         return version
 
-    def determine_file_type(self, input_file: Union[str, bytes, bytearray, io.BytesIO], as_string: bool = False):
+    def determine_file_type(self, input_file: Union[str, bytes, bytearray, io.BytesIO], as_string: bool = False, raise_unsupported: bool = True):
         &#34;&#34;&#34; Returns an int representing the file type / file format of a file.
 
         Args:
             input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file, can be a local path.
             as_string (bool, optional): Return file type as string, eg: &#34;bmp&#34; instead of: 29. Defaults to False.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
             file_type (Union[int, str]): The file format.
@@ -1056,8 +1061,11 @@ class Rebuild(Library):
         input_file_repr = f&#34;{type(input_file)} length {len(input_file)}&#34; if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
 
         if not dft.is_success(file_type):
-            log.warning(f&#34;\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}&#34;)
-            raise dft.int_class_map.get(file_type, dft.errors.UnknownErrorCode)(file_type)
+            if raise_unsupported:
+                log.warning(f&#34;\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}&#34;)
+                raise dft.int_class_map.get(file_type, dft.errors.UnknownErrorCode)(file_type)
+            else:
+                log.debug(f&#34;\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}&#34;)
         else:
             log.debug(f&#34;\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}&#34;)
 
@@ -2131,7 +2139,7 @@ class Rebuild(Library):
 </details>
 </dd>
 <dt id="glasswall.libraries.rebuild.rebuild.Rebuild.determine_file_type"><code class="name flex">
-<span>def <span class="ident">determine_file_type</span></span>(<span>self, input_file: Union[str, bytes, bytearray, _io.BytesIO], as_string: bool = False)</span>
+<span>def <span class="ident">determine_file_type</span></span>(<span>self, input_file: Union[str, bytes, bytearray, _io.BytesIO], as_string: bool = False, raise_unsupported: bool = True)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns an int representing the file type / file format of a file.</p>
@@ -2141,6 +2149,8 @@ class Rebuild(Library):
 <dd>The input file, can be a local path.</dd>
 <dt><strong><code>as_string</code></strong> :&ensp;<code>bool</code>, optional</dt>
 <dd>Return file type as string, eg: "bmp" instead of: 29. Defaults to False.</dd>
+<dt><strong><code>raise_unsupported</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>file_type (Union[int, str]): The file format.</p></div>
@@ -2148,12 +2158,13 @@ class Rebuild(Library):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def determine_file_type(self, input_file: Union[str, bytes, bytearray, io.BytesIO], as_string: bool = False):
+<pre><code class="python">def determine_file_type(self, input_file: Union[str, bytes, bytearray, io.BytesIO], as_string: bool = False, raise_unsupported: bool = True):
     &#34;&#34;&#34; Returns an int representing the file type / file format of a file.
 
     Args:
         input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file, can be a local path.
         as_string (bool, optional): Return file type as string, eg: &#34;bmp&#34; instead of: 29. Defaults to False.
+        raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
     Returns:
         file_type (Union[int, str]): The file format.
@@ -2193,8 +2204,11 @@ class Rebuild(Library):
     input_file_repr = f&#34;{type(input_file)} length {len(input_file)}&#34; if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
 
     if not dft.is_success(file_type):
-        log.warning(f&#34;\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}&#34;)
-        raise dft.int_class_map.get(file_type, dft.errors.UnknownErrorCode)(file_type)
+        if raise_unsupported:
+            log.warning(f&#34;\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}&#34;)
+            raise dft.int_class_map.get(file_type, dft.errors.UnknownErrorCode)(file_type)
+        else:
+            log.debug(f&#34;\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}&#34;)
     else:
         log.debug(f&#34;\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}&#34;)
 
