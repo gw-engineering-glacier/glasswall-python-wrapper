@@ -385,7 +385,6 @@ class ArchiveManager(Library):
         self.library.GwFileToFileUnpack.argtypes = [
             ct.c_char_p,
             ct.c_char_p,
-            # ct.c_char_p,
         ]
 
         # Variable initialisation
