@@ -141,16 +141,18 @@ class WordSearch(Library):
             log.debug(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file_repr}\n\toutput_report: {output_report_repr}\n\thomoglyphs: {homoglyphs_repr}\n\tstatus: {gw_return_object.status}\n\tcontent_management_policy:\n{content_management_policy}")
 
         # Write output file
-        if isinstance(output_file, str):
-            os.makedirs(os.path.dirname(output_file), exist_ok=True)
-            with open(output_file, "wb") as f:
-                f.write(gw_return_object.output_file)
+        if gw_return_object.output_file:
+            if isinstance(output_file, str):
+                os.makedirs(os.path.dirname(output_file), exist_ok=True)
+                with open(output_file, "wb") as f:
+                    f.write(gw_return_object.output_file)
 
         # Write output report
-        if isinstance(output_report, str):
-            os.makedirs(os.path.dirname(output_report), exist_ok=True)
-            with open(output_report, "wb") as f:
-                f.write(gw_return_object.output_report)
+        if gw_return_object.output_report:
+            if isinstance(output_report, str):
+                os.makedirs(os.path.dirname(output_report), exist_ok=True)
+                with open(output_report, "wb") as f:
+                    f.write(gw_return_object.output_report)
 
         if input_file_bytes and not gw_return_object.output_file:
             # input_file_bytes was not empty but output_file is unexpectedly empty
