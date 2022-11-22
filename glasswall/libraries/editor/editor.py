@@ -37,7 +37,8 @@ class Editor(Library):
         try:
             self.protect_file(
                 input_file=b"BM:\x00\x00\x00\x00\x00\x00\x006\x00\x00\x00(\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x18\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\x00",
-                raise_unsupported=True
+                raise_unsupported=True,
+                content_management_policy=glasswall.content_management.policies.Editor(config={"sysConfig": {"run_mode": "editoronly"}})
             )
             log.debug(f"{self.__class__.__name__} license validated successfully.")
         except errors.EditorError:
