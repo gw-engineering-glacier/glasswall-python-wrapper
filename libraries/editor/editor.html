@@ -63,7 +63,8 @@ class Editor(Library):
         try:
             self.protect_file(
                 input_file=b&#34;BM:\x00\x00\x00\x00\x00\x00\x006\x00\x00\x00(\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x18\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\x00&#34;,
-                raise_unsupported=True
+                raise_unsupported=True,
+                content_management_policy=glasswall.content_management.policies.Editor(config={&#34;sysConfig&#34;: {&#34;run_mode&#34;: &#34;editoronly&#34;}})
             )
             log.debug(f&#34;{self.__class__.__name__} license validated successfully.&#34;)
         except errors.EditorError:
@@ -1354,7 +1355,8 @@ class Editor(Library):
         try:
             self.protect_file(
                 input_file=b&#34;BM:\x00\x00\x00\x00\x00\x00\x006\x00\x00\x00(\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x18\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\x00&#34;,
-                raise_unsupported=True
+                raise_unsupported=True,
+                content_management_policy=glasswall.content_management.policies.Editor(config={&#34;sysConfig&#34;: {&#34;run_mode&#34;: &#34;editoronly&#34;}})
             )
             log.debug(f&#34;{self.__class__.__name__} license validated successfully.&#34;)
         except errors.EditorError:
@@ -4301,7 +4303,8 @@ The protected files are written to output_directory maintaining the same directo
     try:
         self.protect_file(
             input_file=b&#34;BM:\x00\x00\x00\x00\x00\x00\x006\x00\x00\x00(\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x18\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\x00&#34;,
-            raise_unsupported=True
+            raise_unsupported=True,
+            content_management_policy=glasswall.content_management.policies.Editor(config={&#34;sysConfig&#34;: {&#34;run_mode&#34;: &#34;editoronly&#34;}})
         )
         log.debug(f&#34;{self.__class__.__name__} license validated successfully.&#34;)
     except errors.EditorError:
