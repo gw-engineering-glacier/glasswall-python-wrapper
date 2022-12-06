@@ -2,6 +2,7 @@
 
 from glasswall.content_management.config_elements.archiveConfig import archiveConfig
 from glasswall.content_management.config_elements.config_element import ConfigElement
+from glasswall.content_management.config_elements.gifConfig import gifConfig
 from glasswall.content_management.config_elements.pdfConfig import pdfConfig
 from glasswall.content_management.config_elements.pptConfig import pptConfig
 from glasswall.content_management.config_elements.sysConfig import sysConfig
