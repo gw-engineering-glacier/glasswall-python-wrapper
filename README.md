@@ -344,23 +344,6 @@ editor.protect_directory(
 ### Archive Manager
 
 <details>
-<summary>Supported archive formats</summary>
-
-```py
-
-import glasswall
-
-# Load the Glasswall Archive Manager library
-am = glasswall.ArchiveManager(r"C:\azure\sdk.archive.manager")
-
-print(am.supported_archives)
-
->>> ['7z', 'rar', 'tar', 'zip']
-```
-
-</details>
-
-<details>
 <summary>Protecting an archive</summary>
 
 ```py
@@ -490,25 +473,6 @@ am.pack_directory(
     file_type="zip",
 )
 ```
-
-Pack to multiple formats with ease by iterating the `supported_archives` attribute:
-
-```py
-import glasswall
-
-# Load the Glasswall Archive Manager library
-am = glasswall.ArchiveManager(r"C:\azure\sdk.archive.manager")
-
-# Pack the `assorted_files` directory in each supported file format
-for file_type in am.supported_archives:
-    am.pack_directory(
-        input_directory=r"C:\test_files\assorted_files",
-        output_directory=fr"C:\test_files",
-        file_type=file_type,
-    )
-```
-
-</details>
 
 ## Documentation
 
