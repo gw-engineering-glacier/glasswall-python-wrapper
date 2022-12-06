@@ -10,6 +10,7 @@ class Editor(Policy):
     def __init__(self, default: str = "sanitise", config: dict = {}):
         self.default = default
         self.default_config_elements = [
+            glasswall.content_management.config_elements.gifConfig(default=default),
             glasswall.content_management.config_elements.pdfConfig(default=default),
             glasswall.content_management.config_elements.pptConfig(default=default),
             glasswall.content_management.config_elements.sysConfig(),
