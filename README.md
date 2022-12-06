@@ -448,7 +448,6 @@ am.unpack(
 
 Other useful arguments:
 
-- `file_type` default None (use archive extension), force Glasswall to try to process archives as this format.
 - `include_file_type` default False, keep the archive format in the directory name when unpacking. e.g. when True `Nested_4_layers.zip` will be unpacked to a directory `Nested_4_layers.zip` instead of `Nested_4_layers`. This can be necessary when unpacking multiple same-named archives that have different archive formats.
 - `raise_unsupported` default True, raise an error if the Glasswall library encounters an error.
 - `delete_origin` default False, delete the `input_file` after it has been unpacked to `output_directory`.
