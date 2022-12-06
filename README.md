@@ -8,10 +8,10 @@ A high level Python wrapper for interfacing with Glasswall libraries.
 
 ## Getting Started
 
-Install via pip:
+Install or upgrade to the latest version via pip:
 
 ```
-pip install glasswall
+pip install --upgrade glasswall
 ```
 
 ## Prerequisites
