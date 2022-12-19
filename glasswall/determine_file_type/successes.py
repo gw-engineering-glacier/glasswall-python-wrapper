@@ -157,17 +157,17 @@ class ft_zip(FileTypeEnumSuccess):
 
 class ft_gzip(FileTypeEnumSuccess):
     integer = 257
-    string = "gzip"
+    string = "gz"
 
 
 class ft_bzip2(FileTypeEnumSuccess):
     integer = 258
-    string = "bzip2"
+    string = "bz2"
 
 
 class ft_7zip(FileTypeEnumSuccess):
     integer = 259
-    string = "7zip"
+    string = "7z"
 
 
 class ft_rar(FileTypeEnumSuccess):
