@@ -149,6 +149,11 @@ class ft_dylib(FileTypeEnumSuccess):
     string = "dylib"
 
 
+class ft_txt(FileTypeEnumSuccess):
+    integer = 45
+    string = "txt"
+
+
 # Supported by an external library.
 class ft_zip(FileTypeEnumSuccess):
     integer = 256
