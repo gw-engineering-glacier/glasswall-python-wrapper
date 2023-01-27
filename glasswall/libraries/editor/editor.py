@@ -1,6 +1,7 @@
 
 
 import ctypes as ct
+import functools
 import io
 import os
 from contextlib import contextmanager
@@ -1108,6 +1109,7 @@ class Editor(Library):
 
         return import_files_dict
 
+    @functools.lru_cache()
     def GW2FileErrorMsg(self, session: int):
         """ Retrieve the Glasswall Session Process error message.
 
