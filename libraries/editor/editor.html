@@ -27,6 +27,7 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">import ctypes as ct
+import functools
 import io
 import os
 from contextlib import contextmanager
@@ -1134,6 +1135,7 @@ class Editor(Library):
 
         return import_files_dict
 
+    @functools.lru_cache()
     def GW2FileErrorMsg(self, session: int):
         &#34;&#34;&#34; Retrieve the Glasswall Session Process error message.
 
@@ -2426,6 +2428,7 @@ class Editor(Library):
 
         return import_files_dict
 
+    @functools.lru_cache()
     def GW2FileErrorMsg(self, session: int):
         &#34;&#34;&#34; Retrieve the Glasswall Session Process error message.
 
@@ -2626,7 +2629,8 @@ class Editor(Library):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def GW2FileErrorMsg(self, session: int):
+<pre><code class="python">@functools.lru_cache()
+def GW2FileErrorMsg(self, session: int):
     &#34;&#34;&#34; Retrieve the Glasswall Session Process error message.
 
     Args:
