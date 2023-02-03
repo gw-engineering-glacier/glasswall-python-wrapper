@@ -44,6 +44,25 @@ class ArchiveManager(Library):
         """ Releases any resources held by the Glasswall Archive Manager library. """
         self.library.GwArchiveDone()
 
+    @property
+    @functools.lru_cache()
+    def supported_archives(self):
+        """ Returns a list of supported archive file formats. """
+
+        # API function declaration
+        self.library.GwSupportedFiletypes.restype = ct.c_char_p
+
+        # API call
+        result = self.library.GwSupportedFiletypes()  # b'7z,bz2,gz,rar,tar,xz,zip,'
+
+        # Convert to Python string
+        result = ct.string_at(result).decode()  # 7z,bz2,gz,rar,tar,xz,zip,
+
+        # Convert comma separated str to list, remove empty trailing element, sort
+        result = sorted(filter(None, result.split(",")))
+
+        return result
+
     @functools.lru_cache()
     def is_supported_archive(self, archive_type: str):
         """ Returns True if the archive type (e.g. `7z`) is supported. """
