@@ -70,6 +70,25 @@ class ArchiveManager(Library):
         &#34;&#34;&#34; Releases any resources held by the Glasswall Archive Manager library. &#34;&#34;&#34;
         self.library.GwArchiveDone()
 
+    @property
+    @functools.lru_cache()
+    def supported_archives(self):
+        &#34;&#34;&#34; Returns a list of supported archive file formats. &#34;&#34;&#34;
+
+        # API function declaration
+        self.library.GwSupportedFiletypes.restype = ct.c_char_p
+
+        # API call
+        result = self.library.GwSupportedFiletypes()  # b&#39;7z,bz2,gz,rar,tar,xz,zip,&#39;
+
+        # Convert to Python string
+        result = ct.string_at(result).decode()  # 7z,bz2,gz,rar,tar,xz,zip,
+
+        # Convert comma separated str to list, remove empty trailing element, sort
+        result = sorted(filter(None, result.split(&#34;,&#34;)))
+
+        return result
+
     @functools.lru_cache()
     def is_supported_archive(self, archive_type: str):
         &#34;&#34;&#34; Returns True if the archive type (e.g. `7z`) is supported. &#34;&#34;&#34;
@@ -992,6 +1011,25 @@ class ArchiveManager(Library):
         &#34;&#34;&#34; Releases any resources held by the Glasswall Archive Manager library. &#34;&#34;&#34;
         self.library.GwArchiveDone()
 
+    @property
+    @functools.lru_cache()
+    def supported_archives(self):
+        &#34;&#34;&#34; Returns a list of supported archive file formats. &#34;&#34;&#34;
+
+        # API function declaration
+        self.library.GwSupportedFiletypes.restype = ct.c_char_p
+
+        # API call
+        result = self.library.GwSupportedFiletypes()  # b&#39;7z,bz2,gz,rar,tar,xz,zip,&#39;
+
+        # Convert to Python string
+        result = ct.string_at(result).decode()  # 7z,bz2,gz,rar,tar,xz,zip,
+
+        # Convert comma separated str to list, remove empty trailing element, sort
+        result = sorted(filter(None, result.split(&#34;,&#34;)))
+
+        return result
+
     @functools.lru_cache()
     def is_supported_archive(self, archive_type: str):
         &#34;&#34;&#34; Returns True if the archive type (e.g. `7z`) is supported. &#34;&#34;&#34;
@@ -1868,6 +1906,36 @@ class ArchiveManager(Library):
 <ul class="hlist">
 <li><a title="glasswall.libraries.library.Library" href="../library.html#glasswall.libraries.library.Library">Library</a></li>
 </ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="glasswall.libraries.archive_manager.archive_manager.ArchiveManager.supported_archives"><code class="name">var <span class="ident">supported_archives</span></code></dt>
+<dd>
+<div class="desc"><p>Returns a list of supported archive file formats.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+@functools.lru_cache()
+def supported_archives(self):
+    &#34;&#34;&#34; Returns a list of supported archive file formats. &#34;&#34;&#34;
+
+    # API function declaration
+    self.library.GwSupportedFiletypes.restype = ct.c_char_p
+
+    # API call
+    result = self.library.GwSupportedFiletypes()  # b&#39;7z,bz2,gz,rar,tar,xz,zip,&#39;
+
+    # Convert to Python string
+    result = ct.string_at(result).decode()  # 7z,bz2,gz,rar,tar,xz,zip,
+
+    # Convert comma separated str to list, remove empty trailing element, sort
+    result = sorted(filter(None, result.split(&#34;,&#34;)))
+
+    return result</code></pre>
+</details>
+</dd>
+</dl>
 <h3>Methods</h3>
 <dl>
 <dt id="glasswall.libraries.archive_manager.archive_manager.ArchiveManager.analyse_archive"><code class="name flex">
@@ -3158,6 +3226,7 @@ def is_supported_archive(self, archive_type: str):
 <li><code><a title="glasswall.libraries.archive_manager.archive_manager.ArchiveManager.protect_archive" href="#glasswall.libraries.archive_manager.archive_manager.ArchiveManager.protect_archive">protect_archive</a></code></li>
 <li><code><a title="glasswall.libraries.archive_manager.archive_manager.ArchiveManager.protect_directory" href="#glasswall.libraries.archive_manager.archive_manager.ArchiveManager.protect_directory">protect_directory</a></code></li>
 <li><code><a title="glasswall.libraries.archive_manager.archive_manager.ArchiveManager.release" href="#glasswall.libraries.archive_manager.archive_manager.ArchiveManager.release">release</a></code></li>
+<li><code><a title="glasswall.libraries.archive_manager.archive_manager.ArchiveManager.supported_archives" href="#glasswall.libraries.archive_manager.archive_manager.ArchiveManager.supported_archives">supported_archives</a></code></li>
 <li><code><a title="glasswall.libraries.archive_manager.archive_manager.ArchiveManager.unpack" href="#glasswall.libraries.archive_manager.archive_manager.ArchiveManager.unpack">unpack</a></code></li>
 <li><code><a title="glasswall.libraries.archive_manager.archive_manager.ArchiveManager.unpack_directory" href="#glasswall.libraries.archive_manager.archive_manager.ArchiveManager.unpack_directory">unpack_directory</a></code></li>
 <li><code><a title="glasswall.libraries.archive_manager.archive_manager.ArchiveManager.version" href="#glasswall.libraries.archive_manager.archive_manager.ArchiveManager.version">version</a></code></li>
