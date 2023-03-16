@@ -1287,3 +1287,36 @@ class Editor(Library):
                     file_type_info = self.GW2GetFileTypeID(session, file_type)
 
                 return file_type_info
+
+    def register_report_file(self, session: int, output_file: str, raise_unsupported: bool = True):
+        """ Register the report file path for the given session.
+
+        Args:
+            session (int): The current session.
+            output_file (str): The file path of the report file.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            status (int): The result of the Glasswall API call.
+        """
+        if not isinstance(output_file, (type(None), str)):
+            raise TypeError(output_file)
+
+        self.library.GW2RegisterReportFile.argtypes = [
+            ct.c_size_t,
+            ct.c_char_p,
+        ]
+
+        ct_session = ct.c_size_t(session)
+        ct_output_file = ct.c_char_p(output_file.encode("utf-8"))
+
+        status = self.library.GW2RegisterReportFile(ct_session, ct_output_file)
+
+        if status not in successes.success_codes:
+            log.error(f"\n\tsession: {session}\n\tstatus: {status}")
+            if raise_unsupported:
+                raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+        else:
+            log.debug(f"\n\tsession: {session}\n\tstatus: {status}")
+
+        return status
