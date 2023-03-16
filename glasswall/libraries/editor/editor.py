@@ -1297,17 +1297,21 @@ class Editor(Library):
         Returns:
             status (int): The result of the Glasswall API call.
         """
+        # Validate arg types
         if not isinstance(output_file, (type(None), str)):
             raise TypeError(output_file)
 
+        # API function declaration
         self.library.GW2RegisterReportFile.argtypes = [
             ct.c_size_t,
             ct.c_char_p,
         ]
 
+        # Variable initialisation
         ct_session = ct.c_size_t(session)
         ct_output_file = ct.c_char_p(output_file.encode("utf-8"))
 
+        # API call
         status = self.library.GW2RegisterReportFile(ct_session, ct_output_file)
 
         if status not in successes.success_codes:
