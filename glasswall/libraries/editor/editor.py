@@ -1318,3 +1318,58 @@ class Editor(Library):
             log.debug(f"\n\tsession: {session}\n\tstatus: {status}")
 
         return status
+
+    def get_id_info(self, issue_id: int, raise_unsupported: bool = True):
+        """ Retrieves the group description for the given Issue ID. e.g. issue_id 96 returns "Document Processing Instances"
+
+        Args:
+            issue_id (int): The issue id.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            id_info (str): The group description for the given Issue ID.
+        """
+        # Validate arg types
+        if not isinstance(issue_id, int):
+            raise TypeError(issue_id)
+
+        # API function declaration
+        self.library.GW2GetIdInfo.argtypes = [
+            ct.c_size_t,
+            ct.c_size_t,
+            ct.POINTER(ct.c_size_t),
+            ct.POINTER(ct.c_void_p)
+        ]
+
+        with utils.CwdHandler(self.library_path):
+            with self.new_session() as session:
+                # Variable initialisation
+                ct_session = ct.c_size_t(session)
+                ct_issue_id = ct.c_size_t(issue_id)
+                ct_buffer_length = ct.c_size_t(0)
+                ct_buffer = ct.c_void_p()
+
+                # API call
+                status = self.library.GW2GetIdInfo(
+                    ct_session,
+                    ct_issue_id,
+                    ct.byref(ct_buffer_length),
+                    ct.byref(ct_buffer)
+                )
+
+                if status not in successes.success_codes:
+                    log.error(f"\n\tsession: {session}\n\tstatus: {status}")
+                    if raise_unsupported:
+                        raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+                else:
+                    log.debug(f"\n\tsession: {session}\n\tstatus: {status}")
+
+                # Editor wrote to a buffer, convert it to bytes
+                id_info_bytes = utils.buffer_to_bytes(
+                    ct_buffer,
+                    ct_buffer_length
+                )
+
+                id_info = id_info_bytes.decode()
+
+                return id_info
