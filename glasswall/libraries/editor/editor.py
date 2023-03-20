@@ -5,7 +5,7 @@ import functools
 import io
 import os
 from contextlib import contextmanager
-from typing import Union
+from typing import Union, Optional
 
 import glasswall
 from glasswall import determine_file_type as dft
@@ -180,11 +180,9 @@ class Editor(Library):
         input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
 
         if not dft.is_success(file_type):
+            log.warning(f"\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}")
             if raise_unsupported:
-                log.warning(f"\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}")
                 raise dft.int_class_map.get(file_type, dft.errors.UnknownErrorCode)(file_type)
-            else:
-                log.debug(f"\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}")
         else:
             log.debug(f"\n\tfile_type: {file_type}\n\tfile_type_as_string: {file_type_as_string}\n\tinput_file: {input_file_repr}")
 
@@ -497,14 +495,14 @@ class Editor(Library):
             ]
 
             # Variable initialisation
-            ct_session = ct.c_size_t(session)
             gw_return_object = glasswall.GwReturnObj()
+            gw_return_object.session = ct.c_size_t(session)
             gw_return_object.buffer = ct.c_void_p()
             gw_return_object.buffer_length = ct.c_size_t()
 
             # API call
             status = self.library.GW2RegisterAnalysisMemory(
-                ct_session,
+                gw_return_object.session,
                 ct.byref(gw_return_object.buffer),
                 ct.byref(gw_return_object.buffer_length)
             )
@@ -1287,3 +1285,205 @@ class Editor(Library):
                     file_type_info = self.GW2GetFileTypeID(session, file_type)
 
                 return file_type_info
+
+    def register_report_file(self, session: int, output_file: str, raise_unsupported: bool = True):
+        """ Register the report file path for the given session.
+
+        Args:
+            session (int): The current session.
+            output_file (str): The file path of the report file.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            status (int): The result of the Glasswall API call.
+        """
+        # Validate arg types
+        if not isinstance(output_file, (type(None), str)):
+            raise TypeError(output_file)
+
+        # API function declaration
+        self.library.GW2RegisterReportFile.argtypes = [
+            ct.c_size_t,
+            ct.c_char_p,
+        ]
+
+        # Variable initialisation
+        ct_session = ct.c_size_t(session)
+        ct_output_file = ct.c_char_p(output_file.encode("utf-8"))
+
+        # API call
+        status = self.library.GW2RegisterReportFile(ct_session, ct_output_file)
+
+        if status not in successes.success_codes:
+            log.error(f"\n\tsession: {session}\n\tstatus: {status}")
+            if raise_unsupported:
+                raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+        else:
+            log.debug(f"\n\tsession: {session}\n\tstatus: {status}")
+
+        return status
+
+    def get_id_info(self, issue_id: int, raise_unsupported: bool = True):
+        """ Retrieves the group description for the given Issue ID. e.g. issue_id 96 returns "Document Processing Instances"
+
+        Args:
+            issue_id (int): The issue id.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            id_info (str): The group description for the given Issue ID.
+        """
+        # Validate arg types
+        if not isinstance(issue_id, int):
+            raise TypeError(issue_id)
+
+        # API function declaration
+        self.library.GW2GetIdInfo.argtypes = [
+            ct.c_size_t,
+            ct.c_size_t,
+            ct.POINTER(ct.c_size_t),
+            ct.POINTER(ct.c_void_p)
+        ]
+
+        with utils.CwdHandler(self.library_path):
+            with self.new_session() as session:
+                # Variable initialisation
+                ct_session = ct.c_size_t(session)
+                ct_issue_id = ct.c_size_t(issue_id)
+                ct_buffer_length = ct.c_size_t(0)
+                ct_buffer = ct.c_void_p()
+
+                # API call
+                status = self.library.GW2GetIdInfo(
+                    ct_session,
+                    ct_issue_id,
+                    ct.byref(ct_buffer_length),
+                    ct.byref(ct_buffer)
+                )
+
+                if status not in successes.success_codes:
+                    log.error(f"\n\tsession: {session}\n\tstatus: {status}")
+                    if raise_unsupported:
+                        raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+                else:
+                    log.debug(f"\n\tsession: {session}\n\tstatus: {status}")
+
+                # Editor wrote to a buffer, convert it to bytes
+                id_info_bytes = utils.buffer_to_bytes(
+                    ct_buffer,
+                    ct_buffer_length
+                )
+
+                id_info = id_info_bytes.decode()
+
+                return id_info
+
+    def get_all_id_info(self, output_file: Optional[str] = None, raise_unsupported: bool = True):
+        """ Retrieves the XML containing all the Issue ID ranges with their group descriptions
+
+        Args:
+            output_file (Optional[str], optional): The output file path where the analysis file will be written.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            file_bytes (bytes): The analysis file bytes.
+        """
+        # Validate arg types
+        if not isinstance(output_file, (type(None), str)):
+            raise TypeError(output_file)
+        if isinstance(output_file, str):
+            output_file = os.path.abspath(output_file)
+
+        # API function declaration
+        self.library.GW2GetAllIdInfo.argtypes = [
+            ct.c_size_t,
+            ct.POINTER(ct.c_size_t),
+            ct.POINTER(ct.c_void_p)
+        ]
+
+        with utils.CwdHandler(self.library_path):
+            with self.new_session() as session:
+                register_analysis = self.register_analysis(session)
+
+                # API call
+                status = self.library.GW2GetAllIdInfo(
+                    register_analysis.session,
+                    ct.byref(register_analysis.buffer_length),
+                    ct.byref(register_analysis.buffer)
+                )
+
+                if status not in successes.success_codes:
+                    log.error(f"\n\toutput_file: {output_file}\n\tsession: {session}\n\tstatus: {status}")
+                    if raise_unsupported:
+                        raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+                    else:
+                        file_bytes = None
+                else:
+                    log.debug(f"\n\toutput_file: {output_file}\n\tsession: {session}\n\tstatus: {status}")
+
+                    # Get file bytes
+                    # Editor wrote to a buffer, convert it to bytes
+                    file_bytes = utils.buffer_to_bytes(
+                        register_analysis.buffer,
+                        register_analysis.buffer_length
+                    )
+
+                    if isinstance(output_file, str):
+                        # GW2GetAllIdInfo is memory only, write to file
+                        # make directories that do not exist
+                        os.makedirs(os.path.dirname(output_file), exist_ok=True)
+                        with open(output_file, "wb") as f:
+                            f.write(file_bytes)
+
+                    return file_bytes
+
+    def file_session_status(self, session: int, raise_unsupported: bool = True):
+        """ Retrieves the Glasswall Session Status. Also gives a high level indication of the processing that was carried out on the last document processed by the library
+
+        Args:
+            session (int): The current session.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'status' and 'message' indicating the result of the function call.
+        """
+        # API function declaration
+        self.library.GW2FileSessionStatus.argtypes = [
+            ct.c_size_t,
+            ct.POINTER(ct.c_int),
+            ct.POINTER(ct.c_void_p),
+            ct.POINTER(ct.c_size_t)
+        ]
+
+        # Variable initialisation
+        gw_return_object = glasswall.GwReturnObj()
+        gw_return_object.session = ct.c_size_t(session)
+        gw_return_object.session_status = ct.c_int()
+        gw_return_object.buffer = ct.c_void_p()
+        gw_return_object.buffer_length = ct.c_size_t()
+
+        # API call
+        gw_return_object.status = self.library.GW2FileSessionStatus(
+            gw_return_object.session,
+            ct.byref(gw_return_object.session_status),
+            ct.byref(gw_return_object.buffer),
+            ct.byref(gw_return_object.buffer_length)
+        )
+
+        if gw_return_object.status not in successes.success_codes:
+            log.error(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
+            if raise_unsupported:
+                raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
+            else:
+                gw_return_object.message = None
+        else:
+            log.debug(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
+
+            message_bytes = utils.buffer_to_bytes(
+                gw_return_object.buffer,
+                gw_return_object.buffer_length
+            )
+
+            gw_return_object.message = message_bytes.decode()
+
+        return gw_return_object
