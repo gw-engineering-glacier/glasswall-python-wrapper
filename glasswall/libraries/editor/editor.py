@@ -1436,3 +1436,54 @@ class Editor(Library):
                             f.write(file_bytes)
 
                     return file_bytes
+
+    def file_session_status(self, session: int, raise_unsupported: bool = True):
+        """ Retrieves the Glasswall Session Status. Also gives a high level indication of the processing that was carried out on the last document processed by the library
+
+        Args:
+            session (int): The current session.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'status' and 'message' indicating the result of the function call.
+        """
+        # API function declaration
+        self.library.GW2FileSessionStatus.argtypes = [
+            ct.c_size_t,
+            ct.POINTER(ct.c_int),
+            ct.POINTER(ct.c_void_p),
+            ct.POINTER(ct.c_size_t)
+        ]
+
+        # Variable initialisation
+        gw_return_object = glasswall.GwReturnObj()
+        gw_return_object.session = ct.c_size_t(session)
+        gw_return_object.session_status = ct.c_int()
+        gw_return_object.buffer = ct.c_void_p()
+        gw_return_object.buffer_length = ct.c_size_t()
+
+        # API call
+        gw_return_object.status = self.library.GW2FileSessionStatus(
+            gw_return_object.session,
+            ct.byref(gw_return_object.session_status),
+            ct.byref(gw_return_object.buffer),
+            ct.byref(gw_return_object.buffer_length)
+        )
+
+        if gw_return_object.status not in successes.success_codes:
+            log.error(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
+            if raise_unsupported:
+                raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
+            else:
+                gw_return_object.message = None
+        else:
+            log.debug(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
+
+            message_bytes = utils.buffer_to_bytes(
+                gw_return_object.buffer,
+                gw_return_object.buffer_length
+            )
+
+            gw_return_object.message = message_bytes.decode()
+
+        return gw_return_object
