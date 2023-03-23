@@ -432,7 +432,7 @@ class Editor(Library):
             # Variable initialisation
             ct_session = ct.c_size_t(session)
             gw_return_object.buffer = ct.c_void_p()
-            gw_return_object.buffer_length = ct.c_size_t(0)
+            gw_return_object.buffer_length = ct.c_size_t()
 
             # API call
             gw_return_object.status = self.library.GW2RegisterOutputMemory(
@@ -1108,11 +1108,12 @@ class Editor(Library):
         return import_files_dict
 
     @functools.lru_cache()
-    def GW2FileErrorMsg(self, session: int):
+    def GW2FileErrorMsg(self, session: int, raise_unsupported: bool = True):
         """ Retrieve the Glasswall Session Process error message.
 
         Args:
             session (int): The session number.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
             error_message (str): The Glasswall Session Process error message.
@@ -1131,7 +1132,7 @@ class Editor(Library):
         # Variable initialisation
         ct_session = ct.c_size_t(session)
         ct_buffer = ct.c_void_p()
-        ct_buffer_length = ct.c_size_t(0)
+        ct_buffer_length = ct.c_size_t()
 
         # API call
         status = self.library.GW2FileErrorMsg(
@@ -1155,6 +1156,50 @@ class Editor(Library):
         error_message = error_bytes.decode()
 
         return error_message
+
+    @functools.lru_cache()
+    def _GW2FileErrorMsg(self, session: int):
+        """ Retrieve the Glasswall Session Process error message.
+
+        Args:
+            session (int): The session number.
+
+        Returns:
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'status' and 'message' indicating the result of the function call.
+        """
+        # Validate arg types
+        if not isinstance(session, int):
+            raise TypeError(session)
+
+        # API function declaration
+        self.library.GW2FileErrorMsg.argtypes = [
+            ct.c_size_t,
+            ct.POINTER(ct.c_void_p),
+            ct.POINTER(ct.c_size_t)
+        ]
+
+        # Variable initialisation
+        gw_return_object = glasswall.GwReturnObj()
+        gw_return_object.session = ct.c_size_t(session)
+        gw_return_object.buffer = ct.c_void_p()
+        gw_return_object.buffer_length = ct.c_size_t()
+
+        # API call
+        gw_return_object.status = self.library.GW2FileErrorMsg(
+            gw_return_object.session,
+            ct.byref(gw_return_object.buffer),
+            ct.byref(gw_return_object.buffer_length)
+        )
+
+        # Convert to python types
+        gw_return_object.session = gw_return_object.session.value
+        # Editor wrote to a buffer, convert it to bytes
+        gw_return_object.message = utils.buffer_to_bytes(
+            gw_return_object.buffer,
+            gw_return_object.buffer_length
+        )
+
+        return gw_return_object
 
     def GW2GetFileType(self, session: int, file_type_id):
         """ Retrieve the file type as a string.
@@ -1181,7 +1226,7 @@ class Editor(Library):
         # Variable initialisation
         ct_session = ct.c_size_t(session)
         ct_file_type = ct.c_size_t(file_type_id)
-        ct_buffer_length = ct.c_size_t(0)
+        ct_buffer_length = ct.c_size_t()
         ct_buffer = ct.c_void_p()
 
         # API call
@@ -1233,7 +1278,7 @@ class Editor(Library):
         # Variable initialisation
         ct_session = ct.c_size_t(session)
         ct_file_type = ct.c_char_p(file_type_str.encode('utf-8'))
-        ct_buffer_length = ct.c_size_t(0)
+        ct_buffer_length = ct.c_size_t()
         ct_buffer = ct.c_void_p()
 
         # API call
@@ -1350,7 +1395,7 @@ class Editor(Library):
                 # Variable initialisation
                 ct_session = ct.c_size_t(session)
                 ct_issue_id = ct.c_size_t(issue_id)
-                ct_buffer_length = ct.c_size_t(0)
+                ct_buffer_length = ct.c_size_t()
                 ct_buffer = ct.c_void_p()
 
                 # API call
