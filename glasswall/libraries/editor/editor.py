@@ -67,7 +67,7 @@ class Editor(Library):
         """ Open a new Glasswall session.
 
         Returns:
-            session (int): An incrementing integer repsenting the current session.
+            session (int): An incrementing integer representing the current session.
         """
         # API call
         session = self.library.GW2OpenSession()
