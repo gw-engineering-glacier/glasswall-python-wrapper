@@ -604,7 +604,7 @@ class ArchiveManager(Library):
             )
 
     def pack_directory(self, input_directory: str, output_directory: str, file_type: str, add_extension: Optional[bool] = True, raise_unsupported: Optional[bool] = True, delete_origin: Optional[bool] = False):
-        """ Pack a directory. Supported archive formats are: "7z", "bz2", "gz", "rar", "tar", "zip".
+        """ Pack a directory. Supported archive formats are: "7z", "bz2", "gz", "rar", "tar", "xz", "zip".
 
         Args:
             input_directory (str): The input directory containing files to archive.
