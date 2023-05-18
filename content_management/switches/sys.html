@@ -42,6 +42,30 @@ class interchange_pretty(Switch):
         self.name = self.__class__.__name__
         self.restrict_values = [&#34;false&#34;, &#34;true&#34;]
         self.value = value
+        super().__init__(name=self.name, value=self.value, restrict_values=self.restrict_values)
+
+
+class interchange_best_compression(Switch):
+    def __init__(self, value: str):
+        self.name = self.__class__.__name__
+        self.restrict_values = [&#34;false&#34;, &#34;true&#34;]
+        self.value = value
+        super().__init__(name=self.name, value=self.value, restrict_values=self.restrict_values)
+
+
+class export_embedded_images(Switch):
+    def __init__(self, value: str):
+        self.name = self.__class__.__name__
+        self.restrict_values = [&#34;false&#34;, &#34;true&#34;]
+        self.value = value
+        super().__init__(name=self.name, value=self.value, restrict_values=self.restrict_values)
+
+
+class run_mode(Switch):
+    def __init__(self, value: str):
+        self.name = self.__class__.__name__
+        self.restrict_values = [&#34;editoronly&#34;, &#34;enablerebuild&#34;]
+        self.value = value
         super().__init__(name=self.name, value=self.value, restrict_values=self.restrict_values)</code></pre>
 </details>
 </section>
@@ -54,6 +78,66 @@ class interchange_pretty(Switch):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="glasswall.content_management.switches.sys.export_embedded_images"><code class="flex name class">
+<span>class <span class="ident">export_embedded_images</span></span>
+<span>(</span><span>value: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>A Content Management Policy switch which has a name and a value, and can have attributes.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class export_embedded_images(Switch):
+    def __init__(self, value: str):
+        self.name = self.__class__.__name__
+        self.restrict_values = [&#34;false&#34;, &#34;true&#34;]
+        self.value = value
+        super().__init__(name=self.name, value=self.value, restrict_values=self.restrict_values)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="glasswall.content_management.switches.switch.Switch" href="switch.html#glasswall.content_management.switches.switch.Switch">Switch</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="glasswall.content_management.switches.switch.Switch" href="switch.html#glasswall.content_management.switches.switch.Switch">Switch</a></b></code>:
+<ul class="hlist">
+<li><code><a title="glasswall.content_management.switches.switch.Switch.text" href="switch.html#glasswall.content_management.switches.switch.Switch.text">text</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="glasswall.content_management.switches.sys.interchange_best_compression"><code class="flex name class">
+<span>class <span class="ident">interchange_best_compression</span></span>
+<span>(</span><span>value: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>A Content Management Policy switch which has a name and a value, and can have attributes.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class interchange_best_compression(Switch):
+    def __init__(self, value: str):
+        self.name = self.__class__.__name__
+        self.restrict_values = [&#34;false&#34;, &#34;true&#34;]
+        self.value = value
+        super().__init__(name=self.name, value=self.value, restrict_values=self.restrict_values)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="glasswall.content_management.switches.switch.Switch" href="switch.html#glasswall.content_management.switches.switch.Switch">Switch</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="glasswall.content_management.switches.switch.Switch" href="switch.html#glasswall.content_management.switches.switch.Switch">Switch</a></b></code>:
+<ul class="hlist">
+<li><code><a title="glasswall.content_management.switches.switch.Switch.text" href="switch.html#glasswall.content_management.switches.switch.Switch.text">text</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 <dt id="glasswall.content_management.switches.sys.interchange_pretty"><code class="flex name class">
 <span>class <span class="ident">interchange_pretty</span></span>
 <span>(</span><span>value: str)</span>
@@ -114,6 +198,36 @@ class interchange_pretty(Switch):
 </li>
 </ul>
 </dd>
+<dt id="glasswall.content_management.switches.sys.run_mode"><code class="flex name class">
+<span>class <span class="ident">run_mode</span></span>
+<span>(</span><span>value: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>A Content Management Policy switch which has a name and a value, and can have attributes.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class run_mode(Switch):
+    def __init__(self, value: str):
+        self.name = self.__class__.__name__
+        self.restrict_values = [&#34;editoronly&#34;, &#34;enablerebuild&#34;]
+        self.value = value
+        super().__init__(name=self.name, value=self.value, restrict_values=self.restrict_values)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="glasswall.content_management.switches.switch.Switch" href="switch.html#glasswall.content_management.switches.switch.Switch">Switch</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="glasswall.content_management.switches.switch.Switch" href="switch.html#glasswall.content_management.switches.switch.Switch">Switch</a></b></code>:
+<ul class="hlist">
+<li><code><a title="glasswall.content_management.switches.switch.Switch.text" href="switch.html#glasswall.content_management.switches.switch.Switch.text">text</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 </dl>
 </section>
 </article>
@@ -131,10 +245,19 @@ class interchange_pretty(Switch):
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
+<h4><code><a title="glasswall.content_management.switches.sys.export_embedded_images" href="#glasswall.content_management.switches.sys.export_embedded_images">export_embedded_images</a></code></h4>
+</li>
+<li>
+<h4><code><a title="glasswall.content_management.switches.sys.interchange_best_compression" href="#glasswall.content_management.switches.sys.interchange_best_compression">interchange_best_compression</a></code></h4>
+</li>
+<li>
 <h4><code><a title="glasswall.content_management.switches.sys.interchange_pretty" href="#glasswall.content_management.switches.sys.interchange_pretty">interchange_pretty</a></code></h4>
 </li>
 <li>
 <h4><code><a title="glasswall.content_management.switches.sys.interchange_type" href="#glasswall.content_management.switches.sys.interchange_type">interchange_type</a></code></h4>
+</li>
+<li>
+<h4><code><a title="glasswall.content_management.switches.sys.run_mode" href="#glasswall.content_management.switches.sys.run_mode">run_mode</a></code></h4>
 </li>
 </ul>
 </li>

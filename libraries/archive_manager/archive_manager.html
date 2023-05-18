@@ -501,7 +501,7 @@ class ArchiveManager(Library):
 
         return gw_return_object
 
-    def file_to_file_pack(self, input_directory: str, output_directory: str, file_type: Optional[str] = None, raise_unsupported: bool = True):
+    def file_to_file_pack(self, input_directory: str, output_directory: str, file_type: Optional[str] = None, add_extension: Optional[bool] = True, raise_unsupported: Optional[bool] = True):
         # Validate arg types
         if not isinstance(input_directory, str):
             raise TypeError(input_directory)
@@ -520,6 +520,7 @@ class ArchiveManager(Library):
             ct.c_char_p,
             ct.c_char_p,
             ct.c_char_p,
+            ct.c_int,
         ]
 
         # Variable initialisation
@@ -527,6 +528,7 @@ class ArchiveManager(Library):
         gw_return_object.ct_input_directory = ct.c_char_p(input_directory.encode())  # const char* inputDirPath
         gw_return_object.ct_output_directory = ct.c_char_p(output_directory.encode())  # const char* outputDirPath
         gw_return_object.ct_file_type = ct.c_char_p(file_type.encode())  # const char *fileType
+        gw_return_object.ct_add_extension = ct.c_int(int(add_extension))  # int addExtension
 
         with utils.CwdHandler(new_cwd=self.library_path):
             # API call
@@ -534,6 +536,7 @@ class ArchiveManager(Library):
                 gw_return_object.ct_input_directory,
                 gw_return_object.ct_output_directory,
                 gw_return_object.ct_file_type,
+                gw_return_object.ct_add_extension,
             )
 
         if gw_return_object.status not in successes.success_codes:
@@ -626,16 +629,16 @@ class ArchiveManager(Library):
                 delete_origin=delete_origin
             )
 
-    def pack_directory(self, input_directory: str, output_directory: str, file_type: str, raise_unsupported: bool = True, delete_origin: bool = False):
-        &#34;&#34;&#34; Pack a directory. Supported archive formats are: &#34;7z&#34;, &#34;bz2&#34;, &#34;gz&#34;, &#34;rar&#34;, &#34;tar&#34;, &#34;zip&#34;.
+    def pack_directory(self, input_directory: str, output_directory: str, file_type: str, add_extension: Optional[bool] = True, raise_unsupported: Optional[bool] = True, delete_origin: Optional[bool] = False):
+        &#34;&#34;&#34; Pack a directory. Supported archive formats are: &#34;7z&#34;, &#34;bz2&#34;, &#34;gz&#34;, &#34;rar&#34;, &#34;tar&#34;, &#34;xz&#34;, &#34;zip&#34;.
 
         Args:
-            input_file (str): The archive file path
-            output_directory (str): The output directory where the archive will be unpacked to a new directory.
-            recursive (bool, optional): Default True. Recursively unpack all nested archives.
+            input_directory (str): The input directory containing files to archive.
+            output_directory (str): The output directory to store the created archive.
             file_type (str): The archive file type.
+            add_extension (bool, optional): Default: True. Archive file type extension to result file.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
-            delete_origin (bool, optional): Default False. Delete input_file after unpacking to output_directory.
+            delete_origin (bool, optional): Default False. Delete input_directory after packing to output_directory.
         &#34;&#34;&#34;
         # Convert to absolute paths
         input_directory = os.path.abspath(input_directory)
@@ -643,7 +646,7 @@ class ArchiveManager(Library):
 
         # Pack
         log.debug(f&#34;Packing\n\tsrc: {input_directory}\n\tdst: {output_directory}&#34;)
-        status = self.file_to_file_pack(input_directory=input_directory, output_directory=output_directory, file_type=file_type, raise_unsupported=raise_unsupported).status
+        status = self.file_to_file_pack(input_directory=input_directory, output_directory=output_directory, file_type=file_type, add_extension=add_extension, raise_unsupported=raise_unsupported).status
 
         if status not in successes.success_codes:
             log.error(f&#34;\n\tinput_directory: {input_directory}\n\tstatus: {status}&#34;)
@@ -1442,7 +1445,7 @@ class ArchiveManager(Library):
 
         return gw_return_object
 
-    def file_to_file_pack(self, input_directory: str, output_directory: str, file_type: Optional[str] = None, raise_unsupported: bool = True):
+    def file_to_file_pack(self, input_directory: str, output_directory: str, file_type: Optional[str] = None, add_extension: Optional[bool] = True, raise_unsupported: Optional[bool] = True):
         # Validate arg types
         if not isinstance(input_directory, str):
             raise TypeError(input_directory)
@@ -1461,6 +1464,7 @@ class ArchiveManager(Library):
             ct.c_char_p,
             ct.c_char_p,
             ct.c_char_p,
+            ct.c_int,
         ]
 
         # Variable initialisation
@@ -1468,6 +1472,7 @@ class ArchiveManager(Library):
         gw_return_object.ct_input_directory = ct.c_char_p(input_directory.encode())  # const char* inputDirPath
         gw_return_object.ct_output_directory = ct.c_char_p(output_directory.encode())  # const char* outputDirPath
         gw_return_object.ct_file_type = ct.c_char_p(file_type.encode())  # const char *fileType
+        gw_return_object.ct_add_extension = ct.c_int(int(add_extension))  # int addExtension
 
         with utils.CwdHandler(new_cwd=self.library_path):
             # API call
@@ -1475,6 +1480,7 @@ class ArchiveManager(Library):
                 gw_return_object.ct_input_directory,
                 gw_return_object.ct_output_directory,
                 gw_return_object.ct_file_type,
+                gw_return_object.ct_add_extension,
             )
 
         if gw_return_object.status not in successes.success_codes:
@@ -1567,16 +1573,16 @@ class ArchiveManager(Library):
                 delete_origin=delete_origin
             )
 
-    def pack_directory(self, input_directory: str, output_directory: str, file_type: str, raise_unsupported: bool = True, delete_origin: bool = False):
-        &#34;&#34;&#34; Pack a directory. Supported archive formats are: &#34;7z&#34;, &#34;bz2&#34;, &#34;gz&#34;, &#34;rar&#34;, &#34;tar&#34;, &#34;zip&#34;.
+    def pack_directory(self, input_directory: str, output_directory: str, file_type: str, add_extension: Optional[bool] = True, raise_unsupported: Optional[bool] = True, delete_origin: Optional[bool] = False):
+        &#34;&#34;&#34; Pack a directory. Supported archive formats are: &#34;7z&#34;, &#34;bz2&#34;, &#34;gz&#34;, &#34;rar&#34;, &#34;tar&#34;, &#34;xz&#34;, &#34;zip&#34;.
 
         Args:
-            input_file (str): The archive file path
-            output_directory (str): The output directory where the archive will be unpacked to a new directory.
-            recursive (bool, optional): Default True. Recursively unpack all nested archives.
+            input_directory (str): The input directory containing files to archive.
+            output_directory (str): The output directory to store the created archive.
             file_type (str): The archive file type.
+            add_extension (bool, optional): Default: True. Archive file type extension to result file.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
-            delete_origin (bool, optional): Default False. Delete input_file after unpacking to output_directory.
+            delete_origin (bool, optional): Default False. Delete input_directory after packing to output_directory.
         &#34;&#34;&#34;
         # Convert to absolute paths
         input_directory = os.path.abspath(input_directory)
@@ -1584,7 +1590,7 @@ class ArchiveManager(Library):
 
         # Pack
         log.debug(f&#34;Packing\n\tsrc: {input_directory}\n\tdst: {output_directory}&#34;)
-        status = self.file_to_file_pack(input_directory=input_directory, output_directory=output_directory, file_type=file_type, raise_unsupported=raise_unsupported).status
+        status = self.file_to_file_pack(input_directory=input_directory, output_directory=output_directory, file_type=file_type, add_extension=add_extension, raise_unsupported=raise_unsupported).status
 
         if status not in successes.success_codes:
             log.error(f&#34;\n\tinput_directory: {input_directory}\n\tstatus: {status}&#34;)
@@ -2404,7 +2410,7 @@ def supported_archives(self):
 </details>
 </dd>
 <dt id="glasswall.libraries.archive_manager.archive_manager.ArchiveManager.file_to_file_pack"><code class="name flex">
-<span>def <span class="ident">file_to_file_pack</span></span>(<span>self, input_directory: str, output_directory: str, file_type: Optional[str] = None, raise_unsupported: bool = True)</span>
+<span>def <span class="ident">file_to_file_pack</span></span>(<span>self, input_directory: str, output_directory: str, file_type: Optional[str] = None, add_extension: Optional[bool] = True, raise_unsupported: Optional[bool] = True)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2412,7 +2418,7 @@ def supported_archives(self):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def file_to_file_pack(self, input_directory: str, output_directory: str, file_type: Optional[str] = None, raise_unsupported: bool = True):
+<pre><code class="python">def file_to_file_pack(self, input_directory: str, output_directory: str, file_type: Optional[str] = None, add_extension: Optional[bool] = True, raise_unsupported: Optional[bool] = True):
     # Validate arg types
     if not isinstance(input_directory, str):
         raise TypeError(input_directory)
@@ -2431,6 +2437,7 @@ def supported_archives(self):
         ct.c_char_p,
         ct.c_char_p,
         ct.c_char_p,
+        ct.c_int,
     ]
 
     # Variable initialisation
@@ -2438,6 +2445,7 @@ def supported_archives(self):
     gw_return_object.ct_input_directory = ct.c_char_p(input_directory.encode())  # const char* inputDirPath
     gw_return_object.ct_output_directory = ct.c_char_p(output_directory.encode())  # const char* outputDirPath
     gw_return_object.ct_file_type = ct.c_char_p(file_type.encode())  # const char *fileType
+    gw_return_object.ct_add_extension = ct.c_int(int(add_extension))  # int addExtension
 
     with utils.CwdHandler(new_cwd=self.library_path):
         # API call
@@ -2445,6 +2453,7 @@ def supported_archives(self):
             gw_return_object.ct_input_directory,
             gw_return_object.ct_output_directory,
             gw_return_object.ct_file_type,
+            gw_return_object.ct_add_extension,
         )
 
     if gw_return_object.status not in successes.success_codes:
@@ -2763,39 +2772,39 @@ def is_supported_archive(self, archive_type: str):
 </details>
 </dd>
 <dt id="glasswall.libraries.archive_manager.archive_manager.ArchiveManager.pack_directory"><code class="name flex">
-<span>def <span class="ident">pack_directory</span></span>(<span>self, input_directory: str, output_directory: str, file_type: str, raise_unsupported: bool = True, delete_origin: bool = False)</span>
+<span>def <span class="ident">pack_directory</span></span>(<span>self, input_directory: str, output_directory: str, file_type: str, add_extension: Optional[bool] = True, raise_unsupported: Optional[bool] = True, delete_origin: Optional[bool] = False)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Pack a directory. Supported archive formats are: "7z", "bz2", "gz", "rar", "tar", "zip".</p>
+<div class="desc"><p>Pack a directory. Supported archive formats are: "7z", "bz2", "gz", "rar", "tar", "xz", "zip".</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>input_file</code></strong> :&ensp;<code>str</code></dt>
-<dd>The archive file path</dd>
+<dt><strong><code>input_directory</code></strong> :&ensp;<code>str</code></dt>
+<dd>The input directory containing files to archive.</dd>
 <dt><strong><code>output_directory</code></strong> :&ensp;<code>str</code></dt>
-<dd>The output directory where the archive will be unpacked to a new directory.</dd>
-<dt><strong><code>recursive</code></strong> :&ensp;<code>bool</code>, optional</dt>
-<dd>Default True. Recursively unpack all nested archives.</dd>
+<dd>The output directory to store the created archive.</dd>
 <dt><strong><code>file_type</code></strong> :&ensp;<code>str</code></dt>
 <dd>The archive file type.</dd>
+<dt><strong><code>add_extension</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Default: True. Archive file type extension to result file.</dd>
 <dt><strong><code>raise_unsupported</code></strong> :&ensp;<code>bool</code>, optional</dt>
 <dd>Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.</dd>
 <dt><strong><code>delete_origin</code></strong> :&ensp;<code>bool</code>, optional</dt>
-<dd>Default False. Delete input_file after unpacking to output_directory.</dd>
+<dd>Default False. Delete input_directory after packing to output_directory.</dd>
 </dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def pack_directory(self, input_directory: str, output_directory: str, file_type: str, raise_unsupported: bool = True, delete_origin: bool = False):
-    &#34;&#34;&#34; Pack a directory. Supported archive formats are: &#34;7z&#34;, &#34;bz2&#34;, &#34;gz&#34;, &#34;rar&#34;, &#34;tar&#34;, &#34;zip&#34;.
+<pre><code class="python">def pack_directory(self, input_directory: str, output_directory: str, file_type: str, add_extension: Optional[bool] = True, raise_unsupported: Optional[bool] = True, delete_origin: Optional[bool] = False):
+    &#34;&#34;&#34; Pack a directory. Supported archive formats are: &#34;7z&#34;, &#34;bz2&#34;, &#34;gz&#34;, &#34;rar&#34;, &#34;tar&#34;, &#34;xz&#34;, &#34;zip&#34;.
 
     Args:
-        input_file (str): The archive file path
-        output_directory (str): The output directory where the archive will be unpacked to a new directory.
-        recursive (bool, optional): Default True. Recursively unpack all nested archives.
+        input_directory (str): The input directory containing files to archive.
+        output_directory (str): The output directory to store the created archive.
         file_type (str): The archive file type.
+        add_extension (bool, optional): Default: True. Archive file type extension to result file.
         raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
-        delete_origin (bool, optional): Default False. Delete input_file after unpacking to output_directory.
+        delete_origin (bool, optional): Default False. Delete input_directory after packing to output_directory.
     &#34;&#34;&#34;
     # Convert to absolute paths
     input_directory = os.path.abspath(input_directory)
@@ -2803,7 +2812,7 @@ def is_supported_archive(self, archive_type: str):
 
     # Pack
     log.debug(f&#34;Packing\n\tsrc: {input_directory}\n\tdst: {output_directory}&#34;)
-    status = self.file_to_file_pack(input_directory=input_directory, output_directory=output_directory, file_type=file_type, raise_unsupported=raise_unsupported).status
+    status = self.file_to_file_pack(input_directory=input_directory, output_directory=output_directory, file_type=file_type, add_extension=add_extension, raise_unsupported=raise_unsupported).status
 
     if status not in successes.success_codes:
         log.error(f&#34;\n\tinput_directory: {input_directory}\n\tstatus: {status}&#34;)
