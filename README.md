@@ -11,7 +11,7 @@ A high level Python wrapper for interfacing with Glasswall libraries.
 ### Online installation:
 
 ```
-pip install glasswall
+pip install --upgrade glasswall
 ```
 
 ### Offline installation for Centos 7 and RHEL8:
@@ -19,7 +19,7 @@ pip install glasswall
 Run the following commands within the directory containing the offline installation files.
 
 ```
-pip install --no-index --find-links=. glasswall
+pip install --upgrade --no-index --find-links=. glasswall
 ```
 **Note:** The lxml whl includes the required lxml dependencies and has been tested on Centos 7 and RHEL8 environments.
 
