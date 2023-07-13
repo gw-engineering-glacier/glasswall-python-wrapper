@@ -24,25 +24,25 @@ class Rebuild(Library):
         self.set_content_management_policy(input_file=None)
 
         # Validate killswitch has not activated
-        self.validate_license()
+        self.validate_licence()
 
         log.info(f"Loaded Glasswall {self.__class__.__name__} version {self.version()} from {self.library_path}")
 
-    def validate_license(self):
-        """ Validates the license of the library by attempting to call protect_file on a known supported file.
+    def validate_licence(self):
+        """ Validates the licence of the library by attempting to call protect_file on a known supported file.
 
         Raises:
-            RebuildError: If the license could not be validated.
+            RebuildError: If the licence could not be validated.
         """
-        # Call protect file on a known good bitmap to see if license has expired
+        # Call protect file on a known good bitmap to see if licence has expired
         try:
             self.protect_file(
                 input_file=b"BM:\x00\x00\x00\x00\x00\x00\x006\x00\x00\x00(\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x18\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\x00",
                 raise_unsupported=True
             )
-            log.debug(f"{self.__class__.__name__} license validated successfully.")
+            log.debug(f"{self.__class__.__name__} licence validated successfully.")
         except errors.RebuildError:
-            log.error(f"{self.__class__.__name__} license validation failed.")
+            log.error(f"{self.__class__.__name__} licence validation failed.")
             raise
 
     def version(self):

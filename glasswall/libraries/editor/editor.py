@@ -23,15 +23,15 @@ class Editor(Library):
         self.library = self.load_library(os.path.abspath(library_path))
 
         # Validate killswitch has not activated
-        self.validate_license()
+        self.validate_licence()
 
         log.info(f"Loaded Glasswall {self.__class__.__name__} version {self.version()} from {self.library_path}")
 
-    def validate_license(self):
-        """ Validates the license of the library by checking the licence details.
+    def validate_licence(self):
+        """ Validates the licence of the library by checking the licence details.
 
         Raises:
-            LicenseExpired: If the license has expired or could not be validated.
+            LicenceExpired: If the licence has expired or could not be validated.
         """
         licence_details = self.licence_details()
 
@@ -43,10 +43,10 @@ class Editor(Library):
 
         if any(bad_detail.lower() in licence_details.lower() for bad_detail in bad_details):
             # bad_details found in licence_details
-            log.error(f"{self.__class__.__name__} license validation failed. License details:\n{licence_details}")
-            raise errors.LicenseExpired(licence_details)
+            log.error(f"{self.__class__.__name__} licence validation failed. Licence details:\n{licence_details}")
+            raise errors.LicenceExpired(licence_details)
         else:
-            log.debug(f"{self.__class__.__name__} license validated successfully. License details:\n{licence_details}")
+            log.debug(f"{self.__class__.__name__} licence validated successfully. Licence details:\n{licence_details}")
 
     def version(self):
         """ Returns the Glasswall library version.

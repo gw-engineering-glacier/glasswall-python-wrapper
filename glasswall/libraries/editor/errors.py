@@ -19,9 +19,12 @@ class UnexpectedEndOfFile(EditorError):
     pass
 
 
-class LicenseExpired(EditorError):
+class LicenceExpired(EditorError):
     """ Editor error code -3. """
     pass
+
+
+LicenseExpired = LicenceExpired  # alias <= 0.2.42
 
 
 class IncorrectSessionSetup(EditorError):
