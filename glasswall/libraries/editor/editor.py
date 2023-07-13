@@ -28,23 +28,25 @@ class Editor(Library):
         log.info(f"Loaded Glasswall {self.__class__.__name__} version {self.version()} from {self.library_path}")
 
     def validate_license(self):
-        """ Validates the license of the library by attempting to call protect_file on a known supported file.
+        """ Validates the license of the library by checking the licence details.
 
         Raises:
-            LicenseExpired: If the license has expired.
-            EditorError: If the license could not be validated.
+            LicenseExpired: If the license has expired or could not be validated.
         """
-        # Call protect file on a known good bitmap to see if license has expired
-        try:
-            self.protect_file(
-                input_file=b"BM:\x00\x00\x00\x00\x00\x00\x006\x00\x00\x00(\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x18\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\x00",
-                raise_unsupported=True,
-                content_management_policy=glasswall.content_management.policies.Editor(config={"sysConfig": {"run_mode": "editoronly"}})
-            )
-            log.debug(f"{self.__class__.__name__} license validated successfully.")
-        except errors.EditorError:
-            log.error(f"{self.__class__.__name__} license validation failed.")
-            raise
+        licence_details = self.licence_details()
+
+        bad_details = [
+            "Unable to Read Licence Key File",
+            "Licence File Missing Required Contents",
+            "Licence Expired",
+        ]
+
+        if any(bad_detail.lower() in licence_details.lower() for bad_detail in bad_details):
+            # bad_details found in licence_details
+            log.error(f"{self.__class__.__name__} license validation failed. License details:\n{licence_details}")
+            raise errors.LicenseExpired(licence_details)
+        else:
+            log.debug(f"{self.__class__.__name__} license validated successfully. License details:\n{licence_details}")
 
     def version(self):
         """ Returns the Glasswall library version.
@@ -1487,3 +1489,42 @@ class Editor(Library):
             gw_return_object.message = message_bytes.decode()
 
         return gw_return_object
+
+    def _GW2LicenceDetails(self, session: int):
+        """ Returns a human readable text string representing the relevant information contained in the licence.
+
+        Args:
+            session (int): The current session.
+
+        Returns:
+            result (str): A human readable text string representing the relevant information contained in the licence.
+        """
+        # API function declaration
+        self.library.GW2LicenceDetails.argtypes = [ct.c_size_t]
+        self.library.GW2LicenceDetails.restype = ct.c_char_p
+
+        # Variable initialisation
+        ct_session = ct.c_size_t(session)
+
+        # API call
+        result = self.library.GW2LicenceDetails(ct_session)
+
+        # Convert to Python string
+        result = ct.string_at(result).decode()
+
+        # log.debug(f"\n\tsession: {session}\n\tGW2LicenceDetails: {result}")
+
+        return result
+
+    def licence_details(self):
+        """ Returns a human readable text string representing the relevant information contained in the licence.
+
+        Returns:
+            result (str): A human readable text string representing the relevant information contained in the licence.
+        """
+        with self.new_session() as session:
+            result = self._GW2LicenceDetails(session)
+
+            log.debug(f"\n\tsession: {session}\n\tGW2LicenceDetails: {result}")
+
+        return result
