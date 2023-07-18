@@ -1539,9 +1539,9 @@ class Editor(Library):
         """
         # API function declaration
         self.library.GW2RegisterExportTextDumpMemory.argtypes = [
-            ct.c_size_t,
-            ct.POINTER(ct.c_void_p),
-            ct.POINTER(ct.c_size_t)
+            ct.c_size_t,  # Session_Handle session
+            ct.POINTER(ct.c_void_p),  # char ** exportTextDumpFileBuffer
+            ct.POINTER(ct.c_size_t)  # size_t * exportTextDumpLength
         ]
 
         # Variable initialisation
