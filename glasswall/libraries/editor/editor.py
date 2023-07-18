@@ -1590,3 +1590,32 @@ class Editor(Library):
         )
 
         return gw_return_object
+
+    def _GW2RegisterExportTextDumpFile(self, session: int, output_file: str):
+        """ Registers the tet dump file for the file to be exported in File to File Export mode.
+
+        Args:
+            session (int): The current session integer.
+            output_file (str): The file path of the text dump file.
+
+        Returns:
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'output_file', 'status'.
+        """
+        # API function declaration
+        self.library.GW2RegisterExportTextDumpFile.argtypes = [
+            ct.c_size_t,  # Session_Handle session
+            ct.c_char_p  # const char * textDumpFilePathName
+        ]
+
+        # Variable initialisation
+        gw_return_object = glasswall.GwReturnObj()
+        gw_return_object.session = ct.c_size_t(session)
+        gw_return_object.output_file = ct.c_char_p(output_file.encode("utf-8"))
+
+        # API call
+        gw_return_object.status = self.library.GW2RegisterExportTextDumpFile(
+            gw_return_object.session,
+            gw_return_object.output_file
+        )
+
+        return gw_return_object
