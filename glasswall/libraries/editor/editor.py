@@ -1561,12 +1561,13 @@ class Editor(Library):
         return result
 
     def _GW2RegisterExportTextDumpMemory(self, session: int):
-        """
-         Registers the text dump for file to be exported in Memory to Memory Export mode.
+        """ Registers the text dump for file to be exported in Memory to Memory Export mode.
 
-        :param session: The session to register the exported file text dump to.
-        :return: An object with the result indicating the file process status with buffers.
-        :rtype: GwMemReturnObj()
+        Args:
+            session (int): The current session integer.
+
+        Returns:
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'status'.
         """
         # API function declaration
         self.library.GW2RegisterExportTextDumpMemory.argtypes = [
