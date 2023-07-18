@@ -1528,3 +1528,33 @@ class Editor(Library):
             log.debug(f"\n\tsession: {session}\n\tGW2LicenceDetails: {result}")
 
         return result
+
+    def _GW2RegisterExportTextDumpMemory(self, session: int):
+        """
+         Registers the text dump for file to be exported in Memory to Memory Export mode.
+
+        :param session: The session to register the exported file text dump to.
+        :return: An object with the result indicating the file process status with buffers.
+        :rtype: GwMemReturnObj()
+        """
+        # API function declaration
+        self.library.GW2RegisterExportTextDumpMemory.argtypes = [
+            ct.c_size_t,
+            ct.POINTER(ct.c_void_p),
+            ct.POINTER(ct.c_size_t)
+        ]
+
+        # Variable initialisation
+        gw_return_object = glasswall.GwReturnObj()
+        gw_return_object.session = ct.c_size_t(session)
+        gw_return_object.buffer = ct.c_void_p()
+        gw_return_object.buffer_length = ct.c_size_t(0)
+
+        # API call
+        gw_return_object.status = self.library.GW2RegisterExportTextDumpMemory(
+            gw_return_object.session,
+            ct.byref(gw_return_object.buffer),
+            ct.byref(gw_return_object.buffer_length)
+        )
+
+        return gw_return_object
