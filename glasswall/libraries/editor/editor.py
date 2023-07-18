@@ -766,49 +766,47 @@ class Editor(Library):
 
             # API function declaration
             self.library.GW2RegisterExportFile.argtypes = [
-                ct.c_size_t,
-                ct.c_char_p
+                ct.c_size_t,  # Session_Handle session
+                ct.c_char_p  # const char * exportFilePath
             ]
 
             # Variable initialisation
-            ct_session = ct.c_size_t(session)
-            ct_output_file = ct.c_char_p(output_file.encode("utf-8"))
             gw_return_object = glasswall.GwReturnObj()
+            gw_return_object.session = ct.c_size_t(session)
+            gw_return_object.output_file = ct.c_char_p(output_file.encode("utf-8"))
 
             # API Call
-            status = self.library.GW2RegisterExportFile(
-                ct_session,
-                ct_output_file
+            gw_return_object.status = self.library.GW2RegisterExportFile(
+                gw_return_object.session,
+                gw_return_object.output_file
             )
 
         elif isinstance(output_file, type(None)):
             # API function declaration
             self.library.GW2RegisterExportMemory.argtypes = [
-                ct.c_size_t,
-                ct.POINTER(ct.c_void_p),
-                ct.POINTER(ct.c_size_t)
+                ct.c_size_t,  # Session_Handle session
+                ct.POINTER(ct.c_void_p),  # char ** exportFileBuffer
+                ct.POINTER(ct.c_size_t)  # size_t * exportLength
             ]
 
             # Variable initialisation
-            ct_session = ct.c_size_t(session)
             gw_return_object = glasswall.GwReturnObj()
+            gw_return_object.session = ct.c_size_t(session)
             gw_return_object.buffer = ct.c_void_p()
             gw_return_object.buffer_length = ct.c_size_t()
 
             # API call
-            status = self.library.GW2RegisterExportMemory(
-                ct_session,
+            gw_return_object.status = self.library.GW2RegisterExportMemory(
+                gw_return_object.session,
                 ct.byref(gw_return_object.buffer),
                 ct.byref(gw_return_object.buffer_length)
             )
 
-        if status not in successes.success_codes:
-            log.error(f"\n\tsession: {session}\n\tstatus: {status}")
-            raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+        if gw_return_object.status not in successes.success_codes:
+            log.error(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
+            raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
         else:
-            log.debug(f"\n\tsession: {session}\n\tstatus: {status}")
-
-        gw_return_object.status = status
+            log.debug(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
 
         return gw_return_object
 
