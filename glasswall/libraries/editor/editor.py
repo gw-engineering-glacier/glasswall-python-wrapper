@@ -435,7 +435,7 @@ class Editor(Library):
             # Variable initialisation
             ct_session = ct.c_size_t(session)
             gw_return_object.buffer = ct.c_void_p()
-            gw_return_object.buffer_length = ct.c_size_t(0)
+            gw_return_object.buffer_length = ct.c_size_t()
 
             # API call
             gw_return_object.status = self.library.GW2RegisterOutputMemory(
@@ -1127,7 +1127,7 @@ class Editor(Library):
         gw_return_object = glasswall.GwReturnObj()
         gw_return_object.session = ct.c_size_t(session)
         gw_return_object.buffer = ct.c_void_p()
-        gw_return_object.buffer_length = ct.c_size_t(0)
+        gw_return_object.buffer_length = ct.c_size_t()
 
         # API call
         gw_return_object.status = self.library.GW2FileErrorMsg(
@@ -1195,7 +1195,7 @@ class Editor(Library):
         # Variable initialisation
         ct_session = ct.c_size_t(session)
         ct_file_type = ct.c_size_t(file_type_id)
-        ct_buffer_length = ct.c_size_t(0)
+        ct_buffer_length = ct.c_size_t()
         ct_buffer = ct.c_void_p()
 
         # API call
@@ -1247,7 +1247,7 @@ class Editor(Library):
         # Variable initialisation
         ct_session = ct.c_size_t(session)
         ct_file_type = ct.c_char_p(file_type_str.encode('utf-8'))
-        ct_buffer_length = ct.c_size_t(0)
+        ct_buffer_length = ct.c_size_t()
         ct_buffer = ct.c_void_p()
 
         # API call
@@ -1364,7 +1364,7 @@ class Editor(Library):
                 # Variable initialisation
                 ct_session = ct.c_size_t(session)
                 ct_issue_id = ct.c_size_t(issue_id)
-                ct_buffer_length = ct.c_size_t(0)
+                ct_buffer_length = ct.c_size_t()
                 ct_buffer = ct.c_void_p()
 
                 # API call
@@ -1580,7 +1580,7 @@ class Editor(Library):
         gw_return_object = glasswall.GwReturnObj()
         gw_return_object.session = ct.c_size_t(session)
         gw_return_object.buffer = ct.c_void_p()
-        gw_return_object.buffer_length = ct.c_size_t(0)
+        gw_return_object.buffer_length = ct.c_size_t()
 
         # API call
         gw_return_object.status = self.library.GW2RegisterExportTextDumpMemory(
