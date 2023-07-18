@@ -134,9 +134,9 @@ class Editor(Library):
         status = self.library.GW2RunSession(ct_session)
 
         if status not in successes.success_codes:
-            log.error(f"\n\tsession: {session}\n\tstatus: {status}\n\tGW2FileErrorMsg: {self.GW2FileErrorMsg(session)}")
+            log.error(f"\n\tsession: {session}\n\tstatus: {status}\n\tGW2FileErrorMsg: {self.file_error_message(session)}")
         else:
-            log.debug(f"\n\tsession: {session}\n\tstatus: {status}\n\tGW2FileErrorMsg: {self.GW2FileErrorMsg(session)}")
+            log.debug(f"\n\tsession: {session}\n\tstatus: {status}\n\tGW2FileErrorMsg: {self.file_error_message(session)}")
 
         return status
 
@@ -1109,8 +1109,47 @@ class Editor(Library):
 
         return import_files_dict
 
+    def _GW2FileErrorMsg(self, session: int):
+        """ Retrieve the Glasswall Session Process error message.
+
+        Args:
+            session (int): The session number.
+
+        Returns:
+            error_message (str): The Glasswall Session Process error message.
+        """
+        # API function declaration
+        self.library.GW2FileErrorMsg.argtypes = [
+            ct.c_size_t,  # Session_Handle session
+            ct.POINTER(ct.c_void_p),  # char **errorMsgBuffer
+            ct.POINTER(ct.c_size_t)  # size_t *errorMsgBufferLength
+        ]
+
+        # Variable initialisation
+        gw_return_object = glasswall.GwReturnObj()
+        gw_return_object.session = ct.c_size_t(session)
+        gw_return_object.buffer = ct.c_void_p()
+        gw_return_object.buffer_length = ct.c_size_t(0)
+
+        # API call
+        gw_return_object.status = self.library.GW2FileErrorMsg(
+            gw_return_object.session,
+            ct.byref(gw_return_object.buffer),
+            ct.byref(gw_return_object.buffer_length)
+        )
+
+        # Editor wrote to a buffer, convert it to bytes
+        error_bytes = utils.buffer_to_bytes(
+            gw_return_object.buffer,
+            gw_return_object.buffer_length
+        )
+
+        gw_return_object.error_message = error_bytes.decode()
+
+        return gw_return_object
+
     @functools.lru_cache()
-    def GW2FileErrorMsg(self, session: int):
+    def file_error_message(self, session: int):
         """ Retrieve the Glasswall Session Process error message.
 
         Args:
@@ -1123,40 +1162,15 @@ class Editor(Library):
         if not isinstance(session, int):
             raise TypeError(session)
 
-        # API function declaration
-        self.library.GW2FileErrorMsg.argtypes = [
-            ct.c_size_t,
-            ct.POINTER(ct.c_void_p),
-            ct.POINTER(ct.c_size_t)
-        ]
+        result = self._GW2FileErrorMsg(session)
 
-        # Variable initialisation
-        ct_session = ct.c_size_t(session)
-        ct_buffer = ct.c_void_p()
-        ct_buffer_length = ct.c_size_t(0)
-
-        # API call
-        status = self.library.GW2FileErrorMsg(
-            ct_session,
-            ct.byref(ct_buffer),
-            ct.byref(ct_buffer_length)
-        )
-
-        if status not in successes.success_codes:
-            log.error(f"\n\tsession: {session}\n\tstatus: {status}")
-            raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+        if result.status not in successes.success_codes:
+            log.error(f"\n\tsession: {session}\n\tstatus: {result.status}\n\terror_message: {result.error_message}")
+            raise errors.error_codes.get(result.status, errors.UnknownErrorCode)(result.status)
         else:
-            log.debug(f"\n\tsession: {session}\n\tstatus: {status}")
+            log.debug(f"\n\tsession: {session}\n\tstatus: {result.status}\n\terror_message: {result.error_message}")
 
-        # Editor wrote to a buffer, convert it to bytes
-        error_bytes = utils.buffer_to_bytes(
-            ct_buffer,
-            ct_buffer_length
-        )
-
-        error_message = error_bytes.decode()
-
-        return error_message
+        return result.error_message
 
     def GW2GetFileType(self, session: int, file_type_id):
         """ Retrieve the file type as a string.
