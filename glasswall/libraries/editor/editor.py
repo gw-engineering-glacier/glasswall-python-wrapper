@@ -1439,7 +1439,7 @@ class Editor(Library):
 
                     return file_bytes
 
-    def file_session_status(self, session: int, raise_unsupported: bool = True):
+    def _GW2FileSessionStatus(self, session: int):
         """ Retrieves the Glasswall Session Status. Also gives a high level indication of the processing that was carried out on the last document processed by the library
 
         Args:
@@ -1451,10 +1451,10 @@ class Editor(Library):
         """
         # API function declaration
         self.library.GW2FileSessionStatus.argtypes = [
-            ct.c_size_t,
-            ct.POINTER(ct.c_int),
-            ct.POINTER(ct.c_void_p),
-            ct.POINTER(ct.c_size_t)
+            ct.c_size_t,  # Session_Handle session
+            ct.POINTER(ct.c_int),  # int *glasswallSessionStatus
+            ct.POINTER(ct.c_void_p),  # char **statusMsgBuffer
+            ct.POINTER(ct.c_size_t)  # size_t *statusbufferLength
         ]
 
         # Variable initialisation
@@ -1472,23 +1472,42 @@ class Editor(Library):
             ct.byref(gw_return_object.buffer_length)
         )
 
-        if gw_return_object.status not in successes.success_codes:
-            log.error(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
-            if raise_unsupported:
-                raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
-            else:
-                gw_return_object.message = None
-        else:
-            log.debug(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
+        # Convert session_status to int
+        gw_return_object.session_status = gw_return_object.session_status.value
 
-            message_bytes = utils.buffer_to_bytes(
-                gw_return_object.buffer,
-                gw_return_object.buffer_length
-            )
-
-            gw_return_object.message = message_bytes.decode()
+        # Editor wrote to a buffer, convert it to bytes
+        message_bytes = utils.buffer_to_bytes(
+            gw_return_object.buffer,
+            gw_return_object.buffer_length
+        )
+        gw_return_object.message = message_bytes.decode()
 
         return gw_return_object
+
+    def file_session_status_message(self, session: int, raise_unsupported: bool = True):
+        """ Retrieves the Glasswall Session Status message. Gives a high level indication of the processing that was carried out on the last document processed by the library
+
+        Args:
+            session (int): The current session.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'status' and 'message' indicating the result of the function call.
+        """
+        # Validate arg types
+        if not isinstance(session, int):
+            raise TypeError(session)
+
+        result = self._GW2FileSessionStatus(session)
+
+        if result.status not in successes.success_codes:
+            log.error(f"\n\tsession: {session}\n\tstatus: {result.status}\n\tsession_status: {result.session_status}\n\tmessage: {result.message}")
+            if raise_unsupported:
+                raise errors.error_codes.get(result.status, errors.UnknownErrorCode)(result.status)
+        else:
+            log.debug(f"\n\tsession: {session}\n\tstatus: {result.status}\n\tsession_status: {result.session_status}\n\tmessage: {result.message}")
+
+        return result.message
 
     def _GW2LicenceDetails(self, session: int):
         """ Returns a human readable text string representing the relevant information contained in the licence.
