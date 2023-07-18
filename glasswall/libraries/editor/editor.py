@@ -755,9 +755,8 @@ class Editor(Library):
             output_file (Union[None, str], optional): Default None. The file path where the export will be written. None returns the export as bytes.
 
         Returns:
-            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attribute 'status' indicating the result of the function call. If output_file is None (memory mode), 'buffer', and 'buffer_length' are included containing the file content and file size.
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attribute 'status' indicating the result of the function call and 'session', the session integer. If output_file is None (memory mode), 'buffer', and 'buffer_length' are included containing the file content and file size.
         """
-
         if not isinstance(output_file, (type(None), str)):
             raise TypeError(output_file)
 
