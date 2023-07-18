@@ -1239,7 +1239,7 @@ class Editor(Library):
             raise TypeError(session)
 
         # API function declaration
-        self.library.GW2GetFileType.argtypes = [
+        self.library.GW2GetFileTypeID.argtypes = [
             ct.c_size_t,
             ct.c_char_p,
             ct.POINTER(ct.c_size_t),
