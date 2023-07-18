@@ -271,9 +271,9 @@ class Editor(Library):
         if isinstance(input_file, str) and os.path.isfile(input_file):
             # API function declaration
             self.library.GW2RegisterPoliciesFile.argtypes = [
-                ct.c_size_t,
-                ct.c_char_p,
-                ct.c_int,
+                ct.c_size_t,  # Session_Handle session
+                ct.c_char_p,  # const char *filename
+                ct.c_int,  # Policy_Format format
             ]
 
             # Variable initialisation
@@ -298,9 +298,10 @@ class Editor(Library):
 
             # API function declaration
             self.library.GW2RegisterPoliciesMemory.argtype = [
-                ct.c_size_t,
-                ct.c_char_p,
-                ct.c_int
+                ct.c_size_t,  # Session_Handle session
+                ct.c_char_p,  # const char *policies
+                ct.c_size_t,  # size_t policiesLength
+                ct.c_int  # Policy_Format format
             ]
 
             # Variable initialisation
