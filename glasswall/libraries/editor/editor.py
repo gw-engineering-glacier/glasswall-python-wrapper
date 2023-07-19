@@ -10,7 +10,7 @@ from typing import Union, Optional
 import glasswall
 from glasswall import determine_file_type as dft
 from glasswall import utils
-from glasswall.config.logging import log
+from glasswall.config.logging import log, format_object
 from glasswall.libraries.editor import errors, successes
 from glasswall.libraries.library import Library
 
@@ -319,10 +319,10 @@ class Editor(Library):
             )
 
         if gw_return_object.status not in successes.success_codes:
-            log.error(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
+            log.error(format_object(gw_return_object))
             raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
         else:
-            log.debug(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
+            log.debug(format_object(gw_return_object))
 
         return gw_return_object
 
@@ -413,10 +413,10 @@ class Editor(Library):
             result = self._GW2RegisterInputMemory(session, input_file)
 
         if result.status not in successes.success_codes:
-            logging.log.error(logging.format_object(result))
+            log.error(format_object(result))
             raise errors.error_codes.get(result.status, errors.UnknownErrorCode)(result.status)
         else:
-            logging.log.debug(logging.format_object(result))
+            log.debug(format_object(result))
 
         return result.status
 
@@ -474,10 +474,10 @@ class Editor(Library):
             )
 
         if gw_return_object.status not in successes.success_codes:
-            log.error(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
+            log.error(format_object(gw_return_object))
             raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
         else:
-            log.debug(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
+            log.debug(format_object(gw_return_object))
 
         return gw_return_object
 
@@ -831,10 +831,10 @@ class Editor(Library):
             )
 
         if gw_return_object.status not in successes.success_codes:
-            log.error(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
+            log.error(format_object(gw_return_object))
             raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
         else:
-            log.debug(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
+            log.debug(format_object(gw_return_object))
 
         return gw_return_object
 
@@ -1013,10 +1013,10 @@ class Editor(Library):
             )
 
         if gw_return_object.status not in successes.success_codes:
-            log.error(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
+            log.error(format_object(gw_return_object))
             raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
         else:
-            log.debug(f"\n\tsession: {session}\n\tstatus: {gw_return_object.status}")
+            log.debug(format_object(gw_return_object))
 
         return gw_return_object
 
@@ -1192,10 +1192,10 @@ class Editor(Library):
         result = self._GW2FileErrorMsg(session)
 
         if result.status not in successes.success_codes:
-            log.error(f"\n\tsession: {session}\n\tstatus: {result.status}\n\terror_message: {result.error_message}")
+            log.error(format_object(result))
             raise errors.error_codes.get(result.status, errors.UnknownErrorCode)(result.status)
         else:
-            log.debug(f"\n\tsession: {session}\n\tstatus: {result.status}\n\terror_message: {result.error_message}")
+            log.debug(format_object(result))
 
         return result.error_message
 
@@ -1542,11 +1542,11 @@ class Editor(Library):
         result = self._GW2FileSessionStatus(session)
 
         if result.status not in successes.success_codes:
-            log.error(f"\n\tsession: {session}\n\tstatus: {result.status}\n\tsession_status: {result.session_status}\n\tmessage: {result.message}")
+            log.error(format_object(result))
             if raise_unsupported:
                 raise errors.error_codes.get(result.status, errors.UnknownErrorCode)(result.status)
         else:
-            log.debug(f"\n\tsession: {session}\n\tstatus: {result.status}\n\tsession_status: {result.session_status}\n\tmessage: {result.message}")
+            log.debug(format_object(result))
 
         return result.message
 
@@ -1571,8 +1571,6 @@ class Editor(Library):
 
         # Convert to Python string
         result = ct.string_at(result).decode()
-
-        # log.debug(f"\n\tsession: {session}\n\tGW2LicenceDetails: {result}")
 
         return result
 
