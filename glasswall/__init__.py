@@ -27,4 +27,5 @@ class GwReturnObj:
     """
 
     def __init__(self, **kwargs):
-        [setattr(self, k, v) for k, v in kwargs.items()]
+        for k, v in kwargs.items():
+            setattr(self, k, v)
