@@ -326,6 +326,67 @@ class Editor(Library):
 
         return gw_return_object
 
+    def _GW2RegisterInputFile(self, session: int, input_file: str):
+        """ Register an input file for the given session.
+
+        Args:
+            session (int): The current session.
+            input_file (str): The input file path.
+
+        Returns:
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'input_file', 'status'.
+        """
+        # API function declaration
+        self.library.GW2RegisterInputFile.argtypes = [
+            ct.c_size_t,  # Session_Handle session
+            ct.c_char_p  # const char * inputFilePath
+        ]
+
+        # Variable initialisation
+        gw_return_object = glasswall.GwReturnObj()
+        gw_return_object.session = ct.c_size_t(session)
+        gw_return_object.input_file = ct.c_char_p(input_file.encode("utf-8"))
+
+        # API call
+        gw_return_object.status = self.library.GW2RegisterInputFile(
+            gw_return_object.session,
+            gw_return_object.input_file
+        )
+
+        return gw_return_object
+
+    def _GW2RegisterInputMemory(self, session: int, input_file: bytes):
+        """ Register an input file in memory for the given session.
+
+        Args:
+            session (int): The current session.
+            input_file (bytes): The input file in memory.
+
+        Returns:
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'status'.
+        """
+        # API function declaration
+        self.library.GW2RegisterInputMemory.argtypes = [
+            ct.c_size_t,  # Session_Handle session
+            ct.c_char_p,  # const char * inputFileBuffer
+            ct.c_size_t,  # size_t inputLength
+        ]
+
+        # Variable initialisation
+        gw_return_object = glasswall.GwReturnObj()
+        gw_return_object.session = ct.c_size_t(session)
+        gw_return_object.buffer = ct.c_char_p(input_file)
+        gw_return_object.buffer_length = ct.c_size_t(len(input_file))
+
+        # API call
+        gw_return_object.status = self.library.GW2RegisterInputMemory(
+            gw_return_object.session,
+            gw_return_object.buffer,
+            gw_return_object.buffer_length
+        )
+
+        return gw_return_object
+
     def register_input(self, session: int, input_file: Union[str, bytes, bytearray, io.BytesIO]):
         """ Register an input file or bytes for the given session.
 
@@ -336,7 +397,6 @@ class Editor(Library):
         Returns:
             status (int): The result of the Glasswall API call.
         """
-
         if not isinstance(input_file, (str, bytes, bytearray, io.BytesIO,)):
             raise TypeError(input_file)
 
@@ -344,52 +404,21 @@ class Editor(Library):
             if not os.path.isfile(input_file):
                 raise FileNotFoundError(input_file)
 
-            # API function declaration
-            self.library.GW2RegisterInputFile.argtypes = [
-                ct.c_size_t,
-                ct.c_char_p
-            ]
-
-            # Variable initialisation
-            ct_session = ct.c_size_t(session)
-            ct_input_file = ct.c_char_p(input_file.encode("utf-8"))
-
-            # API call
-            status = self.library.GW2RegisterInputFile(
-                ct_session,
-                ct_input_file
-            )
+            result = self._GW2RegisterInputFile(session, input_file)
 
         elif isinstance(input_file, (bytes, bytearray, io.BytesIO,)):
             # Convert bytearray and io.BytesIO to bytes
             input_file = utils.as_bytes(input_file)
 
-            # API function declaration
-            self.library.GW2RegisterInputMemory.argtypes = [
-                ct.c_size_t,
-                ct.c_char_p,
-                ct.c_size_t,
-            ]
+            result = self._GW2RegisterInputMemory(session, input_file)
 
-            # Variable initialisation
-            ct_session = ct.c_size_t(session)
-            ct_buffer = ct.c_char_p(input_file)
-            ct_buffer_length = ct.c_size_t(len(input_file))
-
-            # API call
-            status = self.library.GW2RegisterInputMemory(
-                ct_session,
-                ct_buffer,
-                ct_buffer_length
-            )
-
-        if status not in successes.success_codes:
-            log.error(f"\n\tsession: {session}\n\tstatus: {status}")
-            raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+        if result.status not in successes.success_codes:
+            logging.log.error(logging.format_object(result))
+            raise errors.error_codes.get(result.status, errors.UnknownErrorCode)(result.status)
         else:
-            log.debug(f"\n\tsession: {session}\n\tstatus: {status}")
+            logging.log.debug(logging.format_object(result))
 
-        return status
+        return result.status
 
     def register_output(self, session, output_file: Union[None, str] = None):
         """ Register an output file for the given session. If output_file is None the file will be returned as 'buffer' and 'buffer_length' attributes.
