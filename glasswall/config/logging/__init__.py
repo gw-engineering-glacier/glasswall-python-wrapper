@@ -39,3 +39,9 @@ if os.environ.get("glasswall_console_level"):
 else:
     console.setLevel(logging.INFO)
 log.addHandler(console)
+
+
+def format_object(obj):
+    if not obj.__dict__.items():
+        return ""
+    return "\n\t" + "\n\t".join(f"{k}: {v}" for k, v in obj.__dict__.items())
