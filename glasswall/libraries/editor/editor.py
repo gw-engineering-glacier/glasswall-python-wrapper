@@ -422,6 +422,66 @@ class Editor(Library):
 
         return result.status
 
+    def _GW2RegisterOutFile(self, session: int, output_file: str):
+        """ Register an output file for the given session.
+
+        Args:
+            session (int): The current session.
+            output_file (str): The output file path.
+
+        Returns:
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'output_file', 'status'.
+        """
+        # API function declaration
+        self.library.GW2RegisterOutFile.argtypes = [
+            ct.c_size_t,  # Session_Handle session
+            ct.c_char_p  # const char * outputFilePath
+        ]
+
+        # Variable initialisation
+        gw_return_object = glasswall.GwReturnObj()
+        gw_return_object.session = ct.c_size_t(session)
+        gw_return_object.output_file = ct.c_char_p(output_file.encode("utf-8"))
+
+        # API call
+        gw_return_object.status = self.library.GW2RegisterOutFile(
+            gw_return_object.session,
+            gw_return_object.output_file
+        )
+
+        return gw_return_object
+
+    def _GW2RegisterOutputMemory(self, session: int):
+        """ Register an output file in memory for the given session.
+
+        Args:
+            session (int): The current session.
+
+        Returns:
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'status'.
+        """
+        # API function declaration
+        self.library.GW2RegisterOutputMemory.argtypes = [
+            ct.c_size_t,  # Session_Handle session
+            ct.POINTER(ct.c_void_p),  # char ** outputBuffer
+            ct.POINTER(ct.c_size_t)  # size_t * outputLength
+        ]
+
+        # Variable initialisation
+        gw_return_object = glasswall.GwReturnObj()
+        gw_return_object.session = ct.c_size_t(session)
+        gw_return_object.buffer = ct.c_void_p()
+        gw_return_object.buffer_length = ct.c_size_t()
+
+        # API call
+        gw_return_object.status = self.library.GW2RegisterOutputMemory(
+            gw_return_object.session,
+            ct.byref(gw_return_object.buffer),
+            ct.byref(gw_return_object.buffer_length)
+        )
+
+        return gw_return_object
+
     def register_output(self, session, output_file: Union[None, str] = None):
         """ Register an output file for the given session. If output_file is None the file will be returned as 'buffer' and 'buffer_length' attributes.
 
@@ -432,56 +492,24 @@ class Editor(Library):
         Returns:
             gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attribute 'status' indicating the result of the function call. If output_file is None (memory mode), 'buffer', and 'buffer_length' are included containing the file content and file size.
         """
-
         if not isinstance(output_file, (type(None), str)):
             raise TypeError(output_file)
 
-        gw_return_object = glasswall.GwReturnObj()
-
         if isinstance(output_file, str):
-            # API function declaration
-            self.library.GW2RegisterOutFile.argtypes = [
-                ct.c_size_t,
-                ct.c_char_p
-            ]
+            output_file = os.path.abspath(output_file)
 
-            # Variable initialisation
-            ct_session = ct.c_size_t(session)
-            ct_output_file = ct.c_char_p(output_file.encode("utf-8"))
+            result = self._GW2RegisterOutFile(session, output_file)
 
-            # API call
-            gw_return_object.status = self.library.GW2RegisterOutFile(
-                ct_session,
-                ct_output_file
-            )
+        elif isinstance(output_file, type(None)):
+            result = self._GW2RegisterOutputMemory(session)
 
+        if result.status not in successes.success_codes:
+            log.error(format_object(result))
+            raise errors.error_codes.get(result.status, errors.UnknownErrorCode)(result.status)
         else:
-            # API function declaration
-            self.library.GW2RegisterOutputMemory.argtypes = [
-                ct.c_size_t,
-                ct.POINTER(ct.c_void_p),
-                ct.POINTER(ct.c_size_t)
-            ]
+            log.debug(format_object(result))
 
-            # Variable initialisation
-            ct_session = ct.c_size_t(session)
-            gw_return_object.buffer = ct.c_void_p()
-            gw_return_object.buffer_length = ct.c_size_t()
-
-            # API call
-            gw_return_object.status = self.library.GW2RegisterOutputMemory(
-                ct_session,
-                ct.byref(gw_return_object.buffer),
-                ct.byref(gw_return_object.buffer_length)
-            )
-
-        if gw_return_object.status not in successes.success_codes:
-            log.error(format_object(gw_return_object))
-            raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
-        else:
-            log.debug(format_object(gw_return_object))
-
-        return gw_return_object
+        return result
 
     def register_analysis(self, session: int, output_file: Union[None, str] = None):
         """ Registers an analysis file for the given session. The analysis file will be created during the session's run_session call.
