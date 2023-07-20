@@ -776,12 +776,72 @@ class Editor(Library):
 
         return analysis_files_dict
 
+    def _GW2RegisterExportFile(self, session: int, output_file: str):
+        """ Register an export output file for the given session.
+
+        Args:
+            session (int): The current session.
+            output_file (str): The export output file path.
+
+        Returns:
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'output_file', 'status'.
+        """
+        # API function declaration
+        self.library.GW2RegisterExportFile.argtypes = [
+            ct.c_size_t,  # Session_Handle session
+            ct.c_char_p  # const char * exportFilePath
+        ]
+
+        # Variable initialisation
+        gw_return_object = glasswall.GwReturnObj()
+        gw_return_object.session = ct.c_size_t(session)
+        gw_return_object.output_file = ct.c_char_p(output_file.encode("utf-8"))
+
+        # API Call
+        gw_return_object.status = self.library.GW2RegisterExportFile(
+            gw_return_object.session,
+            gw_return_object.output_file
+        )
+
+        return gw_return_object
+
+    def _GW2RegisterExportMemory(self, session: int):
+        """ Register an export output file in memory for the given session.
+
+        Args:
+            session (int): The current session.
+
+        Returns:
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'status'.
+        """
+        # API function declaration
+        self.library.GW2RegisterExportMemory.argtypes = [
+            ct.c_size_t,  # Session_Handle session
+            ct.POINTER(ct.c_void_p),  # char ** exportFileBuffer
+            ct.POINTER(ct.c_size_t)  # size_t * exportLength
+        ]
+
+        # Variable initialisation
+        gw_return_object = glasswall.GwReturnObj()
+        gw_return_object.session = ct.c_size_t(session)
+        gw_return_object.buffer = ct.c_void_p()
+        gw_return_object.buffer_length = ct.c_size_t()
+
+        # API call
+        gw_return_object.status = self.library.GW2RegisterExportMemory(
+            gw_return_object.session,
+            ct.byref(gw_return_object.buffer),
+            ct.byref(gw_return_object.buffer_length)
+        )
+
+        return gw_return_object
+
     def register_export(self, session: int, output_file: Union[None, str] = None):
         """ Registers a file to be exported for the given session. The export file will be created during the session's run_session call.
 
         Args:
             session (int): The session number.
-            output_file (Union[None, str], optional): Default None. The file path where the export will be written. None returns the export as bytes.
+            output_file (Union[None, str], optional): Default None. The file path where the export will be written. None exports the file in memory.
 
         Returns:
             gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attribute 'status' indicating the result of the function call and 'session', the session integer. If output_file is None (memory mode), 'buffer', and 'buffer_length' are included containing the file content and file size.
@@ -792,51 +852,18 @@ class Editor(Library):
         if isinstance(output_file, str):
             output_file = os.path.abspath(output_file)
 
-            # API function declaration
-            self.library.GW2RegisterExportFile.argtypes = [
-                ct.c_size_t,  # Session_Handle session
-                ct.c_char_p  # const char * exportFilePath
-            ]
-
-            # Variable initialisation
-            gw_return_object = glasswall.GwReturnObj()
-            gw_return_object.session = ct.c_size_t(session)
-            gw_return_object.output_file = ct.c_char_p(output_file.encode("utf-8"))
-
-            # API Call
-            gw_return_object.status = self.library.GW2RegisterExportFile(
-                gw_return_object.session,
-                gw_return_object.output_file
-            )
+            result = self._GW2RegisterExportFile(session, output_file)
 
         elif isinstance(output_file, type(None)):
-            # API function declaration
-            self.library.GW2RegisterExportMemory.argtypes = [
-                ct.c_size_t,  # Session_Handle session
-                ct.POINTER(ct.c_void_p),  # char ** exportFileBuffer
-                ct.POINTER(ct.c_size_t)  # size_t * exportLength
-            ]
+            result = self._GW2RegisterExportMemory(session)
 
-            # Variable initialisation
-            gw_return_object = glasswall.GwReturnObj()
-            gw_return_object.session = ct.c_size_t(session)
-            gw_return_object.buffer = ct.c_void_p()
-            gw_return_object.buffer_length = ct.c_size_t()
-
-            # API call
-            gw_return_object.status = self.library.GW2RegisterExportMemory(
-                gw_return_object.session,
-                ct.byref(gw_return_object.buffer),
-                ct.byref(gw_return_object.buffer_length)
-            )
-
-        if gw_return_object.status not in successes.success_codes:
-            log.error(format_object(gw_return_object))
-            raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
+        if result.status not in successes.success_codes:
+            log.error(format_object(result))
+            raise errors.error_codes.get(result.status, errors.UnknownErrorCode)(result.status)
         else:
-            log.debug(format_object(gw_return_object))
+            log.debug(format_object(result))
 
-        return gw_return_object
+        return result
 
     def export_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
         """ Export a file, returning the .zip file bytes. The .zip file is written to output_file if it is provided.
