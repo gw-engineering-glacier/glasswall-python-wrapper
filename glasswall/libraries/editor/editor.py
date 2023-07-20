@@ -404,6 +404,8 @@ class Editor(Library):
             if not os.path.isfile(input_file):
                 raise FileNotFoundError(input_file)
 
+            input_file = os.path.abspath(input_file)
+
             result = self._GW2RegisterInputFile(session, input_file)
 
         elif isinstance(input_file, (bytes, bytearray, io.BytesIO,)):
