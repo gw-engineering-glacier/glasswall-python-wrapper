@@ -980,12 +980,71 @@ class Editor(Library):
 
         return export_files_dict
 
+    def _GW2RegisterImportFile(self, session: int, input_file: str):
+        """ Register an import file for the given session.
+
+        Args:
+            session (int): The current session.
+            input_file (str): The input import file path.
+
+        Returns:
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'output_file', 'status'.
+        """
+        # API function declaration
+        self.library.GW2RegisterImportFile.argtypes = [
+            ct.c_size_t,  # Session_Handle session
+            ct.c_char_p  # const char * importFilePath
+        ]
+
+        # Variable initialisation
+        gw_return_object = glasswall.GwReturnObj()
+        gw_return_object.session = ct.c_size_t(session)
+        gw_return_object.input_file = ct.c_char_p(input_file.encode("utf-8"))
+
+        # API Call
+        gw_return_object.status = self.library.GW2RegisterImportFile(
+            gw_return_object.session,
+            gw_return_object.input_file
+        )
+
+        return gw_return_object
+
+    def _GW2RegisterImportMemory(self, session: int, input_file: bytes):
+        """ Register an import file in memory for the given session.
+
+        Args:
+            session (int): The current session.
+            input_file (str): The input import file in memory.
+
+        Returns:
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'status'.
+        """
+        # API function declaration
+        self.library.GW2RegisterImportMemory.argtypes = [
+            ct.c_size_t,  # Session_Handle session
+            ct.c_void_p,  # char * importFileBuffer
+            ct.c_size_t  # size_t importLength
+        ]
+
+        # Variable initialisation
+        gw_return_object = glasswall.GwReturnObj()
+        gw_return_object.session = ct.c_size_t(session)
+        gw_return_object.buffer = ct.c_char_p(input_file)
+        gw_return_object.buffer_length = ct.c_size_t(len(input_file))
+
+        # API call
+        gw_return_object.status = self.library.GW2RegisterImportMemory(
+            gw_return_object.session,
+            gw_return_object.buffer,
+            gw_return_object.buffer_length
+        )
+
     def register_import(self, session: int, input_file: Union[str, bytes, bytearray, io.BytesIO]):
         """ Registers a .zip file to be imported for the given session. The constructed file will be created during the session's run_session call.
 
         Args:
             session (int): The session number.
-            input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
+            input_file (Union[str, bytes, bytearray, io.BytesIO]): The input import file path or bytes.
 
         Returns:
             gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attribute 'status' indicating the result of the function call. If output_file is None (memory mode), 'buffer', and 'buffer_length' are included containing the file content and file size.
@@ -997,57 +1056,23 @@ class Editor(Library):
             if not os.path.isfile(input_file):
                 raise FileNotFoundError(input_file)
 
-        gw_return_object = glasswall.GwReturnObj()
-
-        if isinstance(input_file, str):
             input_file = os.path.abspath(input_file)
 
-            # API function declaration
-            self.library.GW2RegisterImportFile.argtypes = [
-                ct.c_size_t,
-                ct.c_char_p
-            ]
-
-            # Variable initialisation
-            ct_session = ct.c_size_t(session)
-            ct_input_file = ct.c_char_p(input_file.encode("utf-8"))
-
-            # API Call
-            gw_return_object.status = self.library.GW2RegisterImportFile(
-                ct_session,
-                ct_input_file
-            )
+            result = self._GW2RegisterImportFile(session, input_file)
 
         elif isinstance(input_file, (bytes, bytearray, io.BytesIO,)):
             # Convert bytearray and io.BytesIO to bytes
             input_file = utils.as_bytes(input_file)
 
-            # API function declaration
-            self.library.GW2RegisterImportMemory.argtypes = [
-                ct.c_size_t,
-                ct.c_void_p,
-                ct.c_size_t
-            ]
+            result = self._GW2RegisterImportMemory(session, input_file)
 
-            # Variable initialisation
-            ct_session = ct.c_size_t(session)
-            gw_return_object.buffer = ct.c_char_p(input_file)
-            gw_return_object.buffer_length = ct.c_size_t(len(input_file))
-
-            # API call
-            gw_return_object.status = self.library.GW2RegisterImportMemory(
-                ct_session,
-                gw_return_object.buffer,
-                gw_return_object.buffer_length
-            )
-
-        if gw_return_object.status not in successes.success_codes:
-            log.error(format_object(gw_return_object))
-            raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
+        if result.status not in successes.success_codes:
+            log.error(format_object(result))
+            raise errors.error_codes.get(result.status, errors.UnknownErrorCode)(result.status)
         else:
-            log.debug(format_object(gw_return_object))
+            log.debug(format_object(result))
 
-        return gw_return_object
+        return result
 
     def import_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
         """ Import a .zip file, constructs a file from the .zip file and returns the file bytes. The file is written to output_file if it is provided.
