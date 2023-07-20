@@ -1067,6 +1067,8 @@ class Editor(Library):
             gw_return_object.buffer_length
         )
 
+        return gw_return_object
+
     def register_import(self, session: int, input_file: Union[str, bytes, bytearray, io.BytesIO]):
         """ Registers a .zip file to be imported for the given session. The constructed file will be created during the session's run_session call.
 
