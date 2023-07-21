@@ -589,6 +589,74 @@ class Editor(Library):
 
         return result
 
+    def _GW2RegisterAnalysisFile(self, session: int, output_file: str, analysis_format: int = 0):
+        """ Register an analysis output file for the given session.
+
+        Args:
+            session (int): The current session.
+            output_file (str): The analysis output file path.
+            analysis_format (int): The format of the analysis report. 0=XML, 1=XMLExtended
+
+        Returns:
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'output_file', 'analysis_format', 'status'.
+        """
+        # API function declaration
+        self.library.GW2RegisterAnalysisFile.argtypes = [
+            ct.c_size_t,  # Session_Handle session
+            ct.c_char_p,  # const char * analysisFilePathName
+            ct.c_int,  # Analysis_Format format
+        ]
+
+        # Variable initialisation
+        gw_return_object = glasswall.GwReturnObj()
+        gw_return_object.session = ct.c_size_t(session)
+        gw_return_object.output_file = ct.c_char_p(output_file.encode("utf-8"))
+        gw_return_object.analysis_format = ct.c_int()
+
+        # API call
+        gw_return_object.status = self.library.GW2RegisterAnalysisFile(
+            gw_return_object.session,
+            gw_return_object.output_file,
+            gw_return_object.analysis_format
+        )
+
+        return gw_return_object
+
+    def _GW2RegisterAnalysisMemory(self, session: int, analysis_format: int = 0):
+        """ Register an analysis output file in memory for the given session.
+
+        Args:
+            session (int): The current session.
+            analysis_format (int): The format of the analysis report. 0=XML, 1=XMLExtended
+
+        Returns:
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'analysis_format', 'status'.
+        """
+        # API function declaration
+        self.library.GW2RegisterAnalysisMemory.argtypes = [
+            ct.c_size_t,  # Session_Handle session
+            ct.POINTER(ct.c_void_p),  # char ** analysisFileBuffer
+            ct.POINTER(ct.c_size_t),  # size_t * analysisoutputLength
+            ct.c_int  # Analysis_Format format
+        ]
+
+        # Variable initialisation
+        gw_return_object = glasswall.GwReturnObj()
+        gw_return_object.session = ct.c_size_t(session)
+        gw_return_object.buffer = ct.c_void_p()
+        gw_return_object.buffer_length = ct.c_size_t()
+        gw_return_object.analysis_format = ct.c_int()
+
+        # API call
+        gw_return_object.status = self.library.GW2RegisterAnalysisMemory(
+            gw_return_object.session,
+            ct.byref(gw_return_object.buffer),
+            ct.byref(gw_return_object.buffer_length),
+            gw_return_object.analysis_format
+        )
+
+        return gw_return_object
+
     def register_analysis(self, session: int, output_file: Union[None, str] = None):
         """ Registers an analysis file for the given session. The analysis file will be created during the session's run_session call.
 
@@ -597,65 +665,26 @@ class Editor(Library):
             output_file (Union[None, str], optional): Default None. The file path where the analysis will be written. None returns the analysis as bytes.
 
         Returns:
-            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attribute 'status' indicating the result of the function call. If output_file is None (memory mode), 'buffer', and 'buffer_length' are included containing the file content and file size.
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'status', 'session', 'analysis_format'. If output_file is None (memory mode), 'buffer', and 'buffer_length' are included containing the file content and file size. If output_file is not None (file mode) 'output_file' is included.
         """
-
         if not isinstance(output_file, (type(None), str)):
             raise TypeError(output_file)
 
         if isinstance(output_file, str):
             output_file = os.path.abspath(output_file)
 
-            # API function declaration
-            self.library.GW2RegisterAnalysisFile.argtypes = [
-                ct.c_size_t,
-                ct.c_char_p,
-                ct.c_int,
-            ]
-
-            # Variable initialisation
-            ct_session = ct.c_size_t(session)
-            ct_output_file = ct.c_char_p(output_file.encode("utf-8"))
-            analysis_file_format = ct.c_int()
-            gw_return_object = glasswall.GwReturnObj()
-
-            # API call
-            status = self.library.GW2RegisterAnalysisFile(
-                ct_session,
-                ct_output_file,
-                analysis_file_format
-            )
+            result = self._GW2RegisterAnalysisFile(session, output_file)
 
         elif isinstance(output_file, type(None)):
-            # API function declaration
-            self.library.GW2RegisterAnalysisMemory.argtypes = [
-                ct.c_size_t,
-                ct.POINTER(ct.c_void_p),
-                ct.POINTER(ct.c_size_t)
-            ]
+            result = self._GW2RegisterAnalysisMemory(session)
 
-            # Variable initialisation
-            gw_return_object = glasswall.GwReturnObj()
-            gw_return_object.session = ct.c_size_t(session)
-            gw_return_object.buffer = ct.c_void_p()
-            gw_return_object.buffer_length = ct.c_size_t()
-
-            # API call
-            status = self.library.GW2RegisterAnalysisMemory(
-                gw_return_object.session,
-                ct.byref(gw_return_object.buffer),
-                ct.byref(gw_return_object.buffer_length)
-            )
-
-        if status not in successes.success_codes:
-            log.error(f"\n\tsession: {session}\n\tstatus: {status}")
-            raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+        if result.status not in successes.success_codes:
+            log.error(format_object(result))
+            raise errors.error_codes.get(result.status, errors.UnknownErrorCode)(result.status)
         else:
-            log.debug(f"\n\tsession: {session}\n\tstatus: {status}")
+            log.debug(format_object(result))
 
-        gw_return_object.status = status
-
-        return gw_return_object
+        return result
 
     def protect_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
         """ Protects a file using the current content management configuration, returning the file bytes. The protected file is written to output_file if it is provided.
