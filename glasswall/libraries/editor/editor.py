@@ -193,6 +193,49 @@ class Editor(Library):
 
         return file_type
 
+    def _GW2GetPolicySettings(self, session: int, file_format: int = 0):
+        """ Get current policy settings for the given session.
+
+        Args:
+            session (int): The current session.
+            file_format (int): The file format of the content management policy. 0 is xml.
+
+        Returns:
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'file_format', 'status', 'policy'.
+        """
+        # API function declaration
+        self.library.GW2GetPolicySettings.argtypes = [
+            ct.c_size_t,  # Session_Handle session
+            ct.POINTER(ct.c_void_p),  # char ** policiesBuffer
+            ct.POINTER(ct.c_size_t),  # size_t * policiesLength
+            ct.c_int,  # Policy_Format format
+        ]
+
+        # Variable initialisation
+        gw_return_object = glasswall.GwReturnObj()
+        gw_return_object.session = ct.c_size_t(session)
+        gw_return_object.buffer = ct.c_void_p()
+        gw_return_object.buffer_length = ct.c_size_t()
+        gw_return_object.file_format = ct.c_int(file_format)
+
+        # API Call
+        gw_return_object.status = self.library.GW2GetPolicySettings(
+            gw_return_object.session,
+            ct.byref(gw_return_object.buffer),
+            ct.byref(gw_return_object.buffer_length),
+            gw_return_object.file_format
+        )
+
+        # Editor wrote to a buffer, convert it to bytes
+        policy_bytes = utils.buffer_to_bytes(
+            gw_return_object.buffer,
+            gw_return_object.buffer_length
+        )
+
+        gw_return_object.policy = policy_bytes.decode()
+
+        return gw_return_object
+
     def get_content_management_policy(self, session: int):
         """ Returns the content management configuration for a given session.
 
