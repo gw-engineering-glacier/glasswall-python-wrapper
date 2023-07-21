@@ -282,6 +282,74 @@ class Editor(Library):
 
         # return file_bytes
 
+    def _GW2RegisterPoliciesFile(self, session: int, input_file: str, file_format: int = 0):
+        """ Registers the policies to be used by Glasswall when processing files.
+
+        Args:
+            session (int): The current session.
+            input_file (str): The content management policy input file path.
+            file_format (int): The file format of the content management policy. 0 is xml.
+
+        Returns:
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'input_file', 'file_format', 'status'.
+        """
+        # API function declaration
+        self.library.GW2RegisterPoliciesFile.argtypes = [
+            ct.c_size_t,  # Session_Handle session
+            ct.c_char_p,  # const char *filename
+            ct.c_int,  # Policy_Format format
+        ]
+
+        # Variable initialisation
+        gw_return_object = glasswall.GwReturnObj()
+        gw_return_object.session = ct.c_size_t(session)
+        gw_return_object.input_file = ct.c_char_p(input_file.encode("utf-8"))
+        gw_return_object.file_format = ct.c_int(file_format)
+
+        gw_return_object.status = self.library.GW2RegisterPoliciesFile(
+            gw_return_object.session,
+            gw_return_object.input_file,
+            gw_return_object.file_format
+        )
+
+        return gw_return_object
+
+    def _GW2RegisterPoliciesMemory(self, session: int, input_file: bytes, file_format: int = 0):
+        """ Registers the policies in memory to be used by Glasswall when processing files.
+
+        Args:
+            session (int): The current session.
+            input_file (str): The content management policy input file bytes.
+            file_format (int): The file format of the content management policy. 0 is xml.
+
+        Returns:
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'file_format', 'status'.
+        """
+        # API function declaration
+        self.library.GW2RegisterPoliciesMemory.argtype = [
+            ct.c_size_t,  # Session_Handle session
+            ct.c_char_p,  # const char *policies
+            ct.c_size_t,  # size_t policiesLength
+            ct.c_int  # Policy_Format format
+        ]
+
+        # Variable initialisation
+        gw_return_object = glasswall.GwReturnObj()
+        gw_return_object.session = ct.c_size_t(session)
+        gw_return_object.buffer = ct.c_char_p(input_file)
+        gw_return_object.buffer_length = ct.c_size_t(len(input_file))
+        gw_return_object.file_format = ct.c_int(file_format)
+
+        # API Call
+        gw_return_object.status = self.library.GW2RegisterPoliciesMemory(
+            gw_return_object.session,
+            gw_return_object.buffer,
+            gw_return_object.buffer_length,
+            gw_return_object.file_format
+        )
+
+        return gw_return_object
+
     def set_content_management_policy(self, session: int, input_file: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, file_format=0):
         """ Sets the content management policy configuration. If input_file is None then default settings (sanitise) are applied.
 
@@ -308,66 +376,33 @@ class Editor(Library):
         # Validate xml content is parsable
         utils.validate_xml(input_file)
 
-        gw_return_object = glasswall.GwReturnObj()
-
         # From file
         if isinstance(input_file, str) and os.path.isfile(input_file):
-            # API function declaration
-            self.library.GW2RegisterPoliciesFile.argtypes = [
-                ct.c_size_t,  # Session_Handle session
-                ct.c_char_p,  # const char *filename
-                ct.c_int,  # Policy_Format format
-            ]
+            if not os.path.isfile(input_file):
+                raise FileNotFoundError(input_file)
 
-            # Variable initialisation
-            gw_return_object.ct_session = ct.c_size_t(session)
-            gw_return_object.ct_input_file = ct.c_char_p(input_file.encode("utf-8"))
-            gw_return_object.ct_file_format = ct.c_int(file_format)
+            input_file = os.path.abspath(input_file)
 
-            gw_return_object.status = self.library.GW2RegisterPoliciesFile(
-                gw_return_object.ct_session,
-                gw_return_object.ct_input_file,
-                gw_return_object.ct_file_format
-            )
+            result = self._GW2RegisterPoliciesFile(session, input_file)
 
         # From memory
         elif isinstance(input_file, (str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy)):
             # Convert bytearray, io.BytesIO to bytes
-            if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
+            if isinstance(input_file, (bytearray, io.BytesIO)):
                 input_file = utils.as_bytes(input_file)
             # Convert string xml or Policy to bytes
             if isinstance(input_file, (str, glasswall.content_management.policies.policy.Policy)):
                 input_file = input_file.encode("utf-8")
 
-            # API function declaration
-            self.library.GW2RegisterPoliciesMemory.argtype = [
-                ct.c_size_t,  # Session_Handle session
-                ct.c_char_p,  # const char *policies
-                ct.c_size_t,  # size_t policiesLength
-                ct.c_int  # Policy_Format format
-            ]
+            result = self._GW2RegisterPoliciesMemory(session, input_file)
 
-            # Variable initialisation
-            gw_return_object.ct_session = ct.c_size_t(session)
-            gw_return_object.ct_buffer = ct.c_char_p(input_file)
-            gw_return_object.ct_buffer_length = ct.c_size_t(len(input_file))
-            gw_return_object.ct_file_format = ct.c_int(file_format)
-
-            # API Call
-            gw_return_object.status = self.library.GW2RegisterPoliciesMemory(
-                gw_return_object.ct_session,
-                gw_return_object.ct_buffer,
-                gw_return_object.ct_buffer_length,
-                gw_return_object.ct_file_format
-            )
-
-        if gw_return_object.status not in successes.success_codes:
-            log.error(format_object(gw_return_object))
-            raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
+        if result.status not in successes.success_codes:
+            log.error(format_object(result))
+            raise errors.error_codes.get(result.status, errors.UnknownErrorCode)(result.status)
         else:
-            log.debug(format_object(gw_return_object))
+            log.debug(format_object(result))
 
-        return gw_return_object
+        return result.status
 
     def _GW2RegisterInputFile(self, session: int, input_file: str):
         """ Register an input file for the given session.
