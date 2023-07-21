@@ -167,12 +167,12 @@ class Editor(Library):
 
             # ctypes conversion
             ct_buffer = ct.c_char_p(bytes_input_file)
-            ct_butter_length = ct.c_size_t(len(bytes_input_file))
+            ct_buffer_length = ct.c_size_t(len(bytes_input_file))
 
             # API call
             file_type = self.library.GW2DetermineFileTypeFromMemory(
                 ct_buffer,
-                ct_butter_length
+                ct_buffer_length
             )
 
         else:
@@ -263,21 +263,21 @@ class Editor(Library):
         # # Variable initialisation
         # ct_session = ct.c_size_t(session)
         # ct_buffer = ct.c_void_p()
-        # ct_butter_length = ct.c_size_t()
+        # ct_buffer_length = ct.c_size_t()
         # # ct_file_format = ct.c_int(file_format)
 
         # # API Call
         # status = self.library.GW2GetPolicySettings(
         #     ct_session,
         #     ct.byref(ct_buffer),
-        #     ct.byref(ct_butter_length)
+        #     ct.byref(ct_buffer_length)
         # )
 
         # print("GW2GetPolicySettings status:", status)
 
         # file_bytes = utils.buffer_to_bytes(
         #     ct_buffer,
-        #     ct_butter_length,
+        #     ct_buffer_length,
         # )
 
         # return file_bytes
