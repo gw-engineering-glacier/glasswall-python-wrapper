@@ -1113,7 +1113,7 @@ class Editor(Library):
         return export_files_dict
 
     def _GW2RegisterImportFile(self, session: int, input_file: str):
-        """ Register an import file for the given session.
+        """ Register an import input file for the given session.
 
         Args:
             session (int): The session integer.
@@ -1142,7 +1142,7 @@ class Editor(Library):
         return gw_return_object
 
     def _GW2RegisterImportMemory(self, session: int, input_file: bytes):
-        """ Register an import file in memory for the given session.
+        """ Register an import input file in memory for the given session.
 
         Args:
             session (int): The session integer.
@@ -1331,7 +1331,7 @@ class Editor(Library):
             session (int): The session integer.
 
         Returns:
-            error_message (str): The Glasswall Session Process error message.
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'status', 'error_message'.
         """
         # API function declaration
         self.library.GW2FileErrorMsg.argtypes = [
@@ -1525,7 +1525,7 @@ class Editor(Library):
             output_file (str): The file path of the output report file.
 
         Returns:
-            status (int): The result of the Glasswall API call.
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'output_file', 'status'.
         """
         # API function declaration
         self.library.GW2RegisterReportFile.argtypes = [
@@ -1650,7 +1650,7 @@ class Editor(Library):
             session (int): The session integer.
 
         Returns:
-            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer_length', 'buffer', 'status', 'all_id_info'.
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'analysis_format', 'status', 'all_id_info'.
         """
 
         # API function declaration
@@ -1725,7 +1725,7 @@ class Editor(Library):
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
-            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'status' and 'message' indicating the result of the function call.
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'session_status', 'buffer', 'buffer_length', 'status', 'message'.
         """
         # API function declaration
         self.library.GW2FileSessionStatus.argtypes = [
@@ -1788,13 +1788,13 @@ class Editor(Library):
         return result.message
 
     def _GW2LicenceDetails(self, session: int):
-        """ Returns a human readable text string representing the relevant information contained in the licence.
+        """ Returns a human readable string containing licence details.
 
         Args:
             session (int): The session integer.
 
         Returns:
-            result (str): A human readable text string representing the relevant information contained in the licence.
+            licence_details (str): A human readable string representing the relevant information contained in the licence.
         """
         # API function declaration
         self.library.GW2LicenceDetails.argtypes = [ct.c_size_t]
@@ -1804,12 +1804,12 @@ class Editor(Library):
         ct_session = ct.c_size_t(session)
 
         # API call
-        result = self.library.GW2LicenceDetails(ct_session)
+        licence_details = self.library.GW2LicenceDetails(ct_session)
 
         # Convert to Python string
-        result = ct.string_at(result).decode()
+        licence_details = ct.string_at(licence_details).decode()
 
-        return result
+        return licence_details
 
     def licence_details(self):
         """ Returns a human readable text string representing the relevant information contained in the licence.
@@ -1825,7 +1825,7 @@ class Editor(Library):
         return result
 
     def _GW2RegisterExportTextDumpMemory(self, session: int):
-        """ Registers the text dump for file to be exported in Memory to Memory Export mode.
+        """ Registers an export text dump to be written in memory.
 
         Args:
             session (int): The session integer.
@@ -1856,7 +1856,7 @@ class Editor(Library):
         return gw_return_object
 
     def _GW2RegisterExportTextDumpFile(self, session: int, output_file: str):
-        """ Registers the tet dump file for the file to be exported in File to File Export mode.
+        """ Registers an export text dump to be written to file.
 
         Args:
             session (int): The session integer.
