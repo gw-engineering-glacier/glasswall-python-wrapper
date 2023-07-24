@@ -1517,42 +1517,60 @@ class Editor(Library):
 
                 return file_type_info
 
-    def register_report_file(self, session: int, output_file: str, raise_unsupported: bool = True):
+    def _GW2RegisterReportFile(self, session: int, output_file: str):
+        """ Register an output report file path for the given session.
+
+        Args:
+            session (int): The session integer.
+            output_file (str): The file path of the output report file.
+
+        Returns:
+            status (int): The result of the Glasswall API call.
+        """
+        # API function declaration
+        self.library.GW2RegisterReportFile.argtypes = [
+            ct.c_size_t,  # Session_Handle session
+            ct.c_char_p,  # const char * reportFilePathName
+        ]
+
+        # Variable initialisation
+        gw_return_object = glasswall.GwReturnObj()
+        gw_return_object.session = ct.c_size_t(session)
+        gw_return_object.output_file = ct.c_char_p(output_file.encode("utf-8"))
+
+        # API call
+        gw_return_object.status = self.library.GW2RegisterReportFile(
+            gw_return_object.session,
+            gw_return_object.output_file
+        )
+
+        return gw_return_object
+
+    def register_report_file(self, session: int, output_file: str):
         """ Register the report file path for the given session.
 
         Args:
             session (int): The session integer.
             output_file (str): The file path of the report file.
-            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
-            status (int): The result of the Glasswall API call.
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attribute 'status' indicating the result of the function call.
         """
         # Validate arg types
+        if not isinstance(session, int):
+            raise TypeError(session)
         if not isinstance(output_file, (type(None), str)):
             raise TypeError(output_file)
 
-        # API function declaration
-        self.library.GW2RegisterReportFile.argtypes = [
-            ct.c_size_t,
-            ct.c_char_p,
-        ]
+        result = self._GW2RegisterReportFile(session, output_file)
 
-        # Variable initialisation
-        ct_session = ct.c_size_t(session)
-        ct_output_file = ct.c_char_p(output_file.encode("utf-8"))
-
-        # API call
-        status = self.library.GW2RegisterReportFile(ct_session, ct_output_file)
-
-        if status not in successes.success_codes:
-            log.error(f"\n\tsession: {session}\n\tstatus: {status}")
-            if raise_unsupported:
-                raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+        if result.status not in successes.success_codes:
+            log.error(format_object(result))
+            raise errors.error_codes.get(result.status, errors.UnknownErrorCode)(result.status)
         else:
-            log.debug(f"\n\tsession: {session}\n\tstatus: {status}")
+            log.debug(format_object(result))
 
-        return status
+        return result.status
 
     def get_id_info(self, issue_id: int, raise_unsupported: bool = True):
         """ Retrieves the group description for the given Issue ID. e.g. issue_id 96 returns "Document Processing Instances"
