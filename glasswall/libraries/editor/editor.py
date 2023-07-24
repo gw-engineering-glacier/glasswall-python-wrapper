@@ -378,9 +378,6 @@ class Editor(Library):
 
         # From file
         if isinstance(input_file, str) and os.path.isfile(input_file):
-            if not os.path.isfile(input_file):
-                raise FileNotFoundError(input_file)
-
             input_file = os.path.abspath(input_file)
 
             result = self._GW2RegisterPoliciesFile(session, input_file)
