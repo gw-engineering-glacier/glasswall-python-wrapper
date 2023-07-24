@@ -193,15 +193,15 @@ class Editor(Library):
 
         return file_type
 
-    def _GW2GetPolicySettings(self, session: int, file_format: int = 0):
+    def _GW2GetPolicySettings(self, session: int, policy_format: int = 0):
         """ Get current policy settings for the given session.
 
         Args:
             session (int): The current session.
-            file_format (int): The file format of the content management policy. 0 is xml.
+            policy_format (int): The format of the content management policy. 0=XML.
 
         Returns:
-            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'file_format', 'status', 'policy'.
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'policy_format', 'status', 'policy'.
         """
         # API function declaration
         self.library.GW2GetPolicySettings.argtypes = [
@@ -216,14 +216,14 @@ class Editor(Library):
         gw_return_object.session = ct.c_size_t(session)
         gw_return_object.buffer = ct.c_void_p()
         gw_return_object.buffer_length = ct.c_size_t()
-        gw_return_object.file_format = ct.c_int(file_format)
+        gw_return_object.policy_format = ct.c_int(policy_format)
 
         # API Call
         gw_return_object.status = self.library.GW2GetPolicySettings(
             gw_return_object.session,
             ct.byref(gw_return_object.buffer),
             ct.byref(gw_return_object.buffer_length),
-            gw_return_object.file_format
+            gw_return_object.policy_format
         )
 
         # Editor wrote to a buffer, convert it to bytes
@@ -282,16 +282,16 @@ class Editor(Library):
 
         # return file_bytes
 
-    def _GW2RegisterPoliciesFile(self, session: int, input_file: str, file_format: int = 0):
+    def _GW2RegisterPoliciesFile(self, session: int, input_file: str, policy_format: int = 0):
         """ Registers the policies to be used by Glasswall when processing files.
 
         Args:
             session (int): The current session.
             input_file (str): The content management policy input file path.
-            file_format (int): The file format of the content management policy. 0 is xml.
+            policy_format (int): The format of the content management policy. 0=XML.
 
         Returns:
-            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'input_file', 'file_format', 'status'.
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'input_file', 'policy_format', 'status'.
         """
         # API function declaration
         self.library.GW2RegisterPoliciesFile.argtypes = [
@@ -304,26 +304,26 @@ class Editor(Library):
         gw_return_object = glasswall.GwReturnObj()
         gw_return_object.session = ct.c_size_t(session)
         gw_return_object.input_file = ct.c_char_p(input_file.encode("utf-8"))
-        gw_return_object.file_format = ct.c_int(file_format)
+        gw_return_object.policy_format = ct.c_int(policy_format)
 
         gw_return_object.status = self.library.GW2RegisterPoliciesFile(
             gw_return_object.session,
             gw_return_object.input_file,
-            gw_return_object.file_format
+            gw_return_object.policy_format
         )
 
         return gw_return_object
 
-    def _GW2RegisterPoliciesMemory(self, session: int, input_file: bytes, file_format: int = 0):
+    def _GW2RegisterPoliciesMemory(self, session: int, input_file: bytes, policy_format: int = 0):
         """ Registers the policies in memory to be used by Glasswall when processing files.
 
         Args:
             session (int): The current session.
             input_file (str): The content management policy input file bytes.
-            file_format (int): The file format of the content management policy. 0 is xml.
+            policy_format (int): The format of the content management policy. 0=XML.
 
         Returns:
-            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'file_format', 'status'.
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'policy_format', 'status'.
         """
         # API function declaration
         self.library.GW2RegisterPoliciesMemory.argtype = [
@@ -338,25 +338,25 @@ class Editor(Library):
         gw_return_object.session = ct.c_size_t(session)
         gw_return_object.buffer = ct.c_char_p(input_file)
         gw_return_object.buffer_length = ct.c_size_t(len(input_file))
-        gw_return_object.file_format = ct.c_int(file_format)
+        gw_return_object.policy_format = ct.c_int(policy_format)
 
         # API Call
         gw_return_object.status = self.library.GW2RegisterPoliciesMemory(
             gw_return_object.session,
             gw_return_object.buffer,
             gw_return_object.buffer_length,
-            gw_return_object.file_format
+            gw_return_object.policy_format
         )
 
         return gw_return_object
 
-    def set_content_management_policy(self, session: int, input_file: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, file_format=0):
+    def set_content_management_policy(self, session: int, input_file: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, policy_format=0):
         """ Sets the content management policy configuration. If input_file is None then default settings (sanitise) are applied.
 
         Args:
             session (int): The current session.
             input_file (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy], optional): Default None (sanitise). The content management policy to apply.
-            file_format (int): The file format of the content management policy. 0 is xml.
+            policy_format (int): The format of the content management policy. 0=XML.
 
         Returns:
             status (int): The result of the Glasswall API call.
@@ -366,8 +366,8 @@ class Editor(Library):
             raise TypeError(session)
         if not isinstance(input_file, (type(None), str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy)):
             raise TypeError(input_file)
-        if not isinstance(file_format, int):
-            raise TypeError(file_format)
+        if not isinstance(policy_format, int):
+            raise TypeError(policy_format)
 
         # Set input_file to default if input_file is None
         if input_file is None:
