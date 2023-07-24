@@ -1642,46 +1642,44 @@ class Editor(Library):
                     log.debug(format_object(result))
 
                 return result.id_info
+
+    def _GW2GetAllIdInfo(self, session: int):
+        """ Retrieves the XML containing all the Issue ID ranges with their group descriptions
+
+        Args:
+            session (int): The session integer.
+
+        Returns:
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer_length', 'buffer', 'status', 'all_id_info'.
+        """
+
         # API function declaration
-        self.library.GW2GetIdInfo.argtypes = [
-            ct.c_size_t,
-            ct.c_size_t,
-            ct.POINTER(ct.c_size_t),
-            ct.POINTER(ct.c_void_p)
+        self.library.GW2GetAllIdInfo.argtypes = [
+            ct.c_size_t,  # Session_Handle session
+            ct.POINTER(ct.c_size_t),  # size_t * bufferLength
+            ct.POINTER(ct.c_void_p)  # char ** outputBuffer
         ]
 
-        with utils.CwdHandler(self.library_path):
-            with self.new_session() as session:
-                # Variable initialisation
-                ct_session = ct.c_size_t(session)
-                ct_issue_id = ct.c_size_t(issue_id)
-                ct_buffer_length = ct.c_size_t()
-                ct_buffer = ct.c_void_p()
+        # Variable initialisation
+        # The extracted issue Id information is stored in the analysis report, register an analysis session.
+        gw_return_object = self._GW2RegisterAnalysisMemory(session)
 
-                # API call
-                status = self.library.GW2GetIdInfo(
-                    ct_session,
-                    ct_issue_id,
-                    ct.byref(ct_buffer_length),
-                    ct.byref(ct_buffer)
-                )
+        # API call
+        gw_return_object.status = self.library.GW2GetAllIdInfo(
+            gw_return_object.session,
+            ct.byref(gw_return_object.buffer_length),
+            ct.byref(gw_return_object.buffer)
+        )
 
-                if status not in successes.success_codes:
-                    log.error(f"\n\tsession: {session}\n\tstatus: {status}")
-                    if raise_unsupported:
-                        raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
-                else:
-                    log.debug(f"\n\tsession: {session}\n\tstatus: {status}")
+        # Editor wrote to a buffer, convert it to bytes
+        all_id_info_bytes = utils.buffer_to_bytes(
+            gw_return_object.buffer,
+            gw_return_object.buffer_length
+        )
 
-                # Editor wrote to a buffer, convert it to bytes
-                id_info_bytes = utils.buffer_to_bytes(
-                    ct_buffer,
-                    ct_buffer_length
-                )
+        gw_return_object.all_id_info = all_id_info_bytes.decode()
 
-                id_info = id_info_bytes.decode()
-
-                return id_info
+        return gw_return_object
 
     def get_all_id_info(self, output_file: Optional[str] = None, raise_unsupported: bool = True):
         """ Retrieves the XML containing all the Issue ID ranges with their group descriptions
@@ -1691,7 +1689,7 @@ class Editor(Library):
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
-            file_bytes (bytes): The analysis file bytes.
+            all_id_info (str): A string analysis report containing all the id info.
         """
         # Validate arg types
         if not isinstance(output_file, (type(None), str)):
@@ -1699,48 +1697,25 @@ class Editor(Library):
         if isinstance(output_file, str):
             output_file = os.path.abspath(output_file)
 
-        # API function declaration
-        self.library.GW2GetAllIdInfo.argtypes = [
-            ct.c_size_t,
-            ct.POINTER(ct.c_size_t),
-            ct.POINTER(ct.c_void_p)
-        ]
-
         with utils.CwdHandler(self.library_path):
             with self.new_session() as session:
-                register_analysis = self.register_analysis(session)
+                result = self._GW2GetAllIdInfo(session)
 
-                # API call
-                status = self.library.GW2GetAllIdInfo(
-                    register_analysis.session,
-                    ct.byref(register_analysis.buffer_length),
-                    ct.byref(register_analysis.buffer)
-                )
-
-                if status not in successes.success_codes:
-                    log.error(f"\n\toutput_file: {output_file}\n\tsession: {session}\n\tstatus: {status}")
+                if result.status not in successes.success_codes:
+                    log.error(format_object(result))
                     if raise_unsupported:
-                        raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
-                    else:
-                        file_bytes = None
+                        raise errors.error_codes.get(result.status, errors.UnknownErrorCode)(result.status)
                 else:
-                    log.debug(f"\n\toutput_file: {output_file}\n\tsession: {session}\n\tstatus: {status}")
+                    log.debug(format_object(result))
 
-                    # Get file bytes
-                    # Editor wrote to a buffer, convert it to bytes
-                    file_bytes = utils.buffer_to_bytes(
-                        register_analysis.buffer,
-                        register_analysis.buffer_length
-                    )
+                if isinstance(output_file, str):
+                    # GW2GetAllIdInfo is memory only, write to file
+                    # make directories that do not exist
+                    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+                    with open(output_file, "w") as f:
+                        f.write(result.all_id_info)
 
-                    if isinstance(output_file, str):
-                        # GW2GetAllIdInfo is memory only, write to file
-                        # make directories that do not exist
-                        os.makedirs(os.path.dirname(output_file), exist_ok=True)
-                        with open(output_file, "wb") as f:
-                            f.write(file_bytes)
-
-                    return file_bytes
+                return result.all_id_info
 
     def _GW2FileSessionStatus(self, session: int):
         """ Retrieves the Glasswall Session Status. Also gives a high level indication of the processing that was carried out on the last document processed by the library
