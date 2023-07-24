@@ -475,7 +475,7 @@ class ArchiveManager(Library):
 
         return gw_return_object
 
-    def file_to_file_pack(self, input_directory: str, output_directory: str, file_type: Optional[str] = None, raise_unsupported: bool = True):
+    def file_to_file_pack(self, input_directory: str, output_directory: str, file_type: Optional[str] = None, add_extension: Optional[bool] = True, raise_unsupported: Optional[bool] = True):
         # Validate arg types
         if not isinstance(input_directory, str):
             raise TypeError(input_directory)
@@ -494,6 +494,7 @@ class ArchiveManager(Library):
             ct.c_char_p,
             ct.c_char_p,
             ct.c_char_p,
+            ct.c_int,
         ]
 
         # Variable initialisation
@@ -501,6 +502,7 @@ class ArchiveManager(Library):
         gw_return_object.ct_input_directory = ct.c_char_p(input_directory.encode())  # const char* inputDirPath
         gw_return_object.ct_output_directory = ct.c_char_p(output_directory.encode())  # const char* outputDirPath
         gw_return_object.ct_file_type = ct.c_char_p(file_type.encode())  # const char *fileType
+        gw_return_object.ct_add_extension = ct.c_int(int(add_extension))  # int addExtension
 
         with utils.CwdHandler(new_cwd=self.library_path):
             # API call
@@ -508,6 +510,7 @@ class ArchiveManager(Library):
                 gw_return_object.ct_input_directory,
                 gw_return_object.ct_output_directory,
                 gw_return_object.ct_file_type,
+                gw_return_object.ct_add_extension,
             )
 
         if gw_return_object.status not in successes.success_codes:
@@ -600,16 +603,16 @@ class ArchiveManager(Library):
                 delete_origin=delete_origin
             )
 
-    def pack_directory(self, input_directory: str, output_directory: str, file_type: str, raise_unsupported: bool = True, delete_origin: bool = False):
-        """ Pack a directory. Supported archive formats are: "7z", "bz2", "gz", "rar", "tar", "zip".
+    def pack_directory(self, input_directory: str, output_directory: str, file_type: str, add_extension: Optional[bool] = True, raise_unsupported: Optional[bool] = True, delete_origin: Optional[bool] = False):
+        """ Pack a directory. Supported archive formats are: "7z", "bz2", "gz", "rar", "tar", "xz", "zip".
 
         Args:
-            input_file (str): The archive file path
-            output_directory (str): The output directory where the archive will be unpacked to a new directory.
-            recursive (bool, optional): Default True. Recursively unpack all nested archives.
+            input_directory (str): The input directory containing files to archive.
+            output_directory (str): The output directory to store the created archive.
             file_type (str): The archive file type.
+            add_extension (bool, optional): Default: True. Archive file type extension to result file.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
-            delete_origin (bool, optional): Default False. Delete input_file after unpacking to output_directory.
+            delete_origin (bool, optional): Default False. Delete input_directory after packing to output_directory.
         """
         # Convert to absolute paths
         input_directory = os.path.abspath(input_directory)
@@ -617,7 +620,7 @@ class ArchiveManager(Library):
 
         # Pack
         log.debug(f"Packing\n\tsrc: {input_directory}\n\tdst: {output_directory}")
-        status = self.file_to_file_pack(input_directory=input_directory, output_directory=output_directory, file_type=file_type, raise_unsupported=raise_unsupported).status
+        status = self.file_to_file_pack(input_directory=input_directory, output_directory=output_directory, file_type=file_type, add_extension=add_extension, raise_unsupported=raise_unsupported).status
 
         if status not in successes.success_codes:
             log.error(f"\n\tinput_directory: {input_directory}\n\tstatus: {status}")

@@ -12,7 +12,6 @@ class Rebuild(Policy):
         self.default_config_elements = [
             glasswall.content_management.config_elements.pdfConfig(default=default),
             glasswall.content_management.config_elements.pptConfig(default=default),
-            glasswall.content_management.config_elements.sysConfig(),
             glasswall.content_management.config_elements.tiffConfig(default=default),
             glasswall.content_management.config_elements.wordConfig(default=default),
             glasswall.content_management.config_elements.xlsConfig(default=default),
