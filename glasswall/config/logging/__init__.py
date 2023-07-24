@@ -42,6 +42,6 @@ log.addHandler(console)
 
 
 def format_object(obj):
-    if not obj.__dict__.items():
+    if not hasattr(obj, "__dict__"):
         return ""
     return "\n\t" + "\n\t".join(f"{k}: {v}" for k, v in obj.__dict__.items())
