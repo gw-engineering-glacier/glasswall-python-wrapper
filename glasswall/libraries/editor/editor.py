@@ -197,7 +197,7 @@ class Editor(Library):
         """ Get current policy settings for the given session.
 
         Args:
-            session (int): The current session.
+            session (int): The session integer.
             policy_format (int): The format of the content management policy. 0=XML.
 
         Returns:
@@ -240,7 +240,7 @@ class Editor(Library):
         """ Returns the content management configuration for a given session.
 
         Args:
-            session (int): The current session.
+            session (int): The session integer.
 
         Returns:
             xml_string (str): The XML string of the current content management configuration.
@@ -286,7 +286,7 @@ class Editor(Library):
         """ Registers the policies to be used by Glasswall when processing files.
 
         Args:
-            session (int): The current session.
+            session (int): The session integer.
             input_file (str): The content management policy input file path.
             policy_format (int): The format of the content management policy. 0=XML.
 
@@ -318,7 +318,7 @@ class Editor(Library):
         """ Registers the policies in memory to be used by Glasswall when processing files.
 
         Args:
-            session (int): The current session.
+            session (int): The session integer.
             input_file (str): The content management policy input file bytes.
             policy_format (int): The format of the content management policy. 0=XML.
 
@@ -354,7 +354,7 @@ class Editor(Library):
         """ Sets the content management policy configuration. If input_file is None then default settings (sanitise) are applied.
 
         Args:
-            session (int): The current session.
+            session (int): The session integer.
             input_file (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy], optional): Default None (sanitise). The content management policy to apply.
             policy_format (int): The format of the content management policy. 0=XML.
 
@@ -408,7 +408,7 @@ class Editor(Library):
         """ Register an input file for the given session.
 
         Args:
-            session (int): The current session.
+            session (int): The session integer.
             input_file (str): The input file path.
 
         Returns:
@@ -437,7 +437,7 @@ class Editor(Library):
         """ Register an input file in memory for the given session.
 
         Args:
-            session (int): The current session.
+            session (int): The session integer.
             input_file (bytes): The input file in memory.
 
         Returns:
@@ -469,7 +469,7 @@ class Editor(Library):
         """ Register an input file or bytes for the given session.
 
         Args:
-            session (int): The current session.
+            session (int): The session integer.
             input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
 
         Returns:
@@ -504,7 +504,7 @@ class Editor(Library):
         """ Register an output file for the given session.
 
         Args:
-            session (int): The current session.
+            session (int): The session integer.
             output_file (str): The output file path.
 
         Returns:
@@ -533,7 +533,7 @@ class Editor(Library):
         """ Register an output file in memory for the given session.
 
         Args:
-            session (int): The current session.
+            session (int): The session integer.
 
         Returns:
             gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'status'.
@@ -564,7 +564,7 @@ class Editor(Library):
         """ Register an output file for the given session. If output_file is None the file will be returned as 'buffer' and 'buffer_length' attributes.
 
         Args:
-            session (int): The current session.
+            session (int): The session integer.
             output_file (Union[None, str], optional): If specified, during run session the file will be written to output_file, otherwise the file will be written to the glasswall.GwReturnObj 'buffer' and 'buffer_length' attributes.
 
         Returns:
@@ -593,7 +593,7 @@ class Editor(Library):
         """ Register an analysis output file for the given session.
 
         Args:
-            session (int): The current session.
+            session (int): The session integer.
             output_file (str): The analysis output file path.
             analysis_format (int): The format of the analysis report. 0=XML, 1=XMLExtended
 
@@ -626,7 +626,7 @@ class Editor(Library):
         """ Register an analysis output file in memory for the given session.
 
         Args:
-            session (int): The current session.
+            session (int): The session integer.
             analysis_format (int): The format of the analysis report. 0=XML, 1=XMLExtended
 
         Returns:
@@ -661,7 +661,7 @@ class Editor(Library):
         """ Registers an analysis file for the given session. The analysis file will be created during the session's run_session call.
 
         Args:
-            session (int): The session number.
+            session (int): The session integer.
             output_file (Union[None, str], optional): Default None. The file path where the analysis will be written. None returns the analysis as bytes.
 
         Returns:
@@ -917,7 +917,7 @@ class Editor(Library):
         """ Register an export output file for the given session.
 
         Args:
-            session (int): The current session.
+            session (int): The session integer.
             output_file (str): The export output file path.
 
         Returns:
@@ -946,7 +946,7 @@ class Editor(Library):
         """ Register an export output file in memory for the given session.
 
         Args:
-            session (int): The current session.
+            session (int): The session integer.
 
         Returns:
             gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'status'.
@@ -977,7 +977,7 @@ class Editor(Library):
         """ Registers a file to be exported for the given session. The export file will be created during the session's run_session call.
 
         Args:
-            session (int): The session number.
+            session (int): The session integer.
             output_file (Union[None, str], optional): Default None. The file path where the export will be written. None exports the file in memory.
 
         Returns:
@@ -1119,7 +1119,7 @@ class Editor(Library):
         """ Register an import file for the given session.
 
         Args:
-            session (int): The current session.
+            session (int): The session integer.
             input_file (str): The input import file path.
 
         Returns:
@@ -1148,7 +1148,7 @@ class Editor(Library):
         """ Register an import file in memory for the given session.
 
         Args:
-            session (int): The current session.
+            session (int): The session integer.
             input_file (str): The input import file in memory.
 
         Returns:
@@ -1180,7 +1180,7 @@ class Editor(Library):
         """ Registers a .zip file to be imported for the given session. The constructed file will be created during the session's run_session call.
 
         Args:
-            session (int): The session number.
+            session (int): The session integer.
             input_file (Union[str, bytes, bytearray, io.BytesIO]): The input import file path or bytes.
 
         Returns:
@@ -1331,7 +1331,7 @@ class Editor(Library):
         """ Retrieve the Glasswall Session Process error message.
 
         Args:
-            session (int): The session number.
+            session (int): The session integer.
 
         Returns:
             error_message (str): The Glasswall Session Process error message.
@@ -1371,7 +1371,7 @@ class Editor(Library):
         """ Retrieve the Glasswall Session Process error message.
 
         Args:
-            session (int): The session number.
+            session (int): The session integer.
 
         Returns:
             error_message (str): The Glasswall Session Process error message.
@@ -1394,7 +1394,7 @@ class Editor(Library):
         """ Retrieve the file type as a string.
 
         Args:
-            session (int): The session number.
+            session (int): The session integer.
             file_type_id (int): The file type id.
 
         Returns:
@@ -1446,7 +1446,7 @@ class Editor(Library):
         """ Retrieve the Glasswall file type id given a file type string.
 
         Args:
-            session (int): The session number.
+            session (int): The session integer.
             file_type_str (str): The file type as a string.
 
         Returns:
@@ -1524,7 +1524,7 @@ class Editor(Library):
         """ Register the report file path for the given session.
 
         Args:
-            session (int): The current session.
+            session (int): The session integer.
             output_file (str): The file path of the report file.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
@@ -1675,7 +1675,7 @@ class Editor(Library):
         """ Retrieves the Glasswall Session Status. Also gives a high level indication of the processing that was carried out on the last document processed by the library
 
         Args:
-            session (int): The current session.
+            session (int): The session integer.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
@@ -1720,7 +1720,7 @@ class Editor(Library):
         """ Retrieves the Glasswall Session Status message. Gives a high level indication of the processing that was carried out on the last document processed by the library
 
         Args:
-            session (int): The current session.
+            session (int): The session integer.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
@@ -1745,7 +1745,7 @@ class Editor(Library):
         """ Returns a human readable text string representing the relevant information contained in the licence.
 
         Args:
-            session (int): The current session.
+            session (int): The session integer.
 
         Returns:
             result (str): A human readable text string representing the relevant information contained in the licence.
@@ -1782,7 +1782,7 @@ class Editor(Library):
         """ Registers the text dump for file to be exported in Memory to Memory Export mode.
 
         Args:
-            session (int): The current session integer.
+            session (int): The session integer.
 
         Returns:
             gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'status'.
@@ -1813,7 +1813,7 @@ class Editor(Library):
         """ Registers the tet dump file for the file to be exported in File to File Export mode.
 
         Args:
-            session (int): The current session integer.
+            session (int): The session integer.
             output_file (str): The file path of the text dump file.
 
         Returns:
