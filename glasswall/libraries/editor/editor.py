@@ -1572,6 +1572,50 @@ class Editor(Library):
 
         return result.status
 
+    def _GW2GetIdInfo(self, session: int, issue_id: int):
+        """ Retrieves the group description for the given Issue ID. e.g. issue_id 96 returns "Document Processing Instances"
+
+        Args:
+            session (int): The session integer.
+            issue_id (int): The issue id.
+            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+
+        Returns:
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'issue_id', 'buffer_length', 'buffer', 'status', 'id_info'.
+        """
+        # API function declaration
+        self.library.GW2GetIdInfo.argtypes = [
+            ct.c_size_t,  # Session_Handle session
+            ct.c_size_t,  # size_t issueId
+            ct.POINTER(ct.c_size_t),  # size_t * bufferLength
+            ct.POINTER(ct.c_void_p)  # char ** outputBuffer
+        ]
+
+        # Variable initialisation
+        gw_return_object = glasswall.GwReturnObj()
+        gw_return_object.session = ct.c_size_t(session)
+        gw_return_object.issue_id = ct.c_size_t(issue_id)
+        gw_return_object.buffer_length = ct.c_size_t()
+        gw_return_object.buffer = ct.c_void_p()
+
+        # API call
+        gw_return_object.status = self.library.GW2GetIdInfo(
+            gw_return_object.session,
+            gw_return_object.issue_id,
+            ct.byref(gw_return_object.buffer_length),
+            ct.byref(gw_return_object.buffer)
+        )
+
+        # Editor wrote to a buffer, convert it to bytes
+        id_info_bytes = utils.buffer_to_bytes(
+            gw_return_object.buffer,
+            gw_return_object.buffer_length
+        )
+
+        gw_return_object.id_info = id_info_bytes.decode()
+
+        return gw_return_object
+
     def get_id_info(self, issue_id: int, raise_unsupported: bool = True):
         """ Retrieves the group description for the given Issue ID. e.g. issue_id 96 returns "Document Processing Instances"
 
@@ -1586,6 +1630,18 @@ class Editor(Library):
         if not isinstance(issue_id, int):
             raise TypeError(issue_id)
 
+        with utils.CwdHandler(self.library_path):
+            with self.new_session() as session:
+                result = self._GW2GetIdInfo(session, issue_id)
+
+                if result.status not in successes.success_codes:
+                    log.error(format_object(result))
+                    if raise_unsupported:
+                        raise errors.error_codes.get(result.status, errors.UnknownErrorCode)(result.status)
+                else:
+                    log.debug(format_object(result))
+
+                return result.id_info
         # API function declaration
         self.library.GW2GetIdInfo.argtypes = [
             ct.c_size_t,
