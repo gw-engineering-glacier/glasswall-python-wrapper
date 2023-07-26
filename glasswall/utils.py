@@ -342,7 +342,8 @@ def list_file_paths(directory: str, file_type: str = 'files', absolute: bool = T
         file_paths = list_file_paths(directory)
         print(file_paths)
     """
-    return sorted(iterate_directory_entries(directory, file_type, absolute, recursive, followlinks))
+    # Remove duplicate file paths (symlinks of same files or other symlinks), and sort
+    return sorted(set(iterate_directory_entries(directory, file_type, absolute, recursive, followlinks)))
 
 
 def list_file_paths_old(directory: str, recursive: bool = True, absolute: bool = True, followlinks: bool = True):
