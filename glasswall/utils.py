@@ -249,7 +249,7 @@ def get_library(library: str, directory: str):
     raise FileNotFoundError(f'Could not find any files: "{library_file_names}" under directory: "{directory}"')
 
 
-def iterate_directory_entries(directory: str, file_type: str = 'files', absolute: bool = True, recursive: bool = True, followlinks: bool = True):
+def iterate_directory_entries(directory: str, file_type: str = 'all', absolute: bool = True, recursive: bool = True, followlinks: bool = True, start_directory: str = None):
     """ Generate entries (files, directories, or both) in a given directory using os.scandir().
 
     Args:
@@ -261,6 +261,7 @@ def iterate_directory_entries(directory: str, file_type: str = 'files', absolute
         absolute (bool, optional): Whether to return absolute paths (default) or relative paths.
         recursive (bool, optional): Whether to recurse into subdirectories (default is True).
         followlinks (bool, optional): Whether to follow symbolic links and yield entries from the target directory (default is True).
+        start_directory (str, optional): The starting directory used to calculate relative paths (default is None).
 
     Yields:
         str: The full path of each file or directory found in the specified directory.
@@ -289,20 +290,26 @@ def iterate_directory_entries(directory: str, file_type: str = 'files', absolute
     if file_type not in allowed_types:
         raise ValueError(f"Invalid file_type '{file_type}'. Allowed values are {', '.join(allowed_types)}.")
 
+    # Convert the directory to an absolute path
+    directory = os.path.abspath(directory)
+
+    # Set the start_directory to the provided directory if not specified
+    start_directory = start_directory or directory
+
     # Get the directory entries using os.scandir()
     for entry in os.scandir(directory):
         # If the entry is a directory
         if entry.is_dir(follow_symlinks=followlinks):
             # If recursive is True, traverse the subdirectory
             if recursive:
-                yield from iterate_directory_entries(entry.path, file_type, absolute, recursive, followlinks)
+                yield from iterate_directory_entries(entry.path, file_type, absolute, recursive, followlinks, start_directory)
 
             # If the file_type is not "files", yield the directory entry
             if file_type != "files":
                 if absolute:
                     yield entry.path
                 else:
-                    yield os.path.relpath(entry.path, start=directory)
+                    yield os.path.relpath(entry.path, start=start_directory)
 
         # If the entry is a file
         elif entry.is_file(follow_symlinks=followlinks):
@@ -311,7 +318,7 @@ def iterate_directory_entries(directory: str, file_type: str = 'files', absolute
                 if absolute:
                     yield entry.path
                 else:
-                    yield os.path.relpath(entry.path, start=directory)
+                    yield os.path.relpath(entry.path, start=start_directory)
 
 
 def list_file_paths(directory: str, file_type: str = 'files', absolute: bool = True, recursive: bool = True, followlinks: bool = True) -> list:
