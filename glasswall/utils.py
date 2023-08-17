@@ -346,57 +346,6 @@ def list_file_paths(directory: str, file_type: str = 'files', absolute: bool = T
     return sorted(set(iterate_directory_entries(directory, file_type, absolute, recursive, followlinks)))
 
 
-def list_file_paths_old(directory: str, recursive: bool = True, absolute: bool = True, followlinks: bool = True):
-    """ Returns a list of paths to files in a directory.
-
-    Args:
-        directory (str): The directory to list files from.
-        recursive (bool, optional): Default True. Include subdirectories.
-        absolute (bool, optional): Default True. Return paths as absolute paths. If False, returns relative paths.
-        followlinks (bool, optional): Default True. Follow symbolic links if True.
-
-    Returns:
-        files (list): A list of file paths.
-    """
-    if not os.path.isdir(directory):
-        raise NotADirectoryError(directory)
-
-    if recursive:
-        files = [
-            os.path.normpath(os.path.join(root, file_))
-            for root, dirs, files in os.walk(directory)
-            for file_ in files
-        ]
-    else:
-        files = [
-            os.path.normpath(os.path.join(directory, file_))
-            for file_ in os.listdir(directory)
-            if os.path.isfile(os.path.join(directory, file_))
-        ]
-
-    if followlinks:
-        files = [
-            str(pathlib.Path(file_).resolve())
-            for file_ in files
-        ]
-
-    if absolute:
-        files = [
-            os.path.abspath(file_)
-            for file_ in files
-        ]
-    else:
-        files = [
-            os.path.relpath(file_, directory)
-            for file_ in files
-        ]
-
-    # Remove duplicate file paths (symlinks of same files or other symlinks), and sort
-    files = sorted(set(files))
-
-    return files
-
-
 def list_subdirectory_paths(directory: str, recursive: bool = False, absolute: bool = True):
     """ Returns a list of paths to subdirectories in a directory.
 
