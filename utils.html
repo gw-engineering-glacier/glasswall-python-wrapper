@@ -372,57 +372,6 @@ def list_file_paths(directory: str, file_type: str = &#39;files&#39;, absolute: 
     return sorted(set(iterate_directory_entries(directory, file_type, absolute, recursive, followlinks)))
 
 
-def list_file_paths_old(directory: str, recursive: bool = True, absolute: bool = True, followlinks: bool = True):
-    &#34;&#34;&#34; Returns a list of paths to files in a directory.
-
-    Args:
-        directory (str): The directory to list files from.
-        recursive (bool, optional): Default True. Include subdirectories.
-        absolute (bool, optional): Default True. Return paths as absolute paths. If False, returns relative paths.
-        followlinks (bool, optional): Default True. Follow symbolic links if True.
-
-    Returns:
-        files (list): A list of file paths.
-    &#34;&#34;&#34;
-    if not os.path.isdir(directory):
-        raise NotADirectoryError(directory)
-
-    if recursive:
-        files = [
-            os.path.normpath(os.path.join(root, file_))
-            for root, dirs, files in os.walk(directory)
-            for file_ in files
-        ]
-    else:
-        files = [
-            os.path.normpath(os.path.join(directory, file_))
-            for file_ in os.listdir(directory)
-            if os.path.isfile(os.path.join(directory, file_))
-        ]
-
-    if followlinks:
-        files = [
-            str(pathlib.Path(file_).resolve())
-            for file_ in files
-        ]
-
-    if absolute:
-        files = [
-            os.path.abspath(file_)
-            for file_ in files
-        ]
-    else:
-        files = [
-            os.path.relpath(file_, directory)
-            for file_ in files
-        ]
-
-    # Remove duplicate file paths (symlinks of same files or other symlinks), and sort
-    files = sorted(set(files))
-
-    return files
-
-
 def list_subdirectory_paths(directory: str, recursive: bool = False, absolute: bool = True):
     &#34;&#34;&#34; Returns a list of paths to subdirectories in a directory.
 
@@ -1279,79 +1228,6 @@ print(file_paths)</p></div>
     return sorted(set(iterate_directory_entries(directory, file_type, absolute, recursive, followlinks)))</code></pre>
 </details>
 </dd>
-<dt id="glasswall.utils.list_file_paths_old"><code class="name flex">
-<span>def <span class="ident">list_file_paths_old</span></span>(<span>directory: str, recursive: bool = True, absolute: bool = True, followlinks: bool = True)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Returns a list of paths to files in a directory.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>directory</code></strong> :&ensp;<code>str</code></dt>
-<dd>The directory to list files from.</dd>
-<dt><strong><code>recursive</code></strong> :&ensp;<code>bool</code>, optional</dt>
-<dd>Default True. Include subdirectories.</dd>
-<dt><strong><code>absolute</code></strong> :&ensp;<code>bool</code>, optional</dt>
-<dd>Default True. Return paths as absolute paths. If False, returns relative paths.</dd>
-<dt><strong><code>followlinks</code></strong> :&ensp;<code>bool</code>, optional</dt>
-<dd>Default True. Follow symbolic links if True.</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<p>files (list): A list of file paths.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def list_file_paths_old(directory: str, recursive: bool = True, absolute: bool = True, followlinks: bool = True):
-    &#34;&#34;&#34; Returns a list of paths to files in a directory.
-
-    Args:
-        directory (str): The directory to list files from.
-        recursive (bool, optional): Default True. Include subdirectories.
-        absolute (bool, optional): Default True. Return paths as absolute paths. If False, returns relative paths.
-        followlinks (bool, optional): Default True. Follow symbolic links if True.
-
-    Returns:
-        files (list): A list of file paths.
-    &#34;&#34;&#34;
-    if not os.path.isdir(directory):
-        raise NotADirectoryError(directory)
-
-    if recursive:
-        files = [
-            os.path.normpath(os.path.join(root, file_))
-            for root, dirs, files in os.walk(directory)
-            for file_ in files
-        ]
-    else:
-        files = [
-            os.path.normpath(os.path.join(directory, file_))
-            for file_ in os.listdir(directory)
-            if os.path.isfile(os.path.join(directory, file_))
-        ]
-
-    if followlinks:
-        files = [
-            str(pathlib.Path(file_).resolve())
-            for file_ in files
-        ]
-
-    if absolute:
-        files = [
-            os.path.abspath(file_)
-            for file_ in files
-        ]
-    else:
-        files = [
-            os.path.relpath(file_, directory)
-            for file_ in files
-        ]
-
-    # Remove duplicate file paths (symlinks of same files or other symlinks), and sort
-    files = sorted(set(files))
-
-    return files</code></pre>
-</details>
-</dd>
 <dt id="glasswall.utils.list_subdirectory_paths"><code class="name flex">
 <span>def <span class="ident">list_subdirectory_paths</span></span>(<span>directory: str, recursive: bool = False, absolute: bool = True)</span>
 </code></dt>
@@ -1764,7 +1640,6 @@ print(file_paths)</p></div>
 <li><code><a title="glasswall.utils.get_library" href="#glasswall.utils.get_library">get_library</a></code></li>
 <li><code><a title="glasswall.utils.iterate_directory_entries" href="#glasswall.utils.iterate_directory_entries">iterate_directory_entries</a></code></li>
 <li><code><a title="glasswall.utils.list_file_paths" href="#glasswall.utils.list_file_paths">list_file_paths</a></code></li>
-<li><code><a title="glasswall.utils.list_file_paths_old" href="#glasswall.utils.list_file_paths_old">list_file_paths_old</a></code></li>
 <li><code><a title="glasswall.utils.list_subdirectory_paths" href="#glasswall.utils.list_subdirectory_paths">list_subdirectory_paths</a></code></li>
 <li><code><a title="glasswall.utils.load_dependencies" href="#glasswall.utils.load_dependencies">load_dependencies</a></code></li>
 <li><code><a title="glasswall.utils.rename_kwargs" href="#glasswall.utils.rename_kwargs">rename_kwargs</a></code></li>
