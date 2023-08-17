@@ -275,7 +275,104 @@ def get_library(library: str, directory: str):
     raise FileNotFoundError(f&#39;Could not find any files: &#34;{library_file_names}&#34; under directory: &#34;{directory}&#34;&#39;)
 
 
-def list_file_paths(directory: str, recursive: bool = True, absolute: bool = True, followlinks: bool = True):
+def iterate_directory_entries(directory: str, file_type: str = &#39;all&#39;, absolute: bool = True, recursive: bool = True, followlinks: bool = True, start_directory: str = None):
+    &#34;&#34;&#34; Generate entries (files, directories, or both) in a given directory using os.scandir().
+
+    Args:
+        directory (str): The path to the directory whose entries are to be listed.
+        file_type (str, optional): Type of entries to return.
+            - &#39;all&#39;: Return both files and directories (default).
+            - &#39;files&#39;: Return only files.
+            - &#39;directories&#39;: Return only directories.
+        absolute (bool, optional): Whether to return absolute paths (default) or relative paths.
+        recursive (bool, optional): Whether to recurse into subdirectories (default is True).
+        followlinks (bool, optional): Whether to follow symbolic links and yield entries from the target directory (default is True).
+        start_directory (str, optional): The starting directory used to calculate relative paths (default is None).
+
+    Yields:
+        str: The full path of each file or directory found in the specified directory.
+
+    Raises:
+        ValueError: If an invalid &#39;file_type&#39; value is provided.
+
+    Example:
+        directory = &#39;/path/to/your/directory&#39;
+
+        # Iterate through all entries (files and directories) in the directory
+        for entry in iterate_directory_entries(directory):
+            print(entry)
+
+        # Iterate through only file entries in the directory
+        for file in iterate_directory_entries(directory, file_type=&#39;files&#39;):
+            print(&#34;File:&#34;, file)
+
+        # Iterate through only directory entries in the directory
+        for directory in iterate_directory_entries(directory, file_type=&#39;directories&#39;):
+            print(&#34;Directory:&#34;, directory)
+    &#34;&#34;&#34;
+    allowed_types = [&#39;all&#39;, &#39;files&#39;, &#39;directories&#39;]
+
+    # Check if the provided file_type is valid
+    if file_type not in allowed_types:
+        raise ValueError(f&#34;Invalid file_type &#39;{file_type}&#39;. Allowed values are {&#39;, &#39;.join(allowed_types)}.&#34;)
+
+    # Convert the directory to an absolute path
+    directory = os.path.abspath(directory)
+
+    # Set the start_directory to the provided directory if not specified
+    start_directory = start_directory or directory
+
+    # Get the directory entries using os.scandir()
+    for entry in os.scandir(directory):
+        # If the entry is a directory
+        if entry.is_dir(follow_symlinks=followlinks):
+            # If recursive is True, traverse the subdirectory
+            if recursive:
+                yield from iterate_directory_entries(entry.path, file_type, absolute, recursive, followlinks, start_directory)
+
+            # If the file_type is not &#34;files&#34;, yield the directory entry
+            if file_type != &#34;files&#34;:
+                if absolute:
+                    yield entry.path
+                else:
+                    yield os.path.relpath(entry.path, start=start_directory)
+
+        # If the entry is a file
+        elif entry.is_file(follow_symlinks=followlinks):
+            # If the file_type is not &#34;directories&#34;, yield the file entry
+            if file_type != &#34;directories&#34;:
+                if absolute:
+                    yield entry.path
+                else:
+                    yield os.path.relpath(entry.path, start=start_directory)
+
+
+def list_file_paths(directory: str, file_type: str = &#39;files&#39;, absolute: bool = True, recursive: bool = True, followlinks: bool = True) -&gt; list:
+    &#34;&#34;&#34; List all file paths in a given directory and its subdirectories.
+
+    Args:
+        directory (str): The path to the directory whose file paths are to be listed.
+        file_type (str, optional): Type of entries to return.
+            - &#39;all&#39;: Return both files and directories.
+            - &#39;files&#39;: Return only files (default).
+            - &#39;directories&#39;: Return only directories.
+        absolute (bool, optional): Whether to return absolute paths (default is True).
+        recursive (bool, optional): Whether to recurse into subdirectories (default is True).
+        followlinks (bool, optional): Whether to follow symbolic links and list file paths from the target directory (default is True).
+
+    Returns:
+        list: A list of file paths found in the specified directory and its subdirectories.
+
+    Example:
+        directory = &#39;/path/to/your/directory&#39;
+        file_paths = list_file_paths(directory)
+        print(file_paths)
+    &#34;&#34;&#34;
+    # Remove duplicate file paths (symlinks of same files or other symlinks), and sort
+    return sorted(set(iterate_directory_entries(directory, file_type, absolute, recursive, followlinks)))
+
+
+def list_file_paths_old(directory: str, recursive: bool = True, absolute: bool = True, followlinks: bool = True):
     &#34;&#34;&#34; Returns a list of paths to files in a directory.
 
     Args:
@@ -1003,8 +1100,187 @@ def myfunc(new_arg):
     raise FileNotFoundError(f&#39;Could not find any files: &#34;{library_file_names}&#34; under directory: &#34;{directory}&#34;&#39;)</code></pre>
 </details>
 </dd>
+<dt id="glasswall.utils.iterate_directory_entries"><code class="name flex">
+<span>def <span class="ident">iterate_directory_entries</span></span>(<span>directory: str, file_type: str = 'all', absolute: bool = True, recursive: bool = True, followlinks: bool = True, start_directory: str = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generate entries (files, directories, or both) in a given directory using os.scandir().</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>directory</code></strong> :&ensp;<code>str</code></dt>
+<dd>The path to the directory whose entries are to be listed.</dd>
+<dt><strong><code>file_type</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>Type of entries to return.
+- 'all': Return both files and directories (default).
+- 'files': Return only files.
+- 'directories': Return only directories.</dd>
+<dt><strong><code>absolute</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Whether to return absolute paths (default) or relative paths.</dd>
+<dt><strong><code>recursive</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Whether to recurse into subdirectories (default is True).</dd>
+<dt><strong><code>followlinks</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Whether to follow symbolic links and yield entries from the target directory (default is True).</dd>
+<dt><strong><code>start_directory</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The starting directory used to calculate relative paths (default is None).</dd>
+</dl>
+<h2 id="yields">Yields</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>The full path of each file or directory found in the specified directory.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>If an invalid 'file_type' value is provided.</dd>
+</dl>
+<h2 id="example">Example</h2>
+<p>directory = '/path/to/your/directory'</p>
+<h1 id="iterate-through-all-entries-files-and-directories-in-the-directory">Iterate through all entries (files and directories) in the directory</h1>
+<p>for entry in iterate_directory_entries(directory):
+print(entry)</p>
+<h1 id="iterate-through-only-file-entries-in-the-directory">Iterate through only file entries in the directory</h1>
+<p>for file in iterate_directory_entries(directory, file_type='files'):
+print("File:", file)</p>
+<h1 id="iterate-through-only-directory-entries-in-the-directory">Iterate through only directory entries in the directory</h1>
+<p>for directory in iterate_directory_entries(directory, file_type='directories'):
+print("Directory:", directory)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def iterate_directory_entries(directory: str, file_type: str = &#39;all&#39;, absolute: bool = True, recursive: bool = True, followlinks: bool = True, start_directory: str = None):
+    &#34;&#34;&#34; Generate entries (files, directories, or both) in a given directory using os.scandir().
+
+    Args:
+        directory (str): The path to the directory whose entries are to be listed.
+        file_type (str, optional): Type of entries to return.
+            - &#39;all&#39;: Return both files and directories (default).
+            - &#39;files&#39;: Return only files.
+            - &#39;directories&#39;: Return only directories.
+        absolute (bool, optional): Whether to return absolute paths (default) or relative paths.
+        recursive (bool, optional): Whether to recurse into subdirectories (default is True).
+        followlinks (bool, optional): Whether to follow symbolic links and yield entries from the target directory (default is True).
+        start_directory (str, optional): The starting directory used to calculate relative paths (default is None).
+
+    Yields:
+        str: The full path of each file or directory found in the specified directory.
+
+    Raises:
+        ValueError: If an invalid &#39;file_type&#39; value is provided.
+
+    Example:
+        directory = &#39;/path/to/your/directory&#39;
+
+        # Iterate through all entries (files and directories) in the directory
+        for entry in iterate_directory_entries(directory):
+            print(entry)
+
+        # Iterate through only file entries in the directory
+        for file in iterate_directory_entries(directory, file_type=&#39;files&#39;):
+            print(&#34;File:&#34;, file)
+
+        # Iterate through only directory entries in the directory
+        for directory in iterate_directory_entries(directory, file_type=&#39;directories&#39;):
+            print(&#34;Directory:&#34;, directory)
+    &#34;&#34;&#34;
+    allowed_types = [&#39;all&#39;, &#39;files&#39;, &#39;directories&#39;]
+
+    # Check if the provided file_type is valid
+    if file_type not in allowed_types:
+        raise ValueError(f&#34;Invalid file_type &#39;{file_type}&#39;. Allowed values are {&#39;, &#39;.join(allowed_types)}.&#34;)
+
+    # Convert the directory to an absolute path
+    directory = os.path.abspath(directory)
+
+    # Set the start_directory to the provided directory if not specified
+    start_directory = start_directory or directory
+
+    # Get the directory entries using os.scandir()
+    for entry in os.scandir(directory):
+        # If the entry is a directory
+        if entry.is_dir(follow_symlinks=followlinks):
+            # If recursive is True, traverse the subdirectory
+            if recursive:
+                yield from iterate_directory_entries(entry.path, file_type, absolute, recursive, followlinks, start_directory)
+
+            # If the file_type is not &#34;files&#34;, yield the directory entry
+            if file_type != &#34;files&#34;:
+                if absolute:
+                    yield entry.path
+                else:
+                    yield os.path.relpath(entry.path, start=start_directory)
+
+        # If the entry is a file
+        elif entry.is_file(follow_symlinks=followlinks):
+            # If the file_type is not &#34;directories&#34;, yield the file entry
+            if file_type != &#34;directories&#34;:
+                if absolute:
+                    yield entry.path
+                else:
+                    yield os.path.relpath(entry.path, start=start_directory)</code></pre>
+</details>
+</dd>
 <dt id="glasswall.utils.list_file_paths"><code class="name flex">
-<span>def <span class="ident">list_file_paths</span></span>(<span>directory: str, recursive: bool = True, absolute: bool = True, followlinks: bool = True)</span>
+<span>def <span class="ident">list_file_paths</span></span>(<span>directory: str, file_type: str = 'files', absolute: bool = True, recursive: bool = True, followlinks: bool = True) ‑> list</span>
+</code></dt>
+<dd>
+<div class="desc"><p>List all file paths in a given directory and its subdirectories.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>directory</code></strong> :&ensp;<code>str</code></dt>
+<dd>The path to the directory whose file paths are to be listed.</dd>
+<dt><strong><code>file_type</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>Type of entries to return.
+- 'all': Return both files and directories.
+- 'files': Return only files (default).
+- 'directories': Return only directories.</dd>
+<dt><strong><code>absolute</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Whether to return absolute paths (default is True).</dd>
+<dt><strong><code>recursive</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Whether to recurse into subdirectories (default is True).</dd>
+<dt><strong><code>followlinks</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Whether to follow symbolic links and list file paths from the target directory (default is True).</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>list</code></dt>
+<dd>A list of file paths found in the specified directory and its subdirectories.</dd>
+</dl>
+<h2 id="example">Example</h2>
+<p>directory = '/path/to/your/directory'
+file_paths = list_file_paths(directory)
+print(file_paths)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def list_file_paths(directory: str, file_type: str = &#39;files&#39;, absolute: bool = True, recursive: bool = True, followlinks: bool = True) -&gt; list:
+    &#34;&#34;&#34; List all file paths in a given directory and its subdirectories.
+
+    Args:
+        directory (str): The path to the directory whose file paths are to be listed.
+        file_type (str, optional): Type of entries to return.
+            - &#39;all&#39;: Return both files and directories.
+            - &#39;files&#39;: Return only files (default).
+            - &#39;directories&#39;: Return only directories.
+        absolute (bool, optional): Whether to return absolute paths (default is True).
+        recursive (bool, optional): Whether to recurse into subdirectories (default is True).
+        followlinks (bool, optional): Whether to follow symbolic links and list file paths from the target directory (default is True).
+
+    Returns:
+        list: A list of file paths found in the specified directory and its subdirectories.
+
+    Example:
+        directory = &#39;/path/to/your/directory&#39;
+        file_paths = list_file_paths(directory)
+        print(file_paths)
+    &#34;&#34;&#34;
+    # Remove duplicate file paths (symlinks of same files or other symlinks), and sort
+    return sorted(set(iterate_directory_entries(directory, file_type, absolute, recursive, followlinks)))</code></pre>
+</details>
+</dd>
+<dt id="glasswall.utils.list_file_paths_old"><code class="name flex">
+<span>def <span class="ident">list_file_paths_old</span></span>(<span>directory: str, recursive: bool = True, absolute: bool = True, followlinks: bool = True)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns a list of paths to files in a directory.</p>
@@ -1025,7 +1301,7 @@ def myfunc(new_arg):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def list_file_paths(directory: str, recursive: bool = True, absolute: bool = True, followlinks: bool = True):
+<pre><code class="python">def list_file_paths_old(directory: str, recursive: bool = True, absolute: bool = True, followlinks: bool = True):
     &#34;&#34;&#34; Returns a list of paths to files in a directory.
 
     Args:
@@ -1486,7 +1762,9 @@ def myfunc(new_arg):
 <li><code><a title="glasswall.utils.get_file_type" href="#glasswall.utils.get_file_type">get_file_type</a></code></li>
 <li><code><a title="glasswall.utils.get_libraries" href="#glasswall.utils.get_libraries">get_libraries</a></code></li>
 <li><code><a title="glasswall.utils.get_library" href="#glasswall.utils.get_library">get_library</a></code></li>
+<li><code><a title="glasswall.utils.iterate_directory_entries" href="#glasswall.utils.iterate_directory_entries">iterate_directory_entries</a></code></li>
 <li><code><a title="glasswall.utils.list_file_paths" href="#glasswall.utils.list_file_paths">list_file_paths</a></code></li>
+<li><code><a title="glasswall.utils.list_file_paths_old" href="#glasswall.utils.list_file_paths_old">list_file_paths_old</a></code></li>
 <li><code><a title="glasswall.utils.list_subdirectory_paths" href="#glasswall.utils.list_subdirectory_paths">list_subdirectory_paths</a></code></li>
 <li><code><a title="glasswall.utils.load_dependencies" href="#glasswall.utils.load_dependencies">load_dependencies</a></code></li>
 <li><code><a title="glasswall.utils.rename_kwargs" href="#glasswall.utils.rename_kwargs">rename_kwargs</a></code></li>

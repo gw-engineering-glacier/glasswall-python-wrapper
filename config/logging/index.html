@@ -34,7 +34,7 @@ import glasswall
 
 
 # 2021-03-22 17:34:59.428       glasswall.config.logging        INFO            __init__                 Loaded Glasswall Editor version 2.0 from C:\Users\AngusRoberts\Documents\Azure\gated-check-in\gated_check_in\data\combined_libraries\gcin\glasswall_core2.dll
-fmt = &#34;%(asctime)s.%(msecs)03d\t%(name)-29s\t%(levelname)-8s\t%(funcName)s\t\t %(message)s&#34;
+fmt = &#34;%(asctime)s.%(msecs)03d\t%(name)-29s\t%(levelname)-8s\t%(funcName)s\t\t%(message)s&#34;
 
 # 2020-06-25 15:04:59
 datefmt = &#34;%Y-%m-%d %H:%M:%S&#34;
@@ -64,7 +64,13 @@ if os.environ.get(&#34;glasswall_console_level&#34;):
     console.setLevel(os.environ.get(&#34;glasswall_console_level&#34;))
 else:
     console.setLevel(logging.INFO)
-log.addHandler(console)</code></pre>
+log.addHandler(console)
+
+
+def format_object(obj):
+    if not hasattr(obj, &#34;__dict__&#34;):
+        return &#34;&#34;
+    return &#34;\n\t&#34; + &#34;\n\t&#34;.join(f&#34;{k}: {v}&#34; for k, v in obj.__dict__.items())</code></pre>
 </details>
 </section>
 <section>
@@ -72,6 +78,24 @@ log.addHandler(console)</code></pre>
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="glasswall.config.logging.format_object"><code class="name flex">
+<span>def <span class="ident">format_object</span></span>(<span>obj)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def format_object(obj):
+    if not hasattr(obj, &#34;__dict__&#34;):
+        return &#34;&#34;
+    return &#34;\n\t&#34; + &#34;\n\t&#34;.join(f&#34;{k}: {v}&#34; for k, v in obj.__dict__.items())</code></pre>
+</details>
+</dd>
+</dl>
 </section>
 <section>
 </section>
@@ -85,6 +109,11 @@ log.addHandler(console)</code></pre>
 <li><h3>Super-module</h3>
 <ul>
 <li><code><a title="glasswall.config" href="../index.html">glasswall.config</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="glasswall.config.logging.format_object" href="#glasswall.config.logging.format_object">format_object</a></code></li>
 </ul>
 </li>
 </ul>

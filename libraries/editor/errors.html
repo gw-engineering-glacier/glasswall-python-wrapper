@@ -45,9 +45,12 @@ class UnexpectedEndOfFile(EditorError):
     pass
 
 
-class LicenseExpired(EditorError):
+class LicenceExpired(EditorError):
     &#34;&#34;&#34; Editor error code -3. &#34;&#34;&#34;
     pass
+
+
+LicenseExpired = LicenceExpired  # alias &lt;= 0.2.42
 
 
 class IncorrectSessionSetup(EditorError):
@@ -115,6 +118,16 @@ class FileRejected(EditorError):
     pass
 
 
+class UnableToWriteExportTextDump(EditorError):
+    &#34;&#34;&#34; Editor error code -17 &#34;&#34;&#34;
+    pass
+
+
+class UnableToWriteAnalysisReport(EditorError):
+    &#34;&#34;&#34; Editor error code -18 &#34;&#34;&#34;
+    pass
+
+
 error_codes = {
     -1: GeneralFail,
     -2: UnexpectedEndOfFile,
@@ -132,6 +145,8 @@ error_codes = {
     -14: UnableToWriteOutput,
     -15: UnableToWriteExport,
     -16: FileRejected,
+    -17: UnableToWriteExportTextDump,
+    -18: UnableToWriteAnalysisReport
 }</code></pre>
 </details>
 </section>
@@ -312,7 +327,28 @@ error_codes = {
 <li>builtins.BaseException</li>
 </ul>
 </dd>
-<dt id="glasswall.libraries.editor.errors.LicenseExpired"><code class="flex name class">
+<dt id="glasswall.libraries.editor.errors.LicenceExpired"><code class="flex name class">
+<span>class <span class="ident">LicenceExpired</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Editor error code -3.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class LicenceExpired(EditorError):
+    &#34;&#34;&#34; Editor error code -3. &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="glasswall.libraries.editor.classes.EditorError" href="classes.html#glasswall.libraries.editor.classes.EditorError">EditorError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="glasswall.libraries.editor.errors.LicenceExpired"><code class="flex name class">
 <span>class <span class="ident">LicenseExpired</span></span>
 <span>(</span><span>*args, **kwargs)</span>
 </code></dt>
@@ -322,7 +358,7 @@ error_codes = {
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class LicenseExpired(EditorError):
+<pre><code class="python">class LicenceExpired(EditorError):
     &#34;&#34;&#34; Editor error code -3. &#34;&#34;&#34;
     pass</code></pre>
 </details>
@@ -396,6 +432,27 @@ error_codes = {
 <li>builtins.BaseException</li>
 </ul>
 </dd>
+<dt id="glasswall.libraries.editor.errors.UnableToWriteAnalysisReport"><code class="flex name class">
+<span>class <span class="ident">UnableToWriteAnalysisReport</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Editor error code -18</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class UnableToWriteAnalysisReport(EditorError):
+    &#34;&#34;&#34; Editor error code -18 &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="glasswall.libraries.editor.classes.EditorError" href="classes.html#glasswall.libraries.editor.classes.EditorError">EditorError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
 <dt id="glasswall.libraries.editor.errors.UnableToWriteExport"><code class="flex name class">
 <span>class <span class="ident">UnableToWriteExport</span></span>
 <span>(</span><span>*args, **kwargs)</span>
@@ -408,6 +465,27 @@ error_codes = {
 </summary>
 <pre><code class="python">class UnableToWriteExport(EditorError):
     &#34;&#34;&#34; Editor error code -15 &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="glasswall.libraries.editor.classes.EditorError" href="classes.html#glasswall.libraries.editor.classes.EditorError">EditorError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="glasswall.libraries.editor.errors.UnableToWriteExportTextDump"><code class="flex name class">
+<span>class <span class="ident">UnableToWriteExportTextDump</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Editor error code -17</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class UnableToWriteExportTextDump(EditorError):
+    &#34;&#34;&#34; Editor error code -17 &#34;&#34;&#34;
     pass</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -542,7 +620,10 @@ error_codes = {
 <h4><code><a title="glasswall.libraries.editor.errors.IncorrectSessionSetup" href="#glasswall.libraries.editor.errors.IncorrectSessionSetup">IncorrectSessionSetup</a></code></h4>
 </li>
 <li>
-<h4><code><a title="glasswall.libraries.editor.errors.LicenseExpired" href="#glasswall.libraries.editor.errors.LicenseExpired">LicenseExpired</a></code></h4>
+<h4><code><a title="glasswall.libraries.editor.errors.LicenceExpired" href="#glasswall.libraries.editor.errors.LicenceExpired">LicenceExpired</a></code></h4>
+</li>
+<li>
+<h4><code><a title="glasswall.libraries.editor.errors.LicenceExpired" href="#glasswall.libraries.editor.errors.LicenceExpired">LicenceExpired</a></code></h4>
 </li>
 <li>
 <h4><code><a title="glasswall.libraries.editor.errors.NoCamerasConnected" href="#glasswall.libraries.editor.errors.NoCamerasConnected">NoCamerasConnected</a></code></h4>
@@ -554,7 +635,13 @@ error_codes = {
 <h4><code><a title="glasswall.libraries.editor.errors.UnableToLoadInput" href="#glasswall.libraries.editor.errors.UnableToLoadInput">UnableToLoadInput</a></code></h4>
 </li>
 <li>
+<h4><code><a title="glasswall.libraries.editor.errors.UnableToWriteAnalysisReport" href="#glasswall.libraries.editor.errors.UnableToWriteAnalysisReport">UnableToWriteAnalysisReport</a></code></h4>
+</li>
+<li>
 <h4><code><a title="glasswall.libraries.editor.errors.UnableToWriteExport" href="#glasswall.libraries.editor.errors.UnableToWriteExport">UnableToWriteExport</a></code></h4>
+</li>
+<li>
+<h4><code><a title="glasswall.libraries.editor.errors.UnableToWriteExportTextDump" href="#glasswall.libraries.editor.errors.UnableToWriteExportTextDump">UnableToWriteExportTextDump</a></code></h4>
 </li>
 <li>
 <h4><code><a title="glasswall.libraries.editor.errors.UnableToWriteOutput" href="#glasswall.libraries.editor.errors.UnableToWriteOutput">UnableToWriteOutput</a></code></h4>
