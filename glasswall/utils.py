@@ -268,6 +268,7 @@ def iterate_directory_entries(directory: str, file_type: str = 'all', absolute: 
 
     Raises:
         ValueError: If an invalid 'file_type' value is provided.
+        NotADirectoryError: If the directory does not exist.
 
     Example:
         directory = '/path/to/your/directory'
@@ -284,6 +285,9 @@ def iterate_directory_entries(directory: str, file_type: str = 'all', absolute: 
         for directory in iterate_directory_entries(directory, file_type='directories'):
             print("Directory:", directory)
     """
+    if not os.path.isdir(directory):
+        raise NotADirectoryError(directory)
+
     allowed_types = ['all', 'files', 'directories']
 
     # Check if the provided file_type is valid
