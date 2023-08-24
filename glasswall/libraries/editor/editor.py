@@ -476,7 +476,7 @@ class Editor(Library):
         Returns:
             If input_file is a str file path:
                 gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'input_file', 'status'.
-            
+
             If input_file is a file in memory:
                 gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'status'.
         """
