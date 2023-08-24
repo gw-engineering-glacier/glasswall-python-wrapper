@@ -425,7 +425,7 @@ class Editor(Library):
         else:
             log.debug(format_object(result))
 
-        return result.status
+        return result
 
     def _GW2RegisterInputFile(self, session: int, input_file: str):
         &#34;&#34;&#34; Register an input file for the given session.
@@ -521,7 +521,7 @@ class Editor(Library):
         else:
             log.debug(format_object(result))
 
-        return result.status
+        return result
 
     def _GW2RegisterOutFile(self, session: int, output_file: str):
         &#34;&#34;&#34; Register an output file for the given session.
@@ -1596,7 +1596,7 @@ class Editor(Library):
         else:
             log.debug(format_object(result))
 
-        return result.status
+        return result
 
     def _GW2GetIdInfo(self, session: int, issue_id: int):
         &#34;&#34;&#34; Retrieves the group description for the given Issue ID. e.g. issue_id 96 returns &#34;Document Processing Instances&#34;
@@ -2314,7 +2314,7 @@ class Editor(Library):
         else:
             log.debug(format_object(result))
 
-        return result.status
+        return result
 
     def _GW2RegisterInputFile(self, session: int, input_file: str):
         &#34;&#34;&#34; Register an input file for the given session.
@@ -2410,7 +2410,7 @@ class Editor(Library):
         else:
             log.debug(format_object(result))
 
-        return result.status
+        return result
 
     def _GW2RegisterOutFile(self, session: int, output_file: str):
         &#34;&#34;&#34; Register an output file for the given session.
@@ -3485,7 +3485,7 @@ class Editor(Library):
         else:
             log.debug(format_object(result))
 
-        return result.status
+        return result
 
     def _GW2GetIdInfo(self, session: int, issue_id: int):
         &#34;&#34;&#34; Retrieves the group description for the given Issue ID. e.g. issue_id 96 returns &#34;Document Processing Instances&#34;
@@ -5244,7 +5244,7 @@ The protected files are written to output_directory maintaining the same directo
     else:
         log.debug(format_object(result))
 
-    return result.status</code></pre>
+    return result</code></pre>
 </details>
 </dd>
 <dt id="glasswall.libraries.editor.editor.Editor.register_output"><code class="name flex">
@@ -5337,7 +5337,7 @@ The protected files are written to output_directory maintaining the same directo
     else:
         log.debug(format_object(result))
 
-    return result.status</code></pre>
+    return result</code></pre>
 </details>
 </dd>
 <dt id="glasswall.libraries.editor.editor.Editor.run_session"><code class="name flex">
@@ -5451,7 +5451,7 @@ The protected files are written to output_directory maintaining the same directo
     else:
         log.debug(format_object(result))
 
-    return result.status</code></pre>
+    return result</code></pre>
 </details>
 </dd>
 <dt id="glasswall.libraries.editor.editor.Editor.validate_licence"><code class="name flex">
