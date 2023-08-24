@@ -399,7 +399,7 @@ class Editor(Library):
         else:
             log.debug(format_object(result))
 
-        return result.status
+        return result
 
     def _GW2RegisterInputFile(self, session: int, input_file: str):
         """ Register an input file for the given session.
@@ -495,7 +495,7 @@ class Editor(Library):
         else:
             log.debug(format_object(result))
 
-        return result.status
+        return result
 
     def _GW2RegisterOutFile(self, session: int, output_file: str):
         """ Register an output file for the given session.
@@ -1570,7 +1570,7 @@ class Editor(Library):
         else:
             log.debug(format_object(result))
 
-        return result.status
+        return result
 
     def _GW2GetIdInfo(self, session: int, issue_id: int):
         """ Retrieves the group description for the given Issue ID. e.g. issue_id 96 returns "Document Processing Instances"
