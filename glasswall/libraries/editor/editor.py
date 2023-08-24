@@ -359,7 +359,11 @@ class Editor(Library):
             policy_format (int): The format of the content management policy. 0=XML.
 
         Returns:
-            status (int): The result of the Glasswall API call.
+            If input_file is a str file path:
+                gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'input_file', 'policy_format', 'status'.
+
+            If input_file is a file in memory:
+                gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'policy_format', 'status'.
         """
         # Validate type
         if not isinstance(session, int):
@@ -470,7 +474,11 @@ class Editor(Library):
             input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
 
         Returns:
-            status (int): The result of the Glasswall API call.
+            If input_file is a str file path:
+                gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'input_file', 'status'.
+
+            If input_file is a file in memory:
+                gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'status'.
         """
         if not isinstance(input_file, (str, bytes, bytearray, io.BytesIO,)):
             raise TypeError(input_file)
@@ -1554,7 +1562,7 @@ class Editor(Library):
             output_file (str): The file path of the report file.
 
         Returns:
-            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attribute 'status' indicating the result of the function call.
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'output_file', 'status'.
         """
         # Validate arg types
         if not isinstance(session, int):
