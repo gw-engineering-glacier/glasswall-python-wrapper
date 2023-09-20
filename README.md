@@ -27,7 +27,7 @@ Run the following commands within the directory containing the offline installat
 ```
 pip install --upgrade --no-index --find-links=. glasswall
 ```
-**Note:** The lxml whl includes the required lxml dependencies and has been tested on CentOS 7 and RHEL8 environments.
+**Note:** The lxml wheel includes the required lxml dependencies and has been tested on CentOS 7 and RHEL8 environments.
 
 <!-- omit in toc -->
 ## Prerequisites
