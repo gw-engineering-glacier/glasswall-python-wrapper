@@ -1,5 +1,6 @@
 
 
+import os
 import subprocess
 import unittest
 
@@ -81,6 +82,9 @@ class TestReadmeCode(unittest.TestCase):
         readme_file_path = "README.md"
         cls.python_blocks_dict = extract_python_blocks_from_readme(readme_file_path)
         cls.python_blocks_count = count_python_blocks_in_readme(readme_file_path)
+
+        if not os.path.exists("C:/gwpw/libraries"):
+            raise unittest.SkipTest("No Glasswall libraries found.")
 
     def test_extract_python_blocks(self):
         # Test that the extract_python_blocks_from_readme function works as expected
