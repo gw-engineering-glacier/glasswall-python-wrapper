@@ -50,7 +50,7 @@ def extract_python_blocks_from_readme(file_path):
 def execute_python_block(python_code):
     try:
         # Execute the Python block in a separate process and capture the output
-        return subprocess.run(["python", "-c", python_code], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True)
+        return subprocess.run(["python", "-c", python_code], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
 
     except subprocess.CalledProcessError as e:
         print(f"Execution failed with error: {e}")
