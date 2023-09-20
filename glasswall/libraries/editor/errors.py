@@ -19,9 +19,12 @@ class UnexpectedEndOfFile(EditorError):
     pass
 
 
-class LicenseExpired(EditorError):
+class LicenceExpired(EditorError):
     """ Editor error code -3. """
     pass
+
+
+LicenseExpired = LicenceExpired  # alias <= 0.2.42
 
 
 class IncorrectSessionSetup(EditorError):
@@ -89,6 +92,16 @@ class FileRejected(EditorError):
     pass
 
 
+class UnableToWriteExportTextDump(EditorError):
+    """ Editor error code -17 """
+    pass
+
+
+class UnableToWriteAnalysisReport(EditorError):
+    """ Editor error code -18 """
+    pass
+
+
 error_codes = {
     -1: GeneralFail,
     -2: UnexpectedEndOfFile,
@@ -106,4 +119,6 @@ error_codes = {
     -14: UnableToWriteOutput,
     -15: UnableToWriteExport,
     -16: FileRejected,
+    -17: UnableToWriteExportTextDump,
+    -18: UnableToWriteAnalysisReport
 }

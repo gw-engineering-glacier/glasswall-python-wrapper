@@ -249,55 +249,105 @@ def get_library(library: str, directory: str):
     raise FileNotFoundError(f'Could not find any files: "{library_file_names}" under directory: "{directory}"')
 
 
-def list_file_paths(directory: str, recursive: bool = True, absolute: bool = True, followlinks: bool = True):
-    """ Returns a list of paths to files in a directory.
+def iterate_directory_entries(directory: str, file_type: str = 'all', absolute: bool = True, recursive: bool = True, followlinks: bool = True, start_directory: str = None):
+    """ Generate entries (files, directories, or both) in a given directory using os.scandir().
 
     Args:
-        directory (str): The directory to list files from.
-        recursive (bool, optional): Default True. Include subdirectories.
-        absolute (bool, optional): Default True. Return paths as absolute paths. If False, returns relative paths.
-        followlinks (bool, optional): Default True. Follow symbolic links if True.
+        directory (str): The path to the directory whose entries are to be listed.
+        file_type (str, optional): Type of entries to return.
+            - 'all': Return both files and directories (default).
+            - 'files': Return only files.
+            - 'directories': Return only directories.
+        absolute (bool, optional): Whether to return absolute paths (default) or relative paths.
+        recursive (bool, optional): Whether to recurse into subdirectories (default is True).
+        followlinks (bool, optional): Whether to follow symbolic links and yield entries from the target directory (default is True).
+        start_directory (str, optional): The starting directory used to calculate relative paths (default is None).
 
-    Returns:
-        files (list): A list of file paths.
+    Yields:
+        str: The full path of each file or directory found in the specified directory.
+
+    Raises:
+        ValueError: If an invalid 'file_type' value is provided.
+        NotADirectoryError: If the directory does not exist.
+
+    Example:
+        directory = '/path/to/your/directory'
+
+        # Iterate through all entries (files and directories) in the directory
+        for entry in iterate_directory_entries(directory):
+            print(entry)
+
+        # Iterate through only file entries in the directory
+        for file in iterate_directory_entries(directory, file_type='files'):
+            print("File:", file)
+
+        # Iterate through only directory entries in the directory
+        for directory in iterate_directory_entries(directory, file_type='directories'):
+            print("Directory:", directory)
     """
     if not os.path.isdir(directory):
         raise NotADirectoryError(directory)
 
-    if recursive:
-        files = [
-            os.path.normpath(os.path.join(root, file_))
-            for root, dirs, files in os.walk(directory)
-            for file_ in files
-        ]
-    else:
-        files = [
-            os.path.normpath(os.path.join(directory, file_))
-            for file_ in os.listdir(directory)
-            if os.path.isfile(os.path.join(directory, file_))
-        ]
+    allowed_types = ['all', 'files', 'directories']
 
-    if followlinks:
-        files = [
-            str(pathlib.Path(file_).resolve())
-            for file_ in files
-        ]
+    # Check if the provided file_type is valid
+    if file_type not in allowed_types:
+        raise ValueError(f"Invalid file_type '{file_type}'. Allowed values are {', '.join(allowed_types)}.")
 
-    if absolute:
-        files = [
-            os.path.abspath(file_)
-            for file_ in files
-        ]
-    else:
-        files = [
-            os.path.relpath(file_, directory)
-            for file_ in files
-        ]
+    # Convert the directory to an absolute path
+    directory = os.path.abspath(directory)
 
+    # Set the start_directory to the provided directory if not specified
+    start_directory = start_directory or directory
+
+    # Get the directory entries using os.scandir()
+    for entry in os.scandir(directory):
+        # If the entry is a directory
+        if entry.is_dir(follow_symlinks=followlinks):
+            # If recursive is True, traverse the subdirectory
+            if recursive:
+                yield from iterate_directory_entries(entry.path, file_type, absolute, recursive, followlinks, start_directory)
+
+            # If the file_type is not "files", yield the directory entry
+            if file_type != "files":
+                if absolute:
+                    yield entry.path
+                else:
+                    yield os.path.relpath(entry.path, start=start_directory)
+
+        # If the entry is a file
+        elif entry.is_file(follow_symlinks=followlinks):
+            # If the file_type is not "directories", yield the file entry
+            if file_type != "directories":
+                if absolute:
+                    yield entry.path
+                else:
+                    yield os.path.relpath(entry.path, start=start_directory)
+
+
+def list_file_paths(directory: str, file_type: str = 'files', absolute: bool = True, recursive: bool = True, followlinks: bool = True) -> list:
+    """ List all file paths in a given directory and its subdirectories.
+
+    Args:
+        directory (str): The path to the directory whose file paths are to be listed.
+        file_type (str, optional): Type of entries to return.
+            - 'all': Return both files and directories.
+            - 'files': Return only files (default).
+            - 'directories': Return only directories.
+        absolute (bool, optional): Whether to return absolute paths (default is True).
+        recursive (bool, optional): Whether to recurse into subdirectories (default is True).
+        followlinks (bool, optional): Whether to follow symbolic links and list file paths from the target directory (default is True).
+
+    Returns:
+        list: A list of file paths found in the specified directory and its subdirectories.
+
+    Example:
+        directory = '/path/to/your/directory'
+        file_paths = list_file_paths(directory)
+        print(file_paths)
+    """
     # Remove duplicate file paths (symlinks of same files or other symlinks), and sort
-    files = sorted(set(files))
-
-    return files
+    return sorted(set(iterate_directory_entries(directory, file_type, absolute, recursive, followlinks)))
 
 
 def list_subdirectory_paths(directory: str, recursive: bool = False, absolute: bool = True):

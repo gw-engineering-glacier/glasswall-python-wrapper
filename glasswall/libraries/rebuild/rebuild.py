@@ -24,25 +24,25 @@ class Rebuild(Library):
         self.set_content_management_policy(input_file=None)
 
         # Validate killswitch has not activated
-        self.validate_license()
+        self.validate_licence()
 
         log.info(f"Loaded Glasswall {self.__class__.__name__} version {self.version()} from {self.library_path}")
 
-    def validate_license(self):
-        """ Validates the license of the library by attempting to call protect_file on a known supported file.
+    def validate_licence(self):
+        """ Validates the licence of the library by attempting to call protect_file on a known supported file.
 
         Raises:
-            RebuildError: If the license could not be validated.
+            RebuildError: If the licence could not be validated.
         """
-        # Call protect file on a known good bitmap to see if license has expired
+        # Call protect file on a known good bitmap to see if licence has expired
         try:
             self.protect_file(
                 input_file=b"BM:\x00\x00\x00\x00\x00\x00\x006\x00\x00\x00(\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01\x00\x18\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\x00",
                 raise_unsupported=True
             )
-            log.debug(f"{self.__class__.__name__} license validated successfully.")
+            log.debug(f"{self.__class__.__name__} licence validated successfully.")
         except errors.RebuildError:
-            log.error(f"{self.__class__.__name__} license validation failed.")
+            log.error(f"{self.__class__.__name__} licence validation failed.")
             raise
 
     def version(self):
@@ -921,3 +921,81 @@ class Rebuild(Library):
         error_message = self.library.GWFileErrorMsg()
 
         return error_message
+
+    def _GWFileToFileAnalysisAndProtect(self, input_file: str, file_type: str, output_file: str, output_analysis_report: str):
+        """ This function Manages the specified file and carries out an Analysis Audit, saving the results to the specified file locations.
+
+        Args:
+            input_file (str): The input file path or bytes.
+            output_file (str): The output file path where the protected file will be written.
+            output_analysis_report (str): The output file path where the analysis report will be written.
+
+        Returns:
+            status (int): The result of the Glasswall API call.
+        """
+        # API function declaration
+        self.library.GWFileToFileAnalysisAndProtect.argtypes = [
+            ct.c_wchar_p,  # wchar_t * inputFilePathName
+            ct.c_wchar_p,  # wchar_t* wcType
+            ct.c_wchar_p,  # wchar_t * outputFilePathName
+            ct.c_wchar_p  # wchar_t * analysisFilePathName
+        ]
+
+        # Variable initialisation
+        ct_input_file = ct.c_wchar_p(input_file)
+        ct_file_type = ct.c_wchar_p(file_type)
+        ct_output_file = ct.c_wchar_p(output_file)
+        ct_output_analysis_report = ct.c_wchar_p(output_analysis_report)
+
+        # API call
+        status = self.library.GWFileToFileAnalysisAndProtect(
+            ct_input_file,
+            ct_file_type,
+            ct_output_file,
+            ct_output_analysis_report
+        )
+
+        return status
+
+    def _GWFileAnalysisAndProtect(self, input_file: str, file_type: str):
+        """ This function Manages the specified file and carries out an Analysis Audit, returning both outputs to the specified memory locations.
+
+        Args:
+            input_file (str): The input file path or bytes.
+
+        Returns:
+            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes  'input_file', 'file_type', 'output_file_buffer', 'output_file_buffer_length', 'output_report_buffer', 'output_report_buffer_length', 'output_file', 'analysis_file'.
+        """
+        # API function declaration
+        self.library.GWFileAnalysisAndProtect.argtypes = [
+            ct.c_wchar_p,  # wchar_t * inputFilePathName
+            ct.c_wchar_p,  # wchar_t* wcType
+            ct.POINTER(ct.c_void_p),  # void **outputFileBuffer
+            ct.POINTER(ct.c_size_t),  # size_t *outputLength
+            ct.POINTER(ct.c_void_p),  # void **analysisFileBuffer
+            ct.POINTER(ct.c_size_t)  # size_t *analysisFileBufferLength
+        ]
+
+        # Variable initialisation
+        gw_return_object = glasswall.GwReturnObj()
+        gw_return_object.input_file = ct.c_wchar_p(input_file)
+        gw_return_object.file_type = ct.c_wchar_p(file_type)
+        gw_return_object.output_file_buffer = ct.c_void_p(0)
+        gw_return_object.output_file_buffer_length = ct.c_size_t(0)
+        gw_return_object.output_report_buffer = ct.c_void_p(0)
+        gw_return_object.output_report_buffer_length = ct.c_size_t(0)
+
+        # API call
+        gw_return_object.status = self.library.GWFileAnalysisAndProtect(
+            gw_return_object.input_file,
+            gw_return_object.file_type,
+            ct.byref(gw_return_object.output_file_buffer),
+            ct.byref(gw_return_object.output_file_buffer_length),
+            ct.byref(gw_return_object.output_report_buffer),
+            ct.byref(gw_return_object.output_report_buffer_length)
+        )
+
+        gw_return_object.output_file = ct.string_at(gw_return_object.output_file_buffer, gw_return_object.output_file_buffer_length.value)
+        gw_return_object.analysis_file = ct.string_at(gw_return_object.output_report_buffer, gw_return_object.output_report_buffer_length.value)
+
+        return gw_return_object

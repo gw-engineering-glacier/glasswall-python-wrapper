@@ -8,7 +8,7 @@ import glasswall
 
 
 # 2021-03-22 17:34:59.428	glasswall.config.logging     	INFO    	__init__		 Loaded Glasswall Editor version 2.0 from C:\Users\AngusRoberts\Documents\Azure\gated-check-in\gated_check_in\data\combined_libraries\gcin\glasswall_core2.dll
-fmt = "%(asctime)s.%(msecs)03d\t%(name)-29s\t%(levelname)-8s\t%(funcName)s\t\t %(message)s"
+fmt = "%(asctime)s.%(msecs)03d\t%(name)-29s\t%(levelname)-8s\t%(funcName)s\t\t%(message)s"
 
 # 2020-06-25 15:04:59
 datefmt = "%Y-%m-%d %H:%M:%S"
@@ -39,3 +39,9 @@ if os.environ.get("glasswall_console_level"):
 else:
     console.setLevel(logging.INFO)
 log.addHandler(console)
+
+
+def format_object(obj):
+    if not hasattr(obj, "__dict__"):
+        return ""
+    return "\n\t" + "\n\t".join(f"{k}: {v}" for k, v in obj.__dict__.items())

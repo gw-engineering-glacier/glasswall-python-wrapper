@@ -9,10 +9,13 @@ os_info = {
         "archive_manager": {
             "file_name": "libglasswall.archive.manager.so",
             "dependencies": [],
+            "relies_on": ["editor"],
         },
         "editor": {
             "file_name": "libglasswall_core2.so",
-            "dependencies": [],
+            "dependencies": [
+                "libdeflate.so.0"
+            ],
         },
         "cli": {
             "file_name": [
@@ -35,10 +38,13 @@ os_info = {
                 "libQt5Multimedia.so.5",
                 "libQt5XmlPatterns.so.5"
             ],
+            "relies_on": ["editor"],
         },
         "word_search": {
             "file_name": "libglasswall.word.search.so",
-            "dependencies": [],  # loading dependencies through ctypes doesn't help for word search, use LD_LIBRARY_PATH
+            # loading dependencies through ctypes doesn't help for word search, use LD_LIBRARY_PATH
+            "dependencies": [],
+            "relies_on": ["editor", "archive_manager"],
         },
     },
 
@@ -46,6 +52,7 @@ os_info = {
         "archive_manager": {
             "file_name": "glasswall.archive.manager.dll",
             "dependencies": [],
+            "relies_on": ["editor"],
         },
         "editor": {
             "file_name": "glasswall_core2.dll",
@@ -74,10 +81,12 @@ os_info = {
                 "Qt5XmlPatterns.dll",
                 "Qt5Network.dll"
             ],
+            "relies_on": ["editor"],
         },
         "word_search": {
             "file_name": "glasswall.word.search.dll",
             "dependencies": [],
+            "relies_on": ["editor", "archive_manager"],
         },
     },
 }

@@ -5,7 +5,7 @@ import pathlib
 import platform
 import tempfile
 
-__version__ = "0.2.33"
+__version__ = "1.0.3"
 
 _OPERATING_SYSTEM = platform.system()
 _PYTHON_VERSION = platform.python_version()
@@ -27,4 +27,5 @@ class GwReturnObj:
     """
 
     def __init__(self, **kwargs):
-        [setattr(self, k, v) for k, v in kwargs.items()]
+        for k, v in kwargs.items():
+            setattr(self, k, v)
