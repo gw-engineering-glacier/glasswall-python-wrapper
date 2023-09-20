@@ -157,7 +157,7 @@ glasswall.config.logging.log.setLevel(logging.DEBUG)
 
 ### Content management policies
 
-Documentation about content management policies can be found here: https://docs.glasswall.com/docs/glasswall-engine-content-management
+Documentation about content management policies can be found on the [Policy Management](https://docs.glasswall.com/docs/embedded-engine-policy-management) page.
 
 Subclasses of the `glasswall.content_management.policies.Policy` class can be used to easily create content management policies of varying complexity by passing the `default` and `config` keyword arguments. Subclasses include:
 
