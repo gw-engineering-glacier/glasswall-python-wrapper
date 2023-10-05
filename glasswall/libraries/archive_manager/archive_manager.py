@@ -784,7 +784,7 @@ class ArchiveManager(Library):
 
         return exported_archives_dict
 
-    def import_archive(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Optional[str] = None, output_report: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager] = None, include_analysis_report: Optional[int] = 1, raise_unsupported: bool = True):
+    def import_archive(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Optional[str] = None, output_report: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager] = None, include_analysis_report: Optional[bool] = True, raise_unsupported: Optional[bool] = True):
         """ Imports an archive using the Glasswall engine.
 
         Args:
@@ -792,7 +792,7 @@ class ArchiveManager(Library):
             output_file (Optional[str], optional): Default None. If str, write the archive to the output_file path.
             output_report (Optional[str], optional): Default None. If str, write the analysis report to the output_report path.
             content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager], optional): The content management policy to apply.
-            include_analysis_report (Optional[int], optional): Default 1. If 1, write the analysis report into imported archive.
+            include_analysis_report (Optional[bool], optional): Default True. If True, write the analysis report into the imported archive.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
@@ -854,7 +854,7 @@ class ArchiveManager(Library):
         ct_output_report_buffer = ct.c_void_p()  # void **outputReportBuffer
         ct_output_report_buffer_length = ct.c_size_t()  # size_t *outputReportBufferLength
         ct_content_management_policy = ct.c_char_p(content_management_policy.encode())  # const char *xmlConfigString
-        ct_include_analysis_report = ct.c_int(include_analysis_report)  # int
+        ct_include_analysis_report = ct.c_int(int(include_analysis_report))  # int
         gw_return_object = glasswall.GwReturnObj()
 
         with utils.CwdHandler(new_cwd=self.library_path):
@@ -905,7 +905,7 @@ class ArchiveManager(Library):
 
         return gw_return_object
 
-    def import_directory(self, input_directory: str, output_directory: Optional[str], output_report_directory: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager] = None, raise_unsupported: bool = True):
+    def import_directory(self, input_directory: str, output_directory: Optional[str], output_report_directory: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager] = None, include_analysis_report: Optional[bool] = True, raise_unsupported: bool = True):
         """ Calls import_archive on each file in input_directory. The imported archives are written to output_directory maintaining the same directory structure as input_directory.
 
         Args:
@@ -913,6 +913,7 @@ class ArchiveManager(Library):
             output_directory (Optional[str], optional): Default None. If str, the output directory where the archives will be written.
             output_report_directory (Optional[str], optional): Default None. If str, the output directory where xml reports for each archive will be written.
             content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager], optional): The content management policy to apply.
+            include_analysis_report (Optional[bool], optional): Default True. If True, write the analysis report into the imported archive.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
@@ -931,6 +932,7 @@ class ArchiveManager(Library):
                 output_file=output_file,
                 output_report=output_report,
                 content_management_policy=content_management_policy,
+                include_analysis_report=include_analysis_report,
                 raise_unsupported=raise_unsupported,
             )
 
