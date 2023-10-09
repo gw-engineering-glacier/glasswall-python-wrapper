@@ -122,7 +122,7 @@ class Editor(Library):
             session (int): The session to run.
 
         Returns:
-            status (int): The status of the function call.
+            status (int): The status code of the function call.
         """
         # API function declaration
         self.library.GW2RunSession.argtypes = [ct.c_size_t]
