@@ -1770,15 +1770,15 @@ class Editor(Library):
 
         return gw_return_object
 
-    def file_session_status_message(self, session: int, raise_unsupported: bool = True):
-        """ Retrieves the Glasswall Session Status message. Gives a high level indication of the processing that was carried out on the last document processed by the library
+    def file_session_status_message(self, session: int, raise_unsupported: bool = True) -> str:
+        """ Retrieves the Glasswall session status message. Gives a high level indication of the processing that was carried out.
 
         Args:
             session (int): The session integer.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
-            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'status' and 'message' indicating the result of the function call.
+            result.message (str):The file session status message.
         """
         # Validate arg types
         if not isinstance(session, int):
