@@ -78,14 +78,14 @@ class Editor(Library):
 
         return session
 
-    def close_session(self, session: int):
+    def close_session(self, session: int) -> int:
         """ Close the Glasswall session. All resources allocated by the session will be destroyed.
 
         Args:
             session (int): The session to close.
 
         Returns:
-            None
+            status (int): The status code of the function call.
         """
         if not isinstance(session, int):
             raise TypeError(session)
