@@ -1689,7 +1689,7 @@ class Editor(Library):
 
         return gw_return_object
 
-    def get_all_id_info(self, output_file: Optional[str] = None, raise_unsupported: bool = True):
+    def get_all_id_info(self, output_file: Optional[str] = None, raise_unsupported: bool = True) -> str:
         """ Retrieves the XML containing all the Issue ID ranges with their group descriptions
 
         Args:
@@ -1697,7 +1697,7 @@ class Editor(Library):
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
-            all_id_info (str): A string analysis report containing all the id info.
+            all_id_info (str): A string XML analysis report containing all id info.
         """
         # Validate arg types
         if not isinstance(output_file, (type(None), str)):
