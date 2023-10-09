@@ -1372,7 +1372,7 @@ class Editor(Library):
         return gw_return_object
 
     @functools.lru_cache()
-    def file_error_message(self, session: int):
+    def file_error_message(self, session: int) -> str:
         """ Retrieve the Glasswall Session Process error message.
 
         Args:
