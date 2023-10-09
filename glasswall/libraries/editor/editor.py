@@ -140,16 +140,16 @@ class Editor(Library):
 
         return status
 
-    def determine_file_type(self, input_file: Union[str, bytes, bytearray, io.BytesIO], as_string: bool = False, raise_unsupported: bool = True):
-        """ Returns an int representing the file type / file format of a file.
+    def determine_file_type(self, input_file: Union[str, bytes, bytearray, io.BytesIO], as_string: bool = False, raise_unsupported: bool = True) -> Union[int, str]:
+        """ Determine the file type of a given input file, either as an integer identifier or a string.
 
         Args:
-            input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file, can be a local path.
+            input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file to analyse. It can be provided as a file path (str), bytes, bytearray, or a BytesIO object.
             as_string (bool, optional): Return file type as string, eg: "bmp" instead of: 29. Defaults to False.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
-            file_type (Union[int, str]): The file format.
+            file_type (Union[int, str]): The file type.
         """
         if isinstance(input_file, str):
             if not os.path.isfile(input_file):
