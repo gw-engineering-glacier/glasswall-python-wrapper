@@ -597,3 +597,19 @@ def rename_kwargs(func_name: str, kwargs: Dict[str, Any], aliases: Dict[str, str
                 stacklevel=3,
             )
             kwargs[new] = kwargs.pop(alias)
+
+
+def deprecated_function(replacement_function):
+    def decorator(f: Callable):
+        @functools.wraps(f)
+        def wrapper(*args, **kwargs):
+            warnings.warn(
+                message=f"Call to deprecated method: '{f.__name__}'. Use '{replacement_function.__name__}' instead.",
+                category=DeprecationWarning,
+                stacklevel=3
+            )
+            return replacement_function(*args, **kwargs)
+
+        return wrapper
+
+    return decorator

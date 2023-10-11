@@ -78,14 +78,14 @@ class Editor(Library):
 
         return session
 
-    def close_session(self, session: int):
+    def close_session(self, session: int) -> int:
         """ Close the Glasswall session. All resources allocated by the session will be destroyed.
 
         Args:
             session (int): The session to close.
 
         Returns:
-            None
+            status (int): The status code of the function call.
         """
         if not isinstance(session, int):
             raise TypeError(session)
@@ -122,7 +122,7 @@ class Editor(Library):
             session (int): The session to run.
 
         Returns:
-            status (int): The status of the function call.
+            status (int): The status code of the function call.
         """
         # API function declaration
         self.library.GW2RunSession.argtypes = [ct.c_size_t]
@@ -140,16 +140,16 @@ class Editor(Library):
 
         return status
 
-    def determine_file_type(self, input_file: Union[str, bytes, bytearray, io.BytesIO], as_string: bool = False, raise_unsupported: bool = True):
-        """ Returns an int representing the file type / file format of a file.
+    def determine_file_type(self, input_file: Union[str, bytes, bytearray, io.BytesIO], as_string: bool = False, raise_unsupported: bool = True) -> Union[int, str]:
+        """ Determine the file type of a given input file, either as an integer identifier or a string.
 
         Args:
-            input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file, can be a local path.
+            input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file to analyse. It can be provided as a file path (str), bytes, bytearray, or a BytesIO object.
             as_string (bool, optional): Return file type as string, eg: "bmp" instead of: 29. Defaults to False.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
-            file_type (Union[int, str]): The file format.
+            file_type (Union[int, str]): The file type.
         """
         if isinstance(input_file, str):
             if not os.path.isfile(input_file):
@@ -359,11 +359,12 @@ class Editor(Library):
             policy_format (int): The format of the content management policy. 0=XML.
 
         Returns:
-            If input_file is a str file path:
-                gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'input_file', 'policy_format', 'status'.
+            - result (glasswall.GwReturnObj): Depending on the input 'input_file':
+                - If input_file is a str file path:
+                    - gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'input_file', 'policy_format', 'status'.
 
-            If input_file is a file in memory:
-                gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'policy_format', 'status'.
+                - If input_file is a file in memory:
+                    - gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'policy_format', 'status'.
         """
         # Validate type
         if not isinstance(session, int):
@@ -474,11 +475,12 @@ class Editor(Library):
             input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
 
         Returns:
-            If input_file is a str file path:
-                gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'input_file', 'status'.
+            - result (glasswall.GwReturnObj): Depending on the input 'input_file':
+                - If input_file is a str file path:
+                    - gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'input_file', 'status'.
 
-            If input_file is a file in memory:
-                gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'status'.
+                - If input_file is a file in memory:
+                    - gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'status'.
         """
         if not isinstance(input_file, (str, bytes, bytearray, io.BytesIO,)):
             raise TypeError(input_file)
@@ -565,12 +567,12 @@ class Editor(Library):
 
         return gw_return_object
 
-    def register_output(self, session, output_file: Union[None, str] = None):
+    def register_output(self, session, output_file: Optional[str] = None):
         """ Register an output file for the given session. If output_file is None the file will be returned as 'buffer' and 'buffer_length' attributes.
 
         Args:
             session (int): The session integer.
-            output_file (Union[None, str], optional): If specified, during run session the file will be written to output_file, otherwise the file will be written to the glasswall.GwReturnObj 'buffer' and 'buffer_length' attributes.
+            output_file (Optional[str]): If specified, during run session the file will be written to output_file, otherwise the file will be written to the glasswall.GwReturnObj 'buffer' and 'buffer_length' attributes.
 
         Returns:
             gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attribute 'status' indicating the result of the function call. If output_file is None (memory mode), 'buffer', and 'buffer_length' are included containing the file content and file size.
@@ -662,12 +664,12 @@ class Editor(Library):
 
         return gw_return_object
 
-    def register_analysis(self, session: int, output_file: Union[None, str] = None):
+    def register_analysis(self, session: int, output_file: Optional[str] = None):
         """ Registers an analysis file for the given session. The analysis file will be created during the session's run_session call.
 
         Args:
             session (int): The session integer.
-            output_file (Union[None, str], optional): Default None. The file path where the analysis will be written. None returns the analysis as bytes.
+            output_file (Optional[str]): Default None. The file path where the analysis will be written. None returns the analysis as bytes.
 
         Returns:
             gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'status', 'session', 'analysis_format'. If output_file is None (memory mode), 'buffer', and 'buffer_length' are included containing the file content and file size. If output_file is not None (file mode) 'output_file' is included.
@@ -691,12 +693,12 @@ class Editor(Library):
 
         return result
 
-    def protect_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
+    def protect_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
         """ Protects a file using the current content management configuration, returning the file bytes. The protected file is written to output_file if it is provided.
 
         Args:
             input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
-            output_file (Union[None, str], optional): The output file path where the protected file will be written.
+            output_file (Optional[str]): The output file path where the protected file will be written.
             content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy], optional): The content management policy to apply to the session.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
@@ -775,13 +777,13 @@ class Editor(Library):
 
                 return file_bytes
 
-    def protect_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
+    def protect_directory(self, input_directory: str, output_directory: Optional[str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
         """ Recursively processes all files in a directory in protect mode using the given content management policy.
         The protected files are written to output_directory maintaining the same directory structure as input_directory.
 
         Args:
             input_directory (str): The input directory containing files to protect.
-            output_directory (Union[None, str]): The output directory where the protected file will be written, or None to not write files.
+            output_directory (Optional[str]): The output directory where the protected file will be written, or None to not write files.
             content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy], optional): Default None (sanitise). The content management policy to apply.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
@@ -805,12 +807,12 @@ class Editor(Library):
 
         return protected_files_dict
 
-    def analyse_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
+    def analyse_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
         """ Analyses a file, returning the analysis bytes. The analysis is written to output_file if it is provided.
 
         Args:
             input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
-            output_file (Union[None, str], optional): The output file path where the analysis file will be written.
+            output_file (Optional[str]): The output file path where the analysis file will be written.
             content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy], optional): The content management policy to apply to the session.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
@@ -889,12 +891,12 @@ class Editor(Library):
 
                 return file_bytes
 
-    def analyse_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
+    def analyse_directory(self, input_directory: str, output_directory: Optional[str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
         """ Analyses all files in a directory and its subdirectories. The analysis files are written to output_directory maintaining the same directory structure as input_directory.
 
         Args:
             input_directory (str): The input directory containing files to analyse.
-            output_directory (Union[None, str]): The output directory where the analysis files will be written, or None to not write files.
+            output_directory (Optional[str]): The output directory where the analysis files will be written, or None to not write files.
             content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy], optional): Default None (sanitise). The content management policy to apply.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
@@ -978,12 +980,12 @@ class Editor(Library):
 
         return gw_return_object
 
-    def register_export(self, session: int, output_file: Union[None, str] = None):
+    def register_export(self, session: int, output_file: Optional[str] = None):
         """ Registers a file to be exported for the given session. The export file will be created during the session's run_session call.
 
         Args:
             session (int): The session integer.
-            output_file (Union[None, str], optional): Default None. The file path where the export will be written. None exports the file in memory.
+            output_file (Optional[str]): Default None. The file path where the export will be written. None exports the file in memory.
 
         Returns:
             gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attribute 'status' indicating the result of the function call and 'session', the session integer. If output_file is None (memory mode), 'buffer', and 'buffer_length' are included containing the file content and file size.
@@ -1007,12 +1009,12 @@ class Editor(Library):
 
         return result
 
-    def export_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
+    def export_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
         """ Export a file, returning the .zip file bytes. The .zip file is written to output_file if it is provided.
 
         Args:
             input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
-            output_file (Union[None, str], optional): The output file path where the .zip file will be written.
+            output_file (Optional[str]): The output file path where the .zip file will be written.
             content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy], optional): The content management policy to apply to the session.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
@@ -1091,12 +1093,12 @@ class Editor(Library):
 
                 return file_bytes
 
-    def export_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
+    def export_directory(self, input_directory: str, output_directory: Optional[str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
         """ Exports all files in a directory and its subdirectories. The export files are written to output_directory maintaining the same directory structure as input_directory.
 
         Args:
             input_directory (str): The input directory containing files to export.
-            output_directory (Union[None, str]): The output directory where the export files will be written, or None to not write files.
+            output_directory (Optional[str]): The output directory where the export files will be written, or None to not write files.
             content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy], optional): Default None (sanitise). The content management policy to apply.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
@@ -1216,12 +1218,12 @@ class Editor(Library):
 
         return result
 
-    def import_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Union[None, str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
+    def import_file(self, input_file: Union[str, bytes, bytearray, io.BytesIO], output_file: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
         """ Import a .zip file, constructs a file from the .zip file and returns the file bytes. The file is written to output_file if it is provided.
 
         Args:
             input_file (Union[str, bytes, bytearray, io.BytesIO]): The .zip input file path or bytes.
-            output_file (Union[None, str], optional): The output file path where the constructed file will be written.
+            output_file (Optional[str]): The output file path where the constructed file will be written.
             content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy], optional): The content management policy to apply to the session.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
@@ -1300,13 +1302,13 @@ class Editor(Library):
 
                 return file_bytes
 
-    def import_directory(self, input_directory: str, output_directory: Union[None, str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
+    def import_directory(self, input_directory: str, output_directory: Optional[str], content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, "glasswall.content_management.policies.policy.Policy"] = None, raise_unsupported: bool = True):
         """ Imports all files in a directory and its subdirectories. Files are expected as .zip but this is not forced.
         The constructed files are written to output_directory maintaining the same directory structure as input_directory.
 
         Args:
             input_directory (str): The input directory containing files to import.
-            output_directory (Union[None, str]): The output directory where the constructed files will be written, or None to not write files.
+            output_directory (Optional[str]): The output directory where the constructed files will be written, or None to not write files.
             content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy], optional): Default None (sanitise). The content management policy to apply.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
@@ -1372,7 +1374,7 @@ class Editor(Library):
         return gw_return_object
 
     @functools.lru_cache()
-    def file_error_message(self, session: int):
+    def file_error_message(self, session: int) -> str:
         """ Retrieve the Glasswall Session Process error message.
 
         Args:
@@ -1499,21 +1501,26 @@ class Editor(Library):
 
         return file_type_id
 
-    def get_file_info(self, file_type: Union[str, int], raise_unsupported: bool = True):
-        """ Get the Glasswall file type id on providing a file extension or get the formal name of a file corresponding to the Glasswall file type id.
+    def get_file_type_info(self, file_type: Union[str, int]):
+        """ Retrieve information about a file type based on its identifier.
 
         Args:
-            file_type (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
-            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+            file_type (Union[str, int]): The file type identifier. This can be either a string representing a file
+            extension (e.g. 'bmp') or an integer corresponding to a file type (e.g. 29).
 
         Returns:
-            file_type_info (str): The file type information(empty string returned when id not found or 0 returned when unable to determine file id from extension).
+            - file_type_info (Union[int, str]): Depending on the input 'file_type':
+                - If `file_type` is a string (e.g. 'bmp'):
+                    - If the file type is recognised, returns an integer corresponding to that file type.
+                    - If the file type is not recognised, returns 0.
+                - If `file_type` is an integer (e.g. 29):
+                    - If the integer corresponds to a recognised file type, returns a more detailed string description
+                        of the file type (e.g. 'BMP Image').
+                    - If the integer does not match any recognised file type, returns an empty string.
         """
         # Validate arg types
         if not isinstance(file_type, (str, int)):
             raise TypeError(file_type)
-        if not isinstance(raise_unsupported, bool):
-            raise TypeError(raise_unsupported)
 
         with utils.CwdHandler(self.library_path):
             with self.new_session() as session:
@@ -1524,6 +1531,11 @@ class Editor(Library):
                     file_type_info = self.GW2GetFileTypeID(session, file_type)
 
                 return file_type_info
+
+    @utils.deprecated_function(replacement_function=get_file_type_info)
+    def get_file_info(self, *args, **kwargs):
+        """ Deprecated in 1.0.6. Use get_file_type_info. """
+        pass
 
     def _GW2RegisterReportFile(self, session: int, output_file: str):
         """ Register an output report file path for the given session.
@@ -1689,15 +1701,15 @@ class Editor(Library):
 
         return gw_return_object
 
-    def get_all_id_info(self, output_file: Optional[str] = None, raise_unsupported: bool = True):
+    def get_all_id_info(self, output_file: Optional[str] = None, raise_unsupported: bool = True) -> str:
         """ Retrieves the XML containing all the Issue ID ranges with their group descriptions
 
         Args:
-            output_file (Optional[str], optional): The output file path where the analysis file will be written.
+            output_file (Optional[str]): The output file path where the analysis file will be written.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
-            all_id_info (str): A string analysis report containing all the id info.
+            all_id_info (str): A string XML analysis report containing all id info.
         """
         # Validate arg types
         if not isinstance(output_file, (type(None), str)):
@@ -1770,15 +1782,15 @@ class Editor(Library):
 
         return gw_return_object
 
-    def file_session_status_message(self, session: int, raise_unsupported: bool = True):
-        """ Retrieves the Glasswall Session Status message. Gives a high level indication of the processing that was carried out on the last document processed by the library
+    def file_session_status_message(self, session: int, raise_unsupported: bool = True) -> str:
+        """ Retrieves the Glasswall session status message. Gives a high level indication of the processing that was carried out.
 
         Args:
             session (int): The session integer.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
-            gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'status' and 'message' indicating the result of the function call.
+            result.message (str):The file session status message.
         """
         # Validate arg types
         if not isinstance(session, int):
@@ -1820,10 +1832,10 @@ class Editor(Library):
         return licence_details
 
     def licence_details(self):
-        """ Returns a human readable text string representing the relevant information contained in the licence.
+        """ Returns a string containing details of the licence.
 
         Returns:
-            result (str): A human readable text string representing the relevant information contained in the licence.
+            result (str): A string containing details of the licence.
         """
         with self.new_session() as session:
             result = self._GW2LicenceDetails(session)
