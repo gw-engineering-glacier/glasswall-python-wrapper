@@ -1825,10 +1825,10 @@ class Editor(Library):
         return licence_details
 
     def licence_details(self):
-        """ Returns a human readable text string representing the relevant information contained in the licence.
+        """ Returns a string containing details of the licence.
 
         Returns:
-            result (str): A human readable text string representing the relevant information contained in the licence.
+            result (str): A string containing details of the licence.
         """
         with self.new_session() as session:
             result = self._GW2LicenceDetails(session)
