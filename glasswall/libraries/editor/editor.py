@@ -359,11 +359,12 @@ class Editor(Library):
             policy_format (int): The format of the content management policy. 0=XML.
 
         Returns:
-            If input_file is a str file path:
-                gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'input_file', 'policy_format', 'status'.
+            - result (glasswall.GwReturnObj): Depending on the input 'input_file':
+                - If input_file is a str file path:
+                    - gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'input_file', 'policy_format', 'status'.
 
-            If input_file is a file in memory:
-                gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'policy_format', 'status'.
+                - If input_file is a file in memory:
+                    - gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'policy_format', 'status'.
         """
         # Validate type
         if not isinstance(session, int):
