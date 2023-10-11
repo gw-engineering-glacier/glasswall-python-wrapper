@@ -570,7 +570,7 @@ class Editor(Library):
 
         Args:
             session (int): The session integer.
-            output_file (Optional[str], optional): If specified, during run session the file will be written to output_file, otherwise the file will be written to the glasswall.GwReturnObj 'buffer' and 'buffer_length' attributes.
+            output_file (Optional[str]): If specified, during run session the file will be written to output_file, otherwise the file will be written to the glasswall.GwReturnObj 'buffer' and 'buffer_length' attributes.
 
         Returns:
             gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attribute 'status' indicating the result of the function call. If output_file is None (memory mode), 'buffer', and 'buffer_length' are included containing the file content and file size.
@@ -667,7 +667,7 @@ class Editor(Library):
 
         Args:
             session (int): The session integer.
-            output_file (Optional[str], optional): Default None. The file path where the analysis will be written. None returns the analysis as bytes.
+            output_file (Optional[str]): Default None. The file path where the analysis will be written. None returns the analysis as bytes.
 
         Returns:
             gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'status', 'session', 'analysis_format'. If output_file is None (memory mode), 'buffer', and 'buffer_length' are included containing the file content and file size. If output_file is not None (file mode) 'output_file' is included.
@@ -696,7 +696,7 @@ class Editor(Library):
 
         Args:
             input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
-            output_file (Optional[str], optional): The output file path where the protected file will be written.
+            output_file (Optional[str]): The output file path where the protected file will be written.
             content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy], optional): The content management policy to apply to the session.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
@@ -810,7 +810,7 @@ class Editor(Library):
 
         Args:
             input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
-            output_file (Optional[str], optional): The output file path where the analysis file will be written.
+            output_file (Optional[str]): The output file path where the analysis file will be written.
             content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy], optional): The content management policy to apply to the session.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
@@ -983,7 +983,7 @@ class Editor(Library):
 
         Args:
             session (int): The session integer.
-            output_file (Optional[str], optional): Default None. The file path where the export will be written. None exports the file in memory.
+            output_file (Optional[str]): Default None. The file path where the export will be written. None exports the file in memory.
 
         Returns:
             gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attribute 'status' indicating the result of the function call and 'session', the session integer. If output_file is None (memory mode), 'buffer', and 'buffer_length' are included containing the file content and file size.
@@ -1012,7 +1012,7 @@ class Editor(Library):
 
         Args:
             input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
-            output_file (Optional[str], optional): The output file path where the .zip file will be written.
+            output_file (Optional[str]): The output file path where the .zip file will be written.
             content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy], optional): The content management policy to apply to the session.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
@@ -1221,7 +1221,7 @@ class Editor(Library):
 
         Args:
             input_file (Union[str, bytes, bytearray, io.BytesIO]): The .zip input file path or bytes.
-            output_file (Optional[str], optional): The output file path where the constructed file will be written.
+            output_file (Optional[str]): The output file path where the constructed file will be written.
             content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.policy.Policy], optional): The content management policy to apply to the session.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
@@ -1698,7 +1698,7 @@ class Editor(Library):
         """ Retrieves the XML containing all the Issue ID ranges with their group descriptions
 
         Args:
-            output_file (Optional[str], optional): The output file path where the analysis file will be written.
+            output_file (Optional[str]): The output file path where the analysis file will be written.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
