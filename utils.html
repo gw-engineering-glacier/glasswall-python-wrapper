@@ -622,7 +622,23 @@ def rename_kwargs(func_name: str, kwargs: Dict[str, Any], aliases: Dict[str, str
                 category=DeprecationWarning,
                 stacklevel=3,
             )
-            kwargs[new] = kwargs.pop(alias)</code></pre>
+            kwargs[new] = kwargs.pop(alias)
+
+
+def deprecated_function(replacement_function):
+    def decorator(f: Callable):
+        @functools.wraps(f)
+        def wrapper(*args, **kwargs):
+            warnings.warn(
+                message=f&#34;Call to deprecated method: &#39;{f.__name__}&#39;. Use &#39;{replacement_function.__name__}&#39; instead.&#34;,
+                category=DeprecationWarning,
+                stacklevel=3
+            )
+            return replacement_function(*args, **kwargs)
+
+        return wrapper
+
+    return decorator</code></pre>
 </details>
 </section>
 <section>
@@ -902,6 +918,31 @@ def myfunc(new_arg):
         return wrapper
 
     return deco</code></pre>
+</details>
+</dd>
+<dt id="glasswall.utils.deprecated_function"><code class="name flex">
+<span>def <span class="ident">deprecated_function</span></span>(<span>replacement_function)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def deprecated_function(replacement_function):
+    def decorator(f: Callable):
+        @functools.wraps(f)
+        def wrapper(*args, **kwargs):
+            warnings.warn(
+                message=f&#34;Call to deprecated method: &#39;{f.__name__}&#39;. Use &#39;{replacement_function.__name__}&#39; instead.&#34;,
+                category=DeprecationWarning,
+                stacklevel=3
+            )
+            return replacement_function(*args, **kwargs)
+
+        return wrapper
+
+    return decorator</code></pre>
 </details>
 </dd>
 <dt id="glasswall.utils.flatten_list"><code class="name flex">
@@ -1644,6 +1685,7 @@ print(file_paths)</p></div>
 <li><code><a title="glasswall.utils.delete_directory" href="#glasswall.utils.delete_directory">delete_directory</a></code></li>
 <li><code><a title="glasswall.utils.delete_empty_subdirectories" href="#glasswall.utils.delete_empty_subdirectories">delete_empty_subdirectories</a></code></li>
 <li><code><a title="glasswall.utils.deprecated_alias" href="#glasswall.utils.deprecated_alias">deprecated_alias</a></code></li>
+<li><code><a title="glasswall.utils.deprecated_function" href="#glasswall.utils.deprecated_function">deprecated_function</a></code></li>
 <li><code><a title="glasswall.utils.flatten_list" href="#glasswall.utils.flatten_list">flatten_list</a></code></li>
 <li><code><a title="glasswall.utils.get_file_type" href="#glasswall.utils.get_file_type">get_file_type</a></code></li>
 <li><code><a title="glasswall.utils.get_libraries" href="#glasswall.utils.get_libraries">get_libraries</a></code></li>
