@@ -474,11 +474,12 @@ class Editor(Library):
             input_file (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
 
         Returns:
-            If input_file is a str file path:
-                gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'input_file', 'status'.
+            - result (glasswall.GwReturnObj): Depending on the input 'input_file':
+                - If input_file is a str file path:
+                    - gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'input_file', 'status'.
 
-            If input_file is a file in memory:
-                gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'status'.
+                - If input_file is a file in memory:
+                    - gw_return_object (glasswall.GwReturnObj): A GwReturnObj instance with the attributes 'session', 'buffer', 'buffer_length', 'status'.
         """
         if not isinstance(input_file, (str, bytes, bytearray, io.BytesIO,)):
             raise TypeError(input_file)
