@@ -1499,21 +1499,25 @@ class Editor(Library):
 
         return file_type_id
 
-    def get_file_info(self, file_type: Union[str, int], raise_unsupported: bool = True):
-        """ Get the Glasswall file type id on providing a file extension or get the formal name of a file corresponding to the Glasswall file type id.
+    def get_file_type_info(self, file_type: Union[str, int]):
+        """ Retrieve information about a file type based on its identifier.
 
         Args:
-            file_type (Union[str, bytes, bytearray, io.BytesIO]): The input file path or bytes.
-            raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
+            file_type (Union[str, int]): The file type identifier. This can be either a string representing a file extension (e.g. 'bmp') or an integer corresponding to a file type (e.g. 29).
 
         Returns:
-            file_type_info (str): The file type information(empty string returned when id not found or 0 returned when unable to determine file id from extension).
+            - file_type_info (Union[int, str]): Depending on the input 'file_type':
+                - If `file_type` is a string (e.g. 'bmp'):
+                    - If the file type is recognised, returns an integer corresponding to that file type.
+                    - If the file type is not recognised, returns 0.
+                - If `file_type` is an integer (e.g. 29):
+                    - If the integer corresponds to a recognised file type, returns a more detailed string description of
+                        the file type (e.g. 'BMP Image').
+                    - If the integer does not match any recognised file type, returns an empty string.
         """
         # Validate arg types
         if not isinstance(file_type, (str, int)):
             raise TypeError(file_type)
-        if not isinstance(raise_unsupported, bool):
-            raise TypeError(raise_unsupported)
 
         with utils.CwdHandler(self.library_path):
             with self.new_session() as session:
