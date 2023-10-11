@@ -1532,6 +1532,11 @@ class Editor(Library):
 
                 return file_type_info
 
+    @utils.deprecated_function(replacement_function=get_file_type_info)
+    def get_file_info(self, *args, **kwargs):
+        """ Deprecated in 1.0.6. Use get_file_type_info. """
+        pass
+
     def _GW2RegisterReportFile(self, session: int, output_file: str):
         """ Register an output report file path for the given session.
 
