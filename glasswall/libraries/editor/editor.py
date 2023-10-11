@@ -1503,7 +1503,8 @@ class Editor(Library):
         """ Retrieve information about a file type based on its identifier.
 
         Args:
-            file_type (Union[str, int]): The file type identifier. This can be either a string representing a file extension (e.g. 'bmp') or an integer corresponding to a file type (e.g. 29).
+            file_type (Union[str, int]): The file type identifier. This can be either a string representing a file
+            extension (e.g. 'bmp') or an integer corresponding to a file type (e.g. 29).
 
         Returns:
             - file_type_info (Union[int, str]): Depending on the input 'file_type':
@@ -1511,8 +1512,8 @@ class Editor(Library):
                     - If the file type is recognised, returns an integer corresponding to that file type.
                     - If the file type is not recognised, returns 0.
                 - If `file_type` is an integer (e.g. 29):
-                    - If the integer corresponds to a recognised file type, returns a more detailed string description of
-                        the file type (e.g. 'BMP Image').
+                    - If the integer corresponds to a recognised file type, returns a more detailed string description
+                        of the file type (e.g. 'BMP Image').
                     - If the integer does not match any recognised file type, returns an empty string.
         """
         # Validate arg types
