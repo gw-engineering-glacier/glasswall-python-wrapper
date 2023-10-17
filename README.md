@@ -168,7 +168,11 @@ Subclasses of the `glasswall.content_management.policies.Policy` class can be us
 
 Some examples of content management policies are below. Note that if a content management policy is required but has not been specified with the keyword argument `content_management_policy` then the default content management policy will be used.
 
-Content management policies can be specified using subclasses of `Policy`:
+
+Content management policies can be specified using subclasses of the `Policy` class:
+
+<details>
+    <summary>Expand setting an Editor policy</summary>
 
 ```py
 import glasswall
@@ -184,7 +188,12 @@ editor.protect_directory(
 )
 ```
 
-or loaded from a file path:
+</details>
+
+...or loaded from a file path:
+
+<details>
+    <summary>Expand setting an Editor policy from file path</summary>
 
 ```py
 import glasswall
@@ -200,13 +209,18 @@ editor.protect_directory(
 )
 ```
 
-Default sanitise all Editor policy
+</details>
+
+Some examples of policies and how to create them using the Policy subclasses are shown below.
+
+<details>
+    <summary>Expand Editor default sanitise all policy</summary>
 
 ```py
 import glasswall
 
 # Print the default Editor content management policy
-print(glasswall.content_management.policies.Editor())
+print(glasswall.content_management.policies.Editor(default="sanitise"))
 ```
 
 ```xml
@@ -263,7 +277,11 @@ print(glasswall.content_management.policies.Editor())
 </config>
 ```
 
-Custom Rebuild policy
+</details>
+
+
+<details>
+    <summary>Expand Rebuild custom allow all policy</summary>
 
 ```py
 import glasswall
@@ -339,6 +357,215 @@ print(glasswall.content_management.policies.Rebuild(
     </xlsConfig>
 </config>
 ```
+
+</details>
+
+Elements within a content management policy may have attributes. Attributes can be set by prefixing a key with the `@` character. In the below example the `recursionDepth` attribute is set with a value of `"30"`.
+
+<details>
+    <summary>Expand Archive Manager custom recursionDepth policy</summary>
+
+```py
+import glasswall
+
+# Print a custom Archive Manager content management policy with a default of
+# sanitise and an archive default of process. Set the recursionDepth attribute
+# to 30. Discard any bmp files in the archive.
+print(glasswall.content_management.policies.ArchiveManager(
+    default="sanitise",
+    default_archive_manager="process",
+    config={
+        "archiveConfig": {
+            "@recursionDepth": "30",
+            "bmp": "discard",
+        }
+    }
+))
+```
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <archiveConfig defaultCompression="zip" libVersion="core2" recursionDepth="30">
+        <bmp>discard</bmp>
+        <doc>process</doc>
+        <docx>process</docx>
+        <elf>process</elf>
+        <emf>process</emf>
+        <gif>process</gif>
+        <jpeg>process</jpeg>
+        <mp3>process</mp3>
+        <mp4>process</mp4>
+        <mpg>process</mpg>
+        <o>process</o>
+        <pdf>process</pdf>
+        <pe>process</pe>
+        <png>process</png>
+        <ppt>process</ppt>
+        <pptx>process</pptx>
+        <tiff>process</tiff>
+        <txt>process</txt>
+        <wav>process</wav>
+        <wmf>process</wmf>
+        <xls>process</xls>
+        <xlsx>process</xlsx>
+    </archiveConfig>
+    <pdfConfig>
+        <acroform>sanitise</acroform>
+        <actions_all>sanitise</actions_all>
+        <digital_signatures>sanitise</digital_signatures>
+        <embedded_files>sanitise</embedded_files>
+        <embedded_images>sanitise</embedded_images>
+        <external_hyperlinks>sanitise</external_hyperlinks>
+        <internal_hyperlinks>sanitise</internal_hyperlinks>
+        <javascript>sanitise</javascript>
+        <metadata>sanitise</metadata>
+    </pdfConfig>
+    <pptConfig>
+        <embedded_files>sanitise</embedded_files>
+        <embedded_images>sanitise</embedded_images>
+        <external_hyperlinks>sanitise</external_hyperlinks>
+        <internal_hyperlinks>sanitise</internal_hyperlinks>
+        <javascript>sanitise</javascript>
+        <macros>sanitise</macros>
+        <metadata>sanitise</metadata>
+        <review_comments>sanitise</review_comments>
+    </pptConfig>
+    <sysConfig>
+        <export_embedded_images>true</export_embedded_images>
+        <interchange_best_compression>false</interchange_best_compression>
+        <interchange_pretty>false</interchange_pretty>
+        <interchange_type>sisl</interchange_type>
+        <run_mode>enablerebuild</run_mode>
+    </sysConfig>
+    <tiffConfig>
+        <geotiff>sanitise</geotiff>
+    </tiffConfig>
+    <wordConfig>
+        <dynamic_data_exchange>sanitise</dynamic_data_exchange>
+        <embedded_files>sanitise</embedded_files>
+        <embedded_images>sanitise</embedded_images>
+        <external_hyperlinks>sanitise</external_hyperlinks>
+        <internal_hyperlinks>sanitise</internal_hyperlinks>
+        <macros>sanitise</macros>
+        <metadata>sanitise</metadata>
+        <review_comments>sanitise</review_comments>
+    </wordConfig>
+    <xlsConfig>
+        <dynamic_data_exchange>sanitise</dynamic_data_exchange>
+        <embedded_files>sanitise</embedded_files>
+        <embedded_images>sanitise</embedded_images>
+        <external_hyperlinks>sanitise</external_hyperlinks>
+        <internal_hyperlinks>sanitise</internal_hyperlinks>
+        <macros>sanitise</macros>
+        <metadata>sanitise</metadata>
+        <review_comments>sanitise</review_comments>
+    </xlsConfig>
+</config>
+```
+
+</details>
+
+
+<details>
+    <summary>Expand Word Search custom policy</summary>
+
+```py
+import glasswall
+
+# Print a custom Word Search content management policy with a default of
+# allow. Redact instances of the string "lorem" by replacing each character
+# with an asterisk, and redact instances of the string "ipsum" by replacing
+# each character with the letter "X".
+print(glasswall.content_management.policies.WordSearch(
+    default="allow",
+    config={
+        "textSearchConfig": {
+            "textList": [
+                {"name": "textItem", "switches": [
+                    {"name": "text", "value": "lorem"},
+                    {"name": "textSetting", "@replacementChar": "*", "value": "redact"},
+                ]},
+                {"name": "textItem", "switches": [
+                    {"name": "text", "value": "ipsum"},
+                    {"name": "textSetting", "@replacementChar": "X", "value": "redact"},
+                ]},
+            ]
+        }
+    }
+))
+```
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <pdfConfig>
+        <acroform>allow</acroform>
+        <actions_all>allow</actions_all>
+        <digital_signatures>allow</digital_signatures>
+        <embedded_files>allow</embedded_files>
+        <embedded_images>allow</embedded_images>
+        <external_hyperlinks>allow</external_hyperlinks>
+        <internal_hyperlinks>allow</internal_hyperlinks>
+        <javascript>allow</javascript>
+        <metadata>allow</metadata>
+    </pdfConfig>
+    <pptConfig>
+        <embedded_files>allow</embedded_files>
+        <embedded_images>allow</embedded_images>
+        <external_hyperlinks>allow</external_hyperlinks>
+        <internal_hyperlinks>allow</internal_hyperlinks>
+        <javascript>allow</javascript>
+        <macros>allow</macros>
+        <metadata>allow</metadata>
+        <review_comments>allow</review_comments>
+    </pptConfig>
+    <sysConfig>
+        <export_embedded_images>true</export_embedded_images>
+        <interchange_best_compression>false</interchange_best_compression>
+        <interchange_pretty>false</interchange_pretty>
+        <interchange_type>xml</interchange_type>
+        <run_mode>enablerebuild</run_mode>
+    </sysConfig>
+    <textSearchConfig libVersion="core2">
+        <textList>
+            <textItem>
+                <text>lorem</text>
+                <textSetting replacementChar="*">redact</textSetting>
+            </textItem>
+            <textItem>
+                <text>ipsum</text>
+                <textSetting replacementChar="X">redact</textSetting>
+            </textItem>
+        </textList>
+    </textSearchConfig>
+    <tiffConfig>
+        <geotiff>allow</geotiff>
+    </tiffConfig>
+    <wordConfig>
+        <dynamic_data_exchange>allow</dynamic_data_exchange>
+        <embedded_files>allow</embedded_files>
+        <embedded_images>allow</embedded_images>
+        <external_hyperlinks>allow</external_hyperlinks>
+        <internal_hyperlinks>allow</internal_hyperlinks>
+        <macros>allow</macros>
+        <metadata>allow</metadata>
+        <review_comments>allow</review_comments>
+    </wordConfig>
+    <xlsConfig>
+        <dynamic_data_exchange>allow</dynamic_data_exchange>
+        <embedded_files>allow</embedded_files>
+        <embedded_images>allow</embedded_images>
+        <external_hyperlinks>allow</external_hyperlinks>
+        <internal_hyperlinks>allow</internal_hyperlinks>
+        <macros>allow</macros>
+        <metadata>allow</metadata>
+        <review_comments>allow</review_comments>
+    </xlsConfig>
+</config>
+```
+
+</details>
 
 ---
 
