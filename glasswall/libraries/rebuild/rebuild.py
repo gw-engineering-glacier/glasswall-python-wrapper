@@ -497,25 +497,15 @@ class Rebuild(Library):
                     ct.byref(ct_output_size)
                 )
 
-            input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
-            if status not in successes.success_codes:
-                log.error(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {status}\n\tGWFileErrorMsg: {self.GWFileErrorMsg()}")
-                if raise_unsupported:
-                    raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
-                else:
-                    file_bytes = None
+            file_bytes = None
+            if isinstance(input_file, str) and isinstance(output_file, str):
+                # file to file, read the bytes of the file that Rebuild has already written
+                if os.path.isfile(output_file):
+                    with open(output_file, "rb") as f:
+                        file_bytes = f.read()
             else:
-                log.debug(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {status}")
-                if isinstance(input_file, str) and isinstance(output_file, str):
-                    # file to file, read the bytes of the file that Rebuild has already written
-                    if not os.path.isfile(output_file):
-                        log.error(f"Rebuild returned success code: {status} but no output file was found: {output_file}")
-                        file_bytes = None
-                    else:
-                        with open(output_file, "rb") as f:
-                            file_bytes = f.read()
-                else:
-                    # file to memory, memory to memory
+                # file to memory, memory to memory
+                if ct_output_buffer and ct_output_size:
                     file_bytes = utils.buffer_to_bytes(
                         ct_output_buffer,
                         ct_output_size
@@ -525,6 +515,14 @@ class Rebuild(Library):
                         # no Rebuild function exists for memory to file, write the memory to file ourselves
                         with open(output_file, "wb") as f:
                             f.write(file_bytes)
+
+            input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
+            if status not in successes.success_codes:
+                log.error(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {status}\n\tGWFileErrorMsg: {self.GWFileErrorMsg()}")
+                if raise_unsupported:
+                    raise errors.error_codes.get(status, errors.UnknownErrorCode)(status)
+            else:
+                log.debug(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {status}")
 
             return file_bytes
 
