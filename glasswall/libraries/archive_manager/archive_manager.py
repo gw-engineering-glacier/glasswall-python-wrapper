@@ -148,7 +148,7 @@ class ArchiveManager(Library):
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
-            gw_return_object (glasswall.GwReturnObj): An instance of class glasswall.GwReturnObj containing attributes: "status" (int), "output_file" (bytes), "output_report" (bytes)
+            gw_return_object (glasswall.GwReturnObj): An instance of class glasswall.GwReturnObj containing attributes including: "status" (int), "output_file" (bytes), "output_report" (bytes)
         """
         # Validate arg types
         if not isinstance(input_file, (str, bytes, bytearray, io.BytesIO)):
@@ -299,7 +299,7 @@ class ArchiveManager(Library):
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
-            gw_return_object (glasswall.GwReturnObj): An instance of class glasswall.GwReturnObj containing attributes: "status" (int), "output_file" (bytes), "output_report" (bytes)
+            gw_return_object (glasswall.GwReturnObj): An instance of class glasswall.GwReturnObj containing attributes including: "status" (int), "output_file" (bytes), "output_report" (bytes)
         """
         # Validate arg types
         if not isinstance(input_file, (str, bytes, bytearray, io.BytesIO)):
@@ -646,7 +646,7 @@ class ArchiveManager(Library):
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
-            gw_return_object (glasswall.GwReturnObj): An instance of class glasswall.GwReturnObj containing attributes: "status" (int), "output_file" (bytes), "output_report" (bytes)
+            gw_return_object (glasswall.GwReturnObj): An instance of class glasswall.GwReturnObj containing attributes including: "status" (int), "output_file" (bytes), "output_report" (bytes)
         """
         # Validate arg types
         if not isinstance(input_file, (str, bytes, bytearray, io.BytesIO)):
@@ -798,7 +798,7 @@ class ArchiveManager(Library):
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
-            gw_return_object (glasswall.GwReturnObj): An instance of class glasswall.GwReturnObj containing attributes: "status" (int), "output_file" (bytes), "output_report" (bytes)
+            gw_return_object (glasswall.GwReturnObj): An instance of class glasswall.GwReturnObj containing attributes including: "status" (int), "output_file" (bytes), "output_report" (bytes)
         """
         # Validate arg types
         if not isinstance(input_file, (str, bytes, bytearray, io.BytesIO)):
