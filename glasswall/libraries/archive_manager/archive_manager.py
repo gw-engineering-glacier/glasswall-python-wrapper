@@ -908,7 +908,7 @@ class ArchiveManager(Library):
 
         return gw_return_object
 
-    def import_directory(self, input_directory: str, output_directory: Optional[str], output_report_directory: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager] = None, include_analysis_report: Optional[bool] = True, raise_unsupported: bool = True):
+    def import_directory(self, input_directory: str, output_directory: Optional[str], output_report_directory: Optional[str] = None, content_management_policy: Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager] = None, include_analysis_report: Optional[bool] = False, raise_unsupported: bool = True):
         """ Calls import_archive on each file in input_directory. The imported archives are written to output_directory maintaining the same directory structure as input_directory.
 
         Args:
@@ -916,7 +916,7 @@ class ArchiveManager(Library):
             output_directory (Optional[str], optional): Default None. If str, the output directory where the archives will be written.
             output_report_directory (Optional[str], optional): Default None. If str, the output directory where xml reports for each archive will be written.
             content_management_policy (Union[None, str, bytes, bytearray, io.BytesIO, glasswall.content_management.policies.ArchiveManager], optional): The content management policy to apply.
-            include_analysis_report (Optional[bool], optional): Default True. If True, write the analysis report into the imported archive.
+            include_analysis_report (Optional[bool], optional): Default False. If True, write the analysis report into the imported archive.
             raise_unsupported (bool, optional): Default True. Raise exceptions when Glasswall encounters an error. Fail silently if False.
 
         Returns:
