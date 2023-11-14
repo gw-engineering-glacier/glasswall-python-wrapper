@@ -161,9 +161,10 @@ class ArchiveManager(Library):
             raise TypeError(content_management_policy)
 
         # Convert string path arguments to absolute paths
+        if isinstance(input_file, str):
+            input_file = os.path.abspath(input_file)
         if isinstance(output_file, str):
             output_file = os.path.abspath(output_file)
-
         if isinstance(output_report, str):
             output_report = os.path.abspath(output_report)
 
@@ -186,38 +187,61 @@ class ArchiveManager(Library):
 
         # API function declaration
         self.library.GwFileAnalysisArchive.argtypes = [
-            ct.c_void_p,
-            ct.c_size_t,
-            ct.POINTER(ct.c_void_p),
-            ct.POINTER(ct.c_size_t),
-            ct.POINTER(ct.c_void_p),
-            ct.POINTER(ct.c_size_t),
-            ct.c_char_p
+            ct.c_void_p,  # void *inputBuffer
+            ct.c_size_t,  # size_t inputBufferLength
+            ct.POINTER(ct.c_void_p),  # void **outputFileBuffer
+            ct.POINTER(ct.c_size_t),  # size_t *outputFileBufferLength
+            ct.POINTER(ct.c_void_p),  # void **outputAnalysisReportBuffer
+            ct.POINTER(ct.c_size_t),  # size_t *outputAnalysisReportBufferLength
+            ct.c_char_p  # const char *xmlConfigString
         ]
 
         # Variable initialisation
-        input_buffer_bytearray = bytearray(input_file_bytes)
-
-        ct_input_buffer = (ct.c_ubyte * len(input_buffer_bytearray)).from_buffer(input_buffer_bytearray)  # void *inputBuffer
-        ct_input_buffer_length = ct.c_size_t(len(input_file_bytes))  # size_t inputBufferLength
-        ct_output_buffer = ct.c_void_p()  # void **outputFileBuffer
-        ct_output_buffer_length = ct.c_size_t()  # size_t *outputFileBufferLength
-        ct_output_report_buffer = ct.c_void_p()  # void **outputAnalysisReportBuffer
-        ct_output_report_buffer_length = ct.c_size_t()  # size_t *outputAnalysisReportBufferLength
-        ct_content_management_policy = ct.c_char_p(content_management_policy.encode())  # const char *xmlConfigString
         gw_return_object = glasswall.GwReturnObj()
+        gw_return_object.input_buffer = ct.create_string_buffer(input_file_bytes)
+        gw_return_object.input_buffer_length = ct.c_size_t(len(input_file_bytes))
+        gw_return_object.output_buffer = ct.c_void_p()
+        gw_return_object.output_buffer_length = ct.c_size_t()
+        gw_return_object.output_report_buffer = ct.c_void_p()
+        gw_return_object.output_report_buffer_length = ct.c_size_t()
+        gw_return_object.content_management_policy = ct.c_char_p(content_management_policy.encode())
 
         with utils.CwdHandler(new_cwd=self.library_path):
             # API call
             gw_return_object.status = self.library.GwFileAnalysisArchive(
-                ct.byref(ct_input_buffer),
-                ct_input_buffer_length,
-                ct.byref(ct_output_buffer),
-                ct.byref(ct_output_buffer_length),
-                ct.byref(ct_output_report_buffer),
-                ct.byref(ct_output_report_buffer_length),
-                ct_content_management_policy
+                gw_return_object.input_buffer,
+                gw_return_object.input_buffer_length,
+                ct.byref(gw_return_object.output_buffer),
+                ct.byref(gw_return_object.output_buffer_length),
+                ct.byref(gw_return_object.output_report_buffer),
+                ct.byref(gw_return_object.output_report_buffer_length),
+                gw_return_object.content_management_policy
             )
+
+        if gw_return_object.output_buffer and gw_return_object.output_buffer_length:
+            gw_return_object.output_file = utils.buffer_to_bytes(
+                gw_return_object.output_buffer,
+                gw_return_object.output_buffer_length
+            )
+        if gw_return_object.output_report_buffer and gw_return_object.output_report_buffer_length:
+            gw_return_object.output_report = utils.buffer_to_bytes(
+                gw_return_object.output_report_buffer,
+                gw_return_object.output_report_buffer_length
+            )
+
+        # Write output file
+        if hasattr(gw_return_object, "output_file"):
+            if isinstance(output_file, str):
+                os.makedirs(os.path.dirname(output_file), exist_ok=True)
+                with open(output_file, "wb") as f:
+                    f.write(gw_return_object.output_file)
+
+        # Write output report
+        if hasattr(gw_return_object, "output_report"):
+            if isinstance(output_report, str):
+                os.makedirs(os.path.dirname(output_report), exist_ok=True)
+                with open(output_report, "wb") as f:
+                    f.write(gw_return_object.output_report)
 
         input_file_repr = f"{type(input_file)} length {len(input_file)}" if isinstance(input_file, (bytes, bytearray,)) else input_file.__sizeof__() if isinstance(input_file, io.BytesIO) else input_file
         if gw_return_object.status not in successes.success_codes:
@@ -226,29 +250,6 @@ class ArchiveManager(Library):
                 raise errors.error_codes.get(gw_return_object.status, errors.UnknownErrorCode)(gw_return_object.status)
         else:
             log.debug(f"\n\tinput_file: {input_file_repr}\n\toutput_file: {output_file}\n\tstatus: {gw_return_object.status}")
-
-        gw_return_object.output_file = utils.buffer_to_bytes(
-            ct_output_buffer,
-            ct_output_buffer_length
-        )
-        gw_return_object.output_report = utils.buffer_to_bytes(
-            ct_output_report_buffer,
-            ct_output_report_buffer_length
-        )
-
-        # Write output file
-        if gw_return_object.output_file:
-            if isinstance(output_file, str):
-                os.makedirs(os.path.dirname(output_file), exist_ok=True)
-                with open(output_file, "wb") as f:
-                    f.write(gw_return_object.output_file)
-
-        # Write output report
-        if gw_return_object.output_report:
-            if isinstance(output_report, str):
-                os.makedirs(os.path.dirname(output_report), exist_ok=True)
-                with open(output_report, "wb") as f:
-                    f.write(gw_return_object.output_report)
 
         self.release()
 
