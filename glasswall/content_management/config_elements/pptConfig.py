@@ -24,7 +24,6 @@ class pptConfig(ConfigElement):
             self.switches_module.embedded_images(value=default),
             self.switches_module.external_hyperlinks(value=default),
             self.switches_module.internal_hyperlinks(value=default),
-            self.switches_module.javascript(value=default),
             self.switches_module.macros(value=default),
             self.switches_module.metadata(value=default),
             self.switches_module.review_comments(value=default),
