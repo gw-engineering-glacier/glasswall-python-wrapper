@@ -12,7 +12,7 @@ class Switch:
         self._indent = 0
         self.restrict_values = restrict_values or []
         self.name = name
-        self.value = value
+        self.value = value or ""
         self.attributes = attributes or {}
 
     def __str__(self):
