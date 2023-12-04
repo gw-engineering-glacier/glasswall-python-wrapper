@@ -5,9 +5,11 @@ from glasswall.content_management.config_elements.config_element import ConfigEl
 from glasswall.content_management.config_elements.gifConfig import gifConfig
 from glasswall.content_management.config_elements.pdfConfig import pdfConfig
 from glasswall.content_management.config_elements.pptConfig import pptConfig
+from glasswall.content_management.config_elements.svgConfig import svgConfig
 from glasswall.content_management.config_elements.sysConfig import sysConfig
 from glasswall.content_management.config_elements.textList import textList
 from glasswall.content_management.config_elements.textSearchConfig import textSearchConfig
 from glasswall.content_management.config_elements.tiffConfig import tiffConfig
+from glasswall.content_management.config_elements.webpConfig import webpConfig
 from glasswall.content_management.config_elements.wordConfig import wordConfig
 from glasswall.content_management.config_elements.xlsConfig import xlsConfig

@@ -17,11 +17,12 @@ class sysConfig(ConfigElement):
 
         self.switches_module = switches.sys
         self.default_switches = [
-            self.switches_module.interchange_type(value="sisl"),
-            self.switches_module.interchange_pretty(value="false"),
-            self.switches_module.interchange_best_compression(value="false"),
+            self.switches_module.enable_sha256(value="true"),
             self.switches_module.export_embedded_images(value="true"),
-            self.switches_module.run_mode(value="enablerebuild")
+            self.switches_module.interchange_best_compression(value="false"),
+            self.switches_module.interchange_pretty(value="false"),
+            self.switches_module.interchange_type(value="sisl"),
+            self.switches_module.run_mode(value="enablerebuild"),
         ]
 
         super().__init__(

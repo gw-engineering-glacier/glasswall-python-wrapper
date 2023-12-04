@@ -29,6 +29,8 @@ class pdfConfig(ConfigElement):
             self.switches_module.internal_hyperlinks(value=default),
             self.switches_module.javascript(value=default),
             self.switches_module.metadata(value=default),
+            self.switches_module.value_outside_reasonable_limits(value=default),
+            self.switches_module.watermark(value=""),
         ]
 
         super().__init__(
