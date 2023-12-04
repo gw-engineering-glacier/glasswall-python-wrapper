@@ -731,15 +731,6 @@ class Editor(Library):
         if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
             input_file = utils.as_bytes(input_file)
 
-        # Check that file type is supported
-        try:
-            self.determine_file_type(input_file=input_file)
-        except dft.errors.FileTypeEnumError:
-            if raise_unsupported:
-                raise
-            else:
-                return None
-
         with utils.CwdHandler(self.library_path):
             with self.new_session() as session:
                 content_management_policy = self.set_content_management_policy(session, content_management_policy)
@@ -844,15 +835,6 @@ class Editor(Library):
         # Convert memory inputs to bytes
         if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
             input_file = utils.as_bytes(input_file)
-
-        # Check that file type is supported
-        try:
-            self.determine_file_type(input_file=input_file)
-        except dft.errors.FileTypeEnumError:
-            if raise_unsupported:
-                raise
-            else:
-                return None
 
         with utils.CwdHandler(self.library_path):
             with self.new_session() as session:
@@ -1043,15 +1025,6 @@ class Editor(Library):
         # Convert memory inputs to bytes
         if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
             input_file = utils.as_bytes(input_file)
-
-        # Check that file type is supported
-        try:
-            self.determine_file_type(input_file=input_file)
-        except dft.errors.FileTypeEnumError:
-            if raise_unsupported:
-                raise
-            else:
-                return None
 
         with utils.CwdHandler(self.library_path):
             with self.new_session() as session:
@@ -1252,15 +1225,6 @@ class Editor(Library):
         # Convert memory inputs to bytes
         if isinstance(input_file, (bytes, bytearray, io.BytesIO)):
             input_file = utils.as_bytes(input_file)
-
-        # Check that file type is supported
-        try:
-            self.determine_file_type(input_file=input_file)
-        except dft.errors.FileTypeEnumError:
-            if raise_unsupported:
-                raise
-            else:
-                return None
 
         with utils.CwdHandler(self.library_path):
             with self.new_session() as session:
