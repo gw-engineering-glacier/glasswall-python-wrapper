@@ -29,15 +29,15 @@
 <pre><code class="python">from glasswall.content_management.switches.switch import Switch
 
 
-class interchange_type(Switch):
+class enable_sha256(Switch):
     def __init__(self, value: str):
         self.name = self.__class__.__name__
-        self.restrict_values = [&#34;sisl&#34;, &#34;xml&#34;]
+        self.restrict_values = [&#34;false&#34;, &#34;true&#34;]
         self.value = value
         super().__init__(name=self.name, value=self.value, restrict_values=self.restrict_values)
 
 
-class interchange_pretty(Switch):
+class export_embedded_images(Switch):
     def __init__(self, value: str):
         self.name = self.__class__.__name__
         self.restrict_values = [&#34;false&#34;, &#34;true&#34;]
@@ -53,10 +53,18 @@ class interchange_best_compression(Switch):
         super().__init__(name=self.name, value=self.value, restrict_values=self.restrict_values)
 
 
-class export_embedded_images(Switch):
+class interchange_pretty(Switch):
     def __init__(self, value: str):
         self.name = self.__class__.__name__
         self.restrict_values = [&#34;false&#34;, &#34;true&#34;]
+        self.value = value
+        super().__init__(name=self.name, value=self.value, restrict_values=self.restrict_values)
+
+
+class interchange_type(Switch):
+    def __init__(self, value: str):
+        self.name = self.__class__.__name__
+        self.restrict_values = [&#34;sisl&#34;, &#34;xml&#34;]
         self.value = value
         super().__init__(name=self.name, value=self.value, restrict_values=self.restrict_values)
 
@@ -78,6 +86,36 @@ class run_mode(Switch):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="glasswall.content_management.switches.sys.enable_sha256"><code class="flex name class">
+<span>class <span class="ident">enable_sha256</span></span>
+<span>(</span><span>value: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>A Content Management Policy switch which has a name and a value, and can have attributes.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class enable_sha256(Switch):
+    def __init__(self, value: str):
+        self.name = self.__class__.__name__
+        self.restrict_values = [&#34;false&#34;, &#34;true&#34;]
+        self.value = value
+        super().__init__(name=self.name, value=self.value, restrict_values=self.restrict_values)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="glasswall.content_management.switches.switch.Switch" href="switch.html#glasswall.content_management.switches.switch.Switch">Switch</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="glasswall.content_management.switches.switch.Switch" href="switch.html#glasswall.content_management.switches.switch.Switch">Switch</a></b></code>:
+<ul class="hlist">
+<li><code><a title="glasswall.content_management.switches.switch.Switch.text" href="switch.html#glasswall.content_management.switches.switch.Switch.text">text</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 <dt id="glasswall.content_management.switches.sys.export_embedded_images"><code class="flex name class">
 <span>class <span class="ident">export_embedded_images</span></span>
 <span>(</span><span>value: str)</span>
@@ -244,6 +282,9 @@ class run_mode(Switch):
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
+<li>
+<h4><code><a title="glasswall.content_management.switches.sys.enable_sha256" href="#glasswall.content_management.switches.sys.enable_sha256">enable_sha256</a></code></h4>
+</li>
 <li>
 <h4><code><a title="glasswall.content_management.switches.sys.export_embedded_images" href="#glasswall.content_management.switches.sys.export_embedded_images">export_embedded_images</a></code></h4>
 </li>

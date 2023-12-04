@@ -29,6 +29,14 @@
 <pre><code class="python">from glasswall.content_management.switches.switch import Switch
 
 
+class connections(Switch):
+    def __init__(self, value: str):
+        self.name = self.__class__.__name__
+        self.restrict_values = [&#34;allow&#34;, &#34;disallow&#34;, &#34;sanitise&#34;]
+        self.value = value
+        super().__init__(name=self.name, value=self.value, restrict_values=self.restrict_values)
+
+
 class dynamic_data_exchange(Switch):
     def __init__(self, value: str):
         self.name = self.__class__.__name__
@@ -102,6 +110,36 @@ class review_comments(Switch):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="glasswall.content_management.switches.xls.connections"><code class="flex name class">
+<span>class <span class="ident">connections</span></span>
+<span>(</span><span>value: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>A Content Management Policy switch which has a name and a value, and can have attributes.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class connections(Switch):
+    def __init__(self, value: str):
+        self.name = self.__class__.__name__
+        self.restrict_values = [&#34;allow&#34;, &#34;disallow&#34;, &#34;sanitise&#34;]
+        self.value = value
+        super().__init__(name=self.name, value=self.value, restrict_values=self.restrict_values)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="glasswall.content_management.switches.switch.Switch" href="switch.html#glasswall.content_management.switches.switch.Switch">Switch</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="glasswall.content_management.switches.switch.Switch" href="switch.html#glasswall.content_management.switches.switch.Switch">Switch</a></b></code>:
+<ul class="hlist">
+<li><code><a title="glasswall.content_management.switches.switch.Switch.text" href="switch.html#glasswall.content_management.switches.switch.Switch.text">text</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 <dt id="glasswall.content_management.switches.xls.dynamic_data_exchange"><code class="flex name class">
 <span>class <span class="ident">dynamic_data_exchange</span></span>
 <span>(</span><span>value: str)</span>
@@ -358,6 +396,9 @@ class review_comments(Switch):
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
+<li>
+<h4><code><a title="glasswall.content_management.switches.xls.connections" href="#glasswall.content_management.switches.xls.connections">connections</a></code></h4>
+</li>
 <li>
 <h4><code><a title="glasswall.content_management.switches.xls.dynamic_data_exchange" href="#glasswall.content_management.switches.xls.dynamic_data_exchange">dynamic_data_exchange</a></code></h4>
 </li>

@@ -98,6 +98,22 @@ class metadata(Switch):
         self.name = self.__class__.__name__
         self.restrict_values = [&#34;allow&#34;, &#34;disallow&#34;, &#34;sanitise&#34;]
         self.value = value
+        super().__init__(name=self.name, value=self.value, restrict_values=self.restrict_values)
+
+
+class value_outside_reasonable_limits(Switch):
+    def __init__(self, value: str):
+        self.name = self.__class__.__name__
+        self.restrict_values = [&#34;allow&#34;, &#34;disallow&#34;, &#34;sanitise&#34;]
+        self.value = value
+        super().__init__(name=self.name, value=self.value, restrict_values=self.restrict_values)
+
+
+class watermark(Switch):
+    def __init__(self, value: str):
+        self.name = self.__class__.__name__
+        self.restrict_values = None
+        self.value = value
         super().__init__(name=self.name, value=self.value, restrict_values=self.restrict_values)</code></pre>
 </details>
 </section>
@@ -380,6 +396,66 @@ class metadata(Switch):
 </li>
 </ul>
 </dd>
+<dt id="glasswall.content_management.switches.pdf.value_outside_reasonable_limits"><code class="flex name class">
+<span>class <span class="ident">value_outside_reasonable_limits</span></span>
+<span>(</span><span>value: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>A Content Management Policy switch which has a name and a value, and can have attributes.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class value_outside_reasonable_limits(Switch):
+    def __init__(self, value: str):
+        self.name = self.__class__.__name__
+        self.restrict_values = [&#34;allow&#34;, &#34;disallow&#34;, &#34;sanitise&#34;]
+        self.value = value
+        super().__init__(name=self.name, value=self.value, restrict_values=self.restrict_values)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="glasswall.content_management.switches.switch.Switch" href="switch.html#glasswall.content_management.switches.switch.Switch">Switch</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="glasswall.content_management.switches.switch.Switch" href="switch.html#glasswall.content_management.switches.switch.Switch">Switch</a></b></code>:
+<ul class="hlist">
+<li><code><a title="glasswall.content_management.switches.switch.Switch.text" href="switch.html#glasswall.content_management.switches.switch.Switch.text">text</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="glasswall.content_management.switches.pdf.watermark"><code class="flex name class">
+<span>class <span class="ident">watermark</span></span>
+<span>(</span><span>value: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>A Content Management Policy switch which has a name and a value, and can have attributes.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class watermark(Switch):
+    def __init__(self, value: str):
+        self.name = self.__class__.__name__
+        self.restrict_values = None
+        self.value = value
+        super().__init__(name=self.name, value=self.value, restrict_values=self.restrict_values)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="glasswall.content_management.switches.switch.Switch" href="switch.html#glasswall.content_management.switches.switch.Switch">Switch</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="glasswall.content_management.switches.switch.Switch" href="switch.html#glasswall.content_management.switches.switch.Switch">Switch</a></b></code>:
+<ul class="hlist">
+<li><code><a title="glasswall.content_management.switches.switch.Switch.text" href="switch.html#glasswall.content_management.switches.switch.Switch.text">text</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 </dl>
 </section>
 </article>
@@ -422,6 +498,12 @@ class metadata(Switch):
 </li>
 <li>
 <h4><code><a title="glasswall.content_management.switches.pdf.metadata" href="#glasswall.content_management.switches.pdf.metadata">metadata</a></code></h4>
+</li>
+<li>
+<h4><code><a title="glasswall.content_management.switches.pdf.value_outside_reasonable_limits" href="#glasswall.content_management.switches.pdf.value_outside_reasonable_limits">value_outside_reasonable_limits</a></code></h4>
+</li>
+<li>
+<h4><code><a title="glasswall.content_management.switches.pdf.watermark" href="#glasswall.content_management.switches.pdf.watermark">watermark</a></code></h4>
 </li>
 </ul>
 </li>

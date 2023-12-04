@@ -61,14 +61,6 @@ class internal_hyperlinks(Switch):
         super().__init__(name=self.name, value=self.value, restrict_values=self.restrict_values)
 
 
-class javascript(Switch):
-    def __init__(self, value: str):
-        self.name = self.__class__.__name__
-        self.restrict_values = [&#34;allow&#34;, &#34;disallow&#34;, &#34;sanitise&#34;]
-        self.value = value
-        super().__init__(name=self.name, value=self.value, restrict_values=self.restrict_values)
-
-
 class macros(Switch):
     def __init__(self, value: str):
         self.name = self.__class__.__name__
@@ -222,36 +214,6 @@ class review_comments(Switch):
 </li>
 </ul>
 </dd>
-<dt id="glasswall.content_management.switches.ppt.javascript"><code class="flex name class">
-<span>class <span class="ident">javascript</span></span>
-<span>(</span><span>value: str)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>A Content Management Policy switch which has a name and a value, and can have attributes.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class javascript(Switch):
-    def __init__(self, value: str):
-        self.name = self.__class__.__name__
-        self.restrict_values = [&#34;allow&#34;, &#34;disallow&#34;, &#34;sanitise&#34;]
-        self.value = value
-        super().__init__(name=self.name, value=self.value, restrict_values=self.restrict_values)</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="glasswall.content_management.switches.switch.Switch" href="switch.html#glasswall.content_management.switches.switch.Switch">Switch</a></li>
-</ul>
-<h3>Inherited members</h3>
-<ul class="hlist">
-<li><code><b><a title="glasswall.content_management.switches.switch.Switch" href="switch.html#glasswall.content_management.switches.switch.Switch">Switch</a></b></code>:
-<ul class="hlist">
-<li><code><a title="glasswall.content_management.switches.switch.Switch.text" href="switch.html#glasswall.content_management.switches.switch.Switch.text">text</a></code></li>
-</ul>
-</li>
-</ul>
-</dd>
 <dt id="glasswall.content_management.switches.ppt.macros"><code class="flex name class">
 <span>class <span class="ident">macros</span></span>
 <span>(</span><span>value: str)</span>
@@ -369,9 +331,6 @@ class review_comments(Switch):
 </li>
 <li>
 <h4><code><a title="glasswall.content_management.switches.ppt.internal_hyperlinks" href="#glasswall.content_management.switches.ppt.internal_hyperlinks">internal_hyperlinks</a></code></h4>
-</li>
-<li>
-<h4><code><a title="glasswall.content_management.switches.ppt.javascript" href="#glasswall.content_management.switches.ppt.javascript">javascript</a></code></h4>
 </li>
 <li>
 <h4><code><a title="glasswall.content_management.switches.ppt.macros" href="#glasswall.content_management.switches.ppt.macros">macros</a></code></h4>

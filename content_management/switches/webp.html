@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>glasswall.content_management.config_elements.sysConfig API documentation</title>
+<title>glasswall.content_management.switches.webp API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
@@ -19,45 +19,22 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>glasswall.content_management.config_elements.sysConfig</code></h1>
+<h1 class="title">Module <code>glasswall.content_management.switches.webp</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from glasswall.content_management import switches
-from glasswall.content_management.config_elements.config_element import ConfigElement
+<pre><code class="python">from glasswall.content_management.switches.switch import Switch
 
 
-class sysConfig(ConfigElement):
-    &#34;&#34;&#34; A sysConfig ConfigElement.
-
-    Key word arguments can be specified to change individual switch values:
-    sysConfig(interchange_type=&#34;sisl&#34;,interchange_pretty=&#34;true&#34;,)
-    &#34;&#34;&#34;
-
-    def __init__(self, attributes={}, **kwargs):
+class metadata(Switch):
+    def __init__(self, value: str):
         self.name = self.__class__.__name__
-        self.attributes = attributes
-
-        self.switches_module = switches.sys
-        self.default_switches = [
-            self.switches_module.enable_sha256(value=&#34;true&#34;),
-            self.switches_module.export_embedded_images(value=&#34;true&#34;),
-            self.switches_module.interchange_best_compression(value=&#34;false&#34;),
-            self.switches_module.interchange_pretty(value=&#34;false&#34;),
-            self.switches_module.interchange_type(value=&#34;sisl&#34;),
-            self.switches_module.run_mode(value=&#34;enablerebuild&#34;),
-        ]
-
-        super().__init__(
-            name=self.name,
-            attributes=self.attributes,
-            switches_module=self.switches_module,
-            default_switches=self.default_switches,
-            config=kwargs
-        )</code></pre>
+        self.restrict_values = [&#34;allow&#34;, &#34;disallow&#34;, &#34;sanitise&#34;]
+        self.value = value
+        super().__init__(name=self.name, value=self.value, restrict_values=self.restrict_values)</code></pre>
 </details>
 </section>
 <section>
@@ -69,59 +46,32 @@ class sysConfig(ConfigElement):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="glasswall.content_management.config_elements.sysConfig.sysConfig"><code class="flex name class">
-<span>class <span class="ident">sysConfig</span></span>
-<span>(</span><span>attributes={}, **kwargs)</span>
+<dt id="glasswall.content_management.switches.webp.metadata"><code class="flex name class">
+<span>class <span class="ident">metadata</span></span>
+<span>(</span><span>value: str)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>A sysConfig ConfigElement.</p>
-<p>Key word arguments can be specified to change individual switch values:
-sysConfig(interchange_type="sisl",interchange_pretty="true",)</p></div>
+<div class="desc"><p>A Content Management Policy switch which has a name and a value, and can have attributes.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class sysConfig(ConfigElement):
-    &#34;&#34;&#34; A sysConfig ConfigElement.
-
-    Key word arguments can be specified to change individual switch values:
-    sysConfig(interchange_type=&#34;sisl&#34;,interchange_pretty=&#34;true&#34;,)
-    &#34;&#34;&#34;
-
-    def __init__(self, attributes={}, **kwargs):
+<pre><code class="python">class metadata(Switch):
+    def __init__(self, value: str):
         self.name = self.__class__.__name__
-        self.attributes = attributes
-
-        self.switches_module = switches.sys
-        self.default_switches = [
-            self.switches_module.enable_sha256(value=&#34;true&#34;),
-            self.switches_module.export_embedded_images(value=&#34;true&#34;),
-            self.switches_module.interchange_best_compression(value=&#34;false&#34;),
-            self.switches_module.interchange_pretty(value=&#34;false&#34;),
-            self.switches_module.interchange_type(value=&#34;sisl&#34;),
-            self.switches_module.run_mode(value=&#34;enablerebuild&#34;),
-        ]
-
-        super().__init__(
-            name=self.name,
-            attributes=self.attributes,
-            switches_module=self.switches_module,
-            default_switches=self.default_switches,
-            config=kwargs
-        )</code></pre>
+        self.restrict_values = [&#34;allow&#34;, &#34;disallow&#34;, &#34;sanitise&#34;]
+        self.value = value
+        super().__init__(name=self.name, value=self.value, restrict_values=self.restrict_values)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="glasswall.content_management.config_elements.config_element.ConfigElement" href="config_element.html#glasswall.content_management.config_elements.config_element.ConfigElement">ConfigElement</a></li>
+<li><a title="glasswall.content_management.switches.switch.Switch" href="switch.html#glasswall.content_management.switches.switch.Switch">Switch</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="glasswall.content_management.config_elements.config_element.ConfigElement" href="config_element.html#glasswall.content_management.config_elements.config_element.ConfigElement">ConfigElement</a></b></code>:
+<li><code><b><a title="glasswall.content_management.switches.switch.Switch" href="switch.html#glasswall.content_management.switches.switch.Switch">Switch</a></b></code>:
 <ul class="hlist">
-<li><code><a title="glasswall.content_management.config_elements.config_element.ConfigElement.add_switch" href="config_element.html#glasswall.content_management.config_elements.config_element.ConfigElement.add_switch">add_switch</a></code></li>
-<li><code><a title="glasswall.content_management.config_elements.config_element.ConfigElement.get_switch_names" href="config_element.html#glasswall.content_management.config_elements.config_element.ConfigElement.get_switch_names">get_switch_names</a></code></li>
-<li><code><a title="glasswall.content_management.config_elements.config_element.ConfigElement.remove_switch" href="config_element.html#glasswall.content_management.config_elements.config_element.ConfigElement.remove_switch">remove_switch</a></code></li>
-<li><code><a title="glasswall.content_management.config_elements.config_element.ConfigElement.text" href="config_element.html#glasswall.content_management.config_elements.config_element.ConfigElement.text">text</a></code></li>
+<li><code><a title="glasswall.content_management.switches.switch.Switch.text" href="switch.html#glasswall.content_management.switches.switch.Switch.text">text</a></code></li>
 </ul>
 </li>
 </ul>
@@ -137,13 +87,13 @@ sysConfig(interchange_type="sisl",interchange_pretty="true",)</p></div>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="glasswall.content_management.config_elements" href="index.html">glasswall.content_management.config_elements</a></code></li>
+<li><code><a title="glasswall.content_management.switches" href="index.html">glasswall.content_management.switches</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="glasswall.content_management.config_elements.sysConfig.sysConfig" href="#glasswall.content_management.config_elements.sysConfig.sysConfig">sysConfig</a></code></h4>
+<h4><code><a title="glasswall.content_management.switches.webp.metadata" href="#glasswall.content_management.switches.webp.metadata">metadata</a></code></h4>
 </li>
 </ul>
 </li>

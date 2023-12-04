@@ -38,7 +38,7 @@ class Switch:
         self._indent = 0
         self.restrict_values = restrict_values or []
         self.name = name
-        self.value = value
+        self.value = value or &#34;&#34;
         self.attributes = attributes or {}
 
     def __str__(self):
@@ -102,7 +102,7 @@ class Switch:
         self._indent = 0
         self.restrict_values = restrict_values or []
         self.name = name
-        self.value = value
+        self.value = value or &#34;&#34;
         self.attributes = attributes or {}
 
     def __str__(self):
@@ -173,20 +173,26 @@ class Switch:
 <li><a title="glasswall.content_management.switches.pdf.internal_hyperlinks" href="pdf.html#glasswall.content_management.switches.pdf.internal_hyperlinks">internal_hyperlinks</a></li>
 <li><a title="glasswall.content_management.switches.pdf.javascript" href="pdf.html#glasswall.content_management.switches.pdf.javascript">javascript</a></li>
 <li><a title="glasswall.content_management.switches.pdf.metadata" href="pdf.html#glasswall.content_management.switches.pdf.metadata">metadata</a></li>
+<li><a title="glasswall.content_management.switches.pdf.value_outside_reasonable_limits" href="pdf.html#glasswall.content_management.switches.pdf.value_outside_reasonable_limits">value_outside_reasonable_limits</a></li>
+<li><a title="glasswall.content_management.switches.pdf.watermark" href="pdf.html#glasswall.content_management.switches.pdf.watermark">watermark</a></li>
 <li><a title="glasswall.content_management.switches.ppt.embedded_files" href="ppt.html#glasswall.content_management.switches.ppt.embedded_files">embedded_files</a></li>
 <li><a title="glasswall.content_management.switches.ppt.embedded_images" href="ppt.html#glasswall.content_management.switches.ppt.embedded_images">embedded_images</a></li>
 <li><a title="glasswall.content_management.switches.ppt.external_hyperlinks" href="ppt.html#glasswall.content_management.switches.ppt.external_hyperlinks">external_hyperlinks</a></li>
 <li><a title="glasswall.content_management.switches.ppt.internal_hyperlinks" href="ppt.html#glasswall.content_management.switches.ppt.internal_hyperlinks">internal_hyperlinks</a></li>
-<li><a title="glasswall.content_management.switches.ppt.javascript" href="ppt.html#glasswall.content_management.switches.ppt.javascript">javascript</a></li>
 <li><a title="glasswall.content_management.switches.ppt.macros" href="ppt.html#glasswall.content_management.switches.ppt.macros">macros</a></li>
 <li><a title="glasswall.content_management.switches.ppt.metadata" href="ppt.html#glasswall.content_management.switches.ppt.metadata">metadata</a></li>
 <li><a title="glasswall.content_management.switches.ppt.review_comments" href="ppt.html#glasswall.content_management.switches.ppt.review_comments">review_comments</a></li>
+<li><a title="glasswall.content_management.switches.svg.foreign_objects" href="svg.html#glasswall.content_management.switches.svg.foreign_objects">foreign_objects</a></li>
+<li><a title="glasswall.content_management.switches.svg.hyperlinks" href="svg.html#glasswall.content_management.switches.svg.hyperlinks">hyperlinks</a></li>
+<li><a title="glasswall.content_management.switches.svg.scripts" href="svg.html#glasswall.content_management.switches.svg.scripts">scripts</a></li>
+<li><a title="glasswall.content_management.switches.sys.enable_sha256" href="sys.html#glasswall.content_management.switches.sys.enable_sha256">enable_sha256</a></li>
 <li><a title="glasswall.content_management.switches.sys.export_embedded_images" href="sys.html#glasswall.content_management.switches.sys.export_embedded_images">export_embedded_images</a></li>
 <li><a title="glasswall.content_management.switches.sys.interchange_best_compression" href="sys.html#glasswall.content_management.switches.sys.interchange_best_compression">interchange_best_compression</a></li>
 <li><a title="glasswall.content_management.switches.sys.interchange_pretty" href="sys.html#glasswall.content_management.switches.sys.interchange_pretty">interchange_pretty</a></li>
 <li><a title="glasswall.content_management.switches.sys.interchange_type" href="sys.html#glasswall.content_management.switches.sys.interchange_type">interchange_type</a></li>
 <li><a title="glasswall.content_management.switches.sys.run_mode" href="sys.html#glasswall.content_management.switches.sys.run_mode">run_mode</a></li>
 <li><a title="glasswall.content_management.switches.tiff.geotiff" href="tiff.html#glasswall.content_management.switches.tiff.geotiff">geotiff</a></li>
+<li><a title="glasswall.content_management.switches.webp.metadata" href="webp.html#glasswall.content_management.switches.webp.metadata">metadata</a></li>
 <li><a title="glasswall.content_management.switches.word.dynamic_data_exchange" href="word.html#glasswall.content_management.switches.word.dynamic_data_exchange">dynamic_data_exchange</a></li>
 <li><a title="glasswall.content_management.switches.word.embedded_files" href="word.html#glasswall.content_management.switches.word.embedded_files">embedded_files</a></li>
 <li><a title="glasswall.content_management.switches.word.embedded_images" href="word.html#glasswall.content_management.switches.word.embedded_images">embedded_images</a></li>
@@ -195,6 +201,7 @@ class Switch:
 <li><a title="glasswall.content_management.switches.word.macros" href="word.html#glasswall.content_management.switches.word.macros">macros</a></li>
 <li><a title="glasswall.content_management.switches.word.metadata" href="word.html#glasswall.content_management.switches.word.metadata">metadata</a></li>
 <li><a title="glasswall.content_management.switches.word.review_comments" href="word.html#glasswall.content_management.switches.word.review_comments">review_comments</a></li>
+<li><a title="glasswall.content_management.switches.xls.connections" href="xls.html#glasswall.content_management.switches.xls.connections">connections</a></li>
 <li><a title="glasswall.content_management.switches.xls.dynamic_data_exchange" href="xls.html#glasswall.content_management.switches.xls.dynamic_data_exchange">dynamic_data_exchange</a></li>
 <li><a title="glasswall.content_management.switches.xls.embedded_files" href="xls.html#glasswall.content_management.switches.xls.embedded_files">embedded_files</a></li>
 <li><a title="glasswall.content_management.switches.xls.embedded_images" href="xls.html#glasswall.content_management.switches.xls.embedded_images">embedded_images</a></li>
