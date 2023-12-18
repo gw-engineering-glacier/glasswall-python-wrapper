@@ -426,6 +426,7 @@ class Editor(Library):
         gw_return_object = glasswall.GwReturnObj()
         gw_return_object.session = ct.c_size_t(session)
         gw_return_object.input_file = ct.c_char_p(input_file.encode("utf-8"))
+        gw_return_object.input_file_path = input_file
 
         # API call
         gw_return_object.status = self.library.GW2RegisterInputFile(
