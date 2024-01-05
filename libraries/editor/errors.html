@@ -128,6 +128,11 @@ class UnableToWriteAnalysisReport(EditorError):
     pass
 
 
+class InputTooLarge(EditorError):
+    &#34;&#34;&#34; Editor error code -19 &#34;&#34;&#34;
+    pass
+
+
 error_codes = {
     -1: GeneralFail,
     -2: UnexpectedEndOfFile,
@@ -146,7 +151,8 @@ error_codes = {
     -15: UnableToWriteExport,
     -16: FileRejected,
     -17: UnableToWriteExportTextDump,
-    -18: UnableToWriteAnalysisReport
+    -18: UnableToWriteAnalysisReport,
+    -19: InputTooLarge
 }</code></pre>
 </details>
 </section>
@@ -318,6 +324,27 @@ error_codes = {
 </summary>
 <pre><code class="python">class IncorrectSessionSetup(EditorError):
     &#34;&#34;&#34; Editor error code -4. &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="glasswall.libraries.editor.classes.EditorError" href="classes.html#glasswall.libraries.editor.classes.EditorError">EditorError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="glasswall.libraries.editor.errors.InputTooLarge"><code class="flex name class">
+<span>class <span class="ident">InputTooLarge</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Editor error code -19</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class InputTooLarge(EditorError):
+    &#34;&#34;&#34; Editor error code -19 &#34;&#34;&#34;
     pass</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -618,6 +645,9 @@ error_codes = {
 </li>
 <li>
 <h4><code><a title="glasswall.libraries.editor.errors.IncorrectSessionSetup" href="#glasswall.libraries.editor.errors.IncorrectSessionSetup">IncorrectSessionSetup</a></code></h4>
+</li>
+<li>
+<h4><code><a title="glasswall.libraries.editor.errors.InputTooLarge" href="#glasswall.libraries.editor.errors.InputTooLarge">InputTooLarge</a></code></h4>
 </li>
 <li>
 <h4><code><a title="glasswall.libraries.editor.errors.LicenceExpired" href="#glasswall.libraries.editor.errors.LicenceExpired">LicenceExpired</a></code></h4>
