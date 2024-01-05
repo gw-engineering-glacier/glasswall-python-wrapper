@@ -101,6 +101,7 @@ class UnableToWriteAnalysisReport(EditorError):
     """ Editor error code -18 """
     pass
 
+
 class InputTooLarge(EditorError):
     """ Editor error code -19 """
     pass
