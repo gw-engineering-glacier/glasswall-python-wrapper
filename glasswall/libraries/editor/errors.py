@@ -101,6 +101,10 @@ class UnableToWriteAnalysisReport(EditorError):
     """ Editor error code -18 """
     pass
 
+class InputTooLarge(EditorError):
+    """ Editor error code -19 """
+    pass
+
 
 error_codes = {
     -1: GeneralFail,
@@ -120,5 +124,6 @@ error_codes = {
     -15: UnableToWriteExport,
     -16: FileRejected,
     -17: UnableToWriteExportTextDump,
-    -18: UnableToWriteAnalysisReport
+    -18: UnableToWriteAnalysisReport,
+    -19: InputTooLarge
 }
