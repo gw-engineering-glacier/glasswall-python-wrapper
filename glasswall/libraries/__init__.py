@@ -17,12 +17,12 @@ os_info = {
                 "libdeflate.so.0"
             ],
         },
-        "cli": {
+        "editor.cli": {
             "file_name": [
-                "gwcli",
-                "GWQtCLI"
+                "gwcli"
             ],
             "dependencies": [],
+            "relies_on": ["editor"],
         },
         "rebuild": {
             "file_name": "libglasswall.classic.so",
@@ -61,12 +61,12 @@ os_info = {
                 "Qt5Xml.dll"
             ],
         },
-        "cli": {
+        "editor.cli": {
             "file_name": [
-                "gwcli.exe",
-                "GWQtCLI.exe"
+                "gwcli.exe"
             ],
             "dependencies": [],
+            "relies_on": ["editor"],
         },
         "rebuild": {
             "file_name": "glasswall.classic.dll",
