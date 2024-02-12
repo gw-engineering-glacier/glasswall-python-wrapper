@@ -13,9 +13,7 @@ os_info = {
         },
         "editor": {
             "file_name": "libglasswall_core2.so",
-            "dependencies": [
-                "libdeflate.so.0"
-            ],
+            "dependencies": [],
         },
         "editor.cli": {
             "file_name": [
