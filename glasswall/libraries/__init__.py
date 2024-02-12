@@ -44,7 +44,7 @@ os_info = {
             "file_name": "libglasswall.word.search.so",
             # loading dependencies through ctypes doesn't help for word search, use LD_LIBRARY_PATH
             "dependencies": [],
-            "relies_on": ["editor", "archive_manager"],
+            "relies_on": ["editor"],
         },
     },
 
@@ -86,7 +86,7 @@ os_info = {
         "word_search": {
             "file_name": "glasswall.word.search.dll",
             "dependencies": [],
-            "relies_on": ["editor", "archive_manager"],
+            "relies_on": ["editor"],
         },
     },
 }
