@@ -16,9 +16,7 @@ os_info = {
             "dependencies": [],
         },
         "editor.cli": {
-            "file_name": [
-                "gwcli"
-            ],
+            "file_name": "gwcli",
             "dependencies": [],
             "relies_on": ["editor"],
         },
@@ -60,9 +58,7 @@ os_info = {
             ],
         },
         "editor.cli": {
-            "file_name": [
-                "gwcli.exe"
-            ],
+            "file_name": "gwcli.exe",
             "dependencies": [],
             "relies_on": ["editor"],
         },
