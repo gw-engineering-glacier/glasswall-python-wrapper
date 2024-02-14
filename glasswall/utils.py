@@ -73,7 +73,7 @@ def as_snake_case(string):
 def as_title(string):
     return ''.join(
         word.title()
-        for word in string.split("_")
+        for word in string.replace(".", "_").split("_")
     )
 
 

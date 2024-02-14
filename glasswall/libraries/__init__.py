@@ -13,16 +13,12 @@ os_info = {
         },
         "editor": {
             "file_name": "libglasswall_core2.so",
-            "dependencies": [
-                "libdeflate.so.0"
-            ],
-        },
-        "cli": {
-            "file_name": [
-                "gwcli",
-                "GWQtCLI"
-            ],
             "dependencies": [],
+        },
+        "editor_cli": {
+            "file_name": "gwcli",
+            "dependencies": [],
+            "relies_on": ["editor"],
         },
         "rebuild": {
             "file_name": "libglasswall.classic.so",
@@ -44,7 +40,7 @@ os_info = {
             "file_name": "libglasswall.word.search.so",
             # loading dependencies through ctypes doesn't help for word search, use LD_LIBRARY_PATH
             "dependencies": [],
-            "relies_on": ["editor", "archive_manager"],
+            "relies_on": ["editor"],
         },
     },
 
@@ -61,12 +57,10 @@ os_info = {
                 "Qt5Xml.dll"
             ],
         },
-        "cli": {
-            "file_name": [
-                "gwcli.exe",
-                "GWQtCLI.exe"
-            ],
+        "editor_cli": {
+            "file_name": "gwcli.exe",
             "dependencies": [],
+            "relies_on": ["editor"],
         },
         "rebuild": {
             "file_name": "glasswall.classic.dll",
@@ -86,7 +80,7 @@ os_info = {
         "word_search": {
             "file_name": "glasswall.word.search.dll",
             "dependencies": [],
-            "relies_on": ["editor", "archive_manager"],
+            "relies_on": ["editor"],
         },
     },
 }
