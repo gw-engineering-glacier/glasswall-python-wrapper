@@ -15,7 +15,7 @@ os_info = {
             "file_name": "libglasswall_core2.so",
             "dependencies": [],
         },
-        "editor.cli": {
+        "editor_cli": {
             "file_name": "gwcli",
             "dependencies": [],
             "relies_on": ["editor"],
@@ -57,7 +57,7 @@ os_info = {
                 "Qt5Xml.dll"
             ],
         },
-        "editor.cli": {
+        "editor_cli": {
             "file_name": "gwcli.exe",
             "dependencies": [],
             "relies_on": ["editor"],
