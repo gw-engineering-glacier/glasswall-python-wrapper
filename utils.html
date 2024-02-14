@@ -99,7 +99,7 @@ def as_snake_case(string):
 def as_title(string):
     return &#39;&#39;.join(
         word.title()
-        for word in string.split(&#34;_&#34;)
+        for word in string.replace(&#34;.&#34;, &#34;_&#34;).split(&#34;_&#34;)
     )
 
 
@@ -765,7 +765,7 @@ def deprecated_function(replacement_function):
 <pre><code class="python">def as_title(string):
     return &#39;&#39;.join(
         word.title()
-        for word in string.split(&#34;_&#34;)
+        for word in string.replace(&#34;.&#34;, &#34;_&#34;).split(&#34;_&#34;)
     )</code></pre>
 </details>
 </dd>
