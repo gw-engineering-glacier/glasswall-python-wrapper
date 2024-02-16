@@ -107,6 +107,11 @@ class InputTooLarge(EditorError):
     pass
 
 
+class InputZeroBytes(EditorError):
+    """ Editor error code -20 """
+    pass
+
+
 error_codes = {
     -1: GeneralFail,
     -2: UnexpectedEndOfFile,
@@ -126,5 +131,6 @@ error_codes = {
     -16: FileRejected,
     -17: UnableToWriteExportTextDump,
     -18: UnableToWriteAnalysisReport,
-    -19: InputTooLarge
+    -19: InputTooLarge,
+    -20: InputZeroBytes
 }
