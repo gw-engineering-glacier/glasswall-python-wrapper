@@ -133,6 +133,11 @@ class InputTooLarge(EditorError):
     pass
 
 
+class InputZeroBytes(EditorError):
+    &#34;&#34;&#34; Editor error code -20 &#34;&#34;&#34;
+    pass
+
+
 error_codes = {
     -1: GeneralFail,
     -2: UnexpectedEndOfFile,
@@ -152,7 +157,8 @@ error_codes = {
     -16: FileRejected,
     -17: UnableToWriteExportTextDump,
     -18: UnableToWriteAnalysisReport,
-    -19: InputTooLarge
+    -19: InputTooLarge,
+    -20: InputZeroBytes
 }</code></pre>
 </details>
 </section>
@@ -345,6 +351,27 @@ error_codes = {
 </summary>
 <pre><code class="python">class InputTooLarge(EditorError):
     &#34;&#34;&#34; Editor error code -19 &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="glasswall.libraries.editor.classes.EditorError" href="classes.html#glasswall.libraries.editor.classes.EditorError">EditorError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="glasswall.libraries.editor.errors.InputZeroBytes"><code class="flex name class">
+<span>class <span class="ident">InputZeroBytes</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Editor error code -20</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class InputZeroBytes(EditorError):
+    &#34;&#34;&#34; Editor error code -20 &#34;&#34;&#34;
     pass</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -648,6 +675,9 @@ error_codes = {
 </li>
 <li>
 <h4><code><a title="glasswall.libraries.editor.errors.InputTooLarge" href="#glasswall.libraries.editor.errors.InputTooLarge">InputTooLarge</a></code></h4>
+</li>
+<li>
+<h4><code><a title="glasswall.libraries.editor.errors.InputZeroBytes" href="#glasswall.libraries.editor.errors.InputZeroBytes">InputZeroBytes</a></code></h4>
 </li>
 <li>
 <h4><code><a title="glasswall.libraries.editor.errors.LicenceExpired" href="#glasswall.libraries.editor.errors.LicenceExpired">LicenceExpired</a></code></h4>
