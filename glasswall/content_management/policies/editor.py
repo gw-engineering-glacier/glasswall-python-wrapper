@@ -19,6 +19,7 @@ class Editor(Policy):
             glasswall.content_management.config_elements.webpConfig(default=default),
             glasswall.content_management.config_elements.wordConfig(default=default),
             glasswall.content_management.config_elements.xlsConfig(default=default),
+            glasswall.content_management.config_elements.jpegConfig(default=default),
         ]
         self.config = config or {}
 
