@@ -11,6 +11,7 @@ class Editor(Policy):
         self.default = default
         self.default_config_elements = [
             glasswall.content_management.config_elements.gifConfig(default=default),
+            glasswall.content_management.config_elements.jpegConfig(default=default),
             glasswall.content_management.config_elements.pdfConfig(default=default),
             glasswall.content_management.config_elements.pptConfig(default=default),
             glasswall.content_management.config_elements.svgConfig(default=default),
@@ -19,7 +20,6 @@ class Editor(Policy):
             glasswall.content_management.config_elements.webpConfig(default=default),
             glasswall.content_management.config_elements.wordConfig(default=default),
             glasswall.content_management.config_elements.xlsConfig(default=default),
-            glasswall.content_management.config_elements.jpegConfig(default=default),
         ]
         self.config = config or {}
 
