@@ -29,6 +29,7 @@
 <pre><code class="python">import ctypes as ct
 import functools
 import io
+import math
 import os
 import pathlib
 import stat
@@ -425,6 +426,30 @@ def load_dependencies(dependencies: list, ignore_errors: bool = False):
                     raise
 
     return missing_dependencies
+
+
+def round_up(number: float, decimals=0) -&gt; float:
+    &#34;&#34;&#34; Rounds a number up to a specified number of decimal places.
+
+    Args:
+        number (float): The number to be rounded.
+        decimals (int, optional): The number of decimal places to round to. Defaults to 0.
+
+    Returns:
+        float: The rounded number.
+
+    Examples:
+        &gt;&gt;&gt; round_up(105, 0)
+        105.0
+        &gt;&gt;&gt; round_up(0.015, 2)
+        0.02
+        &gt;&gt;&gt; round_up(0.025, 2)
+        0.03
+        &gt;&gt;&gt; round_up(0.00001, 2)
+        0.01
+    &#34;&#34;&#34;
+    multiplier = 10 ** decimals
+    return math.ceil(number * multiplier) / multiplier
 
 
 class TempDirectoryPath:
@@ -1401,6 +1426,61 @@ print(file_paths)</p></div>
             kwargs[new] = kwargs.pop(alias)</code></pre>
 </details>
 </dd>
+<dt id="glasswall.utils.round_up"><code class="name flex">
+<span>def <span class="ident">round_up</span></span>(<span>number: float, decimals=0) ‑> float</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Rounds a number up to a specified number of decimal places.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>number</code></strong> :&ensp;<code>float</code></dt>
+<dd>The number to be rounded.</dd>
+<dt><strong><code>decimals</code></strong> :&ensp;<code>int</code>, optional</dt>
+<dd>The number of decimal places to round to. Defaults to 0.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>float</code></dt>
+<dd>The rounded number.</dd>
+</dl>
+<h2 id="examples">Examples</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; round_up(105, 0)
+105.0
+&gt;&gt;&gt; round_up(0.015, 2)
+0.02
+&gt;&gt;&gt; round_up(0.025, 2)
+0.03
+&gt;&gt;&gt; round_up(0.00001, 2)
+0.01
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def round_up(number: float, decimals=0) -&gt; float:
+    &#34;&#34;&#34; Rounds a number up to a specified number of decimal places.
+
+    Args:
+        number (float): The number to be rounded.
+        decimals (int, optional): The number of decimal places to round to. Defaults to 0.
+
+    Returns:
+        float: The rounded number.
+
+    Examples:
+        &gt;&gt;&gt; round_up(105, 0)
+        105.0
+        &gt;&gt;&gt; round_up(0.015, 2)
+        0.02
+        &gt;&gt;&gt; round_up(0.025, 2)
+        0.03
+        &gt;&gt;&gt; round_up(0.00001, 2)
+        0.01
+    &#34;&#34;&#34;
+    multiplier = 10 ** decimals
+    return math.ceil(number * multiplier) / multiplier</code></pre>
+</details>
+</dd>
 <dt id="glasswall.utils.validate_xml"><code class="name flex">
 <span>def <span class="ident">validate_xml</span></span>(<span>xml: Union[str, bytes, bytearray, _io.BytesIO, _ForwardRef('<a title="glasswall.content_management.policies.policy.Policy" href="content_management/policies/policy.html#glasswall.content_management.policies.policy.Policy">Policy</a>')])</span>
 </code></dt>
@@ -1695,6 +1775,7 @@ print(file_paths)</p></div>
 <li><code><a title="glasswall.utils.list_subdirectory_paths" href="#glasswall.utils.list_subdirectory_paths">list_subdirectory_paths</a></code></li>
 <li><code><a title="glasswall.utils.load_dependencies" href="#glasswall.utils.load_dependencies">load_dependencies</a></code></li>
 <li><code><a title="glasswall.utils.rename_kwargs" href="#glasswall.utils.rename_kwargs">rename_kwargs</a></code></li>
+<li><code><a title="glasswall.utils.round_up" href="#glasswall.utils.round_up">round_up</a></code></li>
 <li><code><a title="glasswall.utils.validate_xml" href="#glasswall.utils.validate_xml">validate_xml</a></code></li>
 <li><code><a title="glasswall.utils.xml_as_dict" href="#glasswall.utils.xml_as_dict">xml_as_dict</a></code></li>
 </ul>
