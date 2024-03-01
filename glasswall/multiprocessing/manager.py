@@ -1,6 +1,4 @@
-
-
-import multiprocessing
+from multiprocessing import Process, Queue
 import os
 import time
 from collections import deque
@@ -13,14 +11,21 @@ from glasswall.multiprocessing.tasks import Task, TaskResult
 
 
 class GlasswallProcessManager:
-    def __init__(self, max_workers: Optional[int] = None, worker_timeout_seconds: Optional[float] = None, sleep_time: Optional[float] = None):
-        self.max_workers = max_workers or os.cpu_count()
+    def __init__(
+        self,
+        max_workers: Optional[int] = None,
+        worker_timeout_seconds: Optional[float] = None,
+        memory_limit_in_gb: Optional[float] = None,
+        sleep_time: Optional[float] = None,
+    ):
+        self.max_workers = max_workers or os.cpu_count() or 1
         self.worker_timeout_seconds = worker_timeout_seconds
+        self.memory_limit_in_gb = memory_limit_in_gb
         self.sleep_time = sleep_time
 
-        self.pending_processes = deque()
-        self.active_processes: list[multiprocessing.Process] = []
-        self.task_results_queue = multiprocessing.Queue()
+        self.pending_processes: "deque[Process]" = deque()
+        self.active_processes: list[Process] = []
+        self.task_results_queue: "Queue[TaskResult]" = Queue()
         self.task_results: List[TaskResult] = []
 
     def __enter__(self):
@@ -31,12 +36,13 @@ class GlasswallProcessManager:
 
     def queue_task(self, task: Task):
         # Create and queue the process without starting it
-        process = multiprocessing.Process(
+        process = Process(
             target=TaskWatcher,
             kwargs={
                 "task": task,
                 "task_results_queue": self.task_results_queue,
                 "timeout_seconds": self.worker_timeout_seconds,
+                "memory_limit_in_gb": self.memory_limit_in_gb,
             },
         )
         self.pending_processes.append(process)
@@ -45,7 +51,7 @@ class GlasswallProcessManager:
         while not self.task_results_queue.empty():
             self.task_results.append(self.task_results_queue.get())
 
-    def remove_completed_active_processes(self, pbar):
+    def remove_completed_active_processes(self, pbar: tqdm):
         index = 0
         while index < len(self.active_processes):
             process = self.active_processes[index]
@@ -57,7 +63,7 @@ class GlasswallProcessManager:
             else:
                 index += 1
 
-    def wait_for_completed_process(self, pbar):
+    def wait_for_completed_process(self, pbar: tqdm):
         self.remove_completed_active_processes(pbar)
         while len(self.active_processes) >= self.max_workers:
             self.remove_completed_active_processes(pbar)
