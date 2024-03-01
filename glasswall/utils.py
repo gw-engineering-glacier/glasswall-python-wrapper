@@ -3,6 +3,7 @@
 import ctypes as ct
 import functools
 import io
+import math
 import os
 import pathlib
 import stat
@@ -399,6 +400,30 @@ def load_dependencies(dependencies: list, ignore_errors: bool = False):
                     raise
 
     return missing_dependencies
+
+
+def round_up(number: float, decimals=0) -> float:
+    """ Rounds a number up to a specified number of decimal places.
+
+    Args:
+        number (float): The number to be rounded.
+        decimals (int, optional): The number of decimal places to round to. Defaults to 0.
+
+    Returns:
+        float: The rounded number.
+
+    Examples:
+        >>> round_up(105, 0)
+        105.0
+        >>> round_up(0.015, 2)
+        0.02
+        >>> round_up(0.025, 2)
+        0.03
+        >>> round_up(0.00001, 2)
+        0.01
+    """
+    multiplier = 10 ** decimals
+    return math.ceil(number * multiplier) / multiplier
 
 
 class TempDirectoryPath:

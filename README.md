@@ -45,6 +45,7 @@ https://gw-engineering.github.io/glasswall-python-wrapper/
 - [Loading a Glasswall library](#loading-a-glasswall-library)
 - [Logging](#logging)
 - [Content management policies](#content-management-policies)
+- [Multiprocessing timeouts and memory limits](#multiprocessing-timeouts-and-memory-limits)
 - [Editor](#editor)
   - [Protect](#protect)
     - [Protect from file path to file path](#protect-from-file-path-to-file-path)
@@ -566,6 +567,137 @@ print(glasswall.content_management.policies.WordSearch(
 ```
 
 </details>
+
+---
+
+### Multiprocessing timeouts and memory limits
+
+The `GlasswallProcessManager` class is designed to manage multiprocessing with a designated timeout and memory limit for processing of each file. It serves as a context manager where `Task` objects are created and added to the queue. Upon exiting the context, pending `Task`'s are processed, which operates in a blocking manner. Once processing of all `Task`'s is complete their outcome is accessible as a `TaskResult` object contained in the `task_results` list attribute. Errors, timeouts, and out of memory exceptions are managed gracefully and are reflected in the attributes of each `TaskResult`.
+
+```py
+import os
+import time
+
+from tqdm import tqdm
+
+import glasswall
+from glasswall.multiprocessing import GlasswallProcessManager, Task
+
+INPUT_DIRECTORY = r"C:\gwpw\input"
+OUTPUT_DIRECTORY = r"C:\gwpw\output\editor\multiprocessing"
+LIBRARY_DIRECTORY = r"C:\gwpw\libraries\embedded_engine_release_5.3"
+
+glasswall.config.logging.console.setLevel("CRITICAL")
+EDITOR = glasswall.Editor(LIBRARY_DIRECTORY)
+
+
+def worker_function(*args, **kwargs):
+    EDITOR.export_file(*args, **kwargs)
+
+
+def main():
+    start_time = time.time()
+    input_files = glasswall.utils.list_file_paths(INPUT_DIRECTORY)
+    with GlasswallProcessManager(max_workers=None, worker_timeout_seconds=5, memory_limit_in_gb=4) as process_manager:
+        for input_file in tqdm(input_files, desc="Queueing files"):
+            relative_path = os.path.relpath(input_file, INPUT_DIRECTORY)
+            output_file = os.path.join(OUTPUT_DIRECTORY, relative_path)
+
+            task = Task(
+                func=worker_function,
+                args=None,
+                kwargs={
+                    "input_file": input_file,
+                    "output_file": output_file,
+                },
+            )
+            process_manager.queue_task(task)
+
+    print(f"Elapsed: {time.time() - start_time} seconds")
+
+    for task_result in process_manager.task_results:
+        print(task_result.__dict__)
+
+
+if __name__ == "__main__":
+    main()
+
+```
+```
+Queueing files: 100%|█████████████████████████████████████████████████████████████████████| 3/3 [00:00<?, ?it/s]
+Processing tasks: 100%|███████████████████████████████████████████████████████████| 3/3 [00:03<00:00,  1.25s/it]
+Elapsed: 3.752045154571533 seconds
+{'task': Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\TestFile_11.doc', output_file='C:\\gwpw\\output\\editor\\multiprocessing\\TestFile_11.doc')), 'success': True, 'result': None, 'exception': None, 'timeout_seconds': 5, 'memory_limit_in_gb': 4, 'start_time': 1709296142.9135368, 'end_time': 1709296144.412138, 'elapsed_time': 1.5, 'timed_out': False, 'out_of_memory': False}
+{'task': Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\TestFile_9.doc', output_file='C:\\gwpw\\output\\editor\\multiprocessing\\TestFile_9.doc')), 'success': True, 'result': None, 'exception': None, 'timeout_seconds': 5, 'memory_limit_in_gb': 4, 'start_time': 1709296142.9098842, 'end_time': 1709296144.4395535, 'elapsed_time': 1.53, 'timed_out': False, 'out_of_memory': False}
+{'task': Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\PDFWithGifAndJpeg.pdf', output_file='C:\\gwpw\\output\\editor\\multiprocessing\\PDFWithGifAndJpeg.pdf')), 'success': True, 'result': None, 'exception': None, 'timeout_seconds': 5, 'memory_limit_in_gb': 4, 'start_time': 1709296142.9110086, 'end_time': 1709296145.2423978, 'elapsed_time': 2.34, 'timed_out': False, 'out_of_memory': False}
+```
+
+Note that `GlasswallProcessManager` is not currently intended to handle large returns of data from the worker_function. It is advised not to return file bytes from the worker function, instead rely on file to file processing rather than file to memory or memory to memory processing.
+
+Currently objects that are too large to be returned through the multiprocessing queue will be replaced by a `Deleted` object. This is likely to be changed in a future release that supports handling of large objects between different processes.
+
+Below is another example of the `GlasswallProcessManager` being used without a context manager. In this example the worker_function returns the files bytes, which are too large and so are replaced by `Deleted` objects. The `memory_limit_in_gb` is also set to the very low value of 0.1GB and this results in the example PDF file being terminated as it exceeds this memory limit, reflected in the attribute `out_of_memory` with value `True`.
+
+```py
+import os
+import time
+
+from tqdm import tqdm
+
+import glasswall
+from glasswall.multiprocessing import GlasswallProcessManager, Task
+
+INPUT_DIRECTORY = r"C:\gwpw\input"
+OUTPUT_DIRECTORY = r"C:\gwpw\output\editor\multiprocessing"
+LIBRARY_DIRECTORY = r"C:\gwpw\libraries\embedded_engine_release_5.3"
+
+glasswall.config.logging.console.setLevel("CRITICAL")
+EDITOR = glasswall.Editor(LIBRARY_DIRECTORY)
+
+
+def worker_function(*args, **kwargs):
+    return EDITOR.export_file(*args, **kwargs)
+
+
+def main():
+    start_time = time.time()
+    input_files = glasswall.utils.list_file_paths(INPUT_DIRECTORY)
+    process_manager = GlasswallProcessManager(max_workers=None, worker_timeout_seconds=5, memory_limit_in_gb=0.1)
+    for input_file in tqdm(input_files, desc="Queueing files"):
+        relative_path = os.path.relpath(input_file, INPUT_DIRECTORY)
+        output_file = os.path.join(OUTPUT_DIRECTORY, relative_path)
+
+        task = Task(
+            func=worker_function,
+            args=None,
+            kwargs={
+                "input_file": input_file,
+                "output_file": output_file,
+            },
+        )
+        process_manager.queue_task(task)
+
+    process_manager.start_tasks()
+
+    print(f"Elapsed: {time.time() - start_time} seconds")
+
+    for task_result in process_manager.task_results:
+        print(task_result.__dict__)
+
+
+if __name__ == "__main__":
+    main()
+
+```
+
+```
+Queueing files: 100%|█████████████████████████████████████████████████████████████████████| 3/3 [00:00<?, ?it/s]
+Processing tasks: 100%|███████████████████████████████████████████████████████████| 3/3 [00:02<00:00,  1.00it/s] 
+Elapsed: 3.003904104232788 seconds
+{'task': Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\PDFWithGifAndJpeg.pdf', output_file='C:\\gwpw\\output\\editor\\multiprocessing\\PDFWithGifAndJpeg.pdf')), 'success': False, 'result': None, 'exception': <class 'MemoryError'>, 'timeout_seconds': 5, 'memory_limit_in_gb': 0.1, 'start_time': 1709296532.9376478, 'end_time': 1709296533.9498513, 'elapsed_time': 1.02, 'timed_out': False, 'out_of_memory': True}
+{'task': Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\TestFile_11.doc', output_file='C:\\gwpw\\output\\editor\\multiprocessing\\TestFile_11.doc')), 'success': True, 'result': <glasswall.multiprocessing.deletion.Deleted object at 0x000002F80CFD1390>, 'exception': None, 'timeout_seconds': 5, 'memory_limit_in_gb': 0.1, 'start_time': 1709296532.9342618, 'end_time': 1709296534.046275, 'elapsed_time': 1.12, 'timed_out': False, 'out_of_memory': False}
+{'task': Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\TestFile_9.doc', output_file='C:\\gwpw\\output\\editor\\multiprocessing\\TestFile_9.doc')), 'success': True, 'result': <glasswall.multiprocessing.deletion.Deleted object at 0x000002F80C9C9650>, 'exception': None, 'timeout_seconds': 5, 'memory_limit_in_gb': 0.1, 'start_time': 1709296532.9273338, 'end_time': 1709296534.0676358, 'elapsed_time': 1.15, 'timed_out': False, 'out_of_memory': False}
+```
 
 ---
 
