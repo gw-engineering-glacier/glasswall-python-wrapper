@@ -601,7 +601,7 @@ def main():
     with GlasswallProcessManager(max_workers=None, worker_timeout_seconds=5, memory_limit_in_gb=4) as process_manager:
         for input_file in tqdm(input_files, desc="Queueing files"):
             relative_path = os.path.relpath(input_file, INPUT_DIRECTORY)
-            output_file = os.path.join(OUTPUT_DIRECTORY, relative_path)
+            output_file = os.path.join(OUTPUT_DIRECTORY, relative_path) + ".zip"
 
             task = Task(
                 func=worker_function,
@@ -665,7 +665,7 @@ def main():
     process_manager = GlasswallProcessManager(max_workers=None, worker_timeout_seconds=5, memory_limit_in_gb=0.1)
     for input_file in tqdm(input_files, desc="Queueing files"):
         relative_path = os.path.relpath(input_file, INPUT_DIRECTORY)
-        output_file = os.path.join(OUTPUT_DIRECTORY, relative_path)
+        output_file = os.path.join(OUTPUT_DIRECTORY, relative_path) + ".zip"
 
         task = Task(
             func=worker_function,
@@ -694,9 +694,9 @@ if __name__ == "__main__":
 Queueing files: 100%|█████████████████████████████████████████████████████████████████████| 3/3 [00:00<?, ?it/s]
 Processing tasks: 100%|███████████████████████████████████████████████████████████| 3/3 [00:02<00:00,  1.00it/s] 
 Elapsed: 3.003904104232788 seconds
-{'task': Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\PDFWithGifAndJpeg.pdf', output_file='C:\\gwpw\\output\\editor\\multiprocessing\\PDFWithGifAndJpeg.pdf')), 'success': False, 'result': None, 'exception': <class 'MemoryError'>, 'timeout_seconds': 5, 'memory_limit_in_gb': 0.1, 'start_time': 1709296532.9376478, 'end_time': 1709296533.9498513, 'elapsed_time': 1.02, 'timed_out': False, 'out_of_memory': True}
-{'task': Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\TestFile_11.doc', output_file='C:\\gwpw\\output\\editor\\multiprocessing\\TestFile_11.doc')), 'success': True, 'result': <glasswall.multiprocessing.deletion.Deleted object at 0x000002F80CFD1390>, 'exception': None, 'timeout_seconds': 5, 'memory_limit_in_gb': 0.1, 'start_time': 1709296532.9342618, 'end_time': 1709296534.046275, 'elapsed_time': 1.12, 'timed_out': False, 'out_of_memory': False}
-{'task': Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\TestFile_9.doc', output_file='C:\\gwpw\\output\\editor\\multiprocessing\\TestFile_9.doc')), 'success': True, 'result': <glasswall.multiprocessing.deletion.Deleted object at 0x000002F80C9C9650>, 'exception': None, 'timeout_seconds': 5, 'memory_limit_in_gb': 0.1, 'start_time': 1709296532.9273338, 'end_time': 1709296534.0676358, 'elapsed_time': 1.15, 'timed_out': False, 'out_of_memory': False}
+{'task': Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\PDFWithGifAndJpeg.pdf', output_file='C:\\gwpw\\output\\editor\\multiprocessing\\PDFWithGifAndJpeg.pdf.zip')), 'success': False, 'result': None, 'exception': <class 'MemoryError'>, 'timeout_seconds': 5, 'memory_limit_in_gb': 0.1, 'start_time': 1709296532.9376478, 'end_time': 1709296533.9498513, 'elapsed_time': 1.02, 'timed_out': False, 'out_of_memory': True}
+{'task': Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\TestFile_11.doc', output_file='C:\\gwpw\\output\\editor\\multiprocessing\\TestFile_11.doc.zip')), 'success': True, 'result': <glasswall.multiprocessing.deletion.Deleted object at 0x000002F80CFD1390>, 'exception': None, 'timeout_seconds': 5, 'memory_limit_in_gb': 0.1, 'start_time': 1709296532.9342618, 'end_time': 1709296534.046275, 'elapsed_time': 1.12, 'timed_out': False, 'out_of_memory': False}
+{'task': Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\TestFile_9.doc', output_file='C:\\gwpw\\output\\editor\\multiprocessing\\TestFile_9.doc.zip')), 'success': True, 'result': <glasswall.multiprocessing.deletion.Deleted object at 0x000002F80C9C9650>, 'exception': None, 'timeout_seconds': 5, 'memory_limit_in_gb': 0.1, 'start_time': 1709296532.9273338, 'end_time': 1709296534.0676358, 'elapsed_time': 1.15, 'timed_out': False, 'out_of_memory': False}
 ```
 
 ---
