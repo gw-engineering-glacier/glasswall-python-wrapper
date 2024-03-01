@@ -20,14 +20,14 @@ pip install --upgrade glasswall
 ```
 
 <!-- omit in toc -->
-### Offline installation for CentOS 7 and RHEL8
+### Offline installation
 
 Run the following commands within the directory containing the offline installation files.
 
 ```
 pip install --upgrade --no-index --find-links=. glasswall
 ```
-**Note:** The lxml wheel includes the required lxml dependencies and has been tested on CentOS 7 and RHEL8 environments.
+>**Note:** The wheels available for offline installation include all necessary dependencies for their respective packages and have been tested on amazonlinux.2023, rockylinux.8.9, and ubuntu.22.04 environments.
 
 <!-- omit in toc -->
 ## Prerequisites
@@ -572,7 +572,7 @@ print(glasswall.content_management.policies.WordSearch(
 
 ### Multiprocessing timeouts and memory limits
 
-The `GlasswallProcessManager` class is designed to manage multiprocessing with a designated timeout and memory limit for processing of each file. It serves as a context manager where `Task` objects are created and added to the queue. Upon exiting the context, pending `Task`'s are processed, which operates in a blocking manner. Once processing of all `Task`'s is complete their outcome is accessible as a `TaskResult` object contained in the `task_results` list attribute. Errors, timeouts, and out of memory exceptions are managed gracefully and are reflected in the attributes of each `TaskResult`.
+The `GlasswallProcessManager` class is designed to manage multiprocessing with a designated timeout and memory limit for processing of each file. It serves as a context manager where `Task` objects are created and added to the queue. Upon exiting the context, pending `Task`s are processed, which operates in a blocking manner. Once processing of all `Task`s is complete their outcome is accessible as a `TaskResult` object contained in the `task_results` list attribute. Errors, timeouts, and out of memory exceptions are managed gracefully and are reflected in the attributes of each `TaskResult`.
 
 ```py
 import os
@@ -636,7 +636,7 @@ Note that `GlasswallProcessManager` is not currently intended to handle large re
 
 Currently objects that are too large to be returned through the multiprocessing queue will be replaced by a `Deleted` object. This is likely to be changed in a future release that supports handling of large objects between different processes.
 
-Below is another example of the `GlasswallProcessManager` being used without a context manager. In this example the worker_function returns the files bytes, which are too large and so are replaced by `Deleted` objects. The `memory_limit_in_gb` is also set to the very low value of 0.1GB and this results in the example PDF file being terminated as it exceeds this memory limit, reflected in the attribute `out_of_memory` with value `True`.
+Below is another example of the `GlasswallProcessManager` being used without a context manager. In this example the worker_function returns the files bytes, which are too large and so are replaced by `Deleted` objects. The `memory_limit_in_gb` is also set to the very low value of 0.1 GiB and this results in the example PDF file being terminated as it exceeds this memory limit, reflected in the attribute `out_of_memory` with value `True`.
 
 ```py
 import os
