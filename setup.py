@@ -24,8 +24,8 @@ setuptools.setup(
     python_requires=">=3.6",
     include_package_data=True,
     install_requires=[
-        "lxml==4.9.4<5",
-        "psutil==5.9.8<6",
-        "tqdm==4.64.1<5",
+        "lxml>=4.9.4,<5",
+        "psutil>=5.9.8,<6",
+        "tqdm>=4.64.1,<5",
     ],
 )
