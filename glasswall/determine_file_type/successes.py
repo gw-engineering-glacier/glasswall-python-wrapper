@@ -294,6 +294,24 @@ class ft_pdf_core2(FileTypeEnumSuccess):
     string = "pdf_core2"
 
 
+# File Identification Camera
 class ft_fi(FileTypeEnumSuccess):
     integer = 783
     string = "fi"
+
+
+class ft_pdfContentStream(FileTypeEnumSuccess):
+    integer = 784
+    string = "pdfContentStream"
+
+
+# Rebuild Camera
+class ft_rebuild(FileTypeEnumSuccess):
+    integer = 785
+    string = "rebuild"
+
+
+# Glasswall Lens
+class ft_gwlens(FileTypeEnumSuccess):
+    integer = 786
+    string = "gwlens"
