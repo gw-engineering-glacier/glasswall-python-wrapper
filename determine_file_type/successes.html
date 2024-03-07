@@ -320,9 +320,27 @@ class ft_pdf_core2(FileTypeEnumSuccess):
     string = &#34;pdf_core2&#34;
 
 
+# File Identification Camera
 class ft_fi(FileTypeEnumSuccess):
     integer = 783
-    string = &#34;fi&#34;</code></pre>
+    string = &#34;fi&#34;
+
+
+class ft_pdfContentStream(FileTypeEnumSuccess):
+    integer = 784
+    string = &#34;pdfContentStream&#34;
+
+
+# Rebuild Camera
+class ft_rebuild(FileTypeEnumSuccess):
+    integer = 785
+    string = &#34;rebuild&#34;
+
+
+# Glasswall Lens
+class ft_gwlens(FileTypeEnumSuccess):
+    integer = 786
+    string = &#34;gwlens&#34;</code></pre>
 </details>
 </section>
 <section>
@@ -874,6 +892,36 @@ class ft_fi(FileTypeEnumSuccess):
 </dd>
 </dl>
 </dd>
+<dt id="glasswall.determine_file_type.successes.ft_gwlens"><code class="flex name class">
+<span>class <span class="ident">ft_gwlens</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Enumerations that correspond to a file type.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ft_gwlens(FileTypeEnumSuccess):
+    integer = 786
+    string = &#34;gwlens&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="glasswall.determine_file_type.classes.FileTypeEnumSuccess" href="classes.html#glasswall.determine_file_type.classes.FileTypeEnumSuccess">FileTypeEnumSuccess</a></li>
+<li><a title="glasswall.determine_file_type.classes.FileTypeEnum" href="classes.html#glasswall.determine_file_type.classes.FileTypeEnum">FileTypeEnum</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="glasswall.determine_file_type.successes.ft_gwlens.integer"><code class="name">var <span class="ident">integer</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="glasswall.determine_file_type.successes.ft_gwlens.string"><code class="name">var <span class="ident">string</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
 <dt id="glasswall.determine_file_type.successes.ft_gzip"><code class="flex name class">
 <span>class <span class="ident">ft_gzip</span></span>
 </code></dt>
@@ -1264,6 +1312,36 @@ class ft_fi(FileTypeEnumSuccess):
 </dd>
 </dl>
 </dd>
+<dt id="glasswall.determine_file_type.successes.ft_pdfContentStream"><code class="flex name class">
+<span>class <span class="ident">ft_pdfContentStream</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Enumerations that correspond to a file type.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ft_pdfContentStream(FileTypeEnumSuccess):
+    integer = 784
+    string = &#34;pdfContentStream&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="glasswall.determine_file_type.classes.FileTypeEnumSuccess" href="classes.html#glasswall.determine_file_type.classes.FileTypeEnumSuccess">FileTypeEnumSuccess</a></li>
+<li><a title="glasswall.determine_file_type.classes.FileTypeEnum" href="classes.html#glasswall.determine_file_type.classes.FileTypeEnum">FileTypeEnum</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="glasswall.determine_file_type.successes.ft_pdfContentStream.integer"><code class="name">var <span class="ident">integer</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="glasswall.determine_file_type.successes.ft_pdfContentStream.string"><code class="name">var <span class="ident">string</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
 <dt id="glasswall.determine_file_type.successes.ft_pdf_core2"><code class="flex name class">
 <span>class <span class="ident">ft_pdf_core2</span></span>
 </code></dt>
@@ -1559,6 +1637,36 @@ class ft_fi(FileTypeEnumSuccess):
 <div class="desc"></div>
 </dd>
 <dt id="glasswall.determine_file_type.successes.ft_rar.string"><code class="name">var <span class="ident">string</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="glasswall.determine_file_type.successes.ft_rebuild"><code class="flex name class">
+<span>class <span class="ident">ft_rebuild</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Enumerations that correspond to a file type.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ft_rebuild(FileTypeEnumSuccess):
+    integer = 785
+    string = &#34;rebuild&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="glasswall.determine_file_type.classes.FileTypeEnumSuccess" href="classes.html#glasswall.determine_file_type.classes.FileTypeEnumSuccess">FileTypeEnumSuccess</a></li>
+<li><a title="glasswall.determine_file_type.classes.FileTypeEnum" href="classes.html#glasswall.determine_file_type.classes.FileTypeEnum">FileTypeEnum</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="glasswall.determine_file_type.successes.ft_rebuild.integer"><code class="name">var <span class="ident">integer</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="glasswall.determine_file_type.successes.ft_rebuild.string"><code class="name">var <span class="ident">string</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -2187,6 +2295,13 @@ class ft_fi(FileTypeEnumSuccess):
 </ul>
 </li>
 <li>
+<h4><code><a title="glasswall.determine_file_type.successes.ft_gwlens" href="#glasswall.determine_file_type.successes.ft_gwlens">ft_gwlens</a></code></h4>
+<ul class="">
+<li><code><a title="glasswall.determine_file_type.successes.ft_gwlens.integer" href="#glasswall.determine_file_type.successes.ft_gwlens.integer">integer</a></code></li>
+<li><code><a title="glasswall.determine_file_type.successes.ft_gwlens.string" href="#glasswall.determine_file_type.successes.ft_gwlens.string">string</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="glasswall.determine_file_type.successes.ft_gzip" href="#glasswall.determine_file_type.successes.ft_gzip">ft_gzip</a></code></h4>
 <ul class="">
 <li><code><a title="glasswall.determine_file_type.successes.ft_gzip.integer" href="#glasswall.determine_file_type.successes.ft_gzip.integer">integer</a></code></li>
@@ -2278,6 +2393,13 @@ class ft_fi(FileTypeEnumSuccess):
 </ul>
 </li>
 <li>
+<h4><code><a title="glasswall.determine_file_type.successes.ft_pdfContentStream" href="#glasswall.determine_file_type.successes.ft_pdfContentStream">ft_pdfContentStream</a></code></h4>
+<ul class="">
+<li><code><a title="glasswall.determine_file_type.successes.ft_pdfContentStream.integer" href="#glasswall.determine_file_type.successes.ft_pdfContentStream.integer">integer</a></code></li>
+<li><code><a title="glasswall.determine_file_type.successes.ft_pdfContentStream.string" href="#glasswall.determine_file_type.successes.ft_pdfContentStream.string">string</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="glasswall.determine_file_type.successes.ft_pdf_core2" href="#glasswall.determine_file_type.successes.ft_pdf_core2">ft_pdf_core2</a></code></h4>
 <ul class="">
 <li><code><a title="glasswall.determine_file_type.successes.ft_pdf_core2.integer" href="#glasswall.determine_file_type.successes.ft_pdf_core2.integer">integer</a></code></li>
@@ -2345,6 +2467,13 @@ class ft_fi(FileTypeEnumSuccess):
 <ul class="">
 <li><code><a title="glasswall.determine_file_type.successes.ft_rar.integer" href="#glasswall.determine_file_type.successes.ft_rar.integer">integer</a></code></li>
 <li><code><a title="glasswall.determine_file_type.successes.ft_rar.string" href="#glasswall.determine_file_type.successes.ft_rar.string">string</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="glasswall.determine_file_type.successes.ft_rebuild" href="#glasswall.determine_file_type.successes.ft_rebuild">ft_rebuild</a></code></h4>
+<ul class="">
+<li><code><a title="glasswall.determine_file_type.successes.ft_rebuild.integer" href="#glasswall.determine_file_type.successes.ft_rebuild.integer">integer</a></code></li>
+<li><code><a title="glasswall.determine_file_type.successes.ft_rebuild.string" href="#glasswall.determine_file_type.successes.ft_rebuild.string">string</a></code></li>
 </ul>
 </li>
 <li>

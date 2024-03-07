@@ -68,7 +68,12 @@ class ft_passwordProtectedOpcFile(FileTypeEnumError):
 
 class ft_nullPointerArgument(FileTypeEnumError):
     integer = 6
-    string = &#34;nullPointerArgument&#34;</code></pre>
+    string = &#34;nullPointerArgument&#34;
+
+
+class ft_unsupportedFileType(FileTypeEnumError):
+    integer = 7
+    string = &#34;unsupportedFileType&#34;</code></pre>
 </details>
 </section>
 <section>
@@ -333,6 +338,39 @@ class ft_nullPointerArgument(FileTypeEnumError):
 </dd>
 </dl>
 </dd>
+<dt id="glasswall.determine_file_type.errors.ft_unsupportedFileType"><code class="flex name class">
+<span>class <span class="ident">ft_unsupportedFileType</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Enumerations that correspond to an error.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ft_unsupportedFileType(FileTypeEnumError):
+    integer = 7
+    string = &#34;unsupportedFileType&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="glasswall.determine_file_type.classes.FileTypeEnumError" href="classes.html#glasswall.determine_file_type.classes.FileTypeEnumError">FileTypeEnumError</a></li>
+<li><a title="glasswall.determine_file_type.classes.FileTypeEnum" href="classes.html#glasswall.determine_file_type.classes.FileTypeEnum">FileTypeEnum</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="glasswall.determine_file_type.errors.ft_unsupportedFileType.integer"><code class="name">var <span class="ident">integer</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="glasswall.determine_file_type.errors.ft_unsupportedFileType.string"><code class="name">var <span class="ident">string</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 </article>
@@ -399,6 +437,13 @@ class ft_nullPointerArgument(FileTypeEnumError):
 <ul class="">
 <li><code><a title="glasswall.determine_file_type.errors.ft_unknown.integer" href="#glasswall.determine_file_type.errors.ft_unknown.integer">integer</a></code></li>
 <li><code><a title="glasswall.determine_file_type.errors.ft_unknown.string" href="#glasswall.determine_file_type.errors.ft_unknown.string">string</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="glasswall.determine_file_type.errors.ft_unsupportedFileType" href="#glasswall.determine_file_type.errors.ft_unsupportedFileType">ft_unsupportedFileType</a></code></h4>
+<ul class="">
+<li><code><a title="glasswall.determine_file_type.errors.ft_unsupportedFileType.integer" href="#glasswall.determine_file_type.errors.ft_unsupportedFileType.integer">integer</a></code></li>
+<li><code><a title="glasswall.determine_file_type.errors.ft_unsupportedFileType.string" href="#glasswall.determine_file_type.errors.ft_unsupportedFileType.string">string</a></code></li>
 </ul>
 </li>
 </ul>
