@@ -62,14 +62,7 @@ class GlasswallProcessManager:
                 yield result
 
     def start_tasks(self):
-        while self.pending_processes or self.active_processes:
-            if self.active_processes:
-                self.wait_for_completed_process()
-
-            while len(self.active_processes) < self.max_workers and self.pending_processes:
-                process = self.pending_processes.popleft()
-                self.active_processes.append(process)
-                process.start()
+        self.task_results = list(self.as_completed())
 
     def wait_for_completed_process(self):
         self.remove_completed_active_processes()
