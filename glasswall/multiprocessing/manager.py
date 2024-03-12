@@ -15,12 +15,12 @@ class GlasswallProcessManager:
         self,
         max_workers: Optional[int] = None,
         worker_timeout_seconds: Optional[float] = None,
-        memory_limit_in_gb: Optional[float] = None,
+        memory_limit_in_gib: Optional[float] = None,
         sleep_time: Optional[float] = None,
     ):
         self.max_workers = max_workers or os.cpu_count() or 1
         self.worker_timeout_seconds = worker_timeout_seconds
-        self.memory_limit_in_gb = memory_limit_in_gb
+        self.memory_limit_in_gib = memory_limit_in_gib
         self.sleep_time = sleep_time
 
         self.pending_processes: deque[Process] = deque()
@@ -42,7 +42,7 @@ class GlasswallProcessManager:
                 "task": task,
                 "task_results_queue": self.task_results_queue,
                 "timeout_seconds": self.worker_timeout_seconds,
-                "memory_limit_in_gb": self.memory_limit_in_gb,
+                "memory_limit_in_gib": self.memory_limit_in_gib,
             },
         )
         self.pending_processes.append(process)

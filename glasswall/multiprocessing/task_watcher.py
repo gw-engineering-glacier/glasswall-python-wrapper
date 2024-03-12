@@ -4,28 +4,9 @@ import time
 from multiprocessing import Process, Queue
 from typing import Optional
 
-from psutil import NoSuchProcess
-from psutil import Process as PsutilProcess
-
+from glasswall.multiprocessing.memory_usage import get_total_memory_usage_in_gib
 from glasswall.multiprocessing.tasks import Task, TaskResult, execute_task_and_put_in_queue
 from glasswall.utils import round_up
-
-
-def get_total_memory_in_gb(process: Process) -> float:
-    total_memory: float = 0
-    try:
-        psutil_process = PsutilProcess(process.pid)
-        total_memory = psutil_process.memory_info().rss
-
-        # Include memory usage of child processes
-        for child in psutil_process.children(recursive=True):
-            total_memory += child.memory_info().rss
-
-        return total_memory / 1024 ** 3  # Convert bytes to GB
-
-    except NoSuchProcess:
-        # Handle the case where the process does not exist
-        return 0.0
 
 
 class TaskWatcher:
@@ -39,7 +20,7 @@ class TaskWatcher:
         task: Task,
         task_results_queue: "Queue[TaskResult]",
         timeout_seconds: Optional[float] = None,
-        memory_limit_in_gb: Optional[float] = None,
+        memory_limit_in_gib: Optional[float] = None,
         sleep_time: float = 0.001,
         sleep_time_memory_limit: float = 1,
         auto_start: bool = True,
@@ -47,7 +28,7 @@ class TaskWatcher:
         self.task = task
         self.task_results_queue = task_results_queue
         self.timeout_seconds = timeout_seconds
-        self.memory_limit_in_gb = memory_limit_in_gb
+        self.memory_limit_in_gib = memory_limit_in_gib
         self.sleep_time = sleep_time
         self.sleep_time_memory_limit = sleep_time_memory_limit
         self.auto_start = auto_start
@@ -101,11 +82,11 @@ class TaskWatcher:
                     break
 
             # Monitor for memory limit exceeded
-            if self.memory_limit_in_gb:
+            if self.memory_limit_in_gib:
                 if time.time() - last_memory_limit_check > self.sleep_time_memory_limit:
                     last_memory_limit_check = time.time()
-                    memory_usage_in_gb = get_total_memory_in_gb(process=self.process)
-                    if memory_usage_in_gb > self.memory_limit_in_gb:
+                    memory_usage_in_gib = get_total_memory_usage_in_gib(self.process.pid)
+                    if memory_usage_in_gib > self.memory_limit_in_gib:
                         self.terminate_task_with_out_of_memory()
                         break
 
@@ -130,7 +111,7 @@ class TaskWatcher:
 
         task_result.task = self.task
         task_result.timeout_seconds = self.timeout_seconds
-        task_result.memory_limit_in_gb = self.memory_limit_in_gb
+        task_result.memory_limit_in_gib = self.memory_limit_in_gib
 
         task_result.start_time = self.start_time
         task_result.end_time = self.end_time

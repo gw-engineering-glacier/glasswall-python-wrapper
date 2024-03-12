@@ -36,7 +36,7 @@ class Task:
 
 class TaskResult:
     timeout_seconds: Optional[float]
-    memory_limit_in_gb: Optional[float]
+    memory_limit_in_gib: Optional[float]
     start_time: float
     end_time: float
     elapsed_time: float
