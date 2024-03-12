@@ -1,3 +1,5 @@
+
+
 import time
 from multiprocessing import Process, Queue
 from typing import Optional
@@ -5,7 +7,6 @@ from typing import Optional
 from psutil import NoSuchProcess
 from psutil import Process as PsutilProcess
 
-from glasswall.multiprocessing.deletion import force_object_under_target_size
 from glasswall.multiprocessing.tasks import Task, TaskResult, execute_task_and_put_in_queue
 from glasswall.utils import round_up
 
@@ -52,6 +53,7 @@ class TaskWatcher:
         self.auto_start = auto_start
 
         self.watcher_queue: "Queue[TaskResult]" = Queue()
+        self.watcher_results = []
 
         self.exception = None
         self.timed_out: bool = False
@@ -83,9 +85,15 @@ class TaskWatcher:
         self.out_of_memory = True
         self.exception = MemoryError()
 
+    def clean_watcher_queue(self):
+        while not self.watcher_queue.empty():
+            self.watcher_results.append(self.watcher_queue.get())
+
     def watch_task(self) -> None:
         last_memory_limit_check = time.time()
         while self.process.is_alive():
+            self.clean_watcher_queue()
+
             # Monitor for timeout exceeded
             if self.timeout_seconds:
                 if time.time() - self.start_time > self.timeout_seconds:
@@ -104,9 +112,9 @@ class TaskWatcher:
             if self.sleep_time:
                 time.sleep(self.sleep_time)
 
+        self.clean_watcher_queue()
         self.end_time = time.time()
         self.elapsed_time = round_up(self.end_time - self.start_time, decimals=2)
-        self.process.join()
 
     def update_queue(self) -> None:
         if self.exception:
@@ -117,7 +125,8 @@ class TaskWatcher:
                 exception=self.exception,
             )  # TODO add memoryusage
         else:
-            task_result = self.watcher_queue.get()
+            # self.watcher_results is always populated if self.exception is None
+            task_result = self.watcher_results[0]
 
         task_result.task = self.task
         task_result.timeout_seconds = self.timeout_seconds
@@ -128,8 +137,5 @@ class TaskWatcher:
         task_result.elapsed_time = self.elapsed_time
         task_result.timed_out = self.timed_out
         task_result.out_of_memory = self.out_of_memory
-
-        # Ensure task_result can fit in queue
-        task_result = force_object_under_target_size(task_result, target_size=8192)
 
         self.task_results_queue.put(task_result)

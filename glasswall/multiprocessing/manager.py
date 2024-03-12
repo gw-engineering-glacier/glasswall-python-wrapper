@@ -1,10 +1,10 @@
-from multiprocessing import Process, Queue
+
+
 import os
 import time
 from collections import deque
+from multiprocessing import Process, Queue
 from typing import List, Optional
-
-from tqdm import tqdm
 
 from glasswall.multiprocessing.task_watcher import TaskWatcher
 from glasswall.multiprocessing.tasks import Task, TaskResult
@@ -47,36 +47,27 @@ class GlasswallProcessManager:
         )
         self.pending_processes.append(process)
 
+    def start_tasks(self):
+        while self.pending_processes or self.active_processes:
+            if self.active_processes:
+                self.wait_for_completed_process()
+
+            while len(self.active_processes) < self.max_workers and self.pending_processes:
+                process = self.pending_processes.popleft()
+                self.active_processes.append(process)
+                process.start()
+
+    def wait_for_completed_process(self):
+        self.remove_completed_active_processes()
+        while len(self.active_processes) >= self.max_workers:
+            if self.sleep_time:
+                time.sleep(self.sleep_time)
+            self.remove_completed_active_processes()
+
+    def remove_completed_active_processes(self):
+        self.active_processes = [process for process in self.active_processes if process.is_alive()]
+        self.clean_task_results_queue()
+
     def clean_task_results_queue(self):
         while not self.task_results_queue.empty():
             self.task_results.append(self.task_results_queue.get())
-
-    def remove_completed_active_processes(self, pbar: tqdm):
-        index = 0
-        while index < len(self.active_processes):
-            process = self.active_processes[index]
-            if not process.is_alive():
-                process.join()
-                self.active_processes.remove(process)
-                pbar.update(1)
-                self.clean_task_results_queue()
-            else:
-                index += 1
-
-    def wait_for_completed_process(self, pbar: tqdm):
-        self.remove_completed_active_processes(pbar)
-        while len(self.active_processes) >= self.max_workers:
-            self.remove_completed_active_processes(pbar)
-            if self.sleep_time:
-                time.sleep(self.sleep_time)
-
-    def start_tasks(self):
-        with tqdm(total=len(self.pending_processes), desc="Processing tasks") as pbar:
-            while self.pending_processes or len(self.active_processes) > 0:
-                if self.active_processes:
-                    self.wait_for_completed_process(pbar)
-
-                while len(self.active_processes) < self.max_workers and self.pending_processes:
-                    process = self.pending_processes.popleft()
-                    self.active_processes.append(process)
-                    process.start()

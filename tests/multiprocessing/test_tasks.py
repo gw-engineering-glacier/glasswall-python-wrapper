@@ -3,7 +3,6 @@
 import unittest
 from multiprocessing import Queue
 
-from glasswall.multiprocessing.deletion import force_object_under_target_size, Deleted
 from glasswall.multiprocessing.tasks import Task, TaskResult, execute_task_and_put_in_queue
 
 
@@ -57,51 +56,6 @@ class TestTasks(unittest.TestCase):
 
         # Additional check to ensure the task result matches the expected task
         self.assertEqual(task_result.task, task)
-
-    def test_delete_objects_result_exceeds_threshold(self):
-        # Test case where task_result size exceeds the threshold
-        task_result = TaskResult(
-            task=None,
-            success=True,
-            result="A" * 8193,
-        )
-
-        # Delete objects until total size is <= 8192 bytes
-        task_result = force_object_under_target_size(task_result, target_size=8192)
-
-        # Assert that the result is an instance of Delete
-        self.assertIsInstance(task_result.result, Deleted)
-
-    def test_delete_objects_task_kwarg_exceeds_threshold(self):
-        # Test case where task_result size exceeds the threshold
-        task_result = TaskResult(
-            task=Task(
-                func=None,
-                args=None,
-                kwargs={"somekwarg": "A" * 8193}
-            ),
-            success=True,
-            result="A" * 8193,
-        )
-
-        # Delete objects until total size is <= 8192 bytes
-        task_result = force_object_under_target_size(task_result, target_size=8192)
-
-        # Assert that the Task is an instance of Delete
-        self.assertIsInstance(task_result.task, Deleted)
-
-    def test_queue_task_result_exceeds_threshold(self):
-        # Test case where task_result size exceeds the threshold
-        # sample_function returns "A" * 8193
-        task = Task(func=sample_function, args=("A",), kwargs={"n": 8193})
-        queue: "Queue[TaskResult]" = Queue()
-
-        # Execute the function
-        execute_task_and_put_in_queue(task, queue)
-        task_result = queue.get()
-
-        # Assert that the result is an instance of Delete
-        self.assertIsInstance(task_result.result, Deleted)
 
 
 if __name__ == "__main__":

@@ -1,6 +1,9 @@
+
+
 from multiprocessing import Queue
 from typing import Any, Callable, Optional, Union
-from glasswall.multiprocessing.deletion import force_object_under_target_size
+
+import glasswall
 
 
 class Task:
@@ -13,6 +16,8 @@ class Task:
         self.func = func
         self.args = args or tuple()
         self.kwargs = kwargs or dict()
+        if isinstance(self.kwargs.get("content_management_policy"), glasswall.content_management.policies.Policy):
+            self.kwargs["content_management_policy"] = self.kwargs["content_management_policy"].text
 
     def __eq__(self, other):
         if isinstance(other, Task):
@@ -68,8 +73,5 @@ def execute_task_and_put_in_queue(task: Task, queue: "Queue[TaskResult]") -> Non
         task_result = TaskResult(task=task, success=True, result=func_result)
     except Exception as e:
         task_result = TaskResult(task=task, success=False, exception=e)
-
-    # Ensure task_result can fit in queue
-    task_result = force_object_under_target_size(task_result, target_size=8192)
 
     queue.put(task_result)
