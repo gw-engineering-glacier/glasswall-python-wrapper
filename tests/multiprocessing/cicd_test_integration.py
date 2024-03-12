@@ -15,9 +15,9 @@ glasswall.config.logging.console.setLevel("CRITICAL")
 
 
 def worker_function(*args, **kwargs):
-    library_name = os.environ.get("GLASSWALL_LIBRARY_NAME")
-    function_name = os.environ.get("GLASSWALL_FUNCTION_NAME")
-    library_path = os.environ.get("GLASSWALL_LIBRARY_PATH")
+    library_name = os.environ["GLASSWALL_LIBRARY_NAME"]
+    function_name = os.environ["GLASSWALL_FUNCTION_NAME"]
+    library_path = os.environ["GLASSWALL_LIBRARY_PATH"]
     library_class = getattr(glasswall, library_name)
     library = library_class(library_path)
     library_function = getattr(library, function_name)
