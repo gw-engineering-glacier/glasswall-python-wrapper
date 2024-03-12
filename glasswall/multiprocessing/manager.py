@@ -23,7 +23,7 @@ class GlasswallProcessManager:
         self.memory_limit_in_gb = memory_limit_in_gb
         self.sleep_time = sleep_time
 
-        self.pending_processes: "deque[Process]" = deque()
+        self.pending_processes: deque[Process] = deque()
         self.active_processes: list[Process] = []
         self.task_results_queue: "Queue[TaskResult]" = Queue()
         self.task_results: List[TaskResult] = []

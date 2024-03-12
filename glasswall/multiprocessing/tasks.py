@@ -31,9 +31,7 @@ class Task:
     def __repr__(self):
         args_str = ", ".join(map(repr, self.args))
         kwargs_str = ", ".join(f"{key}={value!r}" for key, value in self.kwargs.items())
-        return (
-            f"Task(func={self.func.__name__}, args=({args_str}), kwargs=({kwargs_str}))"
-        )
+        return f"Task(func={self.func.__name__}, args=({args_str}), kwargs=({kwargs_str}))"
 
 
 class TaskResult:
