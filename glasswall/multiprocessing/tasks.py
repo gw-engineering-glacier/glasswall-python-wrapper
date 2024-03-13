@@ -16,8 +16,19 @@ class Task:
         self.func = func
         self.args = args or tuple()
         self.kwargs = kwargs or dict()
-        if isinstance(self.kwargs.get("content_management_policy"), glasswall.content_management.policies.Policy):
-            self.kwargs["content_management_policy"] = self.kwargs["content_management_policy"].text
+
+        # Convert Policy objects to text (has attributes that are modules, and modules cannot be pickled)
+        # args
+        processed_args = []
+        for arg in self.args:
+            if isinstance(arg, glasswall.content_management.policies.Policy):
+                arg = arg.text
+            processed_args.append(arg)
+        self.args = tuple(processed_args)
+        # kwargs
+        for key, value in self.kwargs.items():
+            if isinstance(value, glasswall.content_management.policies.Policy):
+                self.kwargs[key] = value.text
 
     def __eq__(self, other):
         if isinstance(other, Task):
