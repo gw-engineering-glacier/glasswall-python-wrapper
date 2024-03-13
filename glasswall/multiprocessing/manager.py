@@ -4,7 +4,7 @@ import os
 import time
 from collections import deque
 from multiprocessing import Process, Queue
-from typing import List, Optional
+from typing import List, Generator, Optional
 
 from glasswall.multiprocessing.task_watcher import TaskWatcher
 from glasswall.multiprocessing.tasks import Task, TaskResult
@@ -47,7 +47,7 @@ class GlasswallProcessManager:
         )
         self.pending_processes.append(process)
 
-    def as_completed(self):
+    def as_completed(self) -> Generator[TaskResult, None, None]:
         while self.pending_processes or self.active_processes:
             if self.active_processes:
                 self.wait_for_completed_process()
