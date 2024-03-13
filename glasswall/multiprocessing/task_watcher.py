@@ -95,7 +95,7 @@ class TaskWatcher:
 
         self.clean_watcher_queue()
         self.end_time = time.time()
-        self.elapsed_time = round_up(self.end_time - self.start_time, decimals=2)
+        self.elapsed_time = self.end_time - self.start_time
 
     def update_queue(self) -> None:
         if self.exception:
