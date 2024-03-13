@@ -40,9 +40,10 @@ class Task:
         return hash((self.func, self.args, kwargs_tuple))
 
     def __repr__(self):
-        args_str = ", ".join(map(repr, self.args))
-        kwargs_str = ", ".join(f"{key}={value!r}" for key, value in self.kwargs.items())
-        return f"Task(func={self.func.__name__}, args=({args_str}), kwargs=({kwargs_str}))"
+        max_length = 100
+        args_str = ", ".join(repr(arg)[:max_length] + ('...' if len(repr(arg)) > max_length else '') for arg in self.args)
+        kwargs_str = ", ".join(f"{key}={repr(value)[:max_length] + ('...' if len(repr(value)) > max_length else '')}" for key, value in self.kwargs.items())
+        return f"{self.__class__.__name__}(func={self.func.__name__}, args=({args_str}), kwargs=({kwargs_str}))"
 
 
 class TaskResult:
@@ -74,6 +75,11 @@ class TaskResult:
 
     def __hash__(self):
         return hash((self.task, self.success, self.result, self.exception))
+
+    def __repr__(self):
+        max_length = 100
+        attributes_str = ', '.join(f"{k}={v!r}"[:max_length] + ('...' if len(repr(v)) > max_length else '') for k, v in self.__dict__.items())
+        return f"{self.__class__.__name__}({attributes_str})"
 
 
 def execute_task_and_put_in_queue(task: Task, queue: "Queue[TaskResult]") -> None:
