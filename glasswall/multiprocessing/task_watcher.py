@@ -22,7 +22,7 @@ class TaskWatcher:
         timeout_seconds: Optional[float] = None,
         memory_limit_in_gib: Optional[float] = None,
         sleep_time: float = 0.001,
-        sleep_time_memory_limit: float = 1,
+        sleep_time_memory_limit: float = 0.1,
         auto_start: bool = True,
     ):
         self.task = task
