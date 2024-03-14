@@ -6,7 +6,6 @@ from typing import Optional
 
 from glasswall.multiprocessing.memory_usage import get_total_memory_usage_in_gib
 from glasswall.multiprocessing.tasks import Task, TaskResult, execute_task_and_put_in_queue
-from glasswall.utils import round_up
 
 
 class TaskWatcher:
