@@ -106,14 +106,17 @@ class TestIntegration(unittest.TestCase):
                     },
                 )
                 process_manager.queue_task(task)
+
+            results = []
+            for task_result in tqdm(process_manager.as_completed(), total=len(input_files), desc="Processing tasks"):
+                results.append(task_result)
+
         end_time = time.time()
 
         # Reenable logging
         glasswall.config.logging.console.setLevel("INFO")
 
         log.info(f"Elapsed: {end_time - start_time}")
-
-        results = process_manager.task_results
 
         log.info("Exceptions:")
         exceptions = Counter(str(item.exception) if item else None for item in results)
