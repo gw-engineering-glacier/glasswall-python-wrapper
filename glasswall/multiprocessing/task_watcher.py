@@ -39,6 +39,7 @@ class TaskWatcher:
         self.exception = None
         self.timed_out: bool = False
         self.out_of_memory: bool = False
+        self.max_memory_used_in_gib: float = 0
 
         if self.auto_start:
             self.start_task()
@@ -75,17 +76,21 @@ class TaskWatcher:
         while self.process.is_alive():
             self.clean_watcher_queue()
 
+            now = time.time()
+
             # Monitor for timeout exceeded
             if self.timeout_seconds:
-                if time.time() - self.start_time > self.timeout_seconds:
+                if now - self.start_time > self.timeout_seconds:
                     self.terminate_task_with_timeout()
                     break
 
             # Monitor for memory limit exceeded
             if self.memory_limit_in_gib:
-                if time.time() - last_memory_limit_check > self.sleep_time_memory_limit:
-                    last_memory_limit_check = time.time()
+                if now - last_memory_limit_check > self.sleep_time_memory_limit:
+                    last_memory_limit_check = now
                     memory_usage_in_gib = get_total_memory_usage_in_gib(self.process.pid)
+                    if memory_usage_in_gib > self.max_memory_used_in_gib:
+                        self.max_memory_used_in_gib = memory_usage_in_gib
                     if memory_usage_in_gib > self.memory_limit_in_gib:
                         self.terminate_task_with_out_of_memory()
                         break
@@ -104,7 +109,7 @@ class TaskWatcher:
                 self.task,
                 success=False,
                 exception=self.exception,
-            )  # TODO add memoryusage
+            )
         else:
             # self.watcher_results is always populated if self.exception is None
             task_result = self.watcher_results[0]
@@ -117,6 +122,8 @@ class TaskWatcher:
         task_result.end_time = self.end_time
         task_result.elapsed_time = self.elapsed_time
         task_result.timed_out = self.timed_out
+
+        task_result.max_memory_used_in_gib = self.max_memory_used_in_gib
         task_result.out_of_memory = self.out_of_memory
 
         self.task_results_queue.put(task_result)
