@@ -102,17 +102,17 @@ class TaskWatcher:
         self.elapsed_time = self.end_time - self.start_time
 
     def update_queue(self) -> None:
-        if self.exception:
-            # TimeoutError or MemoryError
+        if self.exception or not self.watcher_results:
+            # TimeoutError, MemoryError, or process was killed (SIGABRT etc)
             task_result = TaskResult(
                 self.task,
                 success=False,
                 exception=self.exception,
             )
         else:
-            # self.watcher_results is always populated if self.exception is None
             task_result = self.watcher_results[0]
 
+        task_result.exit_code = self.process.exitcode
         task_result.task = self.task
         task_result.timeout_seconds = self.timeout_seconds
         task_result.memory_limit_in_gib = self.memory_limit_in_gib

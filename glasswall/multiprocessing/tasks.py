@@ -55,6 +55,7 @@ class TaskResult:
     out_of_memory: bool
     timed_out: bool
     max_memory_used_in_gib: float
+    exit_code: Optional[int]
 
     def __init__(
         self,
