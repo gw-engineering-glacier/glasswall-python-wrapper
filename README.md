@@ -113,7 +113,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 ```
 
 ```
@@ -180,7 +180,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 editor.protect_directory(
     input_directory=r"C:\gwpw\input",
@@ -201,7 +201,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 editor.protect_directory(
     input_directory=r"C:\gwpw\input",
@@ -614,7 +614,7 @@ from glasswall.multiprocessing import GlasswallProcessManager, Task
 
 INPUT_DIRECTORY = r"C:\gwpw\input"
 OUTPUT_DIRECTORY = r"C:\gwpw\output\editor\multiprocessing"
-LIBRARY_DIRECTORY = r"C:\gwpw\libraries\embedded_engine_release_5.3"
+LIBRARY_DIRECTORY = r"C:\gwpw\libraries\10.0"
 
 glasswall.config.logging.console.setLevel("CRITICAL")
 EDITOR = glasswall.Editor(LIBRARY_DIRECTORY)
@@ -680,7 +680,7 @@ from glasswall.multiprocessing import GlasswallProcessManager, Task
 
 INPUT_DIRECTORY = r"C:\gwpw\input"
 OUTPUT_DIRECTORY = r"C:\gwpw\output\editor\multiprocessing"
-LIBRARY_DIRECTORY = r"C:\gwpw\libraries\embedded_engine_release_5.3"
+LIBRARY_DIRECTORY = r"C:\gwpw\libraries\10.0"
 
 glasswall.config.logging.console.setLevel("CRITICAL")
 EDITOR = glasswall.Editor(LIBRARY_DIRECTORY)
@@ -754,7 +754,7 @@ from glasswall.multiprocessing.memory_usage import get_available_memory_gib
 
 INPUT_DIRECTORY = r"C:\gwpw\input"
 OUTPUT_DIRECTORY = r"C:\gwpw\output\editor\multiprocessing"
-LIBRARY_DIRECTORY = r"C:\gwpw\libraries\embedded_engine_release_5.3"
+LIBRARY_DIRECTORY = r"C:\gwpw\libraries\10.0"
 
 glasswall.config.logging.console.setLevel("CRITICAL")
 EDITOR = glasswall.Editor(LIBRARY_DIRECTORY)
@@ -834,7 +834,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to sanitise a file, writing the sanitised file to a new path
 editor.protect_file(
@@ -853,7 +853,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to sanitise a file in memory, returning the file bytes in memory
 file_bytes = editor.protect_file(
@@ -871,7 +871,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Read file from disk to memory
 with open(r"C:\gwpw\input\TestFile_11.doc", "rb") as f:
@@ -893,7 +893,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to protect a directory of files, writing the sanitised files to a new directory.
 editor.protect_directory(
@@ -912,7 +912,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to protect a directory of files, writing the sanitised files to a new directory.
 editor.protect_directory(
@@ -932,7 +932,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use a custom Editor policy to sanitise all files in the input directory
 # and write them to the input_sanitised directory. If macros are present
@@ -968,7 +968,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 input_directory = r"C:\gwpw\input"
 output_directory = r"C:\gwpw\output\editor\protect_directory_file_format"
@@ -1006,7 +1006,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to analyse a file, writing the analysis report to a new path
 editor.analyse_file(
@@ -1025,7 +1025,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to analyse a file
 analysis_report = editor.analyse_file(
@@ -1043,7 +1043,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Read file from disk to memory
 with open(r"C:\gwpw\input\TestFile_11.doc", "rb") as f:
@@ -1065,7 +1065,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to analyse a directory of files, writing the analysis reports to a new directory.
 editor.analyse_directory(
@@ -1084,7 +1084,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to analyse a directory of files, writing the analysis reports to a new directory.
 editor.analyse_directory(
@@ -1104,7 +1104,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use a custom Editor policy to analyse all files in the input directory
 # and write them to analyse_directory_custom directory. If macros are
@@ -1144,7 +1144,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 input_directory = r"C:\gwpw\input"
 output_directory = r"C:\gwpw\output\editor\analyse_directory_file_format"
@@ -1182,7 +1182,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to export a file, writing the export archive to a new path
 editor.export_file(
@@ -1201,7 +1201,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to export a file
 export_archive = editor.export_file(
@@ -1219,7 +1219,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Read file from disk to memory
 with open(r"C:\gwpw\input\TestFile_11.doc", "rb") as f:
@@ -1241,7 +1241,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to export a directory of files, writing the export archives to a new directory.
 editor.export_directory(
@@ -1260,7 +1260,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to export a directory of files, writing the export archives to a new directory.
 editor.export_directory(
@@ -1280,7 +1280,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use a custom Editor policy to export all files in the input directory
 # and write them to export_directory_custom directory. Write streams as
@@ -1313,7 +1313,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 input_directory = r"C:\gwpw\input"
 output_directory = r"C:\gwpw\output\editor\export_directory_file_format"
@@ -1351,7 +1351,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to import an export archive, writing the imported file to a new path
 editor.import_file(
@@ -1370,7 +1370,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to import an export archive
 file_bytes = editor.import_file(
@@ -1388,7 +1388,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Read file from disk to memory
 with open(r"C:\gwpw\output\editor\export_f2f\TestFile_11.doc.zip", "rb") as f:
@@ -1410,7 +1410,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to import a directory of export archives, writing the import archives to a new directory.
 editor.import_directory(
@@ -1429,7 +1429,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to export a directory of export archives, writing the export archives to a new directory.
 editor.import_directory(
@@ -1449,7 +1449,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use a custom Editor policy to import all files in the export directory
 # and write them to import_directory_custom directory. Read streams as
@@ -1480,7 +1480,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 input_directory = r"C:\gwpw\output\editor\export_directory_file_format"
 output_directory = r"C:\gwpw\output\editor\import_directory_file_format"
@@ -1535,7 +1535,7 @@ rebuild.protect_file(
 import glasswall
 
 # Load the Glasswall Archive Manager library
-am = glasswall.ArchiveManager(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+am = glasswall.ArchiveManager(r"C:\gwpw\libraries\10.0")
 
 # Use the default Archive Manager policy: sanitise all, process all, writing
 # the sanitised archive and the analysis report to the output directory.
@@ -1552,7 +1552,7 @@ am.protect_archive(
 import glasswall
 
 # Load the Glasswall Archive Manager library
-am = glasswall.ArchiveManager(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+am = glasswall.ArchiveManager(r"C:\gwpw\libraries\10.0")
 
 # Use a custom Archive Manager policy: sanitise all, process all, but discard
 # mp3 and mp4 files. Write the sanitised archives and the analysis reports to
@@ -1581,7 +1581,7 @@ am.protect_directory(
 import glasswall
 
 # Load the Glasswall Archive Manager library
-am = glasswall.ArchiveManager(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+am = glasswall.ArchiveManager(r"C:\gwpw\libraries\10.0")
 
 # Unpack the Nested_4_layers.zip archive to a new directory
 am.unpack(
@@ -1596,7 +1596,7 @@ A new directory is created: `C:\gwpw\output\archive_manager\unpack\Nested_4_laye
 import glasswall
 
 # Load the Glasswall Archive Manager library
-am = glasswall.ArchiveManager(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+am = glasswall.ArchiveManager(r"C:\gwpw\libraries\10.0")
 
 # Unpack the Nested_4_layers.zip archive to a new directory without recursing the archive.
 am.unpack(
@@ -1618,7 +1618,7 @@ am.unpack(
 import glasswall
 
 # Load the Glasswall Archive Manager library
-am = glasswall.ArchiveManager(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+am = glasswall.ArchiveManager(r"C:\gwpw\libraries\10.0")
 
 # Recursively unpack all archives found in the `archives` directory
 am.unpack_directory(
@@ -1635,7 +1635,7 @@ The `unpack_directory` method shares the same optional arguments as `unpack`. Se
 import glasswall
 
 # Load the Glasswall Archive Manager library
-am = glasswall.ArchiveManager(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+am = glasswall.ArchiveManager(r"C:\gwpw\libraries\10.0")
 
 # Pack the `input_archives` directory as zip to `input_archives.zip` in the 'C:\gwpw\output\archive_manager\pack' directory
 am.pack_directory(
@@ -1823,7 +1823,7 @@ import glasswall
 
 
 # Load the Glasswall WordSearch library
-word_search = glasswall.WordSearch(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+word_search = glasswall.WordSearch(r"C:\gwpw\libraries\10.0")
 
 # Redact occurrences of the text "lorem" and "ipsum" within the input file, writing the redacted file to a new path
 word_search.redact_file(
@@ -1859,7 +1859,7 @@ import glasswall
 
 
 # Load the Glasswall WordSearch library
-word_search = glasswall.WordSearch(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+word_search = glasswall.WordSearch(r"C:\gwpw\libraries\10.0")
 
 # Redact occurrences of the text "lorem" and "ipsum" within the input file, writing the redacted file to a new path
 result = word_search.redact_file(
@@ -1896,7 +1896,7 @@ import glasswall
 
 
 # Load the Glasswall WordSearch library
-word_search = glasswall.WordSearch(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+word_search = glasswall.WordSearch(r"C:\gwpw\libraries\10.0")
 
 # Read file from disk to memory
 with open(r"C:\gwpw\input_redact\lorem_ipsum.docx", "rb") as f:
@@ -1939,7 +1939,7 @@ import glasswall
 
 
 # Load the Glasswall WordSearch library
-word_search = glasswall.WordSearch(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+word_search = glasswall.WordSearch(r"C:\gwpw\libraries\10.0")
 
 # Redact occurrences of the text "lorem" and "ipsum" within each file in the input_directory, writing the redacted file
 # to a new path in the output_directory
@@ -1981,7 +1981,7 @@ import glasswall
 
 
 # Load the Glasswall WordSearch library
-word_search = glasswall.WordSearch(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+word_search = glasswall.WordSearch(r"C:\gwpw\libraries\10.0")
 
 # Redact occurrences of the text "lorem" and "ipsum" within each file in the input_directory, writing the redacted file
 # to a new path in the output_directory
@@ -2029,10 +2029,10 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Load the Glasswall WordSearch library
-word_search = glasswall.WordSearch(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+word_search = glasswall.WordSearch(r"C:\gwpw\libraries\10.0")
 
 input_directory = r"C:\gwpw\input_redact_with_unsupported_file_types"
 output_directory = r"C:\gwpw\output\word_search\redact_directory_file_format"
