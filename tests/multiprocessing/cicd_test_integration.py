@@ -91,7 +91,7 @@ class TestIntegration(unittest.TestCase):
             worker_timeout_seconds=self.timeout,
             memory_limit_in_gib=self.memory_limit_in_gib,
         ) as process_manager:
-            for input_file in tqdm(input_files, desc="Queueing files"):
+            for input_file in tqdm(input_files, desc="Queueing files", miniters=len(input_files) // 10):
                 relative_path = os.path.relpath(input_file, self.input_directory)
                 output_file = os.path.normpath(
                     os.path.join(self.output_directory, relative_path)
@@ -108,7 +108,7 @@ class TestIntegration(unittest.TestCase):
                 process_manager.queue_task(task)
 
             results = []
-            for task_result in tqdm(process_manager.as_completed(), total=len(input_files), desc="Processing tasks"):
+            for task_result in tqdm(process_manager.as_completed(), total=len(input_files), desc="Processing tasks", miniters=len(input_files) // 100):
                 results.append(task_result)
 
         end_time = time.time()
