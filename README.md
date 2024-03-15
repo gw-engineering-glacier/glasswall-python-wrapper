@@ -666,7 +666,7 @@ Elapsed: 6.226853370666504 seconds
 <details>
     <summary>Expand Example: Yielding individual `TaskResult` objects as they are completed.</summary>
 
-This example uses the external [tqdm](https://pypi.org/project/tqdm/) to visualise progress during processing.
+This example uses the external library [tqdm](https://pypi.org/project/tqdm/) to visualise progress during processing.
 
 ```py
 import os
