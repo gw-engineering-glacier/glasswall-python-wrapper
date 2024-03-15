@@ -581,7 +581,7 @@ The `GlasswallProcessManager` produces either a list of `TaskResult` objects onc
 <details>
     <summary>Expand TaskResult attributes</summary>
 
-```py
+```python
 task: Task
 success: bool  # True if function did not raise an exception
 result: Any  # function return value
