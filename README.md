@@ -739,7 +739,7 @@ Note that while the `GlasswallProcessManager` can handle large returns of data f
 If file to file processing is undesirable and returning the file bytes from the worker function is required, we recommend limiting max_workers to allow for at least 4 GiB of memory available for each process.
 
 <details>
-    <summary>Expand Example: Yielding file bytes in memory to memory mode and limiting max_workers</summary>
+    <summary>Expand Example: Yielding file bytes in file to memory mode and limiting max_workers</summary>
 
 ```py
 import os
