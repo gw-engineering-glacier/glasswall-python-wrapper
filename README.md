@@ -576,7 +576,7 @@ The `GlasswallProcessManager` class is designed to manage multiprocessing with a
 
 The `GlasswallProcessManager` consumes `Task` objects which must be created and added to the queue. A `Task` object consists of a function that will be called, and arguments and keyword arguments that will be passed to that function.
 
-The `GlasswallProcessManager` produces either a list of `TaskResult` objects once processing has finished, or yields individual `TaskResult` objects as they are completed. A `TaskResult` object contains attributes related to the processing of the file.
+The `GlasswallProcessManager` produces either a list of `TaskResult` objects once processing has completed, or yields individual `TaskResult` objects as they are completed. A `TaskResult` object contains attributes related to the processing of the file.
 
 <details>
     <summary>Expand TaskResult attributes</summary>
@@ -602,7 +602,15 @@ out_of_memory: bool  # terminated for exceeding the memory limit: 'memory_limit_
 <br>
 
 <details>
-    <summary>Expand Example: Producing a list of `TaskResult` objects once processing has finished.</summary>
+    <summary>Expand Example: Producing a list of `TaskResult` objects once processing has completed</summary>
+
+<br>
+
+In this example tasks are queued and processed in parallel up to the maximum number of workers, which by default is equal to the number of logical CPUs in the system. 
+
+After all tasks are queued, processing begins automatically when exiting the `GlasswallProcessManager` context. Once all tasks are completed, the `process_manager.task_results` list attribute is populated with `TaskResult` objects that show the processing results.
+
+Once all tasks are completed, this example iterates `process_manager.task_results` in a for loop and prints each `TaskResult` object.
 
 ```py
 import os
@@ -664,9 +672,17 @@ Elapsed: 6.226853370666504 seconds
 </details>
 
 <details>
-    <summary>Expand Example: Yielding individual `TaskResult` objects as they are completed.</summary>
+    <summary>Expand Example: Yielding individual `TaskResult` objects as they are completed</summary>
+
+<br>
 
 This example uses the external library [tqdm](https://pypi.org/project/tqdm/) to visualise progress during processing.
+
+Tasks are queued and processed in parallel up to the maximum number of workers, which by default is equal to the number of logical CPUs in the system.
+
+After all tasks are queued, processing begins within the `GlasswallProcessManager` context by invoking the `process_manager.as_completed()` generator method. Once any task is completed, its corresponding `TaskResult` object is yielded. This allows results to be accessed as they become available, rather than waiting for the completion of all tasks. The `process_manager.task_results` list attribute will not be populated.
+
+As each task is completed, this example prints the yielded `TaskResult` object.
 
 ```py
 import os
@@ -740,6 +756,20 @@ If processing files to disk is undesirable or returning the file bytes from the 
 
 <details>
     <summary>Expand Example: Yielding file bytes in file to memory mode and limiting max_workers</summary>
+
+<br>
+
+This example uses the external library [tqdm](https://pypi.org/project/tqdm/) to visualise progress during processing.
+
+The worker_function has been modified to return the result of `EDITOR.export_file`, which will be either the export zip file's bytes, or None.
+
+The max_workers is limited based on the logical CPUs and RAM available.
+
+Tasks are queued and processed in parallel up to the specified number of workers.
+
+After all tasks are queued, processing begins within the `GlasswallProcessManager` context by invoking the `process_manager.as_completed()` generator method. Once any task is completed, its corresponding `TaskResult` object is yielded. This allows results to be accessed as they become available, rather than waiting for the completion of all tasks. The `process_manager.task_results` list attribute will not be populated.
+
+As each task is completed, this example prints the yielded `TaskResult` object, and if the `task_result.result` attribute is populated, it also prints information on the file size of the export zip file.
 
 ```py
 import os
