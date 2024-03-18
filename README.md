@@ -635,12 +635,12 @@ def main():
 
             task = Task(
                 func=worker_function,
-                args=None,
-                kwargs={
-                    "input_file": input_file,
-                    "output_file": output_file,
-                    "content_management_policy": gw_policy,
-                },
+                args=tuple(),
+                kwargs=dict(
+                    input_file=input_file,
+                    output_file=output_file,
+                    content_management_policy=gw_policy,
+                ),
             )
             process_manager.queue_task(task)
 
@@ -701,12 +701,12 @@ def main():
 
             task = Task(
                 func=worker_function,
-                args=None,
-                kwargs={
-                    "input_file": input_file,
-                    "output_file": output_file,
-                    "content_management_policy": gw_policy,
-                },
+                args=tuple(),
+                kwargs=dict(
+                    input_file=input_file,
+                    output_file=output_file,
+                    content_management_policy=gw_policy,
+                ),
             )
             process_manager.queue_task(task)
 
@@ -777,13 +777,14 @@ def main():
     input_files = glasswall.utils.list_file_paths(INPUT_DIRECTORY)
     with GlasswallProcessManager(max_workers=max_workers, worker_timeout_seconds=5, memory_limit_in_gib=4) as process_manager:
         for input_file in tqdm(input_files, desc="Queueing files", miniters=len(input_files) // 10):
+            # No output_file specified, export_file will run in file to memory mode
             task = Task(
                 func=worker_function,
-                args=None,
-                kwargs={
-                    "input_file": input_file,
-                    "content_management_policy": gw_policy,
-                },
+                args=tuple(),
+                kwargs=dict(
+                    input_file=input_file,
+                    content_management_policy=gw_policy,
+                ),
             )
             process_manager.queue_task(task)
 
