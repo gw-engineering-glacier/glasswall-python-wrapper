@@ -736,7 +736,7 @@ Elapsed: 6.356592416763306 seconds
 
 Note that while the `GlasswallProcessManager` can handle large returns of data from the worker_function, holding this data in memory can quickly fill up the available RAM. When possible, it is advised not to return from the worker_function, and instead to rely on file to file processing.
 
-If file to file processing is undesirable and returning the file bytes from the worker function is required, we recommend limiting max_workers to allow for at least 4 GiB of memory available for each process.
+If processing files to disk is undesirable or returning the file bytes from the worker function is required, we recommend limiting max_workers to allow for at least 4 GiB of memory available for each process.
 
 <details>
     <summary>Expand Example: Yielding file bytes in file to memory mode and limiting max_workers</summary>
