@@ -8,7 +8,8 @@ import unittest
 def extract_python_blocks_from_readme(file_path):
     # Function to extract Python blocks from the README and return as a dictionary
     python_blocks = {}
-    start_marker = "```py"   # Start marker for identifying Python code blocks in the README
+    # NOTE: start_marker intentionally ignores ```python and tests only ```py
+    start_marker = "```py\n"   # Start marker for identifying Python code blocks in the README
     end_marker = "```"       # End marker for identifying Python code blocks in the README
     header_count = {}        # Dictionary to keep track of header occurrences
 
@@ -72,7 +73,7 @@ def count_python_blocks_in_readme(file_path):
 
     readme_content = readme_content.decode("utf-8")
 
-    return readme_content.count("```py")
+    return readme_content.count("```py\n")
 
 
 class TestReadmeCode(unittest.TestCase):

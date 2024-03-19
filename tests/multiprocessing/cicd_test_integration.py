@@ -15,9 +15,9 @@ glasswall.config.logging.console.setLevel("CRITICAL")
 
 
 def worker_function(*args, **kwargs):
-    library_name = os.environ.get("GLASSWALL_LIBRARY_NAME")
-    function_name = os.environ.get("GLASSWALL_FUNCTION_NAME")
-    library_path = os.environ.get("GLASSWALL_LIBRARY_PATH")
+    library_name = os.environ["GLASSWALL_LIBRARY_NAME"]
+    function_name = os.environ["GLASSWALL_FUNCTION_NAME"]
+    library_path = os.environ["GLASSWALL_LIBRARY_PATH"]
     library_class = getattr(glasswall, library_name)
     library = library_class(library_path)
     library_function = getattr(library, function_name)
@@ -43,7 +43,7 @@ class TestIntegration(unittest.TestCase):
         else:
             cls.max_workers = os.cpu_count() or 1
         cls.timeout = float(os.environ["GLASSWALL_TIMEOUT"])
-        cls.memory_limit_in_gb = int(os.environ["GLASSWALL_MEMORY_LIMIT_IN_GB"])
+        cls.memory_limit_in_gib = int(os.environ["GLASSWALL_MEMORY_LIMIT_IN_GIB"])
         cls.library_name = os.environ["GLASSWALL_LIBRARY_NAME"]
         cls.function_name = os.environ["GLASSWALL_FUNCTION_NAME"]
         cls.multiply_dataset = int(os.environ["GLASSWALL_MULTIPLY_DATASET"])
@@ -89,9 +89,9 @@ class TestIntegration(unittest.TestCase):
         with GlasswallProcessManager(
             max_workers=self.max_workers,
             worker_timeout_seconds=self.timeout,
-            memory_limit_in_gb=self.memory_limit_in_gb,
+            memory_limit_in_gib=self.memory_limit_in_gib,
         ) as process_manager:
-            for input_file in tqdm(input_files, desc="Queueing files"):
+            for input_file in tqdm(input_files, desc="Queueing files", miniters=len(input_files) // 10):
                 relative_path = os.path.relpath(input_file, self.input_directory)
                 output_file = os.path.normpath(
                     os.path.join(self.output_directory, relative_path)
@@ -106,14 +106,17 @@ class TestIntegration(unittest.TestCase):
                     },
                 )
                 process_manager.queue_task(task)
+
+            results = []
+            for task_result in tqdm(process_manager.as_completed(), total=len(input_files), desc="Processing tasks", miniters=len(input_files) // 100):
+                results.append(task_result)
+
         end_time = time.time()
 
         # Reenable logging
         glasswall.config.logging.console.setLevel("INFO")
 
         log.info(f"Elapsed: {end_time - start_time}")
-
-        results = process_manager.task_results
 
         log.info("Exceptions:")
         exceptions = Counter(str(item.exception) if item else None for item in results)
@@ -138,7 +141,7 @@ if __name__ == "__main__":
     parser.add_argument("--library-directory", required=True, type=str)
     parser.add_argument("--max-workers", required=True, type=int)
     parser.add_argument("--timeout", required=True, type=float)
-    parser.add_argument("--memory-limit-in-gb", default="0", type=int)
+    parser.add_argument("--memory-limit-in-gib", default="0", type=int)
     parser.add_argument("--library-name", default="Editor", type=str)
     parser.add_argument("--function-name", default="export_file", type=str)
     parser.add_argument("--multiply-dataset", default="1", type=int)
@@ -149,7 +152,7 @@ if __name__ == "__main__":
     os.environ["GLASSWALL_LIBRARY_PATH"] = str(args.library_directory)
     os.environ["GLASSWALL_MAX_WORKERS"] = str(args.max_workers)
     os.environ["GLASSWALL_TIMEOUT"] = str(args.timeout)
-    os.environ["GLASSWALL_MEMORY_LIMIT_IN_GB"] = str(args.memory_limit_in_gb)
+    os.environ["GLASSWALL_MEMORY_LIMIT_IN_GIB"] = str(args.memory_limit_in_gib)
     os.environ["GLASSWALL_LIBRARY_NAME"] = str(args.library_name)
     os.environ["GLASSWALL_FUNCTION_NAME"] = str(args.function_name)
     os.environ["GLASSWALL_MULTIPLY_DATASET"] = str(args.multiply_dataset)

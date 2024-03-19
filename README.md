@@ -113,7 +113,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 ```
 
 ```
@@ -180,7 +180,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 editor.protect_directory(
     input_directory=r"C:\gwpw\input",
@@ -201,7 +201,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 editor.protect_directory(
     input_directory=r"C:\gwpw\input",
@@ -572,23 +572,61 @@ print(glasswall.content_management.policies.WordSearch(
 
 ### Multiprocessing timeouts and memory limits
 
-The `GlasswallProcessManager` class is designed to manage multiprocessing with a designated timeout and memory limit for processing of each file. It serves as a context manager where `Task` objects are created and added to the queue. Upon exiting the context, pending `Task`s are processed, which operates in a blocking manner. Once processing of all `Task`s is complete their outcome is accessible as a `TaskResult` object contained in the `task_results` list attribute. Errors, timeouts, and out of memory exceptions are managed gracefully and are reflected in the attributes of each `TaskResult`.
+The `GlasswallProcessManager` class is designed to manage multiprocessing with a designated timeout and memory limit for each file being processed by the Glasswall engine.
+
+The `GlasswallProcessManager` consumes `Task` objects which must be created and added to the queue. A `Task` object consists of a function that will be called, and arguments and keyword arguments that will be passed to that function.
+
+The `GlasswallProcessManager` produces either a list of `TaskResult` objects once processing has completed, or yields individual `TaskResult` objects as they are completed. A `TaskResult` object contains attributes related to the processing of the file.
+
+<details>
+    <summary>Expand TaskResult attributes</summary>
+
+```python
+task: Task
+success: bool  # True if function did not raise an exception
+result: Any  # function return value
+exception: Union[Exception, None],  # the exception raised by the function
+exit_code: Union[int, None],  # multiprocessing.Process.exitcode, 0 = success
+timeout_seconds: Optional[float]  # time limit for each process
+memory_limit_in_gib: Optional[float]  # memory limit for each process, 1 gibibyte = 1024 ** 3 bytes
+start_time: float  # uses time.time(), current time in seconds since the Epoch
+end_time: float  # uses time.time(), current time in seconds since the Epoch
+elapsed_time: float  # end_time - start_time
+timed_out: bool  # terminated for exceeding the time limit: 'timeout_seconds'
+max_memory_used_in_gib: float  # the highest recorded memory usage of the process
+out_of_memory: bool  # terminated for exceeding the memory limit: 'memory_limit_in_gib'
+```
+
+</details
+
+<br>
+
+<details>
+    <summary>Expand Example: Producing a list of `TaskResult` objects once processing has completed</summary>
+
+<br>
+
+In this example tasks are queued and processed in parallel up to the maximum number of workers, which by default is equal to the number of logical CPUs in the system. 
+
+After all tasks are queued, processing begins automatically when exiting the `GlasswallProcessManager` context. Once all tasks are completed, the `process_manager.task_results` list attribute is populated with `TaskResult` objects that show the processing results.
+
+Once all tasks are completed, this example iterates `process_manager.task_results` in a for loop and prints each `TaskResult` object.
 
 ```py
 import os
 import time
 
-from tqdm import tqdm
-
 import glasswall
 from glasswall.multiprocessing import GlasswallProcessManager, Task
 
+
 INPUT_DIRECTORY = r"C:\gwpw\input"
 OUTPUT_DIRECTORY = r"C:\gwpw\output\editor\multiprocessing"
-LIBRARY_DIRECTORY = r"C:\gwpw\libraries\embedded_engine_release_5.3"
+LIBRARY_DIRECTORY = r"C:\gwpw\libraries\10.0"
 
 glasswall.config.logging.console.setLevel("CRITICAL")
 EDITOR = glasswall.Editor(LIBRARY_DIRECTORY)
+gw_policy = glasswall.content_management.policies.Editor(default="sanitise")
 
 
 def worker_function(*args, **kwargs):
@@ -598,45 +636,53 @@ def worker_function(*args, **kwargs):
 def main():
     start_time = time.time()
     input_files = glasswall.utils.list_file_paths(INPUT_DIRECTORY)
-    with GlasswallProcessManager(max_workers=None, worker_timeout_seconds=5, memory_limit_in_gb=4) as process_manager:
-        for input_file in tqdm(input_files, desc="Queueing files"):
+    with GlasswallProcessManager(max_workers=None, worker_timeout_seconds=5, memory_limit_in_gib=4) as process_manager:
+        for input_file in input_files:
             relative_path = os.path.relpath(input_file, INPUT_DIRECTORY)
             output_file = os.path.join(OUTPUT_DIRECTORY, relative_path) + ".zip"
 
             task = Task(
                 func=worker_function,
-                args=None,
-                kwargs={
-                    "input_file": input_file,
-                    "output_file": output_file,
-                },
+                args=tuple(),
+                kwargs=dict(
+                    input_file=input_file,
+                    output_file=output_file,
+                    content_management_policy=gw_policy,
+                ),
             )
             process_manager.queue_task(task)
 
-    print(f"Elapsed: {time.time() - start_time} seconds")
-
     for task_result in process_manager.task_results:
-        print(task_result.__dict__)
+        print(task_result)
+
+    print(f"Elapsed: {time.time() - start_time} seconds")
 
 
 if __name__ == "__main__":
     main()
-
-```
-```
-Queueing files: 100%|█████████████████████████████████████████████████████████████████████| 3/3 [00:00<?, ?it/s]
-Processing tasks: 100%|███████████████████████████████████████████████████████████| 3/3 [00:03<00:00,  1.25s/it]
-Elapsed: 3.752045154571533 seconds
-{'task': Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\TestFile_11.doc', output_file='C:\\gwpw\\output\\editor\\multiprocessing\\TestFile_11.doc')), 'success': True, 'result': None, 'exception': None, 'timeout_seconds': 5, 'memory_limit_in_gb': 4, 'start_time': 1709296142.9135368, 'end_time': 1709296144.412138, 'elapsed_time': 1.5, 'timed_out': False, 'out_of_memory': False}
-{'task': Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\TestFile_9.doc', output_file='C:\\gwpw\\output\\editor\\multiprocessing\\TestFile_9.doc')), 'success': True, 'result': None, 'exception': None, 'timeout_seconds': 5, 'memory_limit_in_gb': 4, 'start_time': 1709296142.9098842, 'end_time': 1709296144.4395535, 'elapsed_time': 1.53, 'timed_out': False, 'out_of_memory': False}
-{'task': Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\PDFWithGifAndJpeg.pdf', output_file='C:\\gwpw\\output\\editor\\multiprocessing\\PDFWithGifAndJpeg.pdf')), 'success': True, 'result': None, 'exception': None, 'timeout_seconds': 5, 'memory_limit_in_gb': 4, 'start_time': 1709296142.9110086, 'end_time': 1709296145.2423978, 'elapsed_time': 2.34, 'timed_out': False, 'out_of_memory': False}
 ```
 
-Note that `GlasswallProcessManager` is not currently intended to handle large returns of data from the worker_function. It is advised not to return file bytes from the worker function, instead rely on file to file processing rather than file to memory or memory to memory processing.
+```
+TaskResult(task=Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\TestFile_11.doc', outp..., success=True, result=None, exception=None, exit_code=0, timeout_seconds=5, memory_limit_in_gib=4, start_time=1710507465.3883162, end_time=1710507466.5565898, elapsed_time=1.168273687362671, timed_out=False, max_memory_used_in_gib=0.06385421752929688, out_of_memory=False)
+TaskResult(task=Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\TestFile_9.doc', outpu..., success=True, result=None, exception=None, exit_code=0, timeout_seconds=5, memory_limit_in_gib=4, start_time=1710507466.299694, end_time=1710507467.366209, elapsed_time=1.0665149688720703, timed_out=False, max_memory_used_in_gib=0.06365966796875, out_of_memory=False)
+TaskResult(task=Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\PDFWithGifAndJpeg.pdf'..., success=True, result=None, exception=None, exit_code=0, timeout_seconds=5, memory_limit_in_gib=4, start_time=1710507465.3763025, end_time=1710507467.7441902, elapsed_time=2.3678877353668213, timed_out=False, max_memory_used_in_gib=0.1662139892578125, out_of_memory=False)
+Elapsed: 6.226853370666504 seconds
+```
 
-Currently objects that are too large to be returned through the multiprocessing queue will be replaced by a `Deleted` object. This is likely to be changed in a future release that supports handling of large objects between different processes.
+</details>
 
-Below is another example of the `GlasswallProcessManager` being used without a context manager. In this example the worker_function returns the files bytes, which are too large and so are replaced by `Deleted` objects. The `memory_limit_in_gb` is also set to the very low value of 0.1 GiB and this results in the example PDF file being terminated as it exceeds this memory limit, reflected in the attribute `out_of_memory` with value `True`.
+<details>
+    <summary>Expand Example: Yielding individual `TaskResult` objects as they are completed</summary>
+
+<br>
+
+This example uses the external library [tqdm](https://pypi.org/project/tqdm/) to visualise progress during processing.
+
+Tasks are queued and processed in parallel up to the maximum number of workers, which by default is equal to the number of logical CPUs in the system.
+
+After all tasks are queued, processing begins within the `GlasswallProcessManager` context by invoking the `process_manager.as_completed()` generator method. Once any task is completed, its corresponding `TaskResult` object is yielded. This allows results to be accessed as they become available, rather than waiting for the completion of all tasks. The `process_manager.task_results` list attribute will not be populated.
+
+As each task is completed, this example prints the yielded `TaskResult` object.
 
 ```py
 import os
@@ -647,12 +693,104 @@ from tqdm import tqdm
 import glasswall
 from glasswall.multiprocessing import GlasswallProcessManager, Task
 
+
 INPUT_DIRECTORY = r"C:\gwpw\input"
 OUTPUT_DIRECTORY = r"C:\gwpw\output\editor\multiprocessing"
-LIBRARY_DIRECTORY = r"C:\gwpw\libraries\embedded_engine_release_5.3"
+LIBRARY_DIRECTORY = r"C:\gwpw\libraries\10.0"
 
 glasswall.config.logging.console.setLevel("CRITICAL")
 EDITOR = glasswall.Editor(LIBRARY_DIRECTORY)
+gw_policy = glasswall.content_management.policies.Editor(default="sanitise")
+
+
+def worker_function(*args, **kwargs):
+    EDITOR.export_file(*args, **kwargs)
+
+
+def main():
+    start_time = time.time()
+    input_files = glasswall.utils.list_file_paths(INPUT_DIRECTORY)
+    with GlasswallProcessManager(max_workers=None, worker_timeout_seconds=5, memory_limit_in_gib=4) as process_manager:
+        for input_file in tqdm(input_files, desc="Queueing files", miniters=len(input_files) // 10):
+            relative_path = os.path.relpath(input_file, INPUT_DIRECTORY)
+            output_file = os.path.join(OUTPUT_DIRECTORY, relative_path) + ".zip"
+
+            task = Task(
+                func=worker_function,
+                args=tuple(),
+                kwargs=dict(
+                    input_file=input_file,
+                    output_file=output_file,
+                    content_management_policy=gw_policy,
+                ),
+            )
+            process_manager.queue_task(task)
+
+        for task_result in tqdm(process_manager.as_completed(), total=len(input_files), desc="Processing tasks", miniters=len(input_files) // 100):
+            print(task_result)
+
+    print(f"Elapsed: {time.time() - start_time} seconds")
+
+
+if __name__ == "__main__":
+    main()
+```
+
+```
+Queueing files: 100%|███████████████████████████████████████████████████████████| 3/3 [00:00<00:00, 2993.79it/s]
+Processing tasks:   0%|                                                                   | 0/3 [00:00<?, ?it/s]
+TaskResult(task=Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\TestFile_11.doc', outp..., success=True, result=None, exception=None, exit_code=0, timeout_seconds=5, memory_limit_in_gib=4, start_time=1710507493.8832896, end_time=1710507496.1666203, elapsed_time=2.2833306789398193, timed_out=False, max_memory_used_in_gib=0.072662353515625, out_of_memory=False)
+Processing tasks:  33%|███████████████████▋                                       | 1/3 [00:04<00:08,  4.08s/it]
+TaskResult(task=Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\TestFile_9.doc', outpu..., success=True, result=None, exception=None, exit_code=0, timeout_seconds=5, memory_limit_in_gib=4, start_time=1710507495.4604173, end_time=1710507497.5040953, elapsed_time=2.043678045272827, timed_out=False, max_memory_used_in_gib=0.06534576416015625, out_of_memory=False)
+Processing tasks:  67%|███████████████████████████████████████▎                   | 2/3 [00:05<00:02,  2.46s/it]
+TaskResult(task=Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\PDFWithGifAndJpeg.pdf'..., success=True, result=None, exception=None, exit_code=0, timeout_seconds=5, memory_limit_in_gib=4, start_time=1710507495.3951488, end_time=1710507498.389851, elapsed_time=2.9947023391723633, timed_out=False, max_memory_used_in_gib=0.1673431396484375, out_of_memory=False)
+Processing tasks: 100%|███████████████████████████████████████████████████████████| 3/3 [00:06<00:00,  2.11s/it] 
+Elapsed: 6.356592416763306 seconds
+```
+
+</details>
+
+> Note that while the `GlasswallProcessManager` can handle large returns of data from the worker_function, holding this data in memory can quickly fill up the available RAM. When possible, it is advised not to return from the worker_function, and instead to rely on file to file processing.
+> If processing files to disk is undesirable or returning the file bytes from the worker function is required, we recommend the following steps:
+> - Limit `max_workers` to allow for at least 4 GiB of memory available for each process.
+> - Use the `as_completed` generator.
+> - Ensure file bytes are not retained after being yielded from `as_completed` so that the Python garbage collector will free up memory after the file bytes are no longer referenced.
+
+<details>
+    <summary>Expand Example: Yielding file bytes in file to memory mode and limiting max_workers</summary>
+
+<br>
+
+This example uses the external library [tqdm](https://pypi.org/project/tqdm/) to visualise progress during processing.
+
+The worker_function has been modified to return the result of `EDITOR.export_file`, which will be either the export zip file's bytes, or None.
+
+The max_workers is limited based on the logical CPUs and RAM available.
+
+Tasks are queued and processed in parallel up to the specified number of workers.
+
+After all tasks are queued, processing begins within the `GlasswallProcessManager` context by invoking the `process_manager.as_completed()` generator method. Once any task is completed, its corresponding `TaskResult` object is yielded. This allows results to be accessed as they become available, rather than waiting for the completion of all tasks. The `process_manager.task_results` list attribute will not be populated.
+
+As each task is completed, this example prints the yielded `TaskResult` object, and if the `task_result.result` attribute is populated, it also prints information on the file size of the export zip file.
+
+```py
+import os
+import time
+
+from tqdm import tqdm
+
+import glasswall
+from glasswall.multiprocessing import GlasswallProcessManager, Task
+from glasswall.multiprocessing.memory_usage import get_available_memory_gib
+
+
+INPUT_DIRECTORY = r"C:\gwpw\input"
+OUTPUT_DIRECTORY = r"C:\gwpw\output\editor\multiprocessing"
+LIBRARY_DIRECTORY = r"C:\gwpw\libraries\10.0"
+
+glasswall.config.logging.console.setLevel("CRITICAL")
+EDITOR = glasswall.Editor(LIBRARY_DIRECTORY)
+gw_policy = glasswall.content_management.policies.Editor(default="sanitise")
 
 
 def worker_function(*args, **kwargs):
@@ -661,43 +799,59 @@ def worker_function(*args, **kwargs):
 
 def main():
     start_time = time.time()
+    available_memory_gib = get_available_memory_gib()
+    print(f"Available memory: {available_memory_gib} GiB")
+    # Set max_workers to lowest between cpu_count or available memory // 4 (4gib per process)
+    cpu_count = os.cpu_count() or 1
+    max_workers = int(min(cpu_count, available_memory_gib // 4))
+    print(f"Max workers: {max_workers}")
+
     input_files = glasswall.utils.list_file_paths(INPUT_DIRECTORY)
-    process_manager = GlasswallProcessManager(max_workers=None, worker_timeout_seconds=5, memory_limit_in_gb=0.1)
-    for input_file in tqdm(input_files, desc="Queueing files"):
-        relative_path = os.path.relpath(input_file, INPUT_DIRECTORY)
-        output_file = os.path.join(OUTPUT_DIRECTORY, relative_path) + ".zip"
+    with GlasswallProcessManager(max_workers=max_workers, worker_timeout_seconds=5, memory_limit_in_gib=4) as process_manager:
+        for input_file in tqdm(input_files, desc="Queueing files", miniters=len(input_files) // 10):
+            # No output_file specified, export_file will run in file to memory mode
+            task = Task(
+                func=worker_function,
+                args=tuple(),
+                kwargs=dict(
+                    input_file=input_file,
+                    content_management_policy=gw_policy,
+                ),
+            )
+            process_manager.queue_task(task)
 
-        task = Task(
-            func=worker_function,
-            args=None,
-            kwargs={
-                "input_file": input_file,
-                "output_file": output_file,
-            },
-        )
-        process_manager.queue_task(task)
-
-    process_manager.start_tasks()
+        for task_result in tqdm(process_manager.as_completed(), total=len(input_files), desc="Processing tasks", miniters=len(input_files) // 100):
+            print(task_result)
+            # Do something with export zip file bytes in memory
+            if task_result.result:
+                print(f"Export zip file size is: {len(task_result.result)} bytes for input_file: '{task_result.task.kwargs['input_file']}'")
+            # task_result no longer referenced and is garbage collected here, freeing up memory
 
     print(f"Elapsed: {time.time() - start_time} seconds")
-
-    for task_result in process_manager.task_results:
-        print(task_result.__dict__)
 
 
 if __name__ == "__main__":
     main()
-
 ```
 
 ```
+Available memory: 13.020416259765625 GiB
+Max workers: 3
 Queueing files: 100%|█████████████████████████████████████████████████████████████████████| 3/3 [00:00<?, ?it/s]
-Processing tasks: 100%|███████████████████████████████████████████████████████████| 3/3 [00:02<00:00,  1.00it/s] 
-Elapsed: 3.003904104232788 seconds
-{'task': Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\PDFWithGifAndJpeg.pdf', output_file='C:\\gwpw\\output\\editor\\multiprocessing\\PDFWithGifAndJpeg.pdf.zip')), 'success': False, 'result': None, 'exception': <class 'MemoryError'>, 'timeout_seconds': 5, 'memory_limit_in_gb': 0.1, 'start_time': 1709296532.9376478, 'end_time': 1709296533.9498513, 'elapsed_time': 1.02, 'timed_out': False, 'out_of_memory': True}
-{'task': Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\TestFile_11.doc', output_file='C:\\gwpw\\output\\editor\\multiprocessing\\TestFile_11.doc.zip')), 'success': True, 'result': <glasswall.multiprocessing.deletion.Deleted object at 0x000002F80CFD1390>, 'exception': None, 'timeout_seconds': 5, 'memory_limit_in_gb': 0.1, 'start_time': 1709296532.9342618, 'end_time': 1709296534.046275, 'elapsed_time': 1.12, 'timed_out': False, 'out_of_memory': False}
-{'task': Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\TestFile_9.doc', output_file='C:\\gwpw\\output\\editor\\multiprocessing\\TestFile_9.doc.zip')), 'success': True, 'result': <glasswall.multiprocessing.deletion.Deleted object at 0x000002F80C9C9650>, 'exception': None, 'timeout_seconds': 5, 'memory_limit_in_gb': 0.1, 'start_time': 1709296532.9273338, 'end_time': 1709296534.0676358, 'elapsed_time': 1.15, 'timed_out': False, 'out_of_memory': False}
+Processing tasks:   0%|                                                                   | 0/3 [00:00<?, ?it/s]
+TaskResult(task=Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\TestFile_11.doc', cont..., success=True, result=b'PK\x03\x04\x14\x00\x0e\x00\x08\x00\xceloX\xc7\x95\x89\xba\xce\x07\x00\x00-\x19\x00\x00\x19\..., exception=None, exit_code=0, timeout_seconds=5, memory_limit_in_gib=4, start_time=1710509905.3188772, end_time=1710509908.5976403, elapsed_time=3.2787630558013916, timed_out=False, max_memory_used_in_gib=0.06348419189453125, out_of_memory=False)
+Export zip file size is: 97553 bytes for input_file: 'C:\gwpw\input\TestFile_11.doc'
+Processing tasks:  33%|███████████████████▋                                       | 1/3 [00:04<00:09,  4.99s/it]
+TaskResult(task=Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\PDFWithGifAndJpeg.pdf'..., success=True, result=b'PK\x03\x04\x14\x00\x0e\x00\x08\x00\xcdloX\xca@\xc8\x8a\xf0\x1d\x00\x00k\xc6\x00\x00\x19\x00..., exception=None, exit_code=0, timeout_seconds=5, memory_limit_in_gib=4, start_time=1710509905.1324441, end_time=1710509908.958884, elapsed_time=3.82643985748291, timed_out=False, max_memory_used_in_gib=0.166259765625, out_of_memory=False)
+Export zip file size is: 664734 bytes for input_file: 'C:\gwpw\input\PDFWithGifAndJpeg.pdf'
+Processing tasks:  67%|███████████████████████████████████████▎                   | 2/3 [00:05<00:02,  2.25s/it]
+TaskResult(task=Task(func=worker_function, args=(), kwargs=(input_file='C:\\gwpw\\input\\TestFile_9.doc', conte..., success=True, result=b'PK\x03\x04\x14\x00\x0e\x00\x08\x00\xcfloX\xc7\x95\x89\xba\xce\x07\x00\x00-\x19\x00\x00\x19\..., exception=None, exit_code=0, timeout_seconds=5, memory_limit_in_gib=4, start_time=1710509907.833435, end_time=1710509910.3073368, elapsed_time=2.4739017486572266, timed_out=False, max_memory_used_in_gib=0.0728759765625, out_of_memory=False)
+Export zip file size is: 139697 bytes for input_file: 'C:\gwpw\input\TestFile_9.doc'
+Processing tasks: 100%|███████████████████████████████████████████████████████████| 3/3 [00:06<00:00,  2.23s/it] 
+Elapsed: 6.706916809082031 seconds
 ```
+
+</details>
 
 ---
 
@@ -714,7 +868,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to sanitise a file, writing the sanitised file to a new path
 editor.protect_file(
@@ -733,7 +887,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to sanitise a file in memory, returning the file bytes in memory
 file_bytes = editor.protect_file(
@@ -751,7 +905,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Read file from disk to memory
 with open(r"C:\gwpw\input\TestFile_11.doc", "rb") as f:
@@ -773,7 +927,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to protect a directory of files, writing the sanitised files to a new directory.
 editor.protect_directory(
@@ -792,7 +946,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to protect a directory of files, writing the sanitised files to a new directory.
 editor.protect_directory(
@@ -812,7 +966,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use a custom Editor policy to sanitise all files in the input directory
 # and write them to the input_sanitised directory. If macros are present
@@ -848,7 +1002,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 input_directory = r"C:\gwpw\input"
 output_directory = r"C:\gwpw\output\editor\protect_directory_file_format"
@@ -886,7 +1040,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to analyse a file, writing the analysis report to a new path
 editor.analyse_file(
@@ -905,7 +1059,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to analyse a file
 analysis_report = editor.analyse_file(
@@ -923,7 +1077,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Read file from disk to memory
 with open(r"C:\gwpw\input\TestFile_11.doc", "rb") as f:
@@ -945,7 +1099,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to analyse a directory of files, writing the analysis reports to a new directory.
 editor.analyse_directory(
@@ -964,7 +1118,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to analyse a directory of files, writing the analysis reports to a new directory.
 editor.analyse_directory(
@@ -984,7 +1138,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use a custom Editor policy to analyse all files in the input directory
 # and write them to analyse_directory_custom directory. If macros are
@@ -1024,7 +1178,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 input_directory = r"C:\gwpw\input"
 output_directory = r"C:\gwpw\output\editor\analyse_directory_file_format"
@@ -1062,7 +1216,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to export a file, writing the export archive to a new path
 editor.export_file(
@@ -1081,7 +1235,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to export a file
 export_archive = editor.export_file(
@@ -1099,7 +1253,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Read file from disk to memory
 with open(r"C:\gwpw\input\TestFile_11.doc", "rb") as f:
@@ -1121,7 +1275,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to export a directory of files, writing the export archives to a new directory.
 editor.export_directory(
@@ -1140,7 +1294,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to export a directory of files, writing the export archives to a new directory.
 editor.export_directory(
@@ -1160,7 +1314,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use a custom Editor policy to export all files in the input directory
 # and write them to export_directory_custom directory. Write streams as
@@ -1193,7 +1347,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 input_directory = r"C:\gwpw\input"
 output_directory = r"C:\gwpw\output\editor\export_directory_file_format"
@@ -1231,7 +1385,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to import an export archive, writing the imported file to a new path
 editor.import_file(
@@ -1250,7 +1404,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to import an export archive
 file_bytes = editor.import_file(
@@ -1268,7 +1422,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Read file from disk to memory
 with open(r"C:\gwpw\output\editor\export_f2f\TestFile_11.doc.zip", "rb") as f:
@@ -1290,7 +1444,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to import a directory of export archives, writing the import archives to a new directory.
 editor.import_directory(
@@ -1309,7 +1463,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use the default policy to export a directory of export archives, writing the export archives to a new directory.
 editor.import_directory(
@@ -1329,7 +1483,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Use a custom Editor policy to import all files in the export directory
 # and write them to import_directory_custom directory. Read streams as
@@ -1360,7 +1514,7 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 input_directory = r"C:\gwpw\output\editor\export_directory_file_format"
 output_directory = r"C:\gwpw\output\editor\import_directory_file_format"
@@ -1415,7 +1569,7 @@ rebuild.protect_file(
 import glasswall
 
 # Load the Glasswall Archive Manager library
-am = glasswall.ArchiveManager(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+am = glasswall.ArchiveManager(r"C:\gwpw\libraries\10.0")
 
 # Use the default Archive Manager policy: sanitise all, process all, writing
 # the sanitised archive and the analysis report to the output directory.
@@ -1432,7 +1586,7 @@ am.protect_archive(
 import glasswall
 
 # Load the Glasswall Archive Manager library
-am = glasswall.ArchiveManager(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+am = glasswall.ArchiveManager(r"C:\gwpw\libraries\10.0")
 
 # Use a custom Archive Manager policy: sanitise all, process all, but discard
 # mp3 and mp4 files. Write the sanitised archives and the analysis reports to
@@ -1461,7 +1615,7 @@ am.protect_directory(
 import glasswall
 
 # Load the Glasswall Archive Manager library
-am = glasswall.ArchiveManager(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+am = glasswall.ArchiveManager(r"C:\gwpw\libraries\10.0")
 
 # Unpack the Nested_4_layers.zip archive to a new directory
 am.unpack(
@@ -1476,7 +1630,7 @@ A new directory is created: `C:\gwpw\output\archive_manager\unpack\Nested_4_laye
 import glasswall
 
 # Load the Glasswall Archive Manager library
-am = glasswall.ArchiveManager(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+am = glasswall.ArchiveManager(r"C:\gwpw\libraries\10.0")
 
 # Unpack the Nested_4_layers.zip archive to a new directory without recursing the archive.
 am.unpack(
@@ -1498,7 +1652,7 @@ am.unpack(
 import glasswall
 
 # Load the Glasswall Archive Manager library
-am = glasswall.ArchiveManager(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+am = glasswall.ArchiveManager(r"C:\gwpw\libraries\10.0")
 
 # Recursively unpack all archives found in the `archives` directory
 am.unpack_directory(
@@ -1515,7 +1669,7 @@ The `unpack_directory` method shares the same optional arguments as `unpack`. Se
 import glasswall
 
 # Load the Glasswall Archive Manager library
-am = glasswall.ArchiveManager(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+am = glasswall.ArchiveManager(r"C:\gwpw\libraries\10.0")
 
 # Pack the `input_archives` directory as zip to `input_archives.zip` in the 'C:\gwpw\output\archive_manager\pack' directory
 am.pack_directory(
@@ -1703,7 +1857,7 @@ import glasswall
 
 
 # Load the Glasswall WordSearch library
-word_search = glasswall.WordSearch(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+word_search = glasswall.WordSearch(r"C:\gwpw\libraries\10.0")
 
 # Redact occurrences of the text "lorem" and "ipsum" within the input file, writing the redacted file to a new path
 word_search.redact_file(
@@ -1739,7 +1893,7 @@ import glasswall
 
 
 # Load the Glasswall WordSearch library
-word_search = glasswall.WordSearch(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+word_search = glasswall.WordSearch(r"C:\gwpw\libraries\10.0")
 
 # Redact occurrences of the text "lorem" and "ipsum" within the input file, writing the redacted file to a new path
 result = word_search.redact_file(
@@ -1776,7 +1930,7 @@ import glasswall
 
 
 # Load the Glasswall WordSearch library
-word_search = glasswall.WordSearch(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+word_search = glasswall.WordSearch(r"C:\gwpw\libraries\10.0")
 
 # Read file from disk to memory
 with open(r"C:\gwpw\input_redact\lorem_ipsum.docx", "rb") as f:
@@ -1819,7 +1973,7 @@ import glasswall
 
 
 # Load the Glasswall WordSearch library
-word_search = glasswall.WordSearch(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+word_search = glasswall.WordSearch(r"C:\gwpw\libraries\10.0")
 
 # Redact occurrences of the text "lorem" and "ipsum" within each file in the input_directory, writing the redacted file
 # to a new path in the output_directory
@@ -1861,7 +2015,7 @@ import glasswall
 
 
 # Load the Glasswall WordSearch library
-word_search = glasswall.WordSearch(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+word_search = glasswall.WordSearch(r"C:\gwpw\libraries\10.0")
 
 # Redact occurrences of the text "lorem" and "ipsum" within each file in the input_directory, writing the redacted file
 # to a new path in the output_directory
@@ -1909,10 +2063,10 @@ import glasswall
 
 
 # Load the Glasswall Editor library
-editor = glasswall.Editor(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+editor = glasswall.Editor(r"C:\gwpw\libraries\10.0")
 
 # Load the Glasswall WordSearch library
-word_search = glasswall.WordSearch(r"C:\gwpw\libraries\embedded_engine_release_5.3")
+word_search = glasswall.WordSearch(r"C:\gwpw\libraries\10.0")
 
 input_directory = r"C:\gwpw\input_redact_with_unsupported_file_types"
 output_directory = r"C:\gwpw\output\word_search\redact_directory_file_format"

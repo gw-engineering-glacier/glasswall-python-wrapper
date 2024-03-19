@@ -1,6 +1,9 @@
+
+
 from multiprocessing import Queue
 from typing import Any, Callable, Optional, Union
-from glasswall.multiprocessing.deletion import force_object_under_target_size
+
+import glasswall
 
 
 class Task:
@@ -14,6 +17,19 @@ class Task:
         self.args = args or tuple()
         self.kwargs = kwargs or dict()
 
+        # Convert Policy objects to text (has attributes that are modules, and modules cannot be pickled)
+        # args
+        processed_args = []
+        for arg in self.args:
+            if isinstance(arg, glasswall.content_management.policies.Policy):
+                arg = arg.text
+            processed_args.append(arg)
+        self.args = tuple(processed_args)
+        # kwargs
+        for key, value in self.kwargs.items():
+            if isinstance(value, glasswall.content_management.policies.Policy):
+                self.kwargs[key] = value.text
+
     def __eq__(self, other):
         if isinstance(other, Task):
             return (self.func, self.args, self.kwargs) == (other.func, other.args, other.kwargs)
@@ -24,21 +40,22 @@ class Task:
         return hash((self.func, self.args, kwargs_tuple))
 
     def __repr__(self):
-        args_str = ", ".join(map(repr, self.args))
-        kwargs_str = ", ".join(f"{key}={value!r}" for key, value in self.kwargs.items())
-        return (
-            f"Task(func={self.func.__name__}, args=({args_str}), kwargs=({kwargs_str}))"
-        )
+        max_length = 100
+        args_str = ", ".join(repr(arg)[:max_length] + ('...' if len(repr(arg)) > max_length else '') for arg in self.args)
+        kwargs_str = ", ".join(f"{key}={repr(value)[:max_length] + ('...' if len(repr(value)) > max_length else '')}" for key, value in self.kwargs.items())
+        return f"{self.__class__.__name__}(func={self.func.__name__}, args=({args_str}), kwargs=({kwargs_str}))"
 
 
 class TaskResult:
     timeout_seconds: Optional[float]
-    memory_limit_in_gb: Optional[float]
+    memory_limit_in_gib: Optional[float]
     start_time: float
     end_time: float
     elapsed_time: float
     out_of_memory: bool
     timed_out: bool
+    max_memory_used_in_gib: float
+    exit_code: Union[int, None]
 
     def __init__(
         self,
@@ -61,6 +78,11 @@ class TaskResult:
     def __hash__(self):
         return hash((self.task, self.success, self.result, self.exception))
 
+    def __repr__(self):
+        max_length = 100
+        attributes_str = ', '.join(f"{k}={v!r}"[:max_length] + ('...' if len(repr(v)) > max_length else '') for k, v in self.__dict__.items())
+        return f"{self.__class__.__name__}({attributes_str})"
+
 
 def execute_task_and_put_in_queue(task: Task, queue: "Queue[TaskResult]") -> None:
     try:
@@ -68,8 +90,5 @@ def execute_task_and_put_in_queue(task: Task, queue: "Queue[TaskResult]") -> Non
         task_result = TaskResult(task=task, success=True, result=func_result)
     except Exception as e:
         task_result = TaskResult(task=task, success=False, exception=e)
-
-    # Ensure task_result can fit in queue
-    task_result = force_object_under_target_size(task_result, target_size=8192)
 
     queue.put(task_result)
