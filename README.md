@@ -750,9 +750,11 @@ Elapsed: 6.356592416763306 seconds
 
 </details>
 
-Note that while the `GlasswallProcessManager` can handle large returns of data from the worker_function, holding this data in memory can quickly fill up the available RAM. When possible, it is advised not to return from the worker_function, and instead to rely on file to file processing.
-
-If processing files to disk is undesirable or returning the file bytes from the worker function is required, we recommend limiting max_workers to allow for at least 4 GiB of memory available for each process.
+> Note that while the `GlasswallProcessManager` can handle large returns of data from the worker_function, holding this data in memory can quickly fill up the available RAM. When possible, it is advised not to return from the worker_function, and instead to rely on file to file processing.
+> If processing files to disk is undesirable or returning the file bytes from the worker function is required, we recommend the following steps:
+> - Limit `max_workers` to allow for at least 4 GiB of memory available for each process.
+> - Use the `as_completed` generator.
+> - Ensure file bytes are not retained after being yielded from `as_completed` so that the Python garbage collector will free up memory after the file bytes are no longer referenced.
 
 <details>
     <summary>Expand Example: Yielding file bytes in file to memory mode and limiting max_workers</summary>
@@ -823,6 +825,7 @@ def main():
             # Do something with export zip file bytes in memory
             if task_result.result:
                 print(f"Export zip file size is: {len(task_result.result)} bytes for input_file: '{task_result.task.kwargs['input_file']}'")
+            # task_result no longer referenced and is garbage collected here, freeing up memory
 
     print(f"Elapsed: {time.time() - start_time} seconds")
 
