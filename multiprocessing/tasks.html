@@ -28,7 +28,8 @@
 </summary>
 <pre><code class="python">from multiprocessing import Queue
 from typing import Any, Callable, Optional, Union
-from glasswall.multiprocessing.deletion import force_object_under_target_size
+
+import glasswall
 
 
 class Task:
@@ -42,6 +43,19 @@ class Task:
         self.args = args or tuple()
         self.kwargs = kwargs or dict()
 
+        # Convert Policy objects to text (has attributes that are modules, and modules cannot be pickled)
+        # args
+        processed_args = []
+        for arg in self.args:
+            if isinstance(arg, glasswall.content_management.policies.Policy):
+                arg = arg.text
+            processed_args.append(arg)
+        self.args = tuple(processed_args)
+        # kwargs
+        for key, value in self.kwargs.items():
+            if isinstance(value, glasswall.content_management.policies.Policy):
+                self.kwargs[key] = value.text
+
     def __eq__(self, other):
         if isinstance(other, Task):
             return (self.func, self.args, self.kwargs) == (other.func, other.args, other.kwargs)
@@ -52,21 +66,22 @@ class Task:
         return hash((self.func, self.args, kwargs_tuple))
 
     def __repr__(self):
-        args_str = &#34;, &#34;.join(map(repr, self.args))
-        kwargs_str = &#34;, &#34;.join(f&#34;{key}={value!r}&#34; for key, value in self.kwargs.items())
-        return (
-            f&#34;Task(func={self.func.__name__}, args=({args_str}), kwargs=({kwargs_str}))&#34;
-        )
+        max_length = 100
+        args_str = &#34;, &#34;.join(repr(arg)[:max_length] + (&#39;...&#39; if len(repr(arg)) &gt; max_length else &#39;&#39;) for arg in self.args)
+        kwargs_str = &#34;, &#34;.join(f&#34;{key}={repr(value)[:max_length] + (&#39;...&#39; if len(repr(value)) &gt; max_length else &#39;&#39;)}&#34; for key, value in self.kwargs.items())
+        return f&#34;{self.__class__.__name__}(func={self.func.__name__}, args=({args_str}), kwargs=({kwargs_str}))&#34;
 
 
 class TaskResult:
     timeout_seconds: Optional[float]
-    memory_limit_in_gb: Optional[float]
+    memory_limit_in_gib: Optional[float]
     start_time: float
     end_time: float
     elapsed_time: float
     out_of_memory: bool
     timed_out: bool
+    max_memory_used_in_gib: float
+    exit_code: Union[int, None]
 
     def __init__(
         self,
@@ -89,6 +104,11 @@ class TaskResult:
     def __hash__(self):
         return hash((self.task, self.success, self.result, self.exception))
 
+    def __repr__(self):
+        max_length = 100
+        attributes_str = &#39;, &#39;.join(f&#34;{k}={v!r}&#34;[:max_length] + (&#39;...&#39; if len(repr(v)) &gt; max_length else &#39;&#39;) for k, v in self.__dict__.items())
+        return f&#34;{self.__class__.__name__}({attributes_str})&#34;
+
 
 def execute_task_and_put_in_queue(task: Task, queue: &#34;Queue[TaskResult]&#34;) -&gt; None:
     try:
@@ -96,9 +116,6 @@ def execute_task_and_put_in_queue(task: Task, queue: &#34;Queue[TaskResult]&#34;
         task_result = TaskResult(task=task, success=True, result=func_result)
     except Exception as e:
         task_result = TaskResult(task=task, success=False, exception=e)
-
-    # Ensure task_result can fit in queue
-    task_result = force_object_under_target_size(task_result, target_size=8192)
 
     queue.put(task_result)</code></pre>
 </details>
@@ -125,9 +142,6 @@ def execute_task_and_put_in_queue(task: Task, queue: &#34;Queue[TaskResult]&#34;
         task_result = TaskResult(task=task, success=True, result=func_result)
     except Exception as e:
         task_result = TaskResult(task=task, success=False, exception=e)
-
-    # Ensure task_result can fit in queue
-    task_result = force_object_under_target_size(task_result, target_size=8192)
 
     queue.put(task_result)</code></pre>
 </details>
@@ -158,6 +172,19 @@ def execute_task_and_put_in_queue(task: Task, queue: &#34;Queue[TaskResult]&#34;
         self.args = args or tuple()
         self.kwargs = kwargs or dict()
 
+        # Convert Policy objects to text (has attributes that are modules, and modules cannot be pickled)
+        # args
+        processed_args = []
+        for arg in self.args:
+            if isinstance(arg, glasswall.content_management.policies.Policy):
+                arg = arg.text
+            processed_args.append(arg)
+        self.args = tuple(processed_args)
+        # kwargs
+        for key, value in self.kwargs.items():
+            if isinstance(value, glasswall.content_management.policies.Policy):
+                self.kwargs[key] = value.text
+
     def __eq__(self, other):
         if isinstance(other, Task):
             return (self.func, self.args, self.kwargs) == (other.func, other.args, other.kwargs)
@@ -168,11 +195,10 @@ def execute_task_and_put_in_queue(task: Task, queue: &#34;Queue[TaskResult]&#34;
         return hash((self.func, self.args, kwargs_tuple))
 
     def __repr__(self):
-        args_str = &#34;, &#34;.join(map(repr, self.args))
-        kwargs_str = &#34;, &#34;.join(f&#34;{key}={value!r}&#34; for key, value in self.kwargs.items())
-        return (
-            f&#34;Task(func={self.func.__name__}, args=({args_str}), kwargs=({kwargs_str}))&#34;
-        )</code></pre>
+        max_length = 100
+        args_str = &#34;, &#34;.join(repr(arg)[:max_length] + (&#39;...&#39; if len(repr(arg)) &gt; max_length else &#39;&#39;) for arg in self.args)
+        kwargs_str = &#34;, &#34;.join(f&#34;{key}={repr(value)[:max_length] + (&#39;...&#39; if len(repr(value)) &gt; max_length else &#39;&#39;)}&#34; for key, value in self.kwargs.items())
+        return f&#34;{self.__class__.__name__}(func={self.func.__name__}, args=({args_str}), kwargs=({kwargs_str}))&#34;</code></pre>
 </details>
 </dd>
 <dt id="glasswall.multiprocessing.tasks.TaskResult"><code class="flex name class">
@@ -187,12 +213,14 @@ def execute_task_and_put_in_queue(task: Task, queue: &#34;Queue[TaskResult]&#34;
 </summary>
 <pre><code class="python">class TaskResult:
     timeout_seconds: Optional[float]
-    memory_limit_in_gb: Optional[float]
+    memory_limit_in_gib: Optional[float]
     start_time: float
     end_time: float
     elapsed_time: float
     out_of_memory: bool
     timed_out: bool
+    max_memory_used_in_gib: float
+    exit_code: Union[int, None]
 
     def __init__(
         self,
@@ -213,7 +241,12 @@ def execute_task_and_put_in_queue(task: Task, queue: &#34;Queue[TaskResult]&#34;
         return False
 
     def __hash__(self):
-        return hash((self.task, self.success, self.result, self.exception))</code></pre>
+        return hash((self.task, self.success, self.result, self.exception))
+
+    def __repr__(self):
+        max_length = 100
+        attributes_str = &#39;, &#39;.join(f&#34;{k}={v!r}&#34;[:max_length] + (&#39;...&#39; if len(repr(v)) &gt; max_length else &#39;&#39;) for k, v in self.__dict__.items())
+        return f&#34;{self.__class__.__name__}({attributes_str})&#34;</code></pre>
 </details>
 <h3>Class variables</h3>
 <dl>
@@ -225,7 +258,15 @@ def execute_task_and_put_in_queue(task: Task, queue: &#34;Queue[TaskResult]&#34;
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="glasswall.multiprocessing.tasks.TaskResult.memory_limit_in_gb"><code class="name">var <span class="ident">memory_limit_in_gb</span> : Optional[float]</code></dt>
+<dt id="glasswall.multiprocessing.tasks.TaskResult.exit_code"><code class="name">var <span class="ident">exit_code</span> : Optional[int]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="glasswall.multiprocessing.tasks.TaskResult.max_memory_used_in_gib"><code class="name">var <span class="ident">max_memory_used_in_gib</span> : float</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="glasswall.multiprocessing.tasks.TaskResult.memory_limit_in_gib"><code class="name">var <span class="ident">memory_limit_in_gib</span> : Optional[float]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -273,10 +314,12 @@ def execute_task_and_put_in_queue(task: Task, queue: &#34;Queue[TaskResult]&#34;
 </li>
 <li>
 <h4><code><a title="glasswall.multiprocessing.tasks.TaskResult" href="#glasswall.multiprocessing.tasks.TaskResult">TaskResult</a></code></h4>
-<ul class="two-column">
+<ul class="">
 <li><code><a title="glasswall.multiprocessing.tasks.TaskResult.elapsed_time" href="#glasswall.multiprocessing.tasks.TaskResult.elapsed_time">elapsed_time</a></code></li>
 <li><code><a title="glasswall.multiprocessing.tasks.TaskResult.end_time" href="#glasswall.multiprocessing.tasks.TaskResult.end_time">end_time</a></code></li>
-<li><code><a title="glasswall.multiprocessing.tasks.TaskResult.memory_limit_in_gb" href="#glasswall.multiprocessing.tasks.TaskResult.memory_limit_in_gb">memory_limit_in_gb</a></code></li>
+<li><code><a title="glasswall.multiprocessing.tasks.TaskResult.exit_code" href="#glasswall.multiprocessing.tasks.TaskResult.exit_code">exit_code</a></code></li>
+<li><code><a title="glasswall.multiprocessing.tasks.TaskResult.max_memory_used_in_gib" href="#glasswall.multiprocessing.tasks.TaskResult.max_memory_used_in_gib">max_memory_used_in_gib</a></code></li>
+<li><code><a title="glasswall.multiprocessing.tasks.TaskResult.memory_limit_in_gib" href="#glasswall.multiprocessing.tasks.TaskResult.memory_limit_in_gib">memory_limit_in_gib</a></code></li>
 <li><code><a title="glasswall.multiprocessing.tasks.TaskResult.out_of_memory" href="#glasswall.multiprocessing.tasks.TaskResult.out_of_memory">out_of_memory</a></code></li>
 <li><code><a title="glasswall.multiprocessing.tasks.TaskResult.start_time" href="#glasswall.multiprocessing.tasks.TaskResult.start_time">start_time</a></code></li>
 <li><code><a title="glasswall.multiprocessing.tasks.TaskResult.timed_out" href="#glasswall.multiprocessing.tasks.TaskResult.timed_out">timed_out</a></code></li>

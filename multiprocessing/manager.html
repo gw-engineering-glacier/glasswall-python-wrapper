@@ -26,13 +26,11 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from multiprocessing import Process, Queue
-import os
+<pre><code class="python">import os
 import time
 from collections import deque
-from typing import List, Optional
-
-from tqdm import tqdm
+from multiprocessing import Process, Queue
+from typing import List, Generator, Optional
 
 from glasswall.multiprocessing.task_watcher import TaskWatcher
 from glasswall.multiprocessing.tasks import Task, TaskResult
@@ -43,15 +41,16 @@ class GlasswallProcessManager:
         self,
         max_workers: Optional[int] = None,
         worker_timeout_seconds: Optional[float] = None,
-        memory_limit_in_gb: Optional[float] = None,
-        sleep_time: Optional[float] = None,
+        memory_limit_in_gib: Optional[float] = None,
     ):
         self.max_workers = max_workers or os.cpu_count() or 1
         self.worker_timeout_seconds = worker_timeout_seconds
-        self.memory_limit_in_gb = memory_limit_in_gb
-        self.sleep_time = sleep_time
+        self.memory_limit_in_gib = memory_limit_in_gib
+        self._sleep_time: float = 0  # Time to sleep for while waiting for processes to complete
+        self._task_watcher_sleep_time: float = 0.001  # Time the TaskWatcher sleeps for while waiting for completed processes and monitoring timeout/memory
+        self._task_watcher_memory_limit_polling_rate: float = 0.1  # Polling rate for TaskWatcher to check the memory usage of a process
 
-        self.pending_processes: &#34;deque[Process]&#34; = deque()
+        self.pending_processes: deque[Process] = deque()
         self.active_processes: list[Process] = []
         self.task_results_queue: &#34;Queue[TaskResult]&#34; = Queue()
         self.task_results: List[TaskResult] = []
@@ -66,48 +65,48 @@ class GlasswallProcessManager:
         # Create and queue the process without starting it
         process = Process(
             target=TaskWatcher,
-            kwargs={
-                &#34;task&#34;: task,
-                &#34;task_results_queue&#34;: self.task_results_queue,
-                &#34;timeout_seconds&#34;: self.worker_timeout_seconds,
-                &#34;memory_limit_in_gb&#34;: self.memory_limit_in_gb,
-            },
+            kwargs=dict(
+                task=task,
+                task_results_queue=self.task_results_queue,
+                timeout_seconds=self.worker_timeout_seconds,
+                memory_limit_in_gib=self.memory_limit_in_gib,
+                sleep_time=self._task_watcher_sleep_time,
+                memory_limit_polling_rate=self._task_watcher_memory_limit_polling_rate,
+            ),
         )
         self.pending_processes.append(process)
 
-    def clean_task_results_queue(self):
-        while not self.task_results_queue.empty():
-            self.task_results.append(self.task_results_queue.get())
+    def as_completed(self) -&gt; Generator[TaskResult, None, None]:
+        while self.pending_processes or self.active_processes:
+            if self.active_processes:
+                self.wait_for_completed_process()
 
-    def remove_completed_active_processes(self, pbar: tqdm):
-        index = 0
-        while index &lt; len(self.active_processes):
-            process = self.active_processes[index]
-            if not process.is_alive():
-                process.join()
-                self.active_processes.remove(process)
-                pbar.update(1)
-                self.clean_task_results_queue()
-            else:
-                index += 1
+            while len(self.active_processes) &lt; self.max_workers and self.pending_processes:
+                process = self.pending_processes.popleft()
+                self.active_processes.append(process)
+                process.start()
 
-    def wait_for_completed_process(self, pbar: tqdm):
-        self.remove_completed_active_processes(pbar)
-        while len(self.active_processes) &gt;= self.max_workers:
-            self.remove_completed_active_processes(pbar)
-            if self.sleep_time:
-                time.sleep(self.sleep_time)
+            for result in self.task_results:
+                self.task_results.remove(result)
+                yield result
 
     def start_tasks(self):
-        with tqdm(total=len(self.pending_processes), desc=&#34;Processing tasks&#34;) as pbar:
-            while self.pending_processes or len(self.active_processes) &gt; 0:
-                if self.active_processes:
-                    self.wait_for_completed_process(pbar)
+        self.task_results = list(self.as_completed())
 
-                while len(self.active_processes) &lt; self.max_workers and self.pending_processes:
-                    process = self.pending_processes.popleft()
-                    self.active_processes.append(process)
-                    process.start()</code></pre>
+    def wait_for_completed_process(self):
+        self.remove_completed_active_processes()
+        while len(self.active_processes) &gt;= self.max_workers:
+            if self._sleep_time:
+                time.sleep(self._sleep_time)
+            self.remove_completed_active_processes()
+
+    def remove_completed_active_processes(self):
+        self.active_processes = [process for process in self.active_processes if process.is_alive()]
+        self.clean_task_results_queue()
+
+    def clean_task_results_queue(self):
+        while not self.task_results_queue.empty():
+            self.task_results.append(self.task_results_queue.get())</code></pre>
 </details>
 </section>
 <section>
@@ -121,7 +120,7 @@ class GlasswallProcessManager:
 <dl>
 <dt id="glasswall.multiprocessing.manager.GlasswallProcessManager"><code class="flex name class">
 <span>class <span class="ident">GlasswallProcessManager</span></span>
-<span>(</span><span>max_workers: Optional[int] = None, worker_timeout_seconds: Optional[float] = None, memory_limit_in_gb: Optional[float] = None, sleep_time: Optional[float] = None)</span>
+<span>(</span><span>max_workers: Optional[int] = None, worker_timeout_seconds: Optional[float] = None, memory_limit_in_gib: Optional[float] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -134,15 +133,16 @@ class GlasswallProcessManager:
         self,
         max_workers: Optional[int] = None,
         worker_timeout_seconds: Optional[float] = None,
-        memory_limit_in_gb: Optional[float] = None,
-        sleep_time: Optional[float] = None,
+        memory_limit_in_gib: Optional[float] = None,
     ):
         self.max_workers = max_workers or os.cpu_count() or 1
         self.worker_timeout_seconds = worker_timeout_seconds
-        self.memory_limit_in_gb = memory_limit_in_gb
-        self.sleep_time = sleep_time
+        self.memory_limit_in_gib = memory_limit_in_gib
+        self._sleep_time: float = 0  # Time to sleep for while waiting for processes to complete
+        self._task_watcher_sleep_time: float = 0.001  # Time the TaskWatcher sleeps for while waiting for completed processes and monitoring timeout/memory
+        self._task_watcher_memory_limit_polling_rate: float = 0.1  # Polling rate for TaskWatcher to check the memory usage of a process
 
-        self.pending_processes: &#34;deque[Process]&#34; = deque()
+        self.pending_processes: deque[Process] = deque()
         self.active_processes: list[Process] = []
         self.task_results_queue: &#34;Queue[TaskResult]&#34; = Queue()
         self.task_results: List[TaskResult] = []
@@ -157,51 +157,75 @@ class GlasswallProcessManager:
         # Create and queue the process without starting it
         process = Process(
             target=TaskWatcher,
-            kwargs={
-                &#34;task&#34;: task,
-                &#34;task_results_queue&#34;: self.task_results_queue,
-                &#34;timeout_seconds&#34;: self.worker_timeout_seconds,
-                &#34;memory_limit_in_gb&#34;: self.memory_limit_in_gb,
-            },
+            kwargs=dict(
+                task=task,
+                task_results_queue=self.task_results_queue,
+                timeout_seconds=self.worker_timeout_seconds,
+                memory_limit_in_gib=self.memory_limit_in_gib,
+                sleep_time=self._task_watcher_sleep_time,
+                memory_limit_polling_rate=self._task_watcher_memory_limit_polling_rate,
+            ),
         )
         self.pending_processes.append(process)
 
-    def clean_task_results_queue(self):
-        while not self.task_results_queue.empty():
-            self.task_results.append(self.task_results_queue.get())
+    def as_completed(self) -&gt; Generator[TaskResult, None, None]:
+        while self.pending_processes or self.active_processes:
+            if self.active_processes:
+                self.wait_for_completed_process()
 
-    def remove_completed_active_processes(self, pbar: tqdm):
-        index = 0
-        while index &lt; len(self.active_processes):
-            process = self.active_processes[index]
-            if not process.is_alive():
-                process.join()
-                self.active_processes.remove(process)
-                pbar.update(1)
-                self.clean_task_results_queue()
-            else:
-                index += 1
+            while len(self.active_processes) &lt; self.max_workers and self.pending_processes:
+                process = self.pending_processes.popleft()
+                self.active_processes.append(process)
+                process.start()
 
-    def wait_for_completed_process(self, pbar: tqdm):
-        self.remove_completed_active_processes(pbar)
-        while len(self.active_processes) &gt;= self.max_workers:
-            self.remove_completed_active_processes(pbar)
-            if self.sleep_time:
-                time.sleep(self.sleep_time)
+            for result in self.task_results:
+                self.task_results.remove(result)
+                yield result
 
     def start_tasks(self):
-        with tqdm(total=len(self.pending_processes), desc=&#34;Processing tasks&#34;) as pbar:
-            while self.pending_processes or len(self.active_processes) &gt; 0:
-                if self.active_processes:
-                    self.wait_for_completed_process(pbar)
+        self.task_results = list(self.as_completed())
 
-                while len(self.active_processes) &lt; self.max_workers and self.pending_processes:
-                    process = self.pending_processes.popleft()
-                    self.active_processes.append(process)
-                    process.start()</code></pre>
+    def wait_for_completed_process(self):
+        self.remove_completed_active_processes()
+        while len(self.active_processes) &gt;= self.max_workers:
+            if self._sleep_time:
+                time.sleep(self._sleep_time)
+            self.remove_completed_active_processes()
+
+    def remove_completed_active_processes(self):
+        self.active_processes = [process for process in self.active_processes if process.is_alive()]
+        self.clean_task_results_queue()
+
+    def clean_task_results_queue(self):
+        while not self.task_results_queue.empty():
+            self.task_results.append(self.task_results_queue.get())</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
+<dt id="glasswall.multiprocessing.manager.GlasswallProcessManager.as_completed"><code class="name flex">
+<span>def <span class="ident">as_completed</span></span>(<span>self) ‑> Generator[<a title="glasswall.multiprocessing.tasks.TaskResult" href="tasks.html#glasswall.multiprocessing.tasks.TaskResult">TaskResult</a>, NoneType, NoneType]</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def as_completed(self) -&gt; Generator[TaskResult, None, None]:
+    while self.pending_processes or self.active_processes:
+        if self.active_processes:
+            self.wait_for_completed_process()
+
+        while len(self.active_processes) &lt; self.max_workers and self.pending_processes:
+            process = self.pending_processes.popleft()
+            self.active_processes.append(process)
+            process.start()
+
+        for result in self.task_results:
+            self.task_results.remove(result)
+            yield result</code></pre>
+</details>
+</dd>
 <dt id="glasswall.multiprocessing.manager.GlasswallProcessManager.clean_task_results_queue"><code class="name flex">
 <span>def <span class="ident">clean_task_results_queue</span></span>(<span>self)</span>
 </code></dt>
@@ -229,18 +253,20 @@ class GlasswallProcessManager:
     # Create and queue the process without starting it
     process = Process(
         target=TaskWatcher,
-        kwargs={
-            &#34;task&#34;: task,
-            &#34;task_results_queue&#34;: self.task_results_queue,
-            &#34;timeout_seconds&#34;: self.worker_timeout_seconds,
-            &#34;memory_limit_in_gb&#34;: self.memory_limit_in_gb,
-        },
+        kwargs=dict(
+            task=task,
+            task_results_queue=self.task_results_queue,
+            timeout_seconds=self.worker_timeout_seconds,
+            memory_limit_in_gib=self.memory_limit_in_gib,
+            sleep_time=self._task_watcher_sleep_time,
+            memory_limit_polling_rate=self._task_watcher_memory_limit_polling_rate,
+        ),
     )
     self.pending_processes.append(process)</code></pre>
 </details>
 </dd>
 <dt id="glasswall.multiprocessing.manager.GlasswallProcessManager.remove_completed_active_processes"><code class="name flex">
-<span>def <span class="ident">remove_completed_active_processes</span></span>(<span>self, pbar: tqdm.std.tqdm)</span>
+<span>def <span class="ident">remove_completed_active_processes</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -248,17 +274,9 @@ class GlasswallProcessManager:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def remove_completed_active_processes(self, pbar: tqdm):
-    index = 0
-    while index &lt; len(self.active_processes):
-        process = self.active_processes[index]
-        if not process.is_alive():
-            process.join()
-            self.active_processes.remove(process)
-            pbar.update(1)
-            self.clean_task_results_queue()
-        else:
-            index += 1</code></pre>
+<pre><code class="python">def remove_completed_active_processes(self):
+    self.active_processes = [process for process in self.active_processes if process.is_alive()]
+    self.clean_task_results_queue()</code></pre>
 </details>
 </dd>
 <dt id="glasswall.multiprocessing.manager.GlasswallProcessManager.start_tasks"><code class="name flex">
@@ -271,19 +289,11 @@ class GlasswallProcessManager:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def start_tasks(self):
-    with tqdm(total=len(self.pending_processes), desc=&#34;Processing tasks&#34;) as pbar:
-        while self.pending_processes or len(self.active_processes) &gt; 0:
-            if self.active_processes:
-                self.wait_for_completed_process(pbar)
-
-            while len(self.active_processes) &lt; self.max_workers and self.pending_processes:
-                process = self.pending_processes.popleft()
-                self.active_processes.append(process)
-                process.start()</code></pre>
+    self.task_results = list(self.as_completed())</code></pre>
 </details>
 </dd>
 <dt id="glasswall.multiprocessing.manager.GlasswallProcessManager.wait_for_completed_process"><code class="name flex">
-<span>def <span class="ident">wait_for_completed_process</span></span>(<span>self, pbar: tqdm.std.tqdm)</span>
+<span>def <span class="ident">wait_for_completed_process</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -291,12 +301,12 @@ class GlasswallProcessManager:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def wait_for_completed_process(self, pbar: tqdm):
-    self.remove_completed_active_processes(pbar)
+<pre><code class="python">def wait_for_completed_process(self):
+    self.remove_completed_active_processes()
     while len(self.active_processes) &gt;= self.max_workers:
-        self.remove_completed_active_processes(pbar)
-        if self.sleep_time:
-            time.sleep(self.sleep_time)</code></pre>
+        if self._sleep_time:
+            time.sleep(self._sleep_time)
+        self.remove_completed_active_processes()</code></pre>
 </details>
 </dd>
 </dl>
@@ -320,6 +330,7 @@ class GlasswallProcessManager:
 <li>
 <h4><code><a title="glasswall.multiprocessing.manager.GlasswallProcessManager" href="#glasswall.multiprocessing.manager.GlasswallProcessManager">GlasswallProcessManager</a></code></h4>
 <ul class="">
+<li><code><a title="glasswall.multiprocessing.manager.GlasswallProcessManager.as_completed" href="#glasswall.multiprocessing.manager.GlasswallProcessManager.as_completed">as_completed</a></code></li>
 <li><code><a title="glasswall.multiprocessing.manager.GlasswallProcessManager.clean_task_results_queue" href="#glasswall.multiprocessing.manager.GlasswallProcessManager.clean_task_results_queue">clean_task_results_queue</a></code></li>
 <li><code><a title="glasswall.multiprocessing.manager.GlasswallProcessManager.queue_task" href="#glasswall.multiprocessing.manager.GlasswallProcessManager.queue_task">queue_task</a></code></li>
 <li><code><a title="glasswall.multiprocessing.manager.GlasswallProcessManager.remove_completed_active_processes" href="#glasswall.multiprocessing.manager.GlasswallProcessManager.remove_completed_active_processes">remove_completed_active_processes</a></code></li>
