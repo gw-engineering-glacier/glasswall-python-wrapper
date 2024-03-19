@@ -16,12 +16,13 @@ class GlasswallProcessManager:
         max_workers: Optional[int] = None,
         worker_timeout_seconds: Optional[float] = None,
         memory_limit_in_gib: Optional[float] = None,
-        sleep_time: Optional[float] = None,
     ):
         self.max_workers = max_workers or os.cpu_count() or 1
         self.worker_timeout_seconds = worker_timeout_seconds
         self.memory_limit_in_gib = memory_limit_in_gib
-        self.sleep_time = sleep_time
+        self._sleep_time: float = 0  # Time to sleep for while waiting for processes to complete
+        self._task_watcher_sleep_time: float = 0.001  # Time the TaskWatcher sleeps for while waiting for completed processes and monitoring timeout/memory
+        self._task_watcher_memory_limit_polling_rate: float = 0.1  # Polling rate for TaskWatcher to check the memory usage of a process
 
         self.pending_processes: deque[Process] = deque()
         self.active_processes: list[Process] = []
@@ -38,12 +39,14 @@ class GlasswallProcessManager:
         # Create and queue the process without starting it
         process = Process(
             target=TaskWatcher,
-            kwargs={
-                "task": task,
-                "task_results_queue": self.task_results_queue,
-                "timeout_seconds": self.worker_timeout_seconds,
-                "memory_limit_in_gib": self.memory_limit_in_gib,
-            },
+            kwargs=dict(
+                task=task,
+                task_results_queue=self.task_results_queue,
+                timeout_seconds=self.worker_timeout_seconds,
+                memory_limit_in_gib=self.memory_limit_in_gib,
+                sleep_time=self._task_watcher_sleep_time,
+                memory_limit_polling_rate=self._task_watcher_memory_limit_polling_rate,
+            ),
         )
         self.pending_processes.append(process)
 
@@ -67,8 +70,8 @@ class GlasswallProcessManager:
     def wait_for_completed_process(self):
         self.remove_completed_active_processes()
         while len(self.active_processes) >= self.max_workers:
-            if self.sleep_time:
-                time.sleep(self.sleep_time)
+            if self._sleep_time:
+                time.sleep(self._sleep_time)
             self.remove_completed_active_processes()
 
     def remove_completed_active_processes(self):

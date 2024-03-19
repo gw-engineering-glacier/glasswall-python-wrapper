@@ -21,7 +21,7 @@ class TaskWatcher:
         timeout_seconds: Optional[float] = None,
         memory_limit_in_gib: Optional[float] = None,
         sleep_time: float = 0.001,
-        sleep_time_memory_limit: float = 0.1,
+        memory_limit_polling_rate: float = 0.1,
         auto_start: bool = True,
     ):
         self.task = task
@@ -29,7 +29,7 @@ class TaskWatcher:
         self.timeout_seconds = timeout_seconds
         self.memory_limit_in_gib = memory_limit_in_gib
         self.sleep_time = sleep_time
-        self.sleep_time_memory_limit = sleep_time_memory_limit
+        self.memory_limit_polling_rate = memory_limit_polling_rate
         self.auto_start = auto_start
 
         self.watcher_queue: "Queue[TaskResult]" = Queue()
@@ -85,7 +85,7 @@ class TaskWatcher:
 
             # Monitor for memory limit exceeded
             if self.memory_limit_in_gib:
-                if now - last_memory_limit_check > self.sleep_time_memory_limit:
+                if now - last_memory_limit_check > self.memory_limit_polling_rate:
                     last_memory_limit_check = now
                     memory_usage_in_gib = get_total_memory_usage_in_gib(self.process.pid)
                     if memory_usage_in_gib > self.max_memory_used_in_gib:
