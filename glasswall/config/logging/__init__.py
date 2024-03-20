@@ -23,7 +23,7 @@ os.makedirs(os.path.dirname(log_file_path), exist_ok=True)
 
 # Logging to file
 log = logging.getLogger(__name__)
-log_handler = logging.FileHandler(log_file_path, mode="w", delay=True)
+log_handler = logging.FileHandler(log_file_path, mode="w", delay=True, encoding="utf-8", errors="backslashreplace")
 log_handler.setFormatter(log_formatter)
 log.addHandler(log_handler)
 if os.environ.get("glasswall_log_level"):
