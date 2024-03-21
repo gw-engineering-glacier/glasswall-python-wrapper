@@ -23,21 +23,17 @@ os.makedirs(os.path.dirname(log_file_path), exist_ok=True)
 
 # Logging to file
 log = logging.getLogger(__name__)
-log_handler = logging.FileHandler(log_file_path, mode="w", delay=True)
+log_handler = logging.FileHandler(log_file_path, mode="w", delay=True, encoding="utf-8")
 log_handler.setFormatter(log_formatter)
 log.addHandler(log_handler)
-if os.environ.get("glasswall_log_level"):
-    log.setLevel(os.environ.get("glasswall_log_level"))
-else:
-    log.setLevel(logging.DEBUG)
+log_level = os.environ.get("glasswall_log_level", logging.DEBUG)
+log.setLevel(log_level)
 
 # Logging to console
 console = logging.StreamHandler()
 console.setFormatter(log_formatter)
-if os.environ.get("glasswall_console_level"):
-    console.setLevel(os.environ.get("glasswall_console_level"))
-else:
-    console.setLevel(logging.INFO)
+console_level = os.environ.get("glasswall_console_level", logging.INFO)
+console.setLevel(console_level)
 log.addHandler(console)
 
 
