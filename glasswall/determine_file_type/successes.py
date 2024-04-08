@@ -154,6 +154,11 @@ class ft_txt(FileTypeEnumSuccess):
     string = "txt"
 
 
+class ft_ascii(FileTypeEnumSuccess):
+    integer = 46
+    string = "ascii"
+
+
 # Supported by an external library.
 class ft_zip(FileTypeEnumSuccess):
     integer = 256
