@@ -149,9 +149,9 @@ class ft_dylib(FileTypeEnumSuccess):
     string = "dylib"
 
 
-class ft_txt(FileTypeEnumSuccess):
+class ft_utf8(FileTypeEnumSuccess):
     integer = 45
-    string = "txt"
+    string = "utf8"
 
 
 class ft_ascii(FileTypeEnumSuccess):
