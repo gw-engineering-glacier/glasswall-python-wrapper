@@ -26,7 +26,10 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from glasswall.libraries.word_search.classes import WordSearchError
+<pre><code class="python"># Statuses from sdk.word.search\src\glasswall.word.search\code\common\common.def.h
+
+
+from glasswall.libraries.word_search.classes import WordSearchError
 
 
 class UnknownErrorCode(WordSearchError):
@@ -34,14 +37,50 @@ class UnknownErrorCode(WordSearchError):
     pass
 
 
-# Statuses from sdk.word.search\src\glasswall.word.search\code\common\common.def.h
+# Differs from gw2ret_generalfail in sdk.editor, but preserved for backwards compatability.
 class Fail(WordSearchError):
     &#34;&#34;&#34; WordSearch error code 0. &#34;&#34;&#34;
     pass
 
 
+class DisallowedItemFound(WordSearchError):
+    &#34;&#34;&#34; WordSearch error code -1024. Item disallowed by policy found in file. &#34;&#34;&#34;
+    pass
+
+
+class RequiredItemNotFound(WordSearchError):
+    &#34;&#34;&#34; WordSearch error code -1025. Item required by policy not found in file. &#34;&#34;&#34;
+    pass
+
+
+class IllegalActionRedact(WordSearchError):
+    &#34;&#34;&#34; WordSearch error code -1026. Redact action specified but filetype doesn&#39;t support redaction. &#34;&#34;&#34;
+    pass
+
+
+class IllegalActionRequire(WordSearchError):
+    &#34;&#34;&#34; WordSearch error code -1027. Require action specified but filetype doesn&#39;t support redaction. &#34;&#34;&#34;
+    pass
+
+
+class IllegalActionNoRequire(WordSearchError):
+    &#34;&#34;&#34; WordSearch error code -1028. Require action not specified but filetype needs one. &#34;&#34;&#34;
+    pass
+
+
+class FiletypeUnsupported(WordSearchError):
+    &#34;&#34;&#34; WordSearch error code -1029. Filetype supported by Editor but not by Word Search. &#34;&#34;&#34;
+    pass
+
+
 error_codes = {
     0: Fail,
+    -1024: DisallowedItemFound,
+    -1025: RequiredItemNotFound,
+    -1026: IllegalActionRedact,
+    -1027: IllegalActionRequire,
+    -1028: IllegalActionNoRequire,
+    -1029: FiletypeUnsupported,
 }</code></pre>
 </details>
 </section>
@@ -54,6 +93,27 @@ error_codes = {
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="glasswall.libraries.word_search.errors.DisallowedItemFound"><code class="flex name class">
+<span>class <span class="ident">DisallowedItemFound</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>WordSearch error code -1024. Item disallowed by policy found in file.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DisallowedItemFound(WordSearchError):
+    &#34;&#34;&#34; WordSearch error code -1024. Item disallowed by policy found in file. &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="glasswall.libraries.word_search.classes.WordSearchError" href="classes.html#glasswall.libraries.word_search.classes.WordSearchError">WordSearchError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
 <dt id="glasswall.libraries.word_search.errors.Fail"><code class="flex name class">
 <span>class <span class="ident">Fail</span></span>
 <span>(</span><span>*args, **kwargs)</span>
@@ -66,6 +126,111 @@ error_codes = {
 </summary>
 <pre><code class="python">class Fail(WordSearchError):
     &#34;&#34;&#34; WordSearch error code 0. &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="glasswall.libraries.word_search.classes.WordSearchError" href="classes.html#glasswall.libraries.word_search.classes.WordSearchError">WordSearchError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="glasswall.libraries.word_search.errors.FiletypeUnsupported"><code class="flex name class">
+<span>class <span class="ident">FiletypeUnsupported</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>WordSearch error code -1029. Filetype supported by Editor but not by Word Search.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FiletypeUnsupported(WordSearchError):
+    &#34;&#34;&#34; WordSearch error code -1029. Filetype supported by Editor but not by Word Search. &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="glasswall.libraries.word_search.classes.WordSearchError" href="classes.html#glasswall.libraries.word_search.classes.WordSearchError">WordSearchError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="glasswall.libraries.word_search.errors.IllegalActionNoRequire"><code class="flex name class">
+<span>class <span class="ident">IllegalActionNoRequire</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>WordSearch error code -1028. Require action not specified but filetype needs one.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class IllegalActionNoRequire(WordSearchError):
+    &#34;&#34;&#34; WordSearch error code -1028. Require action not specified but filetype needs one. &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="glasswall.libraries.word_search.classes.WordSearchError" href="classes.html#glasswall.libraries.word_search.classes.WordSearchError">WordSearchError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="glasswall.libraries.word_search.errors.IllegalActionRedact"><code class="flex name class">
+<span>class <span class="ident">IllegalActionRedact</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>WordSearch error code -1026. Redact action specified but filetype doesn't support redaction.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class IllegalActionRedact(WordSearchError):
+    &#34;&#34;&#34; WordSearch error code -1026. Redact action specified but filetype doesn&#39;t support redaction. &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="glasswall.libraries.word_search.classes.WordSearchError" href="classes.html#glasswall.libraries.word_search.classes.WordSearchError">WordSearchError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="glasswall.libraries.word_search.errors.IllegalActionRequire"><code class="flex name class">
+<span>class <span class="ident">IllegalActionRequire</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>WordSearch error code -1027. Require action specified but filetype doesn't support redaction.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class IllegalActionRequire(WordSearchError):
+    &#34;&#34;&#34; WordSearch error code -1027. Require action specified but filetype doesn&#39;t support redaction. &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="glasswall.libraries.word_search.classes.WordSearchError" href="classes.html#glasswall.libraries.word_search.classes.WordSearchError">WordSearchError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="glasswall.libraries.word_search.errors.RequiredItemNotFound"><code class="flex name class">
+<span>class <span class="ident">RequiredItemNotFound</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>WordSearch error code -1025. Item required by policy not found in file.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RequiredItemNotFound(WordSearchError):
+    &#34;&#34;&#34; WordSearch error code -1025. Item required by policy not found in file. &#34;&#34;&#34;
     pass</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -113,7 +278,25 @@ error_codes = {
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
+<h4><code><a title="glasswall.libraries.word_search.errors.DisallowedItemFound" href="#glasswall.libraries.word_search.errors.DisallowedItemFound">DisallowedItemFound</a></code></h4>
+</li>
+<li>
 <h4><code><a title="glasswall.libraries.word_search.errors.Fail" href="#glasswall.libraries.word_search.errors.Fail">Fail</a></code></h4>
+</li>
+<li>
+<h4><code><a title="glasswall.libraries.word_search.errors.FiletypeUnsupported" href="#glasswall.libraries.word_search.errors.FiletypeUnsupported">FiletypeUnsupported</a></code></h4>
+</li>
+<li>
+<h4><code><a title="glasswall.libraries.word_search.errors.IllegalActionNoRequire" href="#glasswall.libraries.word_search.errors.IllegalActionNoRequire">IllegalActionNoRequire</a></code></h4>
+</li>
+<li>
+<h4><code><a title="glasswall.libraries.word_search.errors.IllegalActionRedact" href="#glasswall.libraries.word_search.errors.IllegalActionRedact">IllegalActionRedact</a></code></h4>
+</li>
+<li>
+<h4><code><a title="glasswall.libraries.word_search.errors.IllegalActionRequire" href="#glasswall.libraries.word_search.errors.IllegalActionRequire">IllegalActionRequire</a></code></h4>
+</li>
+<li>
+<h4><code><a title="glasswall.libraries.word_search.errors.RequiredItemNotFound" href="#glasswall.libraries.word_search.errors.RequiredItemNotFound">RequiredItemNotFound</a></code></h4>
 </li>
 <li>
 <h4><code><a title="glasswall.libraries.word_search.errors.UnknownErrorCode" href="#glasswall.libraries.word_search.errors.UnknownErrorCode">UnknownErrorCode</a></code></h4>

@@ -26,10 +26,13 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from glasswall.libraries.word_search.classes import WordSearchSuccess
+<pre><code class="python"># Statuses from sdk.word.search\src\glasswall.word.search\code\common\common.def.h
 
 
-# Statuses from sdk.word.search\src\glasswall.word.search\code\common\common.def.h
+from glasswall.libraries.word_search.classes import WordSearchSuccess
+
+
+# Differs from gw2ret_ok in sdk.editor, but preserved for backwards compatability.
 class Success(WordSearchSuccess):
     &#34;&#34;&#34; WordSearch success code 1. &#34;&#34;&#34;
     pass

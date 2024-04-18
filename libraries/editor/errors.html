@@ -26,7 +26,10 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from glasswall.libraries.editor.classes import EditorError
+<pre><code class="python"># Statuses from sdk.editor\src\core.support\sdk.interface\gw2_returnstatus.h
+
+
+from glasswall.libraries.editor.classes import EditorError
 
 
 class UnknownErrorCode(EditorError):
@@ -34,7 +37,6 @@ class UnknownErrorCode(EditorError):
     pass
 
 
-# Statuses from sdk.editor\src\core.support\sdk.interface\gw2_returnstatus.h
 class GeneralFail(EditorError):
     &#34;&#34;&#34; Editor error code -1. &#34;&#34;&#34;
     pass
