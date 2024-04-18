@@ -1,9 +1,9 @@
+# Statuses from sdk.editor\src\core.support\sdk.interface\gw2_returnstatus.h
 
 
 from glasswall.libraries.editor.classes import EditorSuccess
 
 
-# Statuses from sdk.editor\src\core.support\sdk.interface\gw2_returnstatus.h
 class OK(EditorSuccess):
     """ Editor success code 0. """
     pass
