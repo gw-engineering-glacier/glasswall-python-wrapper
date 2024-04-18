@@ -1,3 +1,4 @@
+# Statuses from sdk.editor\src\core.support\sdk.interface\gw2_returnstatus.h
 
 
 from glasswall.libraries.editor.classes import EditorError
@@ -8,7 +9,6 @@ class UnknownErrorCode(EditorError):
     pass
 
 
-# Statuses from sdk.editor\src\core.support\sdk.interface\gw2_returnstatus.h
 class GeneralFail(EditorError):
     """ Editor error code -1. """
     pass

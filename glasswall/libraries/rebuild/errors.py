@@ -1,3 +1,4 @@
+# Statuses from sdk.rebuild\src\code\dll.gwfile\dll.gwfilestatus.h
 
 
 from glasswall.libraries.rebuild.classes import RebuildError
@@ -8,7 +9,6 @@ class UnknownErrorCode(RebuildError):
     pass
 
 
-# Statuses from sdk.rebuild\src\code\dll.gwfile\dll.gwfilestatus.h
 class Error(RebuildError):
     """ Rebuild error code 0. This value indicates that the document was non-conformant in some way, but any requested output files were written. """
     pass

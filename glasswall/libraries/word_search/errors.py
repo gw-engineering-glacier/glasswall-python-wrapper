@@ -1,3 +1,5 @@
+# Statuses from sdk.word.search\src\glasswall.word.search\code\common\common.def.h
+
 
 from glasswall.libraries.word_search.classes import WordSearchError
 
@@ -7,7 +9,6 @@ class UnknownErrorCode(WordSearchError):
     pass
 
 
-# Statuses from sdk.word.search\src\glasswall.word.search\code\common\common.def.h
 # Differs from gw2ret_generalfail in sdk.editor, but preserved for backwards compatability.
 class Fail(WordSearchError):
     """ WordSearch error code 0. """
